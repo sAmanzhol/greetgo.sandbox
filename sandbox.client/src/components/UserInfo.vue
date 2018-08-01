@@ -6,11 +6,21 @@
 
 <script lang="ts">
   import {Component, Vue} from 'vue-property-decorator';
+  import axios from 'axios'
 
   @Component
   export default class UserInfo extends Vue {
     onGetUserInfo() {
-      console.log("asd")
+      console.log(process.env.VUE_APP_URL_PREFIX);
+      axios.get("/api/auth/probe", {
+        params: {
+          param: 'err111'
+        }
+      }).then(response => {
+        console.log(response);
+      }, error => {
+        console.log(error);
+      });
     }
   }
 </script>

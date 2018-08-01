@@ -14,7 +14,7 @@ import kz.greetgo.sandbox.controller.errors.JsonRestError;
 import kz.greetgo.sandbox.controller.errors.RestError;
 import kz.greetgo.sandbox.controller.register.AuthRegister;
 import kz.greetgo.sandbox.controller.register.model.SessionInfo;
-import kz.greetgo.sandbox.controller.security.NoSecurity;
+import kz.greetgo.sandbox.controller.security.PublicAccess;
 import kz.greetgo.sandbox.controller.security.SecurityError;
 
 import java.io.PrintWriter;
@@ -57,6 +57,7 @@ public abstract class SandboxViews implements Views {
    * @throws Exception нужно чтобы не ставить надоедливые try/catch-блоки
    */
   @Override
+  @SuppressWarnings("RedundantThrows")
   public String toXml(Object object, RequestTunnel tunnel, Method method) throws Exception {
     //Здесь нужно object преобразовать в XML и вернуть
     //Здесь аннотация ToXml не работает
@@ -119,6 +120,7 @@ public abstract class SandboxViews implements Views {
    *
    * @throws Exception нужно чтобы не ставить надоедливые try/catch-блоки
    */
+  @SuppressWarnings("RedundantThrows")
   private void beforeRequestWithSession() throws Exception {}
 
   /**
@@ -126,6 +128,7 @@ public abstract class SandboxViews implements Views {
    *
    * @throws Exception нужно чтобы не ставить надоедливые try/catch-блоки
    */
+  @SuppressWarnings("RedundantThrows")
   protected void beforeRequest() throws Exception {}
 
   /**
@@ -136,12 +139,12 @@ public abstract class SandboxViews implements Views {
   private void prepareSession(MethodInvoker methodInvoker) {
     try {
       //смотрим, есть ли у вызываемого метода аннотация NoSecurity
-      if (methodInvoker.getMethodAnnotation(NoSecurity.class) == null) {
+      if (methodInvoker.getMethodAnnotation(PublicAccess.class) == null) {
         // если аннотации нет, то нужно проверить на наличие прав
 
 
         //Достаём токен из заголовка запроса. Если токена нет, то получим null
-        String token = methodInvoker.tunnel().getRequestHeader("Token");
+        String token = methodInvoker.tunnel().requestHeaders().value("Token");
 
         //в этом методе токен будет расшифрован и помещён в ThreadLocal-переменную
         //если произойдёт какой-нибудь сбой, то произойдёт ошибка и вызов метода контроллера не произойдёт
@@ -207,7 +210,7 @@ public abstract class SandboxViews implements Views {
 
     //заполняем данные для вьюшки, которые будут доступны через $ например $hello - в методе их добавляли в MvcModel
     for (Map.Entry<String, Object> e : methodInvoker.model().data.entrySet()) {
-      tunnel.setRequestAttribute(e.getKey(), e.getValue());
+      tunnel.requestAttributes().set(e.getKey(), e.getValue());
     }
 
     //форвардим на рендеринг jsp-файла
@@ -228,7 +231,7 @@ public abstract class SandboxViews implements Views {
     error.printStackTrace();
 
     RequestTunnel tunnel = methodInvoker.tunnel();
-    tunnel.setRequestAttribute("ERROR_TYPE", error.getClass().getSimpleName());
+    tunnel.requestAttributes().set("ERROR_TYPE", error.getClass().getSimpleName());
 
     if (error instanceof JsonRestError) {
       JsonRestError restError = (JsonRestError) error;

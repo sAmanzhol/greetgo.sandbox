@@ -2,7 +2,7 @@ dependencies {
   compile project(':sandbox.controller')
 
   compile "kz.greetgo.db:greetgo.db:$greetgoDbVersion"
-  compile "kz.greetgo:greetgo.conf:$greetgoConfVersion"
+  compile "kz.greetgo.conf:greetgo.conf:$greetgoConfVersion"
   compile "kz.greetgo.mvc:greetgo.mvc.security:$greetgoMvcVersion"
 
   compile group: 'org.postgresql', name: 'postgresql', version: '9.4-1202-jdbc42'

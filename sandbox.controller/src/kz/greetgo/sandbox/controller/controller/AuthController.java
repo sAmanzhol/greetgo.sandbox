@@ -3,14 +3,16 @@ package kz.greetgo.sandbox.controller.controller;
 import kz.greetgo.depinject.core.Bean;
 import kz.greetgo.depinject.core.BeanGetter;
 import kz.greetgo.mvc.annotations.AsIs;
-import kz.greetgo.mvc.annotations.Mapping;
 import kz.greetgo.mvc.annotations.Par;
 import kz.greetgo.mvc.annotations.ParSession;
 import kz.greetgo.mvc.annotations.ToJson;
+import kz.greetgo.mvc.annotations.on_methods.ControllerPrefix;
+import kz.greetgo.mvc.annotations.on_methods.OnGet;
+import kz.greetgo.sandbox.controller.errors.RestError;
 import kz.greetgo.sandbox.controller.model.AuthInfo;
 import kz.greetgo.sandbox.controller.model.UserInfo;
 import kz.greetgo.sandbox.controller.register.AuthRegister;
-import kz.greetgo.sandbox.controller.security.NoSecurity;
+import kz.greetgo.sandbox.controller.security.PublicAccess;
 import kz.greetgo.sandbox.controller.util.Controller;
 
 /**
@@ -18,26 +20,36 @@ import kz.greetgo.sandbox.controller.util.Controller;
  * <a href="https://github.com/greetgo/greetgo.mvc/blob/master/greetgo.mvc.parent/doc/controller_spec.md">здесь</a>
  */
 @Bean
-@Mapping("/auth")
+@ControllerPrefix("/auth")
 public class AuthController implements Controller {
 
   public BeanGetter<AuthRegister> authRegister;
 
   @AsIs
-  @NoSecurity
-  @Mapping("/login")
+  @PublicAccess
+  @OnGet("/probe")
+  public String probe(@Par("param") String param) {
+    if ("err".equals(param)) {
+      throw new RestError(476, "Oops");
+    }
+    return "Probe OK, param = " + param;
+  }
+
+  @AsIs
+  @PublicAccess
+  @OnGet("/login")
   public String login(@Par("accountName") String accountName, @Par("password") String password) {
     return authRegister.get().login(accountName, password);
   }
 
   @ToJson
-  @Mapping("/info")
+  @OnGet("/info")
   public AuthInfo info(@ParSession("personId") String personId) {
     return authRegister.get().getAuthInfo(personId);
   }
 
   @ToJson
-  @Mapping("/userInfo")
+  @OnGet("/userInfo")
   public UserInfo userInfo(@ParSession("personId") String personId) {
     return authRegister.get().getUserInfo(personId);
   }

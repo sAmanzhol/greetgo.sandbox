@@ -3,7 +3,7 @@ package kz.greetgo.sandbox.stand.beans;
 import kz.greetgo.depinject.core.Bean;
 import kz.greetgo.depinject.core.BeanGetter;
 import kz.greetgo.mvc.JettyWarServlet;
-import kz.greetgo.mvc.interfaces.TunnelExecutorGetter;
+import kz.greetgo.mvc.builder.ExecDefinition;
 import kz.greetgo.mvc.interfaces.Views;
 import kz.greetgo.sandbox.controller.util.Controller;
 import kz.greetgo.sandbox.stand.util.WebAppContextRegistration;
@@ -32,8 +32,9 @@ public class JettyControllersRegistration extends JettyWarServlet implements Web
   protected void afterRegistered() {
     System.err.println("[WebAppContext] --------------------------------------");
     System.err.println("[WebAppContext] -- USING CONTROLLERS:");
-    for (TunnelExecutorGetter teg : tunnelExecutorGetters) {
-      System.err.println("[WebAppContext] --   " + teg.infoStr());
+    for (ExecDefinition execDefinition : execDefinitionList()) {
+
+      System.err.println("[WebAppContext] --   " + execDefinition.infoStr());
     }
     System.err.println("[WebAppContext] --------------------------------------");
     printRegistration();
