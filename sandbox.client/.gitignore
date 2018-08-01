@@ -7,11 +7,18 @@
 *.iml
 *.ipr
 *.iws
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw*
 
 # Gradle files #
 ################
 .gradle/
 /build/
+/dist/
 
 # OS generated files #
 ######################
@@ -27,6 +34,15 @@ Thumbs.db
 ######################
 *.log
 *.sqlite
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-node_modules
-/package-lock.json
+# node files #
+##############
+/node_modules/
+
+# local env files #
+###################
+.env.local
+.env.*.local
