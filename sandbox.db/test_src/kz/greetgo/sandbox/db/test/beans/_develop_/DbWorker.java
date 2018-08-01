@@ -1,6 +1,6 @@
 package kz.greetgo.sandbox.db.test.beans._develop_;
 
-import kz.greetgo.conf.SysParams;
+import kz.greetgo.conf.sys_params.SysParams;
 import kz.greetgo.depinject.core.Bean;
 import kz.greetgo.depinject.core.BeanGetter;
 import kz.greetgo.sandbox.db.beans.all.AllConfigFactory;

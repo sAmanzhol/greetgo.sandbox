@@ -14,12 +14,12 @@
       console.log(process.env.VUE_APP_URL_PREFIX);
       axios.get("/api/auth/probe", {
         params: {
-          param: 'err111'
+          param: 'err1'
         }
       }).then(response => {
-        console.log(response);
+        console.log('OK', response);
       }, error => {
-        console.log(error);
+        console.log('ERROR', error);
       });
     }
   }

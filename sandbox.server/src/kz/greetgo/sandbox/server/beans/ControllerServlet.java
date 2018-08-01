@@ -2,7 +2,7 @@ package kz.greetgo.sandbox.server.beans;
 
 import kz.greetgo.depinject.core.Bean;
 import kz.greetgo.depinject.core.BeanGetter;
-import kz.greetgo.mvc.interfaces.TunnelExecutorGetter;
+import kz.greetgo.mvc.builder.ExecDefinition;
 import kz.greetgo.mvc.interfaces.Views;
 import kz.greetgo.mvc.model.UploadInfo;
 import kz.greetgo.mvc.war.AppServlet;
@@ -42,8 +42,8 @@ public class ControllerServlet extends AppServlet {
 
     System.err.println("[ControllerServlet] --------------------------------------");
     System.err.println("[ControllerServlet] -- USING CONTROLLERS:");
-    for (TunnelExecutorGetter teg : tunnelExecutorGetters) {
-      System.err.println("[ControllerServlet] --   " + teg.infoStr());
+    for (ExecDefinition ed : execDefinitionList()) {
+      System.err.println("[ControllerServlet] --   " + ed.infoStr());
     }
     System.err.println("[ControllerServlet] --------------------------------------");
 

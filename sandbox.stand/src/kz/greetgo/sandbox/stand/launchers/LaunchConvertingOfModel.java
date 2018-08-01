@@ -8,7 +8,7 @@ import java.io.File;
 public class LaunchConvertingOfModel {
   public static void main(String[] args) throws Exception {
     File sourceDir = Modules.clientDir().toPath()
-      .resolve("front/ts/model").toFile();
+      .resolve("src/model").toFile();
     File destinationDir = Modules.controllerDir().toPath()
       .resolve("src").toFile();
     String destinationPackage = "kz.greetgo.sandbox.controller.model";
