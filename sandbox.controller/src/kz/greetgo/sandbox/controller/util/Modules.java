@@ -47,8 +47,8 @@ public class Modules {
     return findDir("sandbox.client");
   }
 
-  public static File dbDir() {
-    return findDir("sandbox.db");
+  public static File registerDir() {
+    return findDir("sandbox.register");
   }
 
   public static File standDir() {
