@@ -1,3 +1,5 @@
+rootProject.name = "greetgo.sandbox.root"
+
 include 'sandbox.client'
 include 'sandbox.controller'
 include 'sandbox.stand'
