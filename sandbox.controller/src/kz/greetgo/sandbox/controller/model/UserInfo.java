@@ -1,6 +1,6 @@
 package kz.greetgo.sandbox.controller.model;
 
-import kz.greetgo.sandbox.controller.model.PhoneType;
+
 
 public class UserInfo {
   public String id;
@@ -9,5 +9,7 @@ public class UserInfo {
   public String name;
   public String patronymic;
   public boolean yellow;
-  public PhoneType phoneType;
+
+  //The following code would be not removed after regenerating
+  ///LEAVE_FURTHER
 }

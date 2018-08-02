@@ -1,4 +1,8 @@
 export class UserInfo {
-  public fio: string | null = null;
-  public age: number /*int*/ = 0;
+  public id!: string;
+  public accountName!: string;
+  public surname!: string;
+  public name!: string;
+  public patronymic!: string;
+  public yellow!: boolean;
 }
