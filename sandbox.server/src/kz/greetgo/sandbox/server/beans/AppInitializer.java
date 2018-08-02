@@ -2,8 +2,8 @@ package kz.greetgo.sandbox.server.beans;
 
 import kz.greetgo.depinject.core.Bean;
 import kz.greetgo.depinject.core.BeanGetter;
-import kz.greetgo.sandbox.db.util.App;
-import kz.greetgo.sandbox.db.util.LiquibaseManager;
+import kz.greetgo.sandbox.register.util.App;
+import kz.greetgo.sandbox.register.util.LiquibaseManager;
 
 import javax.servlet.ServletContext;
 

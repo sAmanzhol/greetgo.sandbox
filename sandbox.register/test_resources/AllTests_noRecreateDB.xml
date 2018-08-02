@@ -7,7 +7,7 @@
       </run>
     </groups>
     <packages>
-      <package name="kz.greetgo.access.*"/>
+      <package name="kz.greetgo.sandbox.*"/>
     </packages>
   </test>
 </suite>

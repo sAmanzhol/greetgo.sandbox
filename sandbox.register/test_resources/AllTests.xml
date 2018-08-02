@@ -1,7 +1,7 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="All Db Test Suite" parallel="false" verbose="1">
   <listeners>
-    <listener class-name="kz.greetgo.sandbox.db.test.util.TestNgRecreateDbListener"/>
+    <listener class-name="kz.greetgo.sandbox.register.test.util.TestNgRecreateDbListener"/>
   </listeners>
 
   <test name="All DB Tests">

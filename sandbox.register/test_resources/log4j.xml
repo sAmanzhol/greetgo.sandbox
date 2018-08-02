@@ -35,7 +35,7 @@
     <priority value="INFO"/>
   </category>
 
-  <category name="kz.greetgo.sandbox.db.test.beans._develop_" additivity="true">
+  <category name="kz.greetgo.sandbox.register.test.beans._develop_" additivity="true">
     <priority value="INFO"/>
     <appender-ref ref="CONSOLE"/>
   </category>
@@ -54,7 +54,7 @@
     <!--<appender-ref ref="CONSOLE"/>-->
   </category>
 
-  <category name="kz.greetgo.sandbox.db.register_impl" additivity="true">
+  <category name="kz.greetgo.sandbox.register.impl" additivity="true">
     <priority value="TRACE"/>
     <!--<appender-ref ref="CONSOLE"/>-->
   </category>
