@@ -52,7 +52,7 @@ public class Modules {
   }
 
   public static File standDir() {
-    return findDir("sandbox.stand");
+    return findDir("sandbox.debug");
   }
 
   public static File controllerDir() {
