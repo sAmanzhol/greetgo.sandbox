@@ -1,4 +1,4 @@
-package kz.greetgo.sandbox.stand.util;
+package kz.greetgo.sandbox.debug.util;
 
 import org.eclipse.jetty.webapp.WebAppContext;
 

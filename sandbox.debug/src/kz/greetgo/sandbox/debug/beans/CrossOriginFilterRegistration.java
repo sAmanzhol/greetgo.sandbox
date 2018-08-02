@@ -1,7 +1,7 @@
-package kz.greetgo.sandbox.stand.beans;
+package kz.greetgo.sandbox.debug.beans;
 
 import kz.greetgo.depinject.core.Bean;
-import kz.greetgo.sandbox.stand.util.WebAppContextRegistration;
+import kz.greetgo.sandbox.debug.util.WebAppContextRegistration;
 import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.webapp.WebAppContext;
 

@@ -1,9 +1,9 @@
-package kz.greetgo.sandbox.stand.launchers;
+package kz.greetgo.sandbox.debug.launchers;
 
 import kz.greetgo.depinject.Depinject;
 import kz.greetgo.depinject.gen.DepinjectUtil;
 import kz.greetgo.sandbox.controller.util.Modules;
-import kz.greetgo.sandbox.stand.bean_containers.StandBeanContainer;
+import kz.greetgo.sandbox.debug.bean_containers.StandBeanContainer;
 
 public class LaunchStandServer {
   public static void main(String[] args) throws Exception {

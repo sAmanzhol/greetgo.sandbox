@@ -1,4 +1,4 @@
-package kz.greetgo.sandbox.stand.beans;
+package kz.greetgo.sandbox.debug.beans;
 
 import kz.greetgo.depinject.core.Bean;
 import kz.greetgo.sandbox.controller.util.SandboxViews;

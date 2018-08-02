@@ -1,4 +1,4 @@
-package kz.greetgo.sandbox.stand.beans;
+package kz.greetgo.sandbox.debug.beans;
 
 import kz.greetgo.depinject.core.Bean;
 import kz.greetgo.depinject.core.BeanGetter;
@@ -6,7 +6,7 @@ import kz.greetgo.mvc.JettyWarServlet;
 import kz.greetgo.mvc.builder.ExecDefinition;
 import kz.greetgo.mvc.interfaces.Views;
 import kz.greetgo.sandbox.controller.util.Controller;
-import kz.greetgo.sandbox.stand.util.WebAppContextRegistration;
+import kz.greetgo.sandbox.debug.util.WebAppContextRegistration;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,10 +1,10 @@
-package kz.greetgo.sandbox.stand.beans;
+package kz.greetgo.sandbox.debug.beans;
 
 import kz.greetgo.depinject.core.Bean;
 import kz.greetgo.depinject.core.BeanGetter;
 import kz.greetgo.depinject.core.HasAfterInject;
 import kz.greetgo.sandbox.controller.util.Modules;
-import kz.greetgo.sandbox.stand.util.WebAppContextRegistration;
+import kz.greetgo.sandbox.debug.util.WebAppContextRegistration;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
 

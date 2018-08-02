@@ -1,4 +1,4 @@
-package kz.greetgo.sandbox.stand.launchers;
+package kz.greetgo.sandbox.debug.launchers;
 
 import kz.greetgo.sandbox.controller.util.Modules;
 import kz.greetgo.ts_java_convert.ConvertModelBuilder;
