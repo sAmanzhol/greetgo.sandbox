@@ -14,6 +14,7 @@ import kz.greetgo.sandbox.controller.model.UserInfo;
 import kz.greetgo.sandbox.controller.register.AuthRegister;
 import kz.greetgo.sandbox.controller.security.PublicAccess;
 import kz.greetgo.sandbox.controller.util.Controller;
+import kz.greetgo.util.RND;
 
 /**
  * как составлять контроллеры написано
@@ -49,8 +50,22 @@ public class AuthController implements Controller {
   }
 
   @ToJson
-  @OnGet("/userInfo")
-  public UserInfo userInfo(@ParSession("personId") String personId) {
+  @OnGet("/userInfo2")
+  public UserInfo userInfo2(@ParSession("personId") String personId) {
     return authRegister.get().getUserInfo(personId);
+  }
+
+  @ToJson
+  @PublicAccess
+  @OnGet("/userInfo")
+  public UserInfo userInfo() {
+    UserInfo ret = new UserInfo();
+    ret.accountName = "pushkin";
+    ret.id = "213nh43k25";
+    ret.name = "Александр";
+    ret.patronymic = "Сергеевич";
+    ret.surname = "Пушкин";
+    ret.yellow = RND.bool();
+    return ret;
   }
 }
