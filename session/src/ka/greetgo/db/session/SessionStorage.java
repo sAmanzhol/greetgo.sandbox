@@ -16,28 +16,12 @@ public interface SessionStorage {
   void insertSession(SessionIdentity identity, Object sessionData);
 
   /**
-   * Loads additional session data
+   * Loads sessionContents
    *
    * @param sessionId session id
-   * @return additional session data, or null if session is absent
+   * @return session contents
    */
-  <T> T loadSessionData(String sessionId);
-
-  /**
-   * Loads token from session
-   *
-   * @param sessionId session id
-   * @return token or null, if session is absent
-   */
-  String loadToken(String sessionId);
-
-  /**
-   * Loads session insertion time
-   *
-   * @param sessionId session id
-   * @return session insertion time or null, if session is absent
-   */
-  Date loadInsertedAt(String sessionId);
+  SessionRow loadSession(String sessionId);
 
   /**
    * Loads session last touched time

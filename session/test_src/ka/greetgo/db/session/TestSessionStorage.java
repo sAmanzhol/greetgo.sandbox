@@ -21,6 +21,10 @@ public class TestSessionStorage implements SessionStorage {
     private SessionDot(String id) {
       this.id = id;
     }
+
+    public SessionRow toRow() {
+      return new SessionRow(token, sessionData, insertedAt, lastTouchedAt);
+    }
   }
 
   public final Map<String, SessionDot> sessionMap = new HashMap<>();
@@ -36,33 +40,15 @@ public class TestSessionStorage implements SessionStorage {
     sessionMap.put(dot.id, dot);
   }
 
-  public int loadSessionDataCount = 0;
+  public int loadSessionCount = 0;
 
   @Override
-  public <T> T loadSessionData(String sessionId) {
-    loadSessionDataCount++;
+  public SessionRow loadSession(String sessionId) {
+    loadSessionCount++;
     SessionDot dot = sessionMap.get(sessionId);
     if (dot == null) return null;
-    //noinspection unchecked
-    return (T) dot.sessionData;
+    return dot.toRow();
   }
-
-
-  @Override
-  public String loadToken(String sessionId) {
-    SessionDot dot = sessionMap.get(sessionId);
-    if (dot == null) return null;
-    return dot.token;
-  }
-
-
-  @Override
-  public Date loadInsertedAt(String sessionId) {
-    SessionDot dot = sessionMap.get(sessionId);
-    if (dot == null) return null;
-    return dot.insertedAt;
-  }
-
 
   @Override
   public Date loadLastTouchedAt(String sessionId) {

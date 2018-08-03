@@ -1,7 +1,7 @@
 package ka.greetgo.db.session;
 
-import ka.greetgo.db.session.jdbc.SelectBytesOrNull;
 import ka.greetgo.db.session.jdbc.SelectDateOrNull;
+import ka.greetgo.db.session.jdbc.SelectFirstOrNull;
 import ka.greetgo.db.session.jdbc.SelectStrOrNull;
 import ka.greetgo.db.session.jdbc.Update;
 
@@ -9,6 +9,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import static java.util.Collections.singletonList;
 
 public abstract class AbstractSessionStorageAdapter implements SessionStorage {
 
@@ -64,34 +66,6 @@ public abstract class AbstractSessionStorageAdapter implements SessionStorage {
   protected abstract String zeroSessionAgeSql(List<Object> sqlParams, String sessionId);
 
   @Override
-  public <T> T loadSessionData(String sessionId) {
-    List<Object> sqlParams = new ArrayList<>();
-    String sql = loadSessionDataSql(sqlParams, sessionId);
-    byte[] bytes = structure.jdbc.execute(new SelectBytesOrNull(sql, sqlParams));
-    return Serializer.deserialize(bytes);
-  }
-
-  protected abstract String loadSessionDataSql(List<Object> sqlParams, String sessionId);
-
-  @Override
-  public String loadToken(String sessionId) {
-    List<Object> sqlParams = new ArrayList<>();
-    String sql = loadTokenSql(sqlParams, sessionId);
-    return structure.jdbc.execute(new SelectStrOrNull(sql, sqlParams));
-  }
-
-  protected abstract String loadTokenSql(List<Object> sqlParams, String sessionId);
-
-  @Override
-  public Date loadInsertedAt(String sessionId) {
-    List<Object> sqlParams = new ArrayList<>();
-    String sql = loadInsertedAtSql(sqlParams, sessionId);
-    return structure.jdbc.execute(new SelectDateOrNull(sql, sqlParams));
-  }
-
-  protected abstract String loadInsertedAtSql(List<Object> sqlParams, String sessionId);
-
-  @Override
   public Date loadLastTouchedAt(String sessionId) {
     List<Object> sqlParams = new ArrayList<>();
     String sql = loadLastTouchedAtSql(sqlParams, sessionId);
@@ -108,4 +82,20 @@ public abstract class AbstractSessionStorageAdapter implements SessionStorage {
   }
 
   protected abstract String removeSessionsOlderThanSql(List<Object> sqlParams, int ageInHours);
+
+  @Override
+  public SessionRow loadSession(String sessionId) {
+
+    String sql = "select * from " + structure.tableName + " where " + structure.id + " = ?";
+
+    return structure.jdbc.execute(new SelectFirstOrNull<>(sql, singletonList(sessionId), rs -> {
+
+      String token = rs.getString(structure.token);
+      Object sessionData = Serializer.deserialize(rs.getBytes(structure.sessionData));
+      Date insertedAt = rs.getTimestamp(structure.insertedAt);
+      Date lastTouchedAt = rs.getTimestamp(structure.lastTouchedAt);
+
+      return new SessionRow(token, sessionData, insertedAt, lastTouchedAt);
+    }));
+  }
 }

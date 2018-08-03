@@ -46,24 +46,6 @@ class SessionStoragePostgresAdapter extends AbstractSessionStorageAdapter implem
   }
 
   @Override
-  protected String loadSessionDataSql(List<Object> sqlParams, String sessionId) {
-    sqlParams.add(sessionId);
-    return "select " + structure.sessionData + " from " + structure.tableName + " where " + structure.id + " = ?";
-  }
-
-  @Override
-  protected String loadTokenSql(List<Object> sqlParams, String sessionId) {
-    sqlParams.add(sessionId);
-    return "select " + structure.token + " from " + structure.tableName + " where " + structure.id + " = ?";
-  }
-
-  @Override
-  protected String loadInsertedAtSql(List<Object> sqlParams, String sessionId) {
-    sqlParams.add(sessionId);
-    return "select " + structure.insertedAt + " from " + structure.tableName + " where " + structure.id + " = ?";
-  }
-
-  @Override
   protected String loadLastTouchedAtSql(List<Object> sqlParams, String sessionId) {
     sqlParams.add(sessionId);
     return "select " + structure.lastTouchedAt + " from " + structure.tableName + " where " + structure.id + " = ?";

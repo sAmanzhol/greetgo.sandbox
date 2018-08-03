@@ -6,6 +6,8 @@ import java.security.SecureRandom;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -89,24 +91,67 @@ class SessionServiceImpl implements SessionService {
   @Override
   public Object getSessionData(String sessionId) {
 
-    if (removedSessionIds.containsKey(sessionId)) return null;
-
-    SessionCache sessionCache = sessionCacheMap.get(sessionId);
-    if (sessionCache != null) {
-      return sessionCache.sessionData;
+    if (removedSessionIds.containsKey(sessionId)) {
+      return null;
     }
 
-    return builder.storage.loadSessionData(sessionId);
+
+    {
+      SessionCache sessionCache = sessionCacheMap.get(sessionId);
+      if (sessionCache != null) {
+        return sessionCache.sessionData;
+      }
+    }
+
+    return loadSession(sessionId).map(row -> row.sessionData).orElse(null);
+  }
+
+  private Optional<SessionRow> loadSession(String sessionId) {
+    SessionRow sessionRow = builder.storage.loadSession(sessionId);
+    if (sessionRow == null) {
+      return Optional.empty();
+    }
+
+    sessionCacheMap.put(sessionId, sessionRow.toCacheRecord());
+    return Optional.of(sessionRow);
   }
 
   @Override
   public boolean verifyId(String sessionId) {
-    throw new NotImplementedException();
+    if (sessionId == null) {
+      return false;
+    }
+
+    SessionId s = SessionId.parse(sessionId);
+
+    if (s == null) {
+      return false;
+    }
+
+    if (s.part == null || s.part.isEmpty()) {
+      return false;
+    }
+
+    if (s.salt == null || s.salt.isEmpty()) {
+      return false;
+    }
+
+    String saltExpected = builder.saltGenerator.generateSalt(s.part);
+
+    return saltExpected.equals(s.salt);
+
   }
 
   @Override
   public boolean verifyToken(String sessionId, String token) {
-    throw new NotImplementedException();
+    SessionCache cache = sessionCacheMap.get(sessionId);
+    if (cache != null) {
+      return Objects.equals(cache.token, token);
+    }
+
+    return loadSession(sessionId)
+      .filter(row -> row.token != null && row.token.equals(token))
+      .isPresent();
   }
 
   @Override

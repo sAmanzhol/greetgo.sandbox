@@ -48,9 +48,10 @@ public class SessionStorageTest {
     jdbcFactory.dbType = dbType;
     Jdbc jdbc = jdbcFactory.create();
 
+    String tableName = "s_storage_" + RND.intStr(7);
     SessionStorage sessionStorage = SessionBuilders.newStorageBuilder()
       .setJdbc(dbType, jdbc)
-      .setTableName("s_storage")
+      .setTableName(tableName)
       .setFieldId("id")
       .setFieldToken("unique_token")
       .setFieldSessionData("user_data")
@@ -71,12 +72,12 @@ public class SessionStorageTest {
     //
     //
 
-    String actualToken = jdbc.execute(new SelectStrField("unique_token", "s_storage", identity.id));
+    String actualToken = jdbc.execute(new SelectStrField("unique_token", tableName, identity.id));
     assertThat(actualToken).isEqualTo(identity.token);
 
-    assertThat(jdbc.execute(new SelectDateField("ins_at", "s_storage", identity.id))).isNotNull();
-    assertThat(jdbc.execute(new SelectDateField("touched_at", "s_storage", identity.id))).isNotNull();
-    byte[] bytes = jdbc.execute(new SelectBytesField("user_data", "s_storage", identity.id));
+    assertThat(jdbc.execute(new SelectDateField("ins_at", tableName, identity.id))).isNotNull();
+    assertThat(jdbc.execute(new SelectDateField("touched_at", tableName, identity.id))).isNotNull();
+    byte[] bytes = jdbc.execute(new SelectBytesField("user_data", tableName, identity.id));
     TestSessionData actualSessionData = Serializer.deserialize(bytes);
     assertThat(actualSessionData).isNotNull();
     assert actualSessionData != null;
@@ -100,20 +101,22 @@ public class SessionStorageTest {
     sessionData.role = RND.str(10);
     sessionStorage.insertSession(identity, sessionData);
 
-
     //
     //
-    TestSessionData actual = sessionStorage.loadSessionData(identity.id);
+    SessionRow actual = sessionStorage.loadSession(identity.id);
     //
     //
 
     assert actual != null;
-    assertThat(actual.userId).isEqualTo(sessionData.userId);
-    assertThat(actual.role).isEqualTo(sessionData.role);
+    assertThat(((TestSessionData) actual.sessionData).userId).isEqualTo(sessionData.userId);
+    assertThat(((TestSessionData) actual.sessionData).role).isEqualTo(sessionData.role);
+    assertThat(actual.token).isEqualTo(identity.token);
+    assertThat(actual.insertedAt).isNotNull();
+    assertThat(actual.lastTouchedAt).isNotNull();
   }
 
   @Test(dataProvider = "dbTypeDataProvider")
-  public void loadSessionData_null(DbType dbType) {
+  public void loadSessionData_sessionData_null(DbType dbType) {
     jdbcFactory.dbType = dbType;
     Jdbc jdbc = jdbcFactory.create();
 
@@ -127,38 +130,15 @@ public class SessionStorageTest {
 
     //
     //
-    TestSessionData actual = sessionStorage.loadSessionData(identity.id);
+    SessionRow row = sessionStorage.loadSession(identity.id);
     //
     //
 
-    assertThat(actual).isNull();
+    assertThat(row.sessionData).isNull();
   }
 
   @Test(dataProvider = "dbTypeDataProvider")
-  public void loadToken(DbType dbType) {
-    jdbcFactory.dbType = dbType;
-    Jdbc jdbc = jdbcFactory.create();
-
-    SessionStorage sessionStorage = SessionBuilders.newStorageBuilder()
-      .setJdbc(dbType, jdbc)
-      .build();
-
-    SessionIdentity identity = new SessionIdentity(RND.intStr(15), RND.str(10));
-
-    sessionStorage.insertSession(identity, null);
-
-    //
-    //
-    String token = sessionStorage.loadToken(identity.id);
-    //
-    //
-
-    assertThat(token).isEqualTo(identity.token);
-  }
-
-
-  @Test(dataProvider = "dbTypeDataProvider")
-  public void loadToken_null(DbType dbType) {
+  public void loadSessionData_token_null(DbType dbType) {
     jdbcFactory.dbType = dbType;
     Jdbc jdbc = jdbcFactory.create();
 
@@ -172,42 +152,17 @@ public class SessionStorageTest {
 
     //
     //
-    String token = sessionStorage.loadToken(identity.id);
+    SessionRow row = sessionStorage.loadSession(identity.id);
     //
     //
 
-    assertThat(token).isNull();
+    assertThat(row.token).isNull();
   }
 
+  @SuppressWarnings("SameParameterValue")
   private void setDateFieldInAllTable(Jdbc jdbc, String fieldName, Date time) {
     jdbc.execute(new Update("update session_storage set " + fieldName + " = ?",
       singletonList(new Timestamp(time.getTime()))));
-  }
-
-  @Test(dataProvider = "dbTypeDataProvider")
-  public void loadInsertedAt(DbType dbType) {
-    jdbcFactory.dbType = dbType;
-    Jdbc jdbc = jdbcFactory.create();
-
-    SessionStorage sessionStorage = SessionBuilders.newStorageBuilder()
-      .setJdbc(dbType, jdbc)
-      .build();
-
-    SessionIdentity identity = new SessionIdentity(RND.intStr(15), null);
-
-    sessionStorage.insertSession(identity, null);
-
-    setDateFieldInAllTable(jdbc, "inserted_at", nowAddHours(jdbc, -10));
-
-    //
-    //
-    Date insertedAt = sessionStorage.loadInsertedAt(identity.id);
-    //
-    //
-
-    assertThat(insertedAt).isNotNull();
-
-    assertThat(insertedAt).isBefore(nowAddHours(jdbc, -5));
   }
 
   private static Date nowAddHours(Jdbc jdbc, int hours) {
@@ -325,6 +280,4 @@ public class SessionStorageTest {
     int leaveCount = jdbc.execute(new SelectIntOrNull("select count(1) from session_storage"));
     assertThat(leaveCount).isEqualTo(2);
   }
-
-
 }
