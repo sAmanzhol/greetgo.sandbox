@@ -1,4 +1,4 @@
-package ka.greetgo.db.session.jdbc;
+package ka.greetgo.db.jdbc;
 
 import kz.greetgo.db.ConnectionCallback;
 

@@ -1,6 +1,8 @@
 package ka.greetgo.db.session;
 
-import ka.greetgo.db.session.jdbc.SelectOneStrOrNull;
+import ka.greetgo.db.session.jdbc.SelectBytesOrNull;
+import ka.greetgo.db.session.jdbc.SelectDateOrNull;
+import ka.greetgo.db.session.jdbc.SelectStrOrNull;
 import ka.greetgo.db.session.jdbc.Update;
 
 import java.sql.SQLException;
@@ -19,7 +21,7 @@ public abstract class AbstractSessionStorageAdapter implements SessionStorage {
 
   private void init() {
     try {
-      structure.jdbc.execute(new SelectOneStrOrNull(checkTableExistsSql()));
+      structure.jdbc.execute(new SelectStrOrNull(checkTableExistsSql()));
     } catch (RuntimeException e) {
       if (e.getCause() instanceof SQLException) {
         SQLException sqlException = (SQLException) e.getCause();
@@ -54,32 +56,56 @@ public abstract class AbstractSessionStorageAdapter implements SessionStorage {
 
   @Override
   public boolean zeroSessionAge(String sessionId) {
-    return false;
+    List<Object> sqlParams = new ArrayList<>();
+    String sql = zeroSessionAgeSql(sqlParams, sessionId);
+    return structure.jdbc.execute(new Update(sql, sqlParams)) > 0;
   }
 
-  @Override
-  public int removeSessionsOlderThan(int ageInHours) {
-    return 0;
-  }
+  protected abstract String zeroSessionAgeSql(List<Object> sqlParams, String sessionId);
 
   @Override
-  public Object loadSessionData(String sessionId) {
-    return null;
+  public <T> T loadSessionData(String sessionId) {
+    List<Object> sqlParams = new ArrayList<>();
+    String sql = loadSessionDataSql(sqlParams, sessionId);
+    byte[] bytes = structure.jdbc.execute(new SelectBytesOrNull(sql, sqlParams));
+    return Serializer.deserialize(bytes);
   }
+
+  protected abstract String loadSessionDataSql(List<Object> sqlParams, String sessionId);
 
   @Override
   public String loadToken(String sessionId) {
-    return null;
+    List<Object> sqlParams = new ArrayList<>();
+    String sql = loadTokenSql(sqlParams, sessionId);
+    return structure.jdbc.execute(new SelectStrOrNull(sql, sqlParams));
   }
+
+  protected abstract String loadTokenSql(List<Object> sqlParams, String sessionId);
 
   @Override
   public Date loadInsertedAt(String sessionId) {
-    return null;
+    List<Object> sqlParams = new ArrayList<>();
+    String sql = loadInsertedAtSql(sqlParams, sessionId);
+    return structure.jdbc.execute(new SelectDateOrNull(sql, sqlParams));
   }
+
+  protected abstract String loadInsertedAtSql(List<Object> sqlParams, String sessionId);
 
   @Override
   public Date loadLastTouchedAt(String sessionId) {
-    return null;
+    List<Object> sqlParams = new ArrayList<>();
+    String sql = loadLastTouchedAtSql(sqlParams, sessionId);
+    return structure.jdbc.execute(new SelectDateOrNull(sql, sqlParams));
   }
 
+  protected abstract String loadLastTouchedAtSql(List<Object> sqlParams, String sessionId);
+
+  @Override
+  public int removeSessionsOlderThan(int ageInHours) {
+    List<Object> sqlParams = new ArrayList<>();
+    String sql = removeSessionsOlderThanSql(sqlParams, ageInHours);
+    return structure.jdbc.execute(new Update(sql, sqlParams));
+  }
+
+  protected abstract String removeSessionsOlderThanSql(List<Object> sqlParams, int ageInHours);
 }

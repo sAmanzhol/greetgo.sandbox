@@ -1,6 +1,6 @@
 package ka.greetgo.db.session;
 
-public class SessionBuilder {
+public class SessionBuilders {
   public static SessionServiceBuilder newServiceBuilder() {
     return new SessionServiceBuilder();
   }

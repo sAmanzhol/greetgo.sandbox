@@ -4,32 +4,30 @@ import kz.greetgo.db.ConnectionCallback;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.util.ArrayList;
+import java.sql.ResultSet;
 import java.util.List;
 
-public class Update implements ConnectionCallback<Integer> {
+public class SelectBytesOrNull implements ConnectionCallback<byte[]> {
+
   private final String sql;
   private final List<Object> sqlParams;
 
-  public Update(String sql, List<Object> sqlParams) {
+  public SelectBytesOrNull(String sql, List<Object> sqlParams) {
     this.sql = sql;
     this.sqlParams = sqlParams;
   }
 
-  public Update(String sql) {
-    this(sql, new ArrayList<>());
-  }
-
   @Override
-  public Integer doInConnection(Connection con) throws Exception {
+  public byte[] doInConnection(Connection con) throws Exception {
     try (PreparedStatement ps = con.prepareStatement(sql)) {
-
       int index = 1;
       for (Object param : sqlParams) {
         ps.setObject(index++, param);
       }
-
-      return ps.executeUpdate();
+      try (ResultSet rs = ps.executeQuery()) {
+        if (!rs.next()) return null;
+        return rs.getBytes(1);
+      }
     }
   }
 }

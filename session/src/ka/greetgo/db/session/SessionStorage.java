@@ -21,7 +21,7 @@ public interface SessionStorage {
    * @param sessionId session id
    * @return additional session data, or null if session is absent
    */
-  Object loadSessionData(String sessionId);
+  <T> T loadSessionData(String sessionId);
 
   /**
    * Loads token from session
@@ -58,7 +58,7 @@ public interface SessionStorage {
   boolean zeroSessionAge(String sessionId);
 
   /**
-   * Removes all session which age is more then ageInHours in hours
+   * Removes all session which age is more then ageInHours
    *
    * @param ageInHours session age in hours
    * @return count of removed sessions

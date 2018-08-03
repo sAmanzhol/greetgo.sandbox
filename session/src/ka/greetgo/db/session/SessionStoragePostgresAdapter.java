@@ -44,4 +44,42 @@ class SessionStoragePostgresAdapter extends AbstractSessionStorageAdapter implem
   protected boolean isExceptionAboutTableDoesNotExists(SQLException sqlException) {
     return "42P01".equals(sqlException.getSQLState());
   }
+
+  @Override
+  protected String loadSessionDataSql(List<Object> sqlParams, String sessionId) {
+    sqlParams.add(sessionId);
+    return "select " + structure.sessionData + " from " + structure.tableName + " where " + structure.id + " = ?";
+  }
+
+  @Override
+  protected String loadTokenSql(List<Object> sqlParams, String sessionId) {
+    sqlParams.add(sessionId);
+    return "select " + structure.token + " from " + structure.tableName + " where " + structure.id + " = ?";
+  }
+
+  @Override
+  protected String loadInsertedAtSql(List<Object> sqlParams, String sessionId) {
+    sqlParams.add(sessionId);
+    return "select " + structure.insertedAt + " from " + structure.tableName + " where " + structure.id + " = ?";
+  }
+
+  @Override
+  protected String loadLastTouchedAtSql(List<Object> sqlParams, String sessionId) {
+    sqlParams.add(sessionId);
+    return "select " + structure.lastTouchedAt + " from " + structure.tableName + " where " + structure.id + " = ?";
+  }
+
+  @Override
+  protected String zeroSessionAgeSql(List<Object> sqlParams, String sessionId) {
+    sqlParams.add(sessionId);
+    return "update " + structure.tableName
+      + " set " + structure.lastTouchedAt + " = clock_timestamp()" +
+      " where " + structure.id + " = ?";
+  }
+
+  @Override
+  protected String removeSessionsOlderThanSql(List<Object> sqlParams, int ageInHours) {
+    return "delete from " + structure.tableName + " where " + structure.lastTouchedAt
+      + " < clock_timestamp() - interval '" + ageInHours + " hours'";
+  }
 }
