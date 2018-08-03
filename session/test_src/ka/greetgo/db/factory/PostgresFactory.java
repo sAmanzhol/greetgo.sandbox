@@ -3,7 +3,6 @@ package ka.greetgo.db.factory;
 import kz.greetgo.db.AbstractJdbcWithDataSource;
 import kz.greetgo.db.Jdbc;
 import kz.greetgo.db.TransactionManager;
-import kz.greetgo.util.db.AbstractDataSource;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -11,8 +10,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.SQLFeatureNotSupportedException;
-import java.util.logging.Logger;
 
 import static kz.greetgo.conf.sys_params.SysParams.pgAdminPassword;
 import static kz.greetgo.conf.sys_params.SysParams.pgAdminUrl;
@@ -67,16 +64,6 @@ class PostgresFactory {
           public Connection getConnection() throws SQLException {
             return DriverManager.getConnection(
               changeUrlDbName(pgAdminUrl(), dbName), dbName, password);
-          }
-
-          @Override
-          public Connection getConnection(String username, String password) throws SQLException {
-            throw new UnsupportedOperationException();
-          }
-
-          @Override
-          public Logger getParentLogger() throws SQLFeatureNotSupportedException {
-            return null;
           }
         };
       }

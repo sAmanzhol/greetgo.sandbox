@@ -8,4 +8,12 @@ public class SessionIdentity {
     this.id = id;
     this.token = token;
   }
+
+  @Override
+  public String toString() {
+    return "SessionIdentity{" +
+      "id='" + id + '\'' +
+      ", token='" + token + '\'' +
+      '}';
+  }
 }
