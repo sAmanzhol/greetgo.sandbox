@@ -8,10 +8,12 @@ import kz.greetgo.mvc.annotations.ParSession;
 import kz.greetgo.mvc.annotations.ToJson;
 import kz.greetgo.mvc.annotations.on_methods.ControllerPrefix;
 import kz.greetgo.mvc.annotations.on_methods.OnGet;
+import kz.greetgo.mvc.annotations.on_methods.OnPost;
+import kz.greetgo.mvc.interfaces.TunnelCookies;
 import kz.greetgo.sandbox.controller.errors.RestError;
 import kz.greetgo.sandbox.controller.model.AuthInfo;
 import kz.greetgo.sandbox.controller.model.UserInfo;
-import kz.greetgo.sandbox.controller.register.AuthRegister;
+import kz.greetgo.sandbox.controller.register.AuthRegisterOld;
 import kz.greetgo.sandbox.controller.security.PublicAccess;
 import kz.greetgo.sandbox.controller.util.Controller;
 import kz.greetgo.util.RND;
@@ -24,7 +26,7 @@ import kz.greetgo.util.RND;
 @ControllerPrefix("/auth")
 public class AuthController implements Controller {
 
-  public BeanGetter<AuthRegister> authRegister;
+  public BeanGetter<AuthRegisterOld> authRegister;
 
   @AsIs
   @PublicAccess
@@ -36,10 +38,33 @@ public class AuthController implements Controller {
     return "Probe OK, param = " + param;
   }
 
+  int i = 40;
+
   @AsIs
   @PublicAccess
-  @OnGet("/login")
-  public String login(@Par("accountName") String accountName, @Par("password") String password) {
+  @OnPost("/login")
+  public String login(@Par("username") String username,
+                      @Par("password") String password,
+                      TunnelCookies cookies) {
+
+    System.out.println("ok");
+
+    String hiCookieValue = cookies.name("hi").value();
+    System.out.println("hiCookieValue = " + hiCookieValue);
+
+    cookies.forName("hi")
+      .path("/")
+      .httpOnly(true)
+      .maxAge(-1)
+      .saveValue("WOW" + i++);
+
+    return "{'key':'some value'}".replace('\'', '"');
+  }
+
+  @AsIs
+  @PublicAccess
+  @OnGet("/login1")
+  public String login1(@Par("accountName") String accountName, @Par("password") String password) {
     return authRegister.get().login(accountName, password);
   }
 

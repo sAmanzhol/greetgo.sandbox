@@ -52,7 +52,7 @@ public class CrossOriginFilterRegistration implements WebAppContextRegistration,
 
     response.addHeader("Access-Control-Allow-Methods", "POST, GET, PUT, OPTIONS, DELETE");
     response.addHeader("Access-Control-Allow-Headers", "origin,x-requested-with,access-control-request-headers," +
-      "content-type,access-control-request-method,accept,token");
+      "content-type,access-control-request-method,accept,token,set-cookie");
     response.addHeader("Access-Control-Max-Age", "1800");
 
     if ("OPTIONS".equals(request.getMethod())) {

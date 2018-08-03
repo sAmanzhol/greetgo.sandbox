@@ -9,7 +9,7 @@ import kz.greetgo.sandbox.controller.security.SecurityError;
 /**
  * Аутентификация, авторизация и работа с сессией
  */
-public interface AuthRegister {
+public interface AuthRegisterOld {
   /**
    * Сохраняет значение пользовательского параметра. У каждого пользователя свои значения
    *

@@ -8,6 +8,7 @@ Vue.config.productionTip = false;
 axios.interceptors.request.use((config) => {
   config.baseURL = process.env.VUE_APP_URL_PREFIX;
   config.headers.token = 'hello_world';
+  config.withCredentials = true;
   return config;
 });
 

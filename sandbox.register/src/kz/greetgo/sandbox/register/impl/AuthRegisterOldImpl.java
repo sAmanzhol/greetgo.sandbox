@@ -8,14 +8,14 @@ import kz.greetgo.sandbox.controller.errors.NoPassword;
 import kz.greetgo.sandbox.controller.errors.NotFound;
 import kz.greetgo.sandbox.controller.model.AuthInfo;
 import kz.greetgo.sandbox.controller.model.UserInfo;
-import kz.greetgo.sandbox.controller.register.AuthRegister;
+import kz.greetgo.sandbox.controller.register.AuthRegisterOld;
 import kz.greetgo.sandbox.controller.register.model.SessionInfo;
 import kz.greetgo.sandbox.controller.register.model.UserParamName;
 import kz.greetgo.sandbox.controller.security.SecurityError;
 import kz.greetgo.sandbox.register.dao.AuthDao;
 
 @Bean
-public class AuthRegisterImpl implements AuthRegister {
+public class AuthRegisterOldImpl implements AuthRegisterOld {
 
   public BeanGetter<AuthDao> authDao;
 

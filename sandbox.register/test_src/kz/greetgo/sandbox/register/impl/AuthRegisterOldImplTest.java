@@ -7,7 +7,7 @@ import kz.greetgo.sandbox.controller.errors.NoPassword;
 import kz.greetgo.sandbox.controller.errors.NotFound;
 import kz.greetgo.sandbox.controller.model.AuthInfo;
 import kz.greetgo.sandbox.controller.model.UserInfo;
-import kz.greetgo.sandbox.controller.register.AuthRegister;
+import kz.greetgo.sandbox.controller.register.AuthRegisterOld;
 import kz.greetgo.sandbox.controller.register.model.SessionInfo;
 import kz.greetgo.sandbox.controller.register.model.UserParamName;
 import kz.greetgo.sandbox.controller.security.SecurityError;
@@ -24,11 +24,11 @@ import java.util.List;
 import static org.fest.assertions.api.Assertions.assertThat;
 
 /**
- * Набор автоматизированных тестов для тестирования методов класса {@link AuthRegisterImpl}
+ * Набор автоматизированных тестов для тестирования методов класса {@link AuthRegisterOldImpl}
  */
-public class AuthRegisterImplTest extends ParentTestNg {
+public class AuthRegisterOldImplTest extends ParentTestNg {
 
-  public BeanGetter<AuthRegister> authRegister;
+  public BeanGetter<AuthRegisterOld> authRegister;
 
   public BeanGetter<AuthTestDao> authTestDao;
 

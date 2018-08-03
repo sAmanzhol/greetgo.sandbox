@@ -12,7 +12,7 @@ import kz.greetgo.mvc.interfaces.SessionParameterGetter;
 import kz.greetgo.mvc.interfaces.Views;
 import kz.greetgo.sandbox.controller.errors.JsonRestError;
 import kz.greetgo.sandbox.controller.errors.RestError;
-import kz.greetgo.sandbox.controller.register.AuthRegister;
+import kz.greetgo.sandbox.controller.register.AuthRegisterOld;
 import kz.greetgo.sandbox.controller.register.model.SessionInfo;
 import kz.greetgo.sandbox.controller.security.PublicAccess;
 import kz.greetgo.sandbox.controller.security.SecurityError;
@@ -67,7 +67,7 @@ public abstract class SandboxViews implements Views {
   /**
    * Данное поле содержит ссылку на обхект, в котором сосредоточена логика работы с security
    */
-  public BeanGetter<AuthRegister> authRegister;
+  public BeanGetter<AuthRegisterOld> authRegister;
 
   /**
    * Этот метод вызывается, каждый раз при обработке запроса. Метод контроллера ещё не вызван, и его нужно вызвать

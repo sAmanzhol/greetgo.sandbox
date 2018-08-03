@@ -12,6 +12,7 @@
 
 <script lang="ts">
   import {Component, Vue} from 'vue-property-decorator';
+  import axios from 'axios'
 
   @Component
   export default class VueLogin extends Vue {
@@ -27,7 +28,14 @@
     }
 
     onEnter() {
-      console.log("username = ", this.username, "password = ", this.password)
+      axios.post('/auth/login', {
+        username: this.username,
+        password: this.password,
+      }).then(response => {
+        console.log(response)
+      }).catch(error => {
+        console.error(error)
+      })
     }
   }
 </script>
