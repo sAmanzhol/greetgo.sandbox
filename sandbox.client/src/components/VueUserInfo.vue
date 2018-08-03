@@ -1,6 +1,8 @@
 <template>
   <div class="user-info">
-    <button @click="onGetUserInfo()" v-if="!userInfo">Получить данные пользователя</button>
+    <button @click="onGetUserInfo()" v-if="!userInfo" class="button__user-info">
+      Получить данные пользователя
+    </button>
 
     <table v-if="userInfo">
       <tr>
@@ -52,7 +54,7 @@
 </script>
 
 <style scoped lang="scss">
-  button {
+  .button__user-info {
     padding: .5rem;
     color: #314050;
   }
