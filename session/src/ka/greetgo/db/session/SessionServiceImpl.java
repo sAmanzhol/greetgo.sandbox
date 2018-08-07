@@ -1,17 +1,20 @@
 package ka.greetgo.db.session;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 import java.security.SecureRandom;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 class SessionServiceImpl implements SessionService {
   private final SessionServiceBuilder builder;
@@ -49,12 +52,12 @@ class SessionServiceImpl implements SessionService {
   static class SessionCache {
     final Object sessionData;
     final String token;
-    final AtomicReference<Date> lastTouchedData;
+    final AtomicReference<Date> lastTouchedAt;
 
-    public SessionCache(Object sessionData, String token, AtomicReference<Date> lastTouchedData) {
+    public SessionCache(Object sessionData, String token, Date lastTouchedAt) {
       this.sessionData = sessionData;
       this.token = token;
-      this.lastTouchedData = lastTouchedData;
+      this.lastTouchedAt = new AtomicReference<>(lastTouchedAt);
     }
   }
 
@@ -81,7 +84,7 @@ class SessionServiceImpl implements SessionService {
 
     Date lastTouchedAt = builder.storage.loadLastTouchedAt(identity.id);
 
-    SessionCache sessionCache = new SessionCache(sessionData, token, new AtomicReference<>(lastTouchedAt));
+    SessionCache sessionCache = new SessionCache(sessionData, token, lastTouchedAt);
 
     sessionCacheMap.put(sessionId, sessionCache);
 
@@ -156,21 +159,80 @@ class SessionServiceImpl implements SessionService {
 
   @Override
   public void zeroSessionAge(String sessionId) {
-    throw new NotImplementedException();
+
+    if (!verifyId(sessionId)) {
+      return;
+    }
+
+    if (zeroSessionAgeInCacheIfExists(sessionId)) {
+      return;
+    }
+
+    if (!loadSession(sessionId).isPresent()) {
+      return;
+    }
+
+    zeroSessionAgeInCacheIfExists(sessionId);
+  }
+
+  private boolean zeroSessionAgeInCacheIfExists(String sessionId) {
+    SessionCache sessionCache = sessionCacheMap.get(sessionId);
+    if (sessionCache == null) {
+      return false;
+    }
+    sessionCache.lastTouchedAt.set(new Date());
+    return true;
   }
 
   @Override
   public void removeSession(String sessionId) {
-    throw new NotImplementedException();
+    if (!verifyId(sessionId)) return;
+    sessionCacheMap.remove(sessionId);
+    builder.storage.remove(sessionId);
+    removedSessionIds.put(sessionId, sessionId);
   }
 
   @Override
   public void removeOldSessions() {
-    throw new NotImplementedException();
+
+    builder.storage.removeSessionsOlderThan(builder.oldSessionAgeInHours);
+
+    Calendar calendar = new GregorianCalendar();
+    calendar.add(Calendar.HOUR, -builder.oldSessionAgeInHours);
+
+    Set<String> removingIds = sessionCacheMap.entrySet().stream()
+      .filter(s -> s.getValue().lastTouchedAt.get().before(calendar.getTime()))
+      .map(Map.Entry::getKey)
+      .collect(Collectors.toSet());
+
+    removingIds.forEach(sessionCacheMap::remove);
+    removingIds.forEach(id -> removedSessionIds.put(id, id));
   }
 
   @Override
   public void syncCache() {
-    throw new NotImplementedException();
+
+    Set<String> removingIds = new HashSet<>();
+
+    for (Map.Entry<String, SessionCache> e : sessionCacheMap.entrySet()) {
+      SessionRow sessionRow = builder.storage.loadSession(e.getKey());
+      if (sessionRow == null) {
+        removingIds.add(e.getKey());
+        continue;
+      }
+
+      if (sessionRow.lastTouchedAt == null || sessionRow.lastTouchedAt.before(e.getValue().lastTouchedAt.get())) {
+
+        builder.storage.setLastTouchedAt(e.getKey(), e.getValue().lastTouchedAt.get());
+
+      } else {
+
+        e.getValue().lastTouchedAt.set(sessionRow.lastTouchedAt);
+
+      }
+    }
+
+    removingIds.forEach(sessionCacheMap::remove);
+    removingIds.forEach(id -> removedSessionIds.put(id, id));
   }
 }

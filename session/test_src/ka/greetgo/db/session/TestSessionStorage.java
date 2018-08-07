@@ -10,23 +10,6 @@ import java.util.stream.Collectors;
 
 public class TestSessionStorage implements SessionStorage {
 
-
-  public static class SessionDot {
-    final String id;
-    String token;
-    Object sessionData;
-    Date insertedAt = new Date();
-    Date lastTouchedAt = new Date();
-
-    private SessionDot(String id) {
-      this.id = id;
-    }
-
-    public SessionRow toRow() {
-      return new SessionRow(token, sessionData, insertedAt, lastTouchedAt);
-    }
-  }
-
   public final Map<String, SessionDot> sessionMap = new HashMap<>();
 
   @Override
@@ -66,10 +49,12 @@ public class TestSessionStorage implements SessionStorage {
     return true;
   }
 
-  public void setLastTouchedAt(String sessionId, Date value) {
+  @Override
+  public boolean setLastTouchedAt(String sessionId, Date value) {
     SessionDot dot = sessionMap.get(sessionId);
-    if (dot == null) throw new RuntimeException("No session with id = " + sessionId);
+    if (dot == null) return false;
     dot.lastTouchedAt = value;
+    return true;
   }
 
   @Override
@@ -84,5 +69,12 @@ public class TestSessionStorage implements SessionStorage {
     removingIds.forEach(sessionMap::remove);
 
     return removingIds.size();
+  }
+
+  @Override
+  public boolean remove(String sessionId) {
+    boolean containsKey = sessionMap.containsKey(sessionId);
+    sessionMap.remove(sessionId);
+    return containsKey;
   }
 }

@@ -1,7 +1,6 @@
 package ka.greetgo.db.session;
 
 import java.util.Date;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class SessionRow {
   public final String token;
@@ -17,6 +16,6 @@ public class SessionRow {
   }
 
   public SessionServiceImpl.SessionCache toCacheRecord() {
-    return new SessionServiceImpl.SessionCache(sessionData, token, new AtomicReference<>(lastTouchedAt));
+    return new SessionServiceImpl.SessionCache(sessionData, token, lastTouchedAt);
   }
 }

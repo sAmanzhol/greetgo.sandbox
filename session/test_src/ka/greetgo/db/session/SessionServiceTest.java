@@ -4,6 +4,9 @@ import kz.greetgo.util.RND;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Map;
 
 import static org.fest.assertions.api.Assertions.assertThat;
@@ -15,13 +18,15 @@ public class SessionServiceTest {
   SessionServiceImpl impl;
   final SaltGenerator saltGenerator = str -> "S" + str.substring(0, 5) + "S";
 
+  private static final int OLD_SESSION_AGE_IN_HOURS = 7;
+
   @BeforeMethod
   public void createSessionService() {
     sessionStorage = new TestSessionStorage();
 
 
     sessionService = SessionBuilders.newServiceBuilder()
-      .setOldSessionAgeInHours(4)
+      .setOldSessionAgeInHours(OLD_SESSION_AGE_IN_HOURS)
       .setSessionIdLength(17)
       .setTokenLength(17)
       .setStorage(sessionStorage)
@@ -46,7 +51,7 @@ public class SessionServiceTest {
     assertThat(identity.token).isNotNull();
     assertThat(identity.id).isNotEqualTo(identity.token);
 
-    TestSessionStorage.SessionDot sessionDot = sessionStorage.sessionMap.get(identity.id);
+    SessionDot sessionDot = sessionStorage.sessionMap.get(identity.id);
     assertThat(sessionDot).isNotNull();
     assertThat(sessionDot.id).isEqualTo(identity.id);
     assertThat(sessionDot.token).isEqualTo(identity.token);
@@ -330,5 +335,257 @@ public class SessionServiceTest {
     assertThat(sessionStorage.loadSessionCount).isZero();
 
     assertThat(impl.sessionCacheMap).containsKey(identity.id);
+  }
+
+  public static Date nowAddHours(int hours) {
+    Calendar calendar = new GregorianCalendar();
+    calendar.add(Calendar.HOUR, hours);
+    return calendar.getTime();
+  }
+
+  @Test
+  public void zeroSessionAge_usedCache() {
+    SessionIdentity identity = sessionService.createSession(null);
+
+    {
+      SessionServiceImpl.SessionCache cache = impl.sessionCacheMap.get(identity.id);
+      assertThat(cache).isNotNull();
+      cache.lastTouchedAt.set(nowAddHours(-10));
+    }
+
+    sessionStorage.loadSessionCount = 0;
+
+    //
+    //
+    sessionService.zeroSessionAge(identity.id);
+    //
+    //
+
+    assertThat(sessionStorage.loadSessionCount).isZero();
+
+    {
+      SessionServiceImpl.SessionCache cache = impl.sessionCacheMap.get(identity.id);
+      assertThat(cache).isNotNull();
+      assertThat(cache.lastTouchedAt.get()).isAfter(nowAddHours(-1));
+    }
+  }
+
+  @Test
+  public void zeroSessionAge_noCache() {
+
+    SessionIdentity identity = sessionService.createSession(null);
+
+    sessionStorage.sessionMap.get(identity.id).lastTouchedAt = nowAddHours(-10);
+
+    impl.sessionCacheMap.clear();
+    sessionStorage.loadSessionCount = 0;
+
+    //
+    //
+    sessionService.zeroSessionAge(identity.id);
+    //
+    //
+
+    assertThat(sessionStorage.loadSessionCount).isEqualTo(1);
+
+    {
+      SessionServiceImpl.SessionCache cache = impl.sessionCacheMap.get(identity.id);
+      assertThat(cache).isNotNull();
+      assertThat(cache.lastTouchedAt.get()).isAfter(nowAddHours(-1));
+    }
+    {
+      SessionDot sessionDot = sessionStorage.sessionMap.get(identity.id);
+      assertThat(sessionDot).isNotNull();
+      assertThat(sessionDot.lastTouchedAt)
+        .describedAs("Session must be being pinging only in cache")
+        .isBefore(nowAddHours(-1));
+    }
+  }
+
+  @Test
+  public void zeroSessionAge_leftSessionId() {
+
+    String sessionId = RND.str(10);
+
+    sessionStorage.loadSessionCount = 0;
+
+    //
+    //
+    sessionService.zeroSessionAge(sessionId);
+    //
+    //
+
+    assertThat(sessionStorage.loadSessionCount).isZero();
+  }
+
+  @Test
+  public void zeroSessionAge_noSessionInDb() {
+
+    SessionIdentity identity = sessionService.createSession(null);
+
+    sessionStorage.sessionMap.remove(identity.id);
+
+    impl.sessionCacheMap.clear();
+    sessionStorage.loadSessionCount = 0;
+
+    //
+    //
+    sessionService.zeroSessionAge(identity.id);
+    //
+    //
+
+    assertThat(sessionStorage.loadSessionCount).isEqualTo(1);
+
+    assertThat(impl.sessionCacheMap).doesNotContainKey(identity.id);
+  }
+
+  @Test
+  public void removeSession() {
+    SessionIdentity identity = sessionService.createSession(null);
+
+    assertThat(sessionStorage.sessionMap).containsKey(identity.id);
+    assertThat(impl.sessionCacheMap).containsKey(identity.id);
+
+    //
+    //
+    sessionService.removeSession(identity.id);
+    //
+    //
+
+    assertThat(sessionStorage.sessionMap).doesNotContainKey(identity.id);
+    assertThat(impl.sessionCacheMap).doesNotContainKey(identity.id);
+    assertThat(impl.removedSessionIds).containsKey(identity.id);
+  }
+
+  @Test
+  public void removeSession_noSession_leftId() {
+    String sessionId = RND.str(10);
+
+    //
+    //
+    sessionService.removeSession(sessionId);
+    //
+    //
+
+    assertThat(impl.removedSessionIds).doesNotContainKey(sessionId);
+  }
+
+  @Test
+  public void removeSession_noSession_goodId() {
+    SessionIdentity identity = sessionService.createSession(null);
+
+    sessionStorage.sessionMap.remove(identity.id);
+    impl.sessionCacheMap.remove(identity.id);
+
+    //
+    //
+    sessionService.removeSession(identity.id);
+    //
+    //
+
+    assertThat(impl.removedSessionIds).containsKey(identity.id);
+  }
+
+  private void setLastTouchedByInDb(String sessionId, Date value) {
+    sessionStorage.sessionMap.get(sessionId).lastTouchedAt = value;
+    {
+      SessionServiceImpl.SessionCache cache = impl.sessionCacheMap.get(sessionId);
+      if (cache != null) {
+        cache.lastTouchedAt.set(value);
+      }
+    }
+  }
+
+  @Test
+  public void removeOldSessions() {
+    String youngId = sessionService.createSession(null).id;
+    String oldId = sessionService.createSession(null).id;
+
+    setLastTouchedByInDb(youngId, nowAddHours(-OLD_SESSION_AGE_IN_HOURS + 1));
+    setLastTouchedByInDb(oldId, nowAddHours(-OLD_SESSION_AGE_IN_HOURS - 1));
+
+    //
+    //
+    sessionService.removeOldSessions();
+    //
+    //
+
+    assertThat(sessionStorage.sessionMap).containsKey(youngId);
+    assertThat(impl.sessionCacheMap).containsKey(youngId);
+    assertThat(impl.removedSessionIds).doesNotContainKey(youngId);
+
+    assertThat(sessionStorage.sessionMap).doesNotContainKey(oldId);
+    assertThat(impl.sessionCacheMap).doesNotContainKey(oldId);
+    assertThat(impl.removedSessionIds).containsKey(oldId);
+  }
+
+  @Test
+  public void syncCache_existsInCache_absentInDb() {
+
+    String sessionId = RND.str(10);
+    impl.sessionCacheMap.put(sessionId, new SessionServiceImpl.SessionCache(sessionId, RND.str(10), new Date()));
+
+    sessionStorage.loadSessionCount = 0;
+
+    //
+    //
+    sessionService.syncCache();
+    //
+    //
+
+    assertThat(impl.sessionCacheMap).doesNotContainKey(sessionId);
+    assertThat(impl.removedSessionIds).containsKey(sessionId);
+
+    assertThat(sessionStorage.loadSessionCount).isEqualTo(1);
+  }
+
+  @Test
+  public void syncCache_cacheYoungerThenDb() {
+
+    String sessionId = sessionService.createSession(null).id;
+
+    impl.sessionCacheMap.get(sessionId).lastTouchedAt.set(nowAddHours(-10));
+    sessionStorage.sessionMap.get(sessionId).lastTouchedAt = nowAddHours(-5);
+
+    sessionStorage.loadSessionCount = 0;
+
+    //
+    //
+    sessionService.syncCache();
+    //
+    //
+
+    assertThat(impl.sessionCacheMap).containsKey(sessionId);
+    assertThat(impl.removedSessionIds).doesNotContainKey(sessionId);
+
+    assertThat(impl.sessionCacheMap.get(sessionId).lastTouchedAt.get()).isAfter(nowAddHours(-7));
+    assertThat(sessionStorage.sessionMap.get(sessionId).lastTouchedAt).isAfter(nowAddHours(-7));
+
+    assertThat(sessionStorage.loadSessionCount).isEqualTo(1);
+  }
+
+  @Test
+  public void syncCache_cacheOlderThenDb() {
+
+    String sessionId = sessionService.createSession(null).id;
+
+    impl.sessionCacheMap.get(sessionId).lastTouchedAt.set(nowAddHours(-5));
+    sessionStorage.sessionMap.get(sessionId).lastTouchedAt = nowAddHours(-10);
+
+    sessionStorage.loadSessionCount = 0;
+
+    //
+    //
+    sessionService.syncCache();
+    //
+    //
+
+    assertThat(impl.sessionCacheMap).containsKey(sessionId);
+    assertThat(impl.removedSessionIds).doesNotContainKey(sessionId);
+
+    assertThat(impl.sessionCacheMap.get(sessionId).lastTouchedAt.get()).isAfter(nowAddHours(-7));
+    assertThat(sessionStorage.sessionMap.get(sessionId).lastTouchedAt).isAfter(nowAddHours(-7));
+
+    assertThat(sessionStorage.loadSessionCount).isEqualTo(1);
   }
 }

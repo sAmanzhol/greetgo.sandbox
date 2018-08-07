@@ -26,6 +26,13 @@ import static org.fest.assertions.api.Assertions.assertThat;
 public class SessionStorageTest {
   JdbcFactory jdbcFactory = new JdbcFactory();
 
+  public static Date nowAddHours(Jdbc jdbc, int hours) {
+    Calendar calendar = new GregorianCalendar();
+    calendar.setTime(jdbc.execute(new SelectNow()));
+    calendar.add(Calendar.HOUR, hours);
+    return calendar.getTime();
+  }
+
   @BeforeMethod
   public void createJdbcFactory() {
     jdbcFactory.defineDbNameFrom("session_storage");
@@ -165,13 +172,6 @@ public class SessionStorageTest {
       singletonList(new Timestamp(time.getTime()))));
   }
 
-  private static Date nowAddHours(Jdbc jdbc, int hours) {
-    Calendar calendar = new GregorianCalendar();
-    calendar.setTime(jdbc.execute(new SelectNow()));
-    calendar.add(Calendar.HOUR, hours);
-    return calendar.getTime();
-  }
-
   @Test(dataProvider = "dbTypeDataProvider")
   public void loadLastTouchedAt(DbType dbType) {
     jdbcFactory.dbType = dbType;
@@ -226,9 +226,10 @@ public class SessionStorageTest {
     assertThat(actual).isAfter(nowAddHours(jdbc, -1));
   }
 
-  private void insertSession(SessionStorage sessionStorage) {
+  private SessionIdentity insertSession(SessionStorage sessionStorage) {
     SessionIdentity identity = new SessionIdentity(RND.intStr(15), null);
     sessionStorage.insertSession(identity, null);
+    return identity;
   }
 
   @Test(dataProvider = "dbTypeDataProvider")
@@ -280,4 +281,98 @@ public class SessionStorageTest {
     int leaveCount = jdbc.execute(new SelectIntOrNull("select count(1) from session_storage"));
     assertThat(leaveCount).isEqualTo(2);
   }
+
+  @Test(dataProvider = "dbTypeDataProvider")
+  public void removeSession(DbType dbType) {
+    jdbcFactory.dbType = dbType;
+    Jdbc jdbc = jdbcFactory.create();
+
+    SessionStorage sessionStorage = SessionBuilders.newStorageBuilder()
+      .setJdbc(dbType, jdbc)
+      .build();
+
+    String sessionId = insertSession(sessionStorage).id;
+
+    //
+    //
+    boolean removeFlag = sessionStorage.remove(sessionId);
+    //
+    //
+
+    assertThat(removeFlag).isTrue();
+
+    int count = jdbc.execute(new SelectIntOrNull(
+      "select count(1) from session_storage where id = ?", singletonList(sessionId)
+    ));
+    assertThat(count).isZero();
+  }
+
+  @Test(dataProvider = "dbTypeDataProvider")
+  public void removeSession_noSession(DbType dbType) {
+    jdbcFactory.dbType = dbType;
+    Jdbc jdbc = jdbcFactory.create();
+
+    SessionStorage sessionStorage = SessionBuilders.newStorageBuilder()
+      .setJdbc(dbType, jdbc)
+      .build();
+
+    //
+    //
+    boolean removeFlag = sessionStorage.remove(RND.str(10));
+    //
+    //
+
+    assertThat(removeFlag).isFalse();
+  }
+
+  @Test(dataProvider = "dbTypeDataProvider")
+  public void setLastTouchedAt(DbType dbType) {
+    jdbcFactory.dbType = dbType;
+    Jdbc jdbc = jdbcFactory.create();
+
+    SessionStorage sessionStorage = SessionBuilders.newStorageBuilder()
+      .setJdbc(dbType, jdbc)
+      .build();
+
+    String sessionId = insertSession(sessionStorage).id;
+
+    setDateFieldInAllTable(jdbc, "last_touched_at", nowAddHours(jdbc, -10));
+
+    //
+    //
+    boolean updateStatus = sessionStorage.setLastTouchedAt(sessionId, nowAddHours(jdbc, -5));
+    //
+    //
+
+    assertThat(updateStatus).isTrue();
+
+    Date actualDate = jdbc.execute(new SelectDateField("last_touched_at", "session_storage", sessionId));
+    assertThat(actualDate).isAfter(nowAddHours(jdbc, -7));
+  }
+
+  @Test(dataProvider = "dbTypeDataProvider")
+  public void setLastTouchedAt_noSession(DbType dbType) {
+    jdbcFactory.dbType = dbType;
+    Jdbc jdbc = jdbcFactory.create();
+
+    SessionStorage sessionStorage = SessionBuilders.newStorageBuilder()
+      .setJdbc(dbType, jdbc)
+      .build();
+
+    String sessionId = insertSession(sessionStorage).id;
+
+    setDateFieldInAllTable(jdbc, "last_touched_at", nowAddHours(jdbc, -10));
+
+    //
+    //
+    boolean updateStatus = sessionStorage.setLastTouchedAt(RND.str(10), nowAddHours(jdbc, -5));
+    //
+    //
+
+    assertThat(updateStatus).isFalse();
+
+    Date actualDate = jdbc.execute(new SelectDateField("last_touched_at", "session_storage", sessionId));
+    assertThat(actualDate).isBefore(nowAddHours(jdbc, -7));
+  }
+
 }

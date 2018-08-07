@@ -48,4 +48,21 @@ public interface SessionStorage {
    * @return count of removed sessions
    */
   int removeSessionsOlderThan(int ageInHours);
+
+  /**
+   * Removes session with specified id
+   *
+   * @param sessionId removing session id
+   * @return removing flag: true - session was and removed, false - session absent with specified id
+   */
+  boolean remove(String sessionId);
+
+  /**
+   * Updates field lastTouchedAt of session
+   *
+   * @param sessionId     updating session id
+   * @param lastTouchedAt new value
+   * @return update flag: true - was session with specified id and it was update, false - otherwise
+   */
+  boolean setLastTouchedAt(String sessionId, Date lastTouchedAt);
 }
