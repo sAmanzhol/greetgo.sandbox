@@ -6,7 +6,7 @@
   <changeSet author="pompei" id="create-function-moment">
     <sql endDelimiter=";;"><![CDATA[
       create function moment() returns timestamp
-      language plpgsql as 'begin return current_timestamp; end '
+      language plpgsql as 'begin return clock_timestamp(); end '
     ]]></sql>
   </changeSet>
 

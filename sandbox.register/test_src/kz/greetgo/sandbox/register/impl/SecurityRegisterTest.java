@@ -18,33 +18,33 @@ import java.util.Date;
 import static org.fest.assertions.api.Assertions.assertThat;
 
 /**
- * Набор автоматизированных тестов для тестирования методов класса {@link TokenRegister}
+ * Набор автоматизированных тестов для тестирования методов класса {@link SecurityRegister}
  */
-public class TokenRegisterTest {
+public class SecurityRegisterTest {
 
   /**
    * Ссылка на тестируемый объект. Инициируется в методе {@link #prepareTokenRegister()} перед запуском каждого теста
    */
-  private TokenRegister tokenRegister;
+  private SecurityRegister securityRegister;
 
   /**
-   * Этот метод запускается перед каждым тестом. Он подготавливает поле {@link #tokenRegister}
+   * Этот метод запускается перед каждым тестом. Он подготавливает поле {@link #securityRegister}
    *
    * @throws Exception пробрасываем, чтобы не требовались try/catch-блоки
    */
   @BeforeMethod
   public void prepareTokenRegister() throws Exception {
-    tokenRegister = new TokenRegister();
+    securityRegister = new SecurityRegister();
 
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd__HH_mm_ss_SSS");
     String ext = sdf.format(new Date());
 
     // Перед каждым тестом придумываем новые файлы, где система будет хранить ключи для ассиместричного шифрования
-    tokenRegister.privateKeyFile = new File("build/TokenRegisterTest/" + ext + "_privateKeyFile");
-    tokenRegister.publicKeyFile = new File("build/TokenRegisterTest/" + ext + "_publicKeyFile");
+    securityRegister.privateKeyFile = new File("build/TokenRegisterTest/" + ext + "_privateKeyFile");
+    securityRegister.publicKeyFile = new File("build/TokenRegisterTest/" + ext + "_publicKeyFile");
 
     //Инициируем внутренние ресурсы
-    tokenRegister.afterInject();
+    securityRegister.afterInject();
   }
 
   /**
@@ -105,8 +105,8 @@ public class TokenRegisterTest {
 
     //
     //
-    String token = tokenRegister.createToken(sessionInfo);
-    SessionInfo sessionInfo2 = tokenRegister.decryptToken(token);
+    String token = securityRegister.createToken(sessionInfo);
+    SessionInfo sessionInfo2 = securityRegister.decryptToken(token);
     //
     //
 
@@ -117,9 +117,9 @@ public class TokenRegisterTest {
   }
 
   private void breakFiles(BreakKeyFiles breakKeyFiles) throws Exception {
-    if (breakKeyFiles.breakPrivateKeyFile) breakFile(tokenRegister.privateKeyFile);
-    if (breakKeyFiles.breakPublicKeyFile) breakFile(tokenRegister.publicKeyFile);
-    tokenRegister.afterInject();
+    if (breakKeyFiles.breakPrivateKeyFile) breakFile(securityRegister.privateKeyFile);
+    if (breakKeyFiles.breakPublicKeyFile) breakFile(securityRegister.publicKeyFile);
+    securityRegister.afterInject();
   }
 
   private void breakFile(File file) throws Exception {
@@ -135,8 +135,8 @@ public class TokenRegisterTest {
     SessionInfo sessionInfo = new SessionInfo(RND.str(10));
 
     {
-      String token = tokenRegister.createToken(sessionInfo);
-      SessionInfo sessionInfo2 = tokenRegister.decryptToken(token);
+      String token = securityRegister.createToken(sessionInfo);
+      SessionInfo sessionInfo2 = securityRegister.decryptToken(token);
 
       assertThat(sessionInfo2.personId).isEqualTo(sessionInfo.personId);
       assertThat(sessionInfo2.createdAt.getTime()).isEqualTo(sessionInfo.createdAt.getTime());
@@ -145,8 +145,8 @@ public class TokenRegisterTest {
     breakFiles(breakKeyFiles);
 
     {
-      String token = tokenRegister.createToken(sessionInfo);
-      SessionInfo sessionInfo2 = tokenRegister.decryptToken(token);
+      String token = securityRegister.createToken(sessionInfo);
+      SessionInfo sessionInfo2 = securityRegister.decryptToken(token);
 
       assertThat(sessionInfo2.personId).isEqualTo(sessionInfo.personId);
       assertThat(sessionInfo2.createdAt.getTime()).isEqualTo(sessionInfo.createdAt.getTime());
@@ -156,7 +156,7 @@ public class TokenRegisterTest {
   @Test
   public void createToken_onNull() throws Exception {
 
-    String token = tokenRegister.createToken(null);
+    String token = securityRegister.createToken(null);
 
     assertThat(token).isNull();
 
@@ -165,7 +165,7 @@ public class TokenRegisterTest {
   @Test
   public void decryptToken_onNull() throws Exception {
 
-    SessionInfo sessionInfo = tokenRegister.decryptToken(null);
+    SessionInfo sessionInfo = securityRegister.decryptToken(null);
 
     assertThat(sessionInfo).isNull();
 
@@ -174,7 +174,7 @@ public class TokenRegisterTest {
   @Test
   public void decryptToken_onEmpty() throws Exception {
 
-    SessionInfo sessionInfo = tokenRegister.decryptToken("");
+    SessionInfo sessionInfo = securityRegister.decryptToken("");
 
     assertThat(sessionInfo).isNull();
 
@@ -183,7 +183,7 @@ public class TokenRegisterTest {
   @Test
   public void decryptToken_onSpacesOnly() throws Exception {
 
-    SessionInfo sessionInfo = tokenRegister.decryptToken("     ");
+    SessionInfo sessionInfo = securityRegister.decryptToken("     ");
 
     assertThat(sessionInfo).isNull();
 
@@ -192,41 +192,9 @@ public class TokenRegisterTest {
   @Test
   public void decryptToken_onLeftToken() throws Exception {
 
-    SessionInfo sessionInfo = tokenRegister.decryptToken("hjb56hjb6hjb7hjb4b3hjb2hjb54hj67hn3kjn2354l6lkm67klm4n3hk3");
+    SessionInfo sessionInfo = securityRegister.decryptToken("hjb56hjb6hjb7hjb4b3hjb2hjb54hj67hn3kjn2354l6lkm67klm4n3hk3");
 
     assertThat(sessionInfo).isNull();
-
-  }
-
-  @Test
-  public void encryptPassword() throws Exception {
-
-    String password = RND.str(10);
-
-    //
-    //
-    String encryptPassword = tokenRegister.encryptPassword(password);
-    //
-    //
-
-    assertThat(encryptPassword).isNotNull();
-
-    String encryptPassword2 = tokenRegister.encryptPassword(password);
-
-    assertThat(encryptPassword).isEqualTo(encryptPassword2);
-
-  }
-
-  @Test
-  public void encryptPassword_null() throws Exception {
-
-    //
-    //
-    String encryptPassword = tokenRegister.encryptPassword(null);
-    //
-    //
-
-    assertThat(encryptPassword).isNull();
 
   }
 
@@ -234,11 +202,11 @@ public class TokenRegisterTest {
   public void createToken_breakKeyFiles_decryptToken() throws Exception {
     SessionInfo sessionInfo = new SessionInfo(RND.str(10));
 
-    String token = tokenRegister.createToken(sessionInfo);
+    String token = securityRegister.createToken(sessionInfo);
 
     breakFiles(BreakKeyFiles.BREAK_BOTH_KEY_FILES);
 
-    SessionInfo sessionInfo2 = tokenRegister.decryptToken(token);
+    SessionInfo sessionInfo2 = securityRegister.decryptToken(token);
 
     assertThat(sessionInfo2).isNull();
   }
@@ -246,10 +214,10 @@ public class TokenRegisterTest {
   @Test
   public void decryptToken_leftDeserialization() throws Exception {
     byte[] leftBytes = RND.byteArray(100);
-    byte[] encryptedBytes = tokenRegister.securityCrypto.encrypt(leftBytes);
+    byte[] encryptedBytes = securityRegister.securityCrypto.encrypt(leftBytes);
     String leftToken = Base64Util.bytesToBase64(encryptedBytes);
 
-    SessionInfo sessionInfo = tokenRegister.decryptToken(leftToken);
+    SessionInfo sessionInfo = securityRegister.decryptToken(leftToken);
 
     assertThat(sessionInfo).isNull();
 
@@ -260,7 +228,7 @@ public class TokenRegisterTest {
     byte[] leftBytes = RND.byteArray(100);
     String leftToken = Base64Util.bytesToBase64(leftBytes);
 
-    SessionInfo sessionInfo = tokenRegister.decryptToken(leftToken);
+    SessionInfo sessionInfo = securityRegister.decryptToken(leftToken);
 
     assertThat(sessionInfo).isNull();
   }
@@ -271,11 +239,62 @@ public class TokenRegisterTest {
   public void decryptToken_leftSerializedObject() throws Exception {
     LeftObject leftObject = new LeftObject();
     byte[] bytes = SerializeUtil.serialize(leftObject);
-    byte[] encryptedBytes = tokenRegister.securityCrypto.encrypt(bytes);
+    byte[] encryptedBytes = securityRegister.securityCrypto.encrypt(bytes);
     String leftToken = Base64Util.bytesToBase64(encryptedBytes);
 
-    SessionInfo sessionInfo = tokenRegister.decryptToken(leftToken);
+    SessionInfo sessionInfo = securityRegister.decryptToken(leftToken);
 
     assertThat(sessionInfo).isNull();
+  }
+
+  @Test
+  public void encryptPassword() throws Exception {
+
+    String password = RND.str(10);
+
+    //
+    //
+    String encryptPassword = securityRegister.encryptPassword(password);
+    //
+    //
+
+    assertThat(encryptPassword).isNotNull();
+
+    String encryptPassword2 = securityRegister.encryptPassword(password);
+
+    assertThat(encryptPassword).isNotEqualTo(encryptPassword2);
+  }
+
+  @Test
+  public void encryptPassword_null() throws Exception {
+
+    //
+    //
+    String encryptPassword = securityRegister.encryptPassword(null);
+    //
+    //
+
+    assertThat(encryptPassword).isNull();
+
+  }
+
+  @Test
+  public void encryptPassword_validatePassword() throws Exception {
+
+    String password = RND.str(10);
+
+    //
+    //
+    String encryptedPassword = securityRegister.encryptPassword(password);
+    //
+    //
+
+    //
+    //
+    boolean validation = securityRegister.validatePassword(password, encryptedPassword);
+    //
+    //
+
+    assertThat(validation).isTrue();
   }
 }

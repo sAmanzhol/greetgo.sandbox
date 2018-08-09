@@ -22,6 +22,7 @@
         surname varchar(255),
         name varchar(255),
         patronymic varchar(255),
+        birth_date date,
         encryptedPassword varchar(255),
         blocked smallint not null default 1
       )

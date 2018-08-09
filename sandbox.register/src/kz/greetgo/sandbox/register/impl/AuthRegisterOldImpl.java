@@ -29,7 +29,7 @@ public class AuthRegisterOldImpl implements AuthRegisterOld {
     return authDao.get().getUserParam(personId, name);
   }
 
-  public BeanGetter<TokenRegister> tokenManager;
+  public BeanGetter<SecurityRegister> tokenRegister;
 
   @Override
   public String login(String accountName, String password) {
@@ -37,7 +37,7 @@ public class AuthRegisterOldImpl implements AuthRegisterOld {
     if (accountName == null || accountName.length() == 0) throw new NoAccountName();
     if (password == null || password.length() == 0) throw new NoPassword();
 
-    String encryptPassword = tokenManager.get().encryptPassword(password);
+    String encryptPassword = tokenRegister.get().encryptPassword(password);
     if (encryptPassword == null) throw new IllegalLoginOrPassword();
 
     String personId = authDao.get().selectPersonIdByAccountAndPassword(accountName, encryptPassword);
@@ -45,14 +45,14 @@ public class AuthRegisterOldImpl implements AuthRegisterOld {
 
     SessionInfo sessionInfo = new SessionInfo(personId);
 
-    return tokenManager.get().createToken(sessionInfo);
+    return tokenRegister.get().createToken(sessionInfo);
   }
 
   private final ThreadLocal<SessionInfo> sessionInfo = new ThreadLocal<>();
 
   @Override
   public void checkTokenAndPutToThreadLocal(String token) {
-    SessionInfo sessionInfo = tokenManager.get().decryptToken(token);
+    SessionInfo sessionInfo = tokenRegister.get().decryptToken(token);
     this.sessionInfo.set(sessionInfo);
     if (sessionInfo == null) throw new SecurityError();
   }

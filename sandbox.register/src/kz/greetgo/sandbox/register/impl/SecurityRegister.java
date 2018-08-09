@@ -12,14 +12,18 @@ import kz.greetgo.mvc.security.SerializeUtil;
 import kz.greetgo.mvc.util.Base64Util;
 import kz.greetgo.sandbox.controller.register.model.SessionInfo;
 import kz.greetgo.sandbox.register.util.App;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 
 @Bean
-public class TokenRegister implements HasAfterInject {
+public class SecurityRegister implements HasAfterInject {
   File publicKeyFile = new File(App.securityDir() + "/session.public.key");
   File privateKeyFile = new File(App.securityDir() + "/session.private.key");
+
+  private SecuritySource securitySource;
+  SecurityCrypto securityCrypto;
 
   @Override
   public void afterInject() throws Exception {
@@ -37,9 +41,6 @@ public class TokenRegister implements HasAfterInject {
     securityCrypto = new SecurityCryptoBridge(securitySource);
   }
 
-  private SecuritySource securitySource;
-  SecurityCrypto securityCrypto;
-
   public String createToken(SessionInfo sessionInfo) {
     byte[] bytes = SerializeUtil.serialize(sessionInfo);
     byte[] encryptedBytes = securityCrypto.encrypt(bytes);
@@ -56,9 +57,20 @@ public class TokenRegister implements HasAfterInject {
     }
   }
 
+  private static final int RND_SIZE = 10;
+
   public String encryptPassword(String password) {
     if (password == null) return null;
+
     byte[] digest = securitySource.getMessageDigest().digest(password.getBytes(StandardCharsets.UTF_8));
+
+    byte[] rndBytes = securitySource.getRandom().generateSeed(RND_SIZE);
+
+
     return Base64Util.bytesToBase64(digest);
+  }
+
+  public boolean validatePassword(String password, String encryptedPassword) {
+    throw new NotImplementedException();
   }
 }

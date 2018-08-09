@@ -153,7 +153,7 @@ public class AuthRegisterOldImplTest extends ParentTestNg {
     assertThat(value).isEqualTo(expectedValue);
   }
 
-  public BeanGetter<TokenRegister> tokenManager;
+  public BeanGetter<SecurityRegister> tokenManager;
 
   @Test
   public void login_ok() throws Exception {
