@@ -1,8 +1,0 @@
-dependencies {
-  compile "kz.greetgo.mvc:greetgo.mvc.security:$greetgoMvcVersion"
-  compile "kz.greetgo.db:greetgo.db:$greetgoDbVersion"
-
-  testCompile "kz.greetgo:greetgo.util:$greetgoUtilVersion"
-  testCompile "kz.greetgo.conf:greetgo.sys_params:$greetgoConfVersion"
-  testCompile "org.postgresql:postgresql:$postgresJdbcVersion"
-}

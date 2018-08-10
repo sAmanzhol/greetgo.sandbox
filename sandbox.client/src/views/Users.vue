@@ -27,12 +27,12 @@
       id: 'asd',
       fio: 'Пушкин А.С.',
       accountName: 'pushkin',
-      birthDate: '1799-06-06'
+      birthDate: '1799-06-06',
     }), UserRecord.create({
       id: 'dsa',
       fio: 'Сталин И.В.',
       accountName: 'stalin',
-      birthDate: '1878-12-18'
+      birthDate: '1878-12-18',
     })];
   }
 </script>

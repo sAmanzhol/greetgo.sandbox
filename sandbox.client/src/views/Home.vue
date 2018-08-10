@@ -1,7 +1,9 @@
 <template>
   <div class="home">
     <img src="../assets/sandbox.svg" width="200px">
+    <div class="login-place">
     <VueLogin/>
+    </div>
     <HelloWorld msg="Sandbox"/>
     <VueUserInfo/>
   </div>
@@ -22,3 +24,9 @@
 
   }
 </script>
+
+<style lang="scss">
+  .login-place {
+    text-align: center;
+  }
+</style>

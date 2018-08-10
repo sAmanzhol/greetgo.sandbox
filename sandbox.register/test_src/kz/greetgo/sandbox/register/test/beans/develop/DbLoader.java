@@ -1,10 +1,10 @@
-package kz.greetgo.sandbox.register.test.beans._develop_;
+package kz.greetgo.sandbox.register.test.beans.develop;
 
 import kz.greetgo.depinject.core.Bean;
 import kz.greetgo.depinject.core.BeanGetter;
 import kz.greetgo.sandbox.register.beans.all.IdGenerator;
-import kz.greetgo.sandbox.register.impl.SecurityRegister;
 import kz.greetgo.sandbox.register.test.dao.AuthTestDao;
+import kz.greetgo.security.password.PasswordEncoder;
 import org.apache.log4j.Logger;
 
 import java.sql.Timestamp;
@@ -17,8 +17,8 @@ public class DbLoader {
 
 
   public BeanGetter<AuthTestDao> authTestDao;
-  public BeanGetter<SecurityRegister> tokenRegister;
   public BeanGetter<IdGenerator> idGenerator;
+  public BeanGetter<PasswordEncoder> passwordEncoder;
 
   public void loadTestData() throws Exception {
     logger.info("Start loading persons...");
@@ -34,11 +34,11 @@ public class DbLoader {
   private void user(String fioStr, String birthDateStr, String accountName) throws Exception {
     String id = idGenerator.get().newId();
     String[] fio = fioStr.split("\\s+");
-    SimpleDateFormat sdf = new SimpleDateFormat("yyy-MM-dd");
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     Date birthDate = sdf.parse(birthDateStr);
-    String encryptPassword = tokenRegister.get().encryptPassword("111");
+    String encryptPassword = passwordEncoder.get().encode("111");
 
-    authTestDao.get().insertUser(id, accountName, encryptPassword, 0);
+    authTestDao.get().insertPerson(id, accountName, encryptPassword);
     authTestDao.get().updatePersonField(id, "birth_date", new Timestamp(birthDate.getTime()));
     authTestDao.get().updatePersonField(id, "surname", fio[0]);
     authTestDao.get().updatePersonField(id, "name", fio[1]);

@@ -1,12 +1,18 @@
 <template>
   <div class="login">
-    Войти
     <input type="text" placeholder="Enter Username" name="name"
-           :value="username" @input="updateUsername($event)"/>
+           :value="username" @input="updateUsername($event)"
+           v-on:keyup.13="$refs.password.focus()"
+    />
     :
     <input type="password" placeholder="Enter Password" name="password"
-           :value="password" @input="updatePassword($event)"/>
+           :value="password" @input="updatePassword($event)" ref="password"
+           v-on:keyup.13="onEnter()"
+    />
     <button class="button__enter" @click="onEnter" :disabled="!username||!password">Войти</button>
+    <div v-if="authError" class="error">
+      {{authError}}
+    </div>
   </div>
 </template>
 
@@ -18,12 +24,17 @@
   export default class VueLogin extends Vue {
     username: string = '';
     password: string = '';
+    authError: string | null = null;
 
-    updateUsername($event) {
+    keyDown($event: any) {
+      console.log($event);
+    }
+
+    updateUsername($event: any) {
       this.username = $event.target.value
     }
 
-    updatePassword($event) {
+    updatePassword($event: any) {
       this.password = $event.target.value
     }
 
@@ -34,7 +45,8 @@
       }).then(response => {
         console.log(response)
       }).catch(error => {
-        console.error(error)
+        this.authError = error.response.data;
+        console.log(error.response);
       })
     }
   }
@@ -86,5 +98,18 @@
     -webkit-box-shadow: 0 0 8px #88D5E9;
     box-shadow: 0 0 8px #88D5E9;
     border: 1px solid #88D5E9;
+  }
+
+  .login {
+    display: inline-block;
+    border: 1px solid green;
+    width: auto;
+  }
+
+  .error {
+    border: 1px solid red;
+    color: red;
+    text-align: left;
+    font-size: smaller;
   }
 </style>

@@ -1,19 +1,15 @@
 package kz.greetgo.sandbox.controller.controller;
 
 import kz.greetgo.depinject.core.Bean;
-import kz.greetgo.depinject.core.BeanGetter;
 import kz.greetgo.mvc.annotations.AsIs;
 import kz.greetgo.mvc.annotations.Par;
-import kz.greetgo.mvc.annotations.ParSession;
 import kz.greetgo.mvc.annotations.ToJson;
 import kz.greetgo.mvc.annotations.on_methods.ControllerPrefix;
 import kz.greetgo.mvc.annotations.on_methods.OnGet;
 import kz.greetgo.mvc.annotations.on_methods.OnPost;
 import kz.greetgo.mvc.interfaces.TunnelCookies;
 import kz.greetgo.sandbox.controller.errors.RestError;
-import kz.greetgo.sandbox.controller.model.AuthInfo;
 import kz.greetgo.sandbox.controller.model.UserInfo;
-import kz.greetgo.sandbox.controller.register.AuthRegisterOld;
 import kz.greetgo.sandbox.controller.security.PublicAccess;
 import kz.greetgo.sandbox.controller.util.Controller;
 import kz.greetgo.util.RND;
@@ -25,8 +21,6 @@ import kz.greetgo.util.RND;
 @Bean
 @ControllerPrefix("/auth")
 public class AuthController implements Controller {
-
-  public BeanGetter<AuthRegisterOld> authRegister;
 
   @AsIs
   @PublicAccess
@@ -47,37 +41,20 @@ public class AuthController implements Controller {
                       @Par("password") String password,
                       TunnelCookies cookies) {
 
-    System.out.println("ok");
+    if (!"111".equals(password)) {
+      throw new RestError(401, "Пароль должен быть 111");
+    }
 
-    String hiCookieValue = cookies.name("hi").value();
+    String hiCookieValue = cookies.name("g-session").value();
     System.out.println("hiCookieValue = " + hiCookieValue);
 
-    cookies.forName("hi")
+    cookies.forName("g-session")
       .path("/")
       .httpOnly(true)
       .maxAge(-1)
       .saveValue("WOW" + i++);
 
-    return "{'key':'some value'}".replace('\'', '"');
-  }
-
-  @AsIs
-  @PublicAccess
-  @OnGet("/login1")
-  public String login1(@Par("accountName") String accountName, @Par("password") String password) {
-    return authRegister.get().login(accountName, password);
-  }
-
-  @ToJson
-  @OnGet("/info")
-  public AuthInfo info(@ParSession("personId") String personId) {
-    return authRegister.get().getAuthInfo(personId);
-  }
-
-  @ToJson
-  @OnGet("/userInfo2")
-  public UserInfo userInfo2(@ParSession("personId") String personId) {
-    return authRegister.get().getUserInfo(personId);
+    return "cool-token";
   }
 
   @ToJson

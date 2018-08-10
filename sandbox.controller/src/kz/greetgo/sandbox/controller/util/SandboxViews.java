@@ -1,7 +1,6 @@
 package kz.greetgo.sandbox.controller.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import kz.greetgo.depinject.core.BeanGetter;
 import kz.greetgo.mvc.annotations.ParSession;
 import kz.greetgo.mvc.annotations.ToJson;
 import kz.greetgo.mvc.annotations.ToXml;
@@ -12,8 +11,6 @@ import kz.greetgo.mvc.interfaces.SessionParameterGetter;
 import kz.greetgo.mvc.interfaces.Views;
 import kz.greetgo.sandbox.controller.errors.JsonRestError;
 import kz.greetgo.sandbox.controller.errors.RestError;
-import kz.greetgo.sandbox.controller.register.AuthRegisterOld;
-import kz.greetgo.sandbox.controller.register.model.SessionInfo;
 import kz.greetgo.sandbox.controller.security.PublicAccess;
 import kz.greetgo.sandbox.controller.security.SecurityError;
 
@@ -64,10 +61,6 @@ public abstract class SandboxViews implements Views {
     throw new UnsupportedOperationException();
   }
 
-  /**
-   * Данное поле содержит ссылку на обхект, в котором сосредоточена логика работы с security
-   */
-  public BeanGetter<AuthRegisterOld> authRegister;
 
   /**
    * Этот метод вызывается, каждый раз при обработке запроса. Метод контроллера ещё не вызван, и его нужно вызвать
@@ -149,13 +142,13 @@ public abstract class SandboxViews implements Views {
         //в этом методе токен будет расшифрован и помещён в ThreadLocal-переменную
         //если произойдёт какой-нибудь сбой, то произойдёт ошибка и вызов метода контроллера не произойдёт
         //тем самым мы предотвратим вероятный взлом
-        authRegister.get().checkTokenAndPutToThreadLocal(token);
+        //authRegister.get().checkTokenAndPutToThreadLocal(token);
       } else {
 
         // если есть аннотация NoSecurity то это значит, что метод не нуждается в параметрах сессии и не
         // нуждается в защите - т.е. его может вызвать любой. Таким методом например является логинг.
         // В этом случае мы очищаем ThreadLocal-переменную
-        authRegister.get().cleanTokenThreadLocal();
+        //authRegister.get().cleanTokenThreadLocal();
       }
     } catch (RestError restError) {
       restError.printStackTrace();
@@ -177,9 +170,10 @@ public abstract class SandboxViews implements Views {
       if (context.expectedReturnType() != String.class) throw new SecurityError("personId must be string");
 
       //sessionInfo берётся из ThreadLocal переменной, которая был определена в методе prepareSession
-      SessionInfo sessionInfo = authRegister.get().getSessionInfo();
-      if (sessionInfo == null) throw new SecurityError("No session");
-      return sessionInfo.personId;
+      //SessionInfo sessionInfo = authRegister.get().getSessionInfo();
+      //if (sessionInfo == null) throw new SecurityError("No session");
+      //return sessionInfo.personId;
+      throw new UnsupportedOperationException();
     }
 
     throw new SecurityError("Unknown session parameter " + context.parameterName());

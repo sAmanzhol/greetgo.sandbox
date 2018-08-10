@@ -1,4 +1,4 @@
-package kz.greetgo.sandbox.register.test.beans._develop_;
+package kz.greetgo.sandbox.register.test.beans.develop;
 
 import kz.greetgo.conf.sys_params.SysParams;
 import kz.greetgo.depinject.core.Bean;

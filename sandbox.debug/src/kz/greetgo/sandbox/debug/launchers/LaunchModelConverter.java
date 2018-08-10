@@ -5,7 +5,7 @@ import kz.greetgo.ts_java_convert.ConvertModelBuilder;
 
 import java.io.File;
 
-public class LaunchConvertingOfModel {
+public class LaunchModelConverter {
   public static void main(String[] args) throws Exception {
     File sourceDir = Modules.clientDir().toPath()
       .resolve("src/model").toFile();

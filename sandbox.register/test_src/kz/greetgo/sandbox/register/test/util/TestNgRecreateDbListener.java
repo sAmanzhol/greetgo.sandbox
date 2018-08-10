@@ -1,6 +1,6 @@
 package kz.greetgo.sandbox.register.test.util;
 
-import kz.greetgo.sandbox.register.test.beans._develop_.DbWorker;
+import kz.greetgo.sandbox.register.test.beans.develop.DbWorker;
 import org.testng.ISuite;
 import org.testng.ISuiteListener;
 
