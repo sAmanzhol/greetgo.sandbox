@@ -97,7 +97,9 @@
     onExit() {
       axios.get('/auth/exit').then(() => {
         this.state = LoginState.LOGIN;
-        localStorage.setItem("token", null);
+
+        localStorage.setItem("token", "");
+
         this.personDisplay = null;
       }).catch(error => {
         console.log(error)
