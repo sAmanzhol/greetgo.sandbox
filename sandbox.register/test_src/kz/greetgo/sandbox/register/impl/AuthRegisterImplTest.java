@@ -2,6 +2,7 @@ package kz.greetgo.sandbox.register.impl;
 
 import kz.greetgo.depinject.core.BeanGetter;
 import kz.greetgo.sandbox.controller.errors.IllegalLoginOrPassword;
+import kz.greetgo.sandbox.controller.model.PersonDisplay;
 import kz.greetgo.sandbox.controller.model.SessionHolder;
 import kz.greetgo.sandbox.controller.register.AuthRegister;
 import kz.greetgo.sandbox.register.test.dao.AuthTestDao;
@@ -170,5 +171,59 @@ public class AuthRegisterImplTest extends ParentTestNg {
     //
 
     assertThat(actual).isNull();
+  }
+
+  @Test
+  public void displayPerson() {
+
+    String id = RND.str(10);
+    String username = RND.str(10);
+    String password = RND.str(10);
+    String encodedPassword = passwordEncoder.get().encode(password);
+
+    authTestDao.get().insertPerson(id, username, encodedPassword);
+
+    String surname = RND.str(10);
+    String name = RND.str(10);
+    String patronymic = RND.str(10);
+    authTestDao.get().updatePersonField(id, "surname", surname);
+    authTestDao.get().updatePersonField(id, "name", name);
+    authTestDao.get().updatePersonField(id, "patronymic", patronymic);
+
+    //
+    //
+    PersonDisplay personDisplay = authRegister.get().displayPerson(id);
+    //
+    //
+
+    assertThat(personDisplay).isNotNull();
+    assertThat(personDisplay.fio).isEqualTo(surname + ' ' + name + ' ' + patronymic);
+    assertThat(personDisplay.username).isEqualTo(username);
+
+  }
+
+  @Test(expectedExceptions = NullPointerException.class)
+  public void displayPerson_absent() {
+    //
+    //
+    authRegister.get().displayPerson(RND.str(10));
+    //
+    //
+  }
+
+  @Test
+  public void deleteSession() {
+
+    SessionHolder sessionHolder = new SessionHolder(RND.str(10), RND.str(10));
+    SessionIdentity identity = sessionService.get().createSession(sessionHolder);
+
+    //
+    //
+    authRegister.get().deleteSession(identity.id);
+    //
+    //
+
+    Object sessionData = sessionService.get().getSessionData(identity.id);
+    assertThat(sessionData).isNull();
   }
 }

@@ -1,5 +1,6 @@
 package kz.greetgo.sandbox.register.dao;
 
+import kz.greetgo.sandbox.controller.model.PersonDisplay;
 import kz.greetgo.sandbox.register.model.PersonLogin;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -7,4 +8,8 @@ import org.apache.ibatis.annotations.Select;
 public interface AuthDao {
   @Select("select * from person where username = #{username} and blocked = 0")
   PersonLogin selectByUsername(@Param("username") String username);
+
+  @Select("select surname||' '||name||' '||patronymic as fio, username" +
+    " from person where id = #{personId}")
+  PersonDisplay loadDisplayPerson(@Param("personId") String personId);
 }

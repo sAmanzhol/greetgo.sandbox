@@ -4,17 +4,19 @@ import kz.greetgo.depinject.core.Bean;
 import kz.greetgo.depinject.core.BeanGetter;
 import kz.greetgo.mvc.annotations.AsIs;
 import kz.greetgo.mvc.annotations.Par;
+import kz.greetgo.mvc.annotations.ParSession;
 import kz.greetgo.mvc.annotations.ToJson;
 import kz.greetgo.mvc.annotations.on_methods.ControllerPrefix;
 import kz.greetgo.mvc.annotations.on_methods.OnGet;
 import kz.greetgo.mvc.annotations.on_methods.OnPost;
 import kz.greetgo.mvc.interfaces.TunnelCookies;
-import kz.greetgo.sandbox.controller.model.UserInfo;
+import kz.greetgo.sandbox.controller.model.PersonDisplay;
 import kz.greetgo.sandbox.controller.register.AuthRegister;
 import kz.greetgo.sandbox.controller.security.PublicAccess;
 import kz.greetgo.sandbox.controller.util.Controller;
 import kz.greetgo.security.session.SessionIdentity;
-import kz.greetgo.util.RND;
+
+import static kz.greetgo.sandbox.controller.util.SandboxViews.G_SESSION;
 
 /**
  * как составлять контроллеры написано
@@ -34,12 +36,9 @@ public class AuthController implements Controller {
                       @Par("password") String password,
                       TunnelCookies cookies) {
 
-    System.out.println("username = " + username);
-    System.out.println("password = " + password);
-
     SessionIdentity identity = authRegister.get().login(username, password);
 
-    cookies.forName("g-session")
+    cookies.forName(G_SESSION)
       .path("/")
       .httpOnly(true)
       .maxAge(-1)
@@ -49,16 +48,19 @@ public class AuthController implements Controller {
   }
 
   @ToJson
+  @OnGet("/displayPerson")
+  public PersonDisplay displayPerson(@ParSession("personId") String personId) {
+    return authRegister.get().displayPerson(personId);
+  }
+
+  @AsIs
   @PublicAccess
-  @OnGet("/userInfo")
-  public UserInfo userInfo() {
-    UserInfo ret = new UserInfo();
-    ret.accountName = "pushkin";
-    ret.id = "213nh43k25";
-    ret.name = "Александр";
-    ret.patronymic = "Сергеевич";
-    ret.surname = "Пушкин";
-    ret.yellow = RND.bool();
-    return ret;
+  @OnGet("/exit")
+  public void exit(@ParSession("sessionId") String sessionId, TunnelCookies cookies) {
+    authRegister.get().deleteSession(sessionId);
+
+    cookies.forName(G_SESSION)
+      .path("/")
+      .remove();
   }
 }

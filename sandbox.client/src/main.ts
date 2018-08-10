@@ -7,7 +7,7 @@ Vue.config.productionTip = false;
 
 axios.interceptors.request.use((config) => {
   config.baseURL = process.env.VUE_APP_URL_PREFIX;
-  config.headers.token = 'hello_world';
+  config.headers.token = localStorage.getItem("token");
   config.withCredentials = true;
   return config;
 });

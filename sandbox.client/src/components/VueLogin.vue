@@ -1,19 +1,27 @@
 <template>
   <div class="login">
-    <div>
-      <input type="text" placeholder="Enter Username" name="name"
+    <div v-if="isWaiting()">
+      WAITING...
+    </div>
+    <div v-if="isLogin()">
+      <input type="text" placeholder="Enter Username" name="login_username"
              :value="username" @input="updateUsername($event)"
              v-on:keyup.13="$refs.password.focus()"
       />
       :
-      <input type="password" placeholder="Enter Password" name="password"
+      <input type="password" placeholder="Enter Password" name="login_password" autocomplete="current-password"
              :value="password" @input="updatePassword($event)" ref="password"
              v-on:keyup.13="onEnter()"
       />
-      <button class="button__enter" @click="onEnter" :disabled="!username||!password">Войти</button>
+      <button @click="onEnter" :disabled="!username||!password">Войти</button>
       <div v-if="authError" class="error">
         {{authError}}
       </div>
+    </div>
+    <div v-if="personDisplay">
+      {{personDisplay.fio}}
+      <span v-if="personDisplay.role">({{personDisplay.role}})</span>
+      <a href="#" @click="onExit">Выйти</a>
     </div>
   </div>
 </template>
@@ -22,12 +30,14 @@
   import {Component, Vue} from 'vue-property-decorator';
   import axios from 'axios'
   import {LoginState} from "./LoginState";
+  import {PersonDisplay} from "../model/PersonDisplay";
 
   @Component
   export default class VueLogin extends Vue {
     username: string = '';
     password: string = '';
     authError: string | null = null;
+    personDisplay: PersonDisplay | null = null;
 
     state: LoginState = LoginState.WAITING;
 
@@ -47,6 +57,8 @@
       const params = new URLSearchParams();
       params.append('username', this.username);
       params.append('password', this.password);
+      this.username = '';
+      this.password = '';
 
       axios.post('/auth/login', params).then(response => {
         localStorage.setItem("token", response.data);
@@ -59,18 +71,41 @@
 
     refresh() {
       this.state = LoginState.WAITING;
+      this.personDisplay = null;
+
+      axios.get('/auth/displayPerson').then(response => {
+        this.personDisplay = PersonDisplay.create(response.data);
+        this.state = LoginState.PERSON_DISPLAY;
+      }).catch(() => {
+        this.state = LoginState.LOGIN;
+      })
     }
 
-    mounted() {
+    isWaiting() {
+      return this.state === LoginState.WAITING;
+    }
+
+    isLogin() {
+      return this.state === LoginState.LOGIN;
+    }
+
+    created() {
       this.refresh();
+    }
+
+    onExit() {
+      axios.get('/auth/exit').then(() => {
+        this.state = LoginState.LOGIN;
+        localStorage.setItem("token", null);
+        this.personDisplay = null;
+      }).catch(error => {
+        console.log(error)
+      })
     }
   }
 </script>
 
 <style scoped lang="scss">
-  .button__enter {
-  }
-
   button {
     background: #4B99AD;
     padding: 8px 15px 8px 15px;

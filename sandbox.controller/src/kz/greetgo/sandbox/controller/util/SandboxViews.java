@@ -12,6 +12,7 @@ import kz.greetgo.mvc.interfaces.SessionParameterGetter;
 import kz.greetgo.mvc.interfaces.Views;
 import kz.greetgo.sandbox.controller.errors.JsonRestError;
 import kz.greetgo.sandbox.controller.errors.RestError;
+import kz.greetgo.sandbox.controller.model.SessionHolder;
 import kz.greetgo.sandbox.controller.register.AuthRegister;
 import kz.greetgo.sandbox.controller.security.PublicAccess;
 import kz.greetgo.sandbox.controller.security.SecurityError;
@@ -26,6 +27,7 @@ import java.util.Map;
  */
 public abstract class SandboxViews implements Views {
 
+  public static final String G_SESSION = "g-session";
   private final ObjectMapper objectMapper = new ObjectMapper();
 
   /**
@@ -139,7 +141,7 @@ public abstract class SandboxViews implements Views {
     String token = methodInvoker.tunnel().requestHeaders().value("token");
 
     //Берём идентификатор сессии из кукисов. Если сессии нет, то получаем null
-    String sessionId = methodInvoker.tunnel().cookies().name("g-session").value();
+    String sessionId = methodInvoker.tunnel().cookies().name(G_SESSION).value();
 
     //Проверяем параметры сессии на достоверность, и если всё ок, сохраняем в ThreadLocal-переменной сессию
     //Иначе очищаем ThreadLocal-переменную
@@ -170,11 +172,20 @@ public abstract class SandboxViews implements Views {
     if ("personId".equals(context.parameterName())) {
       if (context.expectedReturnType() != String.class) throw new SecurityError("personId must be string");
 
-      //sessionInfo берётся из ThreadLocal переменной, которая был определена в методе prepareSession
-      //SessionInfo sessionInfo = authRegister.get().getSessionInfo();
-      //if (sessionInfo == null) throw new SecurityError("No session");
-      //return sessionInfo.personId;
-      throw new UnsupportedOperationException();
+      SessionHolder sessionHolder = authRegister.get().getSession();
+      return sessionHolder == null ? null : sessionHolder.personId;
+    }
+
+    if ("role".equals(context.parameterName())) {
+      if (context.expectedReturnType() != String.class) throw new SecurityError("personId must be string");
+
+      SessionHolder sessionHolder = authRegister.get().getSession();
+      return sessionHolder == null ? null : sessionHolder.role;
+    }
+
+    if ("sessionId".equals(context.parameterName())) {
+      if (context.expectedReturnType() != String.class) throw new SecurityError("personId must be string");
+      return tunnel.cookies().name(G_SESSION).value();
     }
 
     throw new SecurityError("Unknown session parameter " + context.parameterName());

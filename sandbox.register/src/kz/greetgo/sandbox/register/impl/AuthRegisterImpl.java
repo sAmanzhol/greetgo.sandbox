@@ -3,6 +3,7 @@ package kz.greetgo.sandbox.register.impl;
 import kz.greetgo.depinject.core.Bean;
 import kz.greetgo.depinject.core.BeanGetter;
 import kz.greetgo.sandbox.controller.errors.IllegalLoginOrPassword;
+import kz.greetgo.sandbox.controller.model.PersonDisplay;
 import kz.greetgo.sandbox.controller.model.SessionHolder;
 import kz.greetgo.sandbox.controller.register.AuthRegister;
 import kz.greetgo.sandbox.register.dao.AuthDao;
@@ -57,5 +58,21 @@ public class AuthRegisterImpl implements AuthRegister {
   @Override
   public SessionHolder getSession() {
     return sessionDot.get();
+  }
+
+  @Override
+  public PersonDisplay displayPerson(String personId) {
+    PersonDisplay ret = authDao.get().loadDisplayPerson(personId);
+
+    if (ret == null) {
+      throw new NullPointerException("No person with id = " + personId);
+    }
+
+    return ret;
+  }
+
+  @Override
+  public void deleteSession(String sessionId) {
+    sessionService.get().removeSession(sessionId);
   }
 }
