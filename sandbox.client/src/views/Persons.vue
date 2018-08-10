@@ -1,15 +1,15 @@
 <template>
-  <div class="users">
+  <div class="persons">
     <table>
       <tr>
         <th>Фио пользователя</th>
         <th>Акаунт пользователя</th>
         <th>День рождения</th>
       </tr>
-      <tr v-for="user in userList">
-        <td>{{user.fio}}</td>
-        <td>{{user.accountName}}</td>
-        <td>{{user.birthDate}}</td>
+      <tr v-for="p in personList">
+        <td>{{p.fio}}</td>
+        <td>{{p.username}}</td>
+        <td>{{p.birthDate}}</td>
       </tr>
     </table>
   </div>
@@ -17,29 +17,29 @@
 
 <script lang="ts">
   import {Component, Vue} from 'vue-property-decorator';
-  import {UserRecord} from '../model/UserRecord';
+  import {PersonRecord} from '../model/PersonRecord';
+  import axios from 'axios'
 
   @Component({
     components: {},
   })
-  export default class Users extends Vue {
-    userList: UserRecord[] = [UserRecord.create({
-      id: 'asd',
-      fio: 'Пушкин А.С.',
-      accountName: 'pushkin',
-      birthDate: '1799-06-06',
-    }), UserRecord.create({
-      id: 'dsa',
-      fio: 'Сталин И.В.',
-      accountName: 'stalin',
-      birthDate: '1878-12-18',
-    })];
+  export default class Persons extends Vue {
+    personList: PersonRecord[] = [];
+
+    created() {
+      this.personList = [];
+      axios.get('/person/list').then(response => {
+        this.personList = response.data.map(PersonRecord.create);
+      }).catch(error => {
+        console.log(error);
+      })
+    }
   }
 </script>
 
 <style lang="scss">
 
-  .users {
+  .persons {
     display: inline-block;
 
     table {

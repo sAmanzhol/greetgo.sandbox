@@ -21,14 +21,27 @@ public class DbLoader {
   public BeanGetter<PasswordEncoder> passwordEncoder;
 
   public void loadTestData() throws Exception {
+
+    loadPersons();
+
+    logger.info("FINISH");
+  }
+
+  @SuppressWarnings("SpellCheckingInspection")
+  private void loadPersons() throws Exception {
     logger.info("Start loading persons...");
 
     user("Пушкин Александр Сергеевич", "1799-06-06", "pushkin");
     user("Сталин Иосиф Виссарионович", "1878-12-18", "stalin");
+    user("Берия Лаврентий Павлович", "1899-03-17", "beria");
+    user("Есенин Сергей Александрович", "1895-09-21", "esenin");
+    user("Путин Владимир Владимирович", "1952-10-07", "putin");
+    user("Назарбаев Нурсултан Абишевич", "1940-07-06", "papa");
+    user("Менделеев Дмитрий Иванович", "1834-02-08", "mendeleev");
+    user("Ломоносов Михаил Васильевич", "1711-11-19", "lomonosov");
+    user("Бутлеров Александр Михайлович", "1828-09-15", "butlerov");
 
     logger.info("Finish loading persons");
-
-    logger.info("FINISH");
   }
 
   private void user(String fioStr, String birthDateStr, String accountName) throws Exception {

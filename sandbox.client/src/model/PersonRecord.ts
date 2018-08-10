@@ -1,11 +1,11 @@
-export class UserRecord {
+export class PersonRecord {
   public id!: string;
   public fio!: string;
-  public accountName!: string;
+  public username!: string;
   public birthDate!: string;
 
-  public static create(a: any): UserRecord {
-    const ret = new UserRecord();
+  public static create(a: any): PersonRecord {
+    const ret = new PersonRecord();
     ret.assign(a);
     return ret;
   }
@@ -13,7 +13,7 @@ export class UserRecord {
   assign(a: any) {
     this.id = a.id;
     this.fio = a.fio;
-    this.accountName = a.accountName;
+    this.username = a.username;
     this.birthDate = a.birthDate;
   }
 }

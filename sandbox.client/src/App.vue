@@ -3,7 +3,7 @@
     <div id="nav">
       <router-link class="link" to="/">Home</router-link>
       |
-      <router-link class="link" to="/users">Users</router-link>
+      <router-link class="link" to="/persons">Users</router-link>
       |
       <router-link class="link" to="/about">About</router-link>
       |
@@ -22,9 +22,7 @@
       VueLogin,
     },
   })
-  export default class App extends Vue {
-
-  }
+  export default class App extends Vue {}
 </script>
 
 
@@ -47,7 +45,8 @@
       &.router-link-exact-active {
         color: #0b1c13;
         font-weight: bold;
-
+        text-decoration: none;
+        cursor: default;
       }
     }
   }

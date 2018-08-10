@@ -10,6 +10,5 @@
   @Component({
     components: {},
   })
-  export default class About extends Vue {
-  }
+  export default class About extends Vue {}
 </script>
