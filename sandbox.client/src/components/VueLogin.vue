@@ -1,17 +1,19 @@
 <template>
   <div class="login">
-    <input type="text" placeholder="Enter Username" name="name"
-           :value="username" @input="updateUsername($event)"
-           v-on:keyup.13="$refs.password.focus()"
-    />
-    :
-    <input type="password" placeholder="Enter Password" name="password"
-           :value="password" @input="updatePassword($event)" ref="password"
-           v-on:keyup.13="onEnter()"
-    />
-    <button class="button__enter" @click="onEnter" :disabled="!username||!password">Войти</button>
-    <div v-if="authError" class="error">
-      {{authError}}
+    <div>
+      <input type="text" placeholder="Enter Username" name="name"
+             :value="username" @input="updateUsername($event)"
+             v-on:keyup.13="$refs.password.focus()"
+      />
+      :
+      <input type="password" placeholder="Enter Password" name="password"
+             :value="password" @input="updatePassword($event)" ref="password"
+             v-on:keyup.13="onEnter()"
+      />
+      <button class="button__enter" @click="onEnter" :disabled="!username||!password">Войти</button>
+      <div v-if="authError" class="error">
+        {{authError}}
+      </div>
     </div>
   </div>
 </template>
@@ -19,12 +21,15 @@
 <script lang="ts">
   import {Component, Vue} from 'vue-property-decorator';
   import axios from 'axios'
+  import {LoginState} from "./LoginState";
 
   @Component
   export default class VueLogin extends Vue {
     username: string = '';
     password: string = '';
     authError: string | null = null;
+
+    state: LoginState = LoginState.WAITING;
 
     keyDown($event: any) {
       console.log($event);
@@ -39,15 +44,25 @@
     }
 
     onEnter() {
-      axios.post('/auth/login', {
-        username: this.username,
-        password: this.password,
-      }).then(response => {
-        console.log(response)
+      const params = new URLSearchParams();
+      params.append('username', this.username);
+      params.append('password', this.password);
+
+      axios.post('/auth/login', params).then(response => {
+        localStorage.setItem("token", response.data);
+        this.refresh();
       }).catch(error => {
         this.authError = error.response.data;
         console.log(error.response);
       })
+    }
+
+    refresh() {
+      this.state = LoginState.WAITING;
+    }
+
+    mounted() {
+      this.refresh();
     }
   }
 </script>

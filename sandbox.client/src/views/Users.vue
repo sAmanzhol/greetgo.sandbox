@@ -17,7 +17,7 @@
 
 <script lang="ts">
   import {Component, Vue} from 'vue-property-decorator';
-  import {UserRecord} from "../model/UserRecord";
+  import {UserRecord} from '../model/UserRecord';
 
   @Component({
     components: {},

@@ -36,4 +36,26 @@ public class AuthRegisterImpl implements AuthRegister {
 
     return sessionService.get().createSession(sessionHolder);
   }
+
+  private final ThreadLocal<SessionHolder> sessionDot = new ThreadLocal<>();
+
+  @Override
+  public void resetThreadLocalAndVerifySession(String sessionId, String token) {
+    sessionDot.set(null);
+
+    if (!sessionService.get().verifyId(sessionId)) {
+      return;
+    }
+
+    if (!sessionService.get().verifyToken(sessionId, token)) {
+      return;
+    }
+
+    sessionDot.set(sessionService.get().getSessionData(sessionId));
+  }
+
+  @Override
+  public SessionHolder getSession() {
+    return sessionDot.get();
+  }
 }
