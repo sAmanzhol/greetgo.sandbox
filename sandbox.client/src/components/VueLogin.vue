@@ -21,7 +21,7 @@
     <div v-if="personDisplay">
       {{personDisplay.fio}}
       <span v-if="personDisplay.role">({{personDisplay.role}})</span>
-      <a href="#" @click="onExit">Выйти</a>
+      <a href="#" class="exit" @click="onExit">Выйти</a>
     </div>
   </div>
 </template>
@@ -62,6 +62,7 @@
 
       axios.post('/auth/login', params).then(response => {
         localStorage.setItem("token", response.data);
+        this.authError = null;
         this.refresh();
       }).catch(error => {
         this.authError = error.response.data;
@@ -152,14 +153,22 @@
 
   .login {
     display: inline-block;
-    border: 1px solid green;
+    b1order: 1px solid green;
     width: auto;
   }
 
   .error {
-    border: 1px solid red;
+    b1order: 1px solid red;
     color: red;
     text-align: left;
     font-size: smaller;
+  }
+
+  .exit {
+    font-size: smaller;
+    padding: .3em;
+    text-decoration: none;
+    border: 1px solid #acacac;
+    display: inline-block;
   }
 </style>

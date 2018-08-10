@@ -113,7 +113,7 @@ public class AuthRegisterImplTest extends ParentTestNg {
 
     assertThat(actual).isNotNull();
     assertThat(actual.personId).isEqualTo(sessionHolder.personId);
-    assertThat(actual.role).isEqualTo(sessionHolder.role);
+    assertThat(actual.mode).isEqualTo(sessionHolder.mode);
   }
 
   @Test

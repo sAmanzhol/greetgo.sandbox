@@ -170,21 +170,21 @@ public abstract class SandboxViews implements Views {
   @Override
   public Object getSessionParameter(SessionParameterGetter.ParameterContext context, RequestTunnel tunnel) {
     if ("personId".equals(context.parameterName())) {
-      if (context.expectedReturnType() != String.class) throw new SecurityError("personId must be string");
+      if (context.expectedReturnType() != String.class) throw new SecurityError("personId must be a string");
 
       SessionHolder sessionHolder = authRegister.get().getSession();
       return sessionHolder == null ? null : sessionHolder.personId;
     }
 
-    if ("role".equals(context.parameterName())) {
-      if (context.expectedReturnType() != String.class) throw new SecurityError("personId must be string");
+    if ("mode".equals(context.parameterName())) {
+      if (context.expectedReturnType() != String.class) throw new SecurityError("personId must be a string");
 
       SessionHolder sessionHolder = authRegister.get().getSession();
-      return sessionHolder == null ? null : sessionHolder.role;
+      return sessionHolder == null ? null : sessionHolder.mode;
     }
 
     if ("sessionId".equals(context.parameterName())) {
-      if (context.expectedReturnType() != String.class) throw new SecurityError("personId must be string");
+      if (context.expectedReturnType() != String.class) throw new SecurityError("personId must be a string");
       return tunnel.cookies().name(G_SESSION).value();
     }
 
