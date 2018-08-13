@@ -11,11 +11,11 @@
       :
       <input type="password" placeholder="Enter Password" name="login_password" autocomplete="current-password"
              :value="password" @input="updatePassword($event)" ref="password"
-             v-on:keyup.13="onEnter"
+             v-on:keyup.13="onEnter()"
       />
       <button @click="onEnter" :disabled="!username||!password">Войти</button>
-      <div v-if="err" class="error">
-        {{err}}
+      <div v-if="authError" class="error">
+        {{authError}}
       </div>
     </div>
     <div v-if="personDisplay">
@@ -28,55 +28,79 @@
 
 <script lang="ts">
   import {Component, Vue} from 'vue-property-decorator';
+  import axios from 'axios'
+  import {LoginStatus} from "./LoginStatus";
   import {PersonDisplay} from "../model/PersonDisplay";
-  import * as login from "../store/login";
 
   @Component
-  export default class VueLogin extends Vue {
+  export default class VueLoginOld extends Vue {
+    username: string = '';
+    password: string = '';
+    authError: string | null = null;
+    personDisplay: PersonDisplay | null = null;
 
-    get username(): string {
-      return login.readUsername(this.$store);
-    }
+    state: LoginStatus = LoginStatus.LOADING;
 
     updateUsername($event: any) {
-      login.commitUsername(this.$store, $event.target.value);
-    }
-
-    get password(): string {
-      return login.readPassword(this.$store);
+      this.username = $event.target.value
     }
 
     updatePassword($event: any) {
-      login.commitPassword(this.$store, $event.target.value);
+      this.password = $event.target.value
     }
 
-    get err(): string | null {
-      return login.readError(this.$store);
+    onEnter() {
+      const params = new URLSearchParams();
+      params.append('username', this.username);
+      params.append('password', this.password);
+      this.username = '';
+      this.password = '';
+
+      axios.post('/auth/login', params).then(response => {
+        localStorage.setItem("token", response.data);
+        this.authError = null;
+        this.refresh();
+      }).catch(error => {
+        this.authError = error.response.data;
+        console.log(error.response);
+      })
     }
 
-    get personDisplay(): PersonDisplay | null {
-      return login.readDisplay(this.$store);
-    }
+    refresh() {
+      this.state = LoginStatus.LOADING;
+      this.personDisplay = null;
 
-    async onEnter() {
-      await login.dispatchLogin(this.$store);
+      axios.get('/auth/displayPerson').then(response => {
+        this.personDisplay = PersonDisplay.create(response.data);
+        this.state = LoginStatus.AUTH_OK;
+      }).catch(() => {
+        this.state = LoginStatus.LOGIN;
+      })
     }
 
     isWaiting() {
-      return login.readIsLoading(this.$store);
+      return this.state === LoginStatus.LOADING;
     }
 
     isLogin() {
-      return login.readIsLogin(this.$store);
+      return this.state === LoginStatus.LOGIN;
     }
 
     // noinspection JSUnusedGlobalSymbols
-    async created() {
-      await login.dispatchReset(this.$store);
+    created() {
+      this.refresh();
     }
 
-    async onExit() {
-      await login.dispatchExit(this.$store);
+    onExit() {
+      axios.get('/auth/exit').then(() => {
+        this.state = LoginStatus.LOGIN;
+
+        localStorage.setItem("token", "");
+
+        this.personDisplay = null;
+      }).catch(error => {
+        console.log(error)
+      })
     }
   }
 </script>
