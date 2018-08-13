@@ -1,10 +1,10 @@
 import {getStoreAccessors} from 'vuex-typescript';
-import {RootState} from "@/store/RootState";
-import {UserCan} from "@/model/UserCan";
-import {LoginStatus} from "@/components/LoginStatus";
-import {PersonDisplay} from "@/model/PersonDisplay";
+import {RootState} from "../RootState";
+import {UserCan} from "../../model/UserCan";
+import {LoginStatus} from "../../components/LoginStatus";
+import {PersonDisplay} from "../../model/PersonDisplay";
 import {ActionContext} from "vuex";
-import {loginService} from "@/store/login-service";
+import {loginService} from "./service";
 
 export interface LoginState {
   username: string;

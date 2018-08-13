@@ -1,4 +1,4 @@
-import {LoginState} from "@/store/login";
+import {LoginState} from "@/store/login/index";
 
 export interface RootState {
   loginStage: LoginState;
