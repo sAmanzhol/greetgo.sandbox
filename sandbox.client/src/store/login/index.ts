@@ -1,8 +1,8 @@
 import {getStoreAccessors} from 'vuex-typescript';
 import {RootState} from "../RootState";
-import {UserCan} from "../../model/UserCan";
-import {LoginStatus} from "../../components/LoginStatus";
-import {PersonDisplay} from "../../model/PersonDisplay";
+import {UserCan} from "@/model/UserCan";
+import {LoginStatus} from "@/components/LoginStatus";
+import {PersonDisplay} from "@/model/PersonDisplay";
 import {ActionContext} from "vuex";
 import {loginService} from "./service";
 
@@ -38,6 +38,14 @@ const getters = {
   getError(state: LoginState): string | null {
     return state.error;
   },
+  viewUsers(state: LoginState): boolean {
+    if (!state.display) return false;
+    return state.display.cans.indexOf(UserCan.VIEW_USERS) > -1;
+  },
+  viewAbout(state: LoginState): boolean {
+    if (!state.display) return false;
+    return state.display.cans.indexOf(UserCan.VIEW_ABOUT) > -1;
+  },
 };
 
 export const readIsLoading = read(getters.isLoading);
@@ -46,6 +54,8 @@ export const readDisplay = read(getters.getDisplay);
 export const readUsername = read(getters.getUsername);
 export const readPassword = read(getters.getPassword);
 export const readError = read(getters.getError);
+export const readViewAbout = read(getters.viewAbout);
+export const readViewUsers = read(getters.viewUsers);
 
 const mutations = {
   setUsername(state: LoginState, username: string) {

@@ -12,6 +12,8 @@ import kz.greetgo.security.password.PasswordEncoder;
 import kz.greetgo.security.session.SessionIdentity;
 import kz.greetgo.security.session.SessionService;
 
+import static kz.greetgo.sandbox.controller.util.FilterUtil.skipNulls;
+
 @Bean
 public class AuthRegisterImpl implements AuthRegister {
 
@@ -67,6 +69,8 @@ public class AuthRegisterImpl implements AuthRegister {
     if (ret == null) {
       throw new NullPointerException("No person with id = " + personId);
     }
+
+    ret.cans = skipNulls(authDao.get().loadCans(personId));
 
     return ret;
   }

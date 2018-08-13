@@ -3,6 +3,7 @@ export class PersonRecord {
   public fio!: string;
   public username!: string;
   public birthDate!: string;
+  public cans!: string;
 
   public static create(a: any): PersonRecord {
     const ret = new PersonRecord();
@@ -15,5 +16,6 @@ export class PersonRecord {
     this.fio = a.fio;
     this.username = a.username;
     this.birthDate = a.birthDate;
+    this.cans = a.cans;
   }
 }

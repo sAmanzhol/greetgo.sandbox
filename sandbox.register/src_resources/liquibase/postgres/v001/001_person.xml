@@ -40,5 +40,24 @@
     ]]></sql>
   </changeSet>
 
+  <changeSet author="pompei" id="create-table-user_can">
+    <sql endDelimiter=";;"><![CDATA[
+      create table user_can (
+        user_can varchar(50) primary key,
+        description text,
+        actual smallint not null default 1
+      )
+    ]]></sql>
+  </changeSet>
+
+  <changeSet author="pompei" id="create-table-person_cans">
+    <sql endDelimiter=";;"><![CDATA[
+      create table person_cans (
+        person_id varchar(50) references person,
+        user_can varchar(50) references user_can,
+        primary key(person_id, user_can)
+      )
+    ]]></sql>
+  </changeSet>
 
 </databaseChangeLog>

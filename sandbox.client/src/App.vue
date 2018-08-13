@@ -1,12 +1,18 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link class="link" to="/">Home</router-link>
-      |
-      <router-link class="link" to="/persons">Users</router-link>
-      |
-      <router-link class="link" to="/about">About</router-link>
-      |
+      <span>
+        <router-link class="link" to="/">Home</router-link>
+        |
+      </span>
+      <span v-if="viewUsers">
+        <router-link class="link" to="/persons">Users</router-link>
+        |
+      </span>
+      <span v-if="viewAbout">
+        <router-link class="link" to="/about">About</router-link>
+        |
+      </span>
       <VueLogin/>
     </div>
     <router-view/>
@@ -16,13 +22,22 @@
 <script lang="ts">
   import {Component, Vue} from 'vue-property-decorator';
   import VueLogin from '@/components/VueLogin.vue';
+  import * as login from "@/store/login";
 
   @Component({
     components: {
       VueLogin,
     },
   })
-  export default class App extends Vue {}
+  export default class App extends Vue {
+    get viewAbout(): boolean {
+      return login.readViewAbout(this.$store);
+    }
+
+    get viewUsers(): boolean {
+      return login.readViewUsers(this.$store);
+    }
+  }
 </script>
 
 

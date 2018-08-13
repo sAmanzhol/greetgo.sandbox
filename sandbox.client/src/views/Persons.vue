@@ -5,11 +5,13 @@
         <th>Фио пользователя</th>
         <th>Акаунт пользователя</th>
         <th>День рождения</th>
+        <th>Права</th>
       </tr>
       <tr v-for="p in personList">
         <td>{{p.fio}}</td>
         <td>{{p.username}}</td>
         <td>{{p.birthDate}}</td>
+        <td>{{p.cans}}</td>
       </tr>
     </table>
   </div>

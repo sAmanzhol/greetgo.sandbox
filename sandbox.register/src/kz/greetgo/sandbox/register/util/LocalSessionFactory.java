@@ -6,7 +6,9 @@ import kz.greetgo.db.TransactionManager;
 import kz.greetgo.depinject.core.Bean;
 import kz.greetgo.depinject.core.HasAfterInject;
 import kz.greetgo.depinject.core.replace.BeanReplacer;
+import kz.greetgo.sandbox.controller.model.UserCan;
 import kz.greetgo.sandbox.register.util.my_batis.CustomBooleanTypeHandler;
+import kz.greetgo.sandbox.register.util.my_batis.CustomEnumTypeHandler;
 import org.apache.ibatis.logging.log4j.Log4jImpl;
 import org.apache.ibatis.mapping.Environment;
 import org.apache.ibatis.session.Configuration;
@@ -81,6 +83,7 @@ public abstract class LocalSessionFactory implements BeanReplacer, HasAfterInjec
     typeHandlerRegistry.register(Boolean.class, new CustomBooleanTypeHandler());
     typeHandlerRegistry.register(boolean.class, new CustomBooleanTypeHandler());
     typeHandlerRegistry.register(JdbcType.BOOLEAN, new CustomBooleanTypeHandler());
+    typeHandlerRegistry.register(UserCan.class, new CustomEnumTypeHandler<>(UserCan.class));
 
     SqlSessionFactoryBuilder sqlSessionFactoryBuilder = new SqlSessionFactoryBuilder();
 

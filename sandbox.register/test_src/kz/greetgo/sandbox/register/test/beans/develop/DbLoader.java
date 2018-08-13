@@ -2,6 +2,7 @@ package kz.greetgo.sandbox.register.test.beans.develop;
 
 import kz.greetgo.depinject.core.Bean;
 import kz.greetgo.depinject.core.BeanGetter;
+import kz.greetgo.sandbox.controller.model.UserCan;
 import kz.greetgo.sandbox.register.beans.all.IdGenerator;
 import kz.greetgo.sandbox.register.test.dao.AuthTestDao;
 import kz.greetgo.security.password.PasswordEncoder;
@@ -41,6 +42,10 @@ public class DbLoader {
     user("Ломоносов Михаил Васильевич", "1711-11-19", "lomonosov");
     user("Бутлеров Александр Михайлович", "1828-09-15", "butlerov");
 
+    add_can("pushkin", UserCan.VIEW_USERS);
+    add_can("stalin", UserCan.VIEW_USERS);
+    add_can("stalin", UserCan.VIEW_ABOUT);
+
     logger.info("Finish loading persons");
   }
 
@@ -56,5 +61,12 @@ public class DbLoader {
     authTestDao.get().updatePersonField(id, "surname", fio[0]);
     authTestDao.get().updatePersonField(id, "name", fio[1]);
     authTestDao.get().updatePersonField(id, "patronymic", fio[2]);
+  }
+
+  private void add_can(String username, UserCan... cans) {
+    for (UserCan can : cans) {
+      authTestDao.get().upsert(can.name());
+      authTestDao.get().personCan(username, can.name());
+    }
   }
 }

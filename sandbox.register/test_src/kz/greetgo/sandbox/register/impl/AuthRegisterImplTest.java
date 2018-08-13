@@ -4,6 +4,7 @@ import kz.greetgo.depinject.core.BeanGetter;
 import kz.greetgo.sandbox.controller.errors.IllegalLoginOrPassword;
 import kz.greetgo.sandbox.controller.model.PersonDisplay;
 import kz.greetgo.sandbox.controller.model.SessionHolder;
+import kz.greetgo.sandbox.controller.model.UserCan;
 import kz.greetgo.sandbox.controller.register.AuthRegister;
 import kz.greetgo.sandbox.register.test.dao.AuthTestDao;
 import kz.greetgo.sandbox.register.test.util.ParentTestNg;
@@ -12,6 +13,8 @@ import kz.greetgo.security.session.SessionIdentity;
 import kz.greetgo.security.session.SessionService;
 import kz.greetgo.util.RND;
 import org.testng.annotations.Test;
+
+import java.util.Arrays;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 
@@ -183,6 +186,15 @@ public class AuthRegisterImplTest extends ParentTestNg {
 
     authTestDao.get().insertPerson(id, username, encodedPassword);
 
+    Arrays.stream(UserCan.values()).map(Enum::name).forEach(authTestDao.get()::upsert);
+
+    authTestDao.get().personCan(username, UserCan.VIEW_ABOUT.name());
+    authTestDao.get().personCan(username, UserCan.VIEW_USERS.name());
+
+    String unknownCan = RND.str(10);
+    authTestDao.get().upsert(unknownCan);
+    authTestDao.get().personCan(username, unknownCan);
+
     String surname = RND.str(10);
     String name = RND.str(10);
     String patronymic = RND.str(10);
@@ -199,6 +211,9 @@ public class AuthRegisterImplTest extends ParentTestNg {
     assertThat(personDisplay).isNotNull();
     assertThat(personDisplay.fio).isEqualTo(surname + ' ' + name + ' ' + patronymic);
     assertThat(personDisplay.username).isEqualTo(username);
+    assertThat(personDisplay.cans).contains(UserCan.VIEW_ABOUT);
+    assertThat(personDisplay.cans).contains(UserCan.VIEW_USERS);
+    assertThat(personDisplay.cans).hasSize(2);
 
   }
 
