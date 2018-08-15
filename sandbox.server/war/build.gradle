@@ -6,28 +6,10 @@ dependencies {
 
   compile 'jstl:jstl:1.2'
 
-  testCompile "kz.greetgo.depinject:greetgo.depinject.gen:$depinjectVersion"
 }
 
-task generateBeanContainerJavas(type: JavaExec) {
-  ext.genDir = "${project.buildDir}/generated/bean_container_impl"
-
-  main = 'kz.greetgo.sandbox.server.war.GenerateAndCompileBeanContainers'
-  args = ["${genDir}"]
-
-  classpath { [sourceSets.test.runtimeClasspath,] }
-}
-
-task beanContainerJar(type: Jar) {
-  dependsOn generateBeanContainerJavas
-  baseName "sandbox-bean-container"
-  from generateBeanContainerJavas.genDir
-}
 
 war {
-  //dependsOn project(':sandbox.client').build
-  //dependsOn beanContainerJar
-
   doFirst {
 //    println(project(':sandbox.client').buildDir.toPath().resolve('product').toFile())
   }
@@ -35,8 +17,6 @@ war {
   baseName 'sandbox'
 
   addExcludes rootSpec
-
-  //classpath beanContainerJar
 
   from project(':sandbox.client').buildDir.toPath().resolve('dist').toFile()
 }

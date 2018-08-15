@@ -12,19 +12,27 @@ allprojects {
   targetCompatibility = 1.8
 
   group = "kz.greetgo.sandbox"
-}
 
-subprojects {
+  buildscript {
+    repositories {
+      mavenLocal()
+      if (ggRepo?.trim()) maven { url ggRepo.trim() }
+      mavenCentral()
+    }
+  }
 
   repositories {
     mavenLocal()
     if (ggRepo?.trim()) maven { url ggRepo.trim() }
     mavenCentral()
   }
+}
+
+subprojects {
 
   dependencies {
     ext.jacksonVersion = "2.7.3"
-    ext.depinjectVersion = '2.0.3'
+    ext.depinjectVersion = '2.1.0'
     ext.greetgoUtilVersion = '2.0.0'
     ext.greetgoDbVersion = '2.3.1'
     ext.greetgoConfVersion = '1.0.2'
