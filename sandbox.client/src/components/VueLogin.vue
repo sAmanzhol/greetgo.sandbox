@@ -7,15 +7,13 @@
       <input type="text" placeholder="Enter Username" name="login_username"
              :value="username" @input="updateUsername($event)"
              v-on:keyup.13="$refs.password.focus()"
-      />
-      :
-      <input type="password" placeholder="Enter Password" name="login_password" autocomplete="current-password"
-             :value="password" @input="updatePassword($event)" ref="password"
-             v-on:keyup.13="onEnter"
-      />
+      /><input type="password" placeholder="Enter Password" name="login_password" autocomplete="current-password"
+               :value="password" @input="updatePassword($event)" ref="password"
+               v-on:keyup.13="onEnter"
+    />
       <button @click="onEnter" :disabled="!username||!password">Войти</button>
-      <div v-if="err" class="error">
-        {{err}}
+      <div class="error">
+        {{loginError}}
       </div>
     </div>
     <div v-if="personDisplay">
@@ -50,8 +48,8 @@
       login.commitPassword(this.$store, $event.target.value);
     }
 
-    get err(): string | null {
-      return login.readError(this.$store);
+    get loginError(): string | null {
+      return login.readLoginError(this.$store);
     }
 
     get personDisplay(): PersonDisplay | null {
@@ -92,8 +90,6 @@
   button:hover {
     background: #4691A4;
     box-shadow: none;
-    -moz-box-shadow: none;
-    -webkit-box-shadow: none;
   }
 
   button:active {
@@ -114,8 +110,6 @@
   }
 
   input:focus {
-    -moz-box-shadow: 0 0 8px #88D5E9;
-    -webkit-box-shadow: 0 0 8px #88D5E9;
     box-shadow: 0 0 8px #88D5E9;
     border: 1px solid #88D5E9;
   }
@@ -129,6 +123,8 @@
     color: red;
     text-align: left;
     font-size: smaller;
+    display: inline-block;
+    padding-left: .5rem;
   }
 
   .exit {

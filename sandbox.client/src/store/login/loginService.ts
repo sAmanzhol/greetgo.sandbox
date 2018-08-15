@@ -1,7 +1,7 @@
 import axios from 'axios'
 import {PersonDisplay} from "@/model/PersonDisplay";
 
-export interface Service {
+export interface LoginService {
   loadPersonDisplay(): Promise<PersonDisplay>;
 
   login(username: string, password: string): Promise<string>;
@@ -24,7 +24,6 @@ export const loginService = {
     return await axios.post('/auth/login', params).then(response => {
       return response.data as string;
     }).catch(error => {
-      console.log("asd123 error = ", error);
       throw error.response.data;
     });
   },
@@ -33,4 +32,4 @@ export const loginService = {
     return axios.get('/auth/exit').then(() => {});
   },
 
-} as Service;
+} as LoginService;

@@ -1,15 +1,15 @@
-import {getStoreAccessors} from 'vuex-typescript';
+import {GetAccessor, getStoreAccessors} from 'vuex-typescript';
 import {RootState} from "../RootState";
 import {UserCan} from "@/model/UserCan";
 import {LoginStatus} from "@/components/LoginStatus";
 import {PersonDisplay} from "@/model/PersonDisplay";
 import {ActionContext} from "vuex";
-import {loginService} from "./service";
+import {loginService} from "./loginService";
 
 export interface LoginState {
   username: string;
   password: string;
-  error: string | null;
+  loginError: string | null;
 
   status: LoginStatus;
   canList: UserCan[];
@@ -35,8 +35,8 @@ const getters = {
   getPassword(state: LoginState): string {
     return state.password;
   },
-  getError(state: LoginState): string | null {
-    return state.error;
+  getLoginError(state: LoginState): string | null {
+    return state.loginError;
   },
   viewUsers(state: LoginState): boolean {
     if (!state.display) return false;
@@ -50,10 +50,10 @@ const getters = {
 
 export const readIsLoading = read(getters.isLoading);
 export const readIsLogin = read(getters.isLogin);
-export const readDisplay = read(getters.getDisplay);
+export const readDisplay: GetAccessor<LoginState, RootState, PersonDisplay | null> = read(getters.getDisplay);
 export const readUsername = read(getters.getUsername);
 export const readPassword = read(getters.getPassword);
-export const readError = read(getters.getError);
+export const readLoginError = read(getters.getLoginError);
 export const readViewAbout = read(getters.viewAbout);
 export const readViewUsers = read(getters.viewUsers);
 
@@ -64,8 +64,8 @@ const mutations = {
   setPassword(state: LoginState, password: string) {
     state.password = password;
   },
-  setError(state: LoginState, error: string | null) {
-    state.error = error;
+  setLoginError(state: LoginState, loginError: string | null) {
+    state.loginError = loginError;
   },
   setStatus(state: LoginState, status: LoginStatus) {
     state.status = status;
@@ -82,7 +82,7 @@ const actions = {
   async reset(context: LoginContext) {
     commit(mutations.setUsername)(context, '');
     commit(mutations.setPassword)(context, '');
-    commit(mutations.setError)(context, null);
+    commit(mutations.setLoginError)(context, null);
     commit(mutations.setDisplay)(context, null);
     commit(mutations.setStatus)(context, LoginStatus.LOADING);
 
@@ -103,15 +103,15 @@ const actions = {
       localStorage.setItem("token", token);
       await dispatch(actions.reset)(context);
     } catch (e) {
-      console.log("ewq143 e = ", e);
-      commit(mutations.setError)(context, e);
+      commit(mutations.setLoginError)(context, e);
+      commit(mutations.setPassword)(context, '');
     }
   },
 
   async exit(context: LoginContext) {
     await loginService.exit();
     localStorage.setItem("token", '');
-    commit(mutations.setError)(context, null);
+    commit(mutations.setLoginError)(context, null);
     commit(mutations.setDisplay)(context, null);
     commit(mutations.setStatus)(context, LoginStatus.LOGIN);
   },
@@ -127,7 +127,7 @@ export const login = {
   state: {
     username: '',
     password: '',
-    authError: null,
+    loginError: null,
 
     status: LoginStatus.LOADING,
     canList: [],
