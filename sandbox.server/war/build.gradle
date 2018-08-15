@@ -10,6 +10,7 @@ dependencies {
 
 
 war {
+  dependsOn project(':sandbox.client').tasks.dist
   doFirst {
 //    println(project(':sandbox.client').buildDir.toPath().resolve('product').toFile())
   }
@@ -18,7 +19,7 @@ war {
 
   addExcludes rootSpec
 
-  from project(':sandbox.client').buildDir.toPath().resolve('dist').toFile()
+  from project(':sandbox.client').projectDir.toPath().resolve('dist').toFile()
 }
 
 static def addExcludes(rootSpec) {

@@ -8,7 +8,9 @@ task cleanLibs(type: Delete) {
 
 clean.dependsOn cleanLibs
 
-//build.dependsOn npm_install
-//build.dependsOn gulp_build
-//
-//gulp_build.shouldRunAfter npm_install
+task dist {
+  dependsOn yarn_install
+  dependsOn yarn_build
+}
+
+yarn_build.shouldRunAfter yarn_install

@@ -16,7 +16,6 @@ allprojects {
   buildscript {
     repositories {
       mavenLocal()
-      if (ggRepo?.trim()) maven { url ggRepo.trim() }
       mavenCentral()
     }
   }
