@@ -4,9 +4,12 @@ import router from '@/router';
 import axios from 'axios';
 import store from '@/store';
 
-Vue.config.productionTip = false;
+Vue.config.productionTip = process.env.NODE_ENV === 'production';
 
-axios.interceptors.request.use((config) => {
+console.log("ag347ghd1t1 process.env.NODE_ENV = ", process.env.NODE_ENV);
+console.log("ag347ghd1t1 Vue.config.productionTip = ", Vue.config.productionTip);
+
+axios.interceptors.request.use(config => {
   config.baseURL = process.env.VUE_APP_URL_PREFIX;
   config.headers.token = localStorage.getItem("token");
   config.withCredentials = true;
