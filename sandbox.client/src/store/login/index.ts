@@ -31,15 +31,47 @@ const b = getStoreBuilder<RootState>().module("login", initialLoginState);
 //   GETTERS
 //
 
-const isLoadingGetter = b.read(state => state.status == LoginStatus.LOADING);
-const isLoginGetter = b.read(state => state.status == LoginStatus.LOGIN);
-const displayGetter = b.read(state => state.display);
-const usernameGetter = b.read(state => state.username);
-const passwordGetter = b.read(state => state.password);
-const loginErrorGetter = b.read(state => state.loginError);
+function isLoading(state: LoginState): boolean {
+  return state.status == LoginStatus.LOADING;
+}
 
-const isViewUsersGetter = b.read(state => hasCan(state, UserCan.VIEW_USERS));
-const isViewAboutGetter = b.read(state => hasCan(state, UserCan.VIEW_ABOUT));
+function isLogin(state: LoginState): boolean {
+  return state.status == LoginStatus.LOGIN;
+}
+
+function getDisplay(state: LoginState): PersonDisplay | null {
+  return state.display;
+}
+
+function getUsername(state: LoginState): string {
+  return state.username;
+}
+
+function getPassword(state: LoginState): string {
+  return state.password;
+}
+
+function getLoginError(state: LoginState): string | null {
+  return state.loginError;
+}
+
+function isViewUsers(state: LoginState): boolean {
+  return hasCan(state, UserCan.VIEW_USERS);
+}
+
+function isViewAbout(state: LoginState): boolean {
+  return hasCan(state, UserCan.VIEW_ABOUT);
+}
+
+const readIsLoading = b.read(isLoading);
+const readIsLogin = b.read(isLogin);
+const readDisplay = b.read(getDisplay);
+const readUsername = b.read(getUsername);
+const readPassword = b.read(getPassword);
+const readLoginError = b.read(getLoginError);
+
+const readCanViewUsers = b.read(isViewUsers);
+const readCanViewAbout = b.read(isViewAbout);
 
 function hasCan(state: LoginState, can: UserCan) {
   if (!state.display) return false;
@@ -70,6 +102,12 @@ function setDisplay(state: LoginState, payload: { display: PersonDisplay | null 
   state.display = payload.display;
 }
 
+const commitSetUsername = b.commit(setUsername);
+const commitSetPassword = b.commit(setPassword);
+const commitSetLoginError = b.commit(setLoginError);
+const commitSetStatus = b.commit(setStatus);
+const commitSetDisplay = b.commit(setDisplay);
+
 //
 // ACTIONS
 //
@@ -77,42 +115,46 @@ function setDisplay(state: LoginState, payload: { display: PersonDisplay | null 
 type LoginContext = BareActionContext<LoginState, RootState>;
 
 async function doReset(ignore: LoginContext) {
-  b.commit(setUsername)({username: ''});
-  b.commit(setPassword)({password: ''});
-  b.commit(setLoginError)({loginError: null});
-  b.commit(setDisplay)({display: null});
-  b.commit(setStatus)({status: LoginStatus.LOADING});
+  commitSetUsername({username: ''});
+  commitSetPassword({password: ''});
+  commitSetLoginError({loginError: null});
+  commitSetDisplay({display: null});
+  commitSetStatus({status: LoginStatus.LOADING});
 
   try {
     const display: PersonDisplay = await loginService.loadPersonDisplay();
-    b.commit(setDisplay)({display: display});
-    b.commit(setStatus)({status: LoginStatus.AUTH_OK});
+    commitSetDisplay({display: display});
+    commitSetStatus({status: LoginStatus.AUTH_OK});
   } catch (e) {
-    b.commit(setStatus)({status: LoginStatus.LOGIN});
+    commitSetStatus({status: LoginStatus.LOGIN});
   }
 
 }
 
 async function doLogin(ignore: LoginContext) {
-  let username: string = b.read(usernameGetter)();
-  let password: string = b.read(passwordGetter)();
+  let username: string = readUsername();
+  let password: string = readPassword();
   try {
     const token = await loginService.login(username, password);
     localStorage.setItem("token", token);
-    await b.dispatch(doReset)();
+    await dispatchReset();
   } catch (e) {
-    b.commit(setLoginError)({loginError: e});
-    b.commit(setPassword)({password: ''});
+    commitSetLoginError({loginError: e});
+    commitSetPassword({password: ''});
   }
 }
 
 async function doExit(ignore: LoginContext) {
   await loginService.exit();
   localStorage.setItem("token", '');
-  b.commit(setLoginError)({loginError: null});
-  b.commit(setDisplay)({display: null});
-  b.commit(setStatus)({status: LoginStatus.LOGIN});
+  commitSetLoginError({loginError: null});
+  commitSetDisplay({display: null});
+  commitSetStatus({status: LoginStatus.LOGIN});
 }
+
+const dispatchReset = b.dispatch(doReset);
+const dispatchLogin = b.dispatch(doLogin);
+const dispatchExit = b.dispatch(doExit);
 
 //
 // STATE
@@ -130,21 +172,21 @@ const login = {
     return stateGetter();
   },
 
-  isLoading: b.read(isLoadingGetter),
-  isLogin: b.read(isLoginGetter),
-  getDisplay: b.read(displayGetter),
-  getUsername: b.read(usernameGetter),
-  getPassword: b.read(passwordGetter),
-  getLoginError: b.read(loginErrorGetter),
-  isViewAbout: b.read(isViewAboutGetter),
-  isViewUsers: b.read(isViewUsersGetter),
+  isLoading: readIsLoading,
+  isLogin: readIsLogin,
+  getDisplay: readDisplay,
+  getUsername: readUsername,
+  getPassword: readPassword,
+  getLoginError: readLoginError,
+  isViewAbout: readCanViewAbout,
+  isViewUsers: readCanViewUsers,
 
-  commitUsername: b.commit(setUsername),
-  commitPassword: b.commit(setPassword),
+  commitSetUsername: commitSetUsername,
+  commitSetPassword: commitSetPassword,
 
-  dispatchReset: b.dispatch(doReset),
-  dispatchLogin: b.dispatch(doLogin),
-  dispatchExit: b.dispatch(doExit),
+  dispatchReset: dispatchReset,
+  dispatchLogin: dispatchLogin,
+  dispatchExit: dispatchExit,
 };
 
 // noinspection JSUnusedGlobalSymbols

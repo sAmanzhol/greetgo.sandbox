@@ -37,7 +37,7 @@
     }
 
     updateUsername($event: any) {
-      login.commitUsername($event.target.value);
+      login.commitSetUsername({username: $event.target.value});
     }
 
     get password(): string {
@@ -45,7 +45,7 @@
     }
 
     updatePassword($event: any) {
-      login.commitPassword($event.target.value);
+      login.commitSetPassword({password: $event.target.value});
     }
 
     get loginError(): string | null {
