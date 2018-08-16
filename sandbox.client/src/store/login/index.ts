@@ -1,10 +1,9 @@
-import {GetAccessor, getStoreAccessors} from 'vuex-typescript';
-import {RootState} from "../RootState";
+import {RootState} from "@/store/RootState";
 import {UserCan} from "@/model/UserCan";
 import {LoginStatus} from "@/components/LoginStatus";
 import {PersonDisplay} from "@/model/PersonDisplay";
-import {ActionContext} from "vuex";
-import {loginService} from "./loginService";
+import {loginService} from "@/store/login/loginService";
+import {BareActionContext, getStoreBuilder} from "vuex-typex";
 
 export interface LoginState {
   username: string;
@@ -16,125 +15,137 @@ export interface LoginState {
   display: PersonDisplay | null;
 }
 
-const {commit, read, dispatch} = getStoreAccessors<LoginState, RootState>('login');
-type LoginContext = ActionContext<LoginState, RootState>;
+const initialLoginState: LoginState = {
+  username: '',
+  password: '',
+  loginError: null,
 
-const getters = {
-  isLoading(state: LoginState): boolean {
-    return state.status == LoginStatus.LOADING;
-  },
-  isLogin(state: LoginState): boolean {
-    return state.status == LoginStatus.LOGIN;
-  },
-  getDisplay(state: LoginState): PersonDisplay | null {
-    return state.display;
-  },
-  getUsername(state: LoginState): string {
-    return state.username;
-  },
-  getPassword(state: LoginState): string {
-    return state.password;
-  },
-  getLoginError(state: LoginState): string | null {
-    return state.loginError;
-  },
-  viewUsers(state: LoginState): boolean {
-    if (!state.display) return false;
-    return state.display.cans.indexOf(UserCan.VIEW_USERS) > -1;
-  },
-  viewAbout(state: LoginState): boolean {
-    if (!state.display) return false;
-    return state.display.cans.indexOf(UserCan.VIEW_ABOUT) > -1;
-  },
+  status: LoginStatus.LOADING,
+  canList: [],
+  display: null,
 };
 
-export const readIsLoading = read(getters.isLoading);
-export const readIsLogin = read(getters.isLogin);
-export const readDisplay: GetAccessor<LoginState, RootState, PersonDisplay | null> = read(getters.getDisplay);
-export const readUsername = read(getters.getUsername);
-export const readPassword = read(getters.getPassword);
-export const readLoginError = read(getters.getLoginError);
-export const readViewAbout = read(getters.viewAbout);
-export const readViewUsers = read(getters.viewUsers);
+const b = getStoreBuilder<RootState>().module("login", initialLoginState);
 
-const mutations = {
-  setUsername(state: LoginState, username: string) {
-    state.username = username;
+//
+//   GETTERS
+//
+
+const isLoadingGetter = b.read(state => state.status == LoginStatus.LOADING);
+const isLoginGetter = b.read(state => state.status == LoginStatus.LOGIN);
+const displayGetter = b.read(state => state.display);
+const usernameGetter = b.read(state => state.username);
+const passwordGetter = b.read(state => state.password);
+const loginErrorGetter = b.read(state => state.loginError);
+
+const isViewUsersGetter = b.read(state => hasCan(state, UserCan.VIEW_USERS));
+const isViewAboutGetter = b.read(state => hasCan(state, UserCan.VIEW_ABOUT));
+
+function hasCan(state: LoginState, can: UserCan) {
+  if (!state.display) return false;
+  return state.display.cans.indexOf(can) > -1;
+}
+
+//
+//  MUTATIONS
+//
+
+function setUsername(state: LoginState, payload: { username: string }) {
+  state.username = payload.username;
+}
+
+function setPassword(state: LoginState, payload: { password: string }) {
+  state.password = payload.password;
+}
+
+function setLoginError(state: LoginState, payload: { loginError: string | null }) {
+  state.loginError = payload.loginError;
+}
+
+function setStatus(state: LoginState, payload: { status: LoginStatus }) {
+  state.status = payload.status;
+}
+
+function setDisplay(state: LoginState, payload: { display: PersonDisplay | null }) {
+  state.display = payload.display;
+}
+
+//
+// ACTIONS
+//
+
+type LoginContext = BareActionContext<LoginState, RootState>;
+
+async function doReset(ignore: LoginContext) {
+  b.commit(setUsername)({username: ''});
+  b.commit(setPassword)({password: ''});
+  b.commit(setLoginError)({loginError: null});
+  b.commit(setDisplay)({display: null});
+  b.commit(setStatus)({status: LoginStatus.LOADING});
+
+  try {
+    const display: PersonDisplay = await loginService.loadPersonDisplay();
+    b.commit(setDisplay)({display: display});
+    b.commit(setStatus)({status: LoginStatus.AUTH_OK});
+  } catch (e) {
+    b.commit(setStatus)({status: LoginStatus.LOGIN});
+  }
+
+}
+
+async function doLogin(ignore: LoginContext) {
+  let username: string = b.read(usernameGetter)();
+  let password: string = b.read(passwordGetter)();
+  try {
+    const token = await loginService.login(username, password);
+    localStorage.setItem("token", token);
+    await b.dispatch(doReset)();
+  } catch (e) {
+    b.commit(setLoginError)({loginError: e});
+    b.commit(setPassword)({password: ''});
+  }
+}
+
+async function doExit(ignore: LoginContext) {
+  await loginService.exit();
+  localStorage.setItem("token", '');
+  b.commit(setLoginError)({loginError: null});
+  b.commit(setDisplay)({display: null});
+  b.commit(setStatus)({status: LoginStatus.LOGIN});
+}
+
+//
+// STATE
+//
+
+const stateGetter: (() => LoginState) = b.state();
+
+//
+// MAIN EXPORT
+//
+
+const login = {
+
+  get state(): LoginState {
+    return stateGetter();
   },
-  setPassword(state: LoginState, password: string) {
-    state.password = password;
-  },
-  setLoginError(state: LoginState, loginError: string | null) {
-    state.loginError = loginError;
-  },
-  setStatus(state: LoginState, status: LoginStatus) {
-    state.status = status;
-  },
-  setDisplay(state: LoginState, display: PersonDisplay | null) {
-    state.display = display;
-  },
+
+  isLoading: b.read(isLoadingGetter),
+  isLogin: b.read(isLoginGetter),
+  getDisplay: b.read(displayGetter),
+  getUsername: b.read(usernameGetter),
+  getPassword: b.read(passwordGetter),
+  getLoginError: b.read(loginErrorGetter),
+  isViewAbout: b.read(isViewAboutGetter),
+  isViewUsers: b.read(isViewUsersGetter),
+
+  commitUsername: b.commit(setUsername),
+  commitPassword: b.commit(setPassword),
+
+  dispatchReset: b.dispatch(doReset),
+  dispatchLogin: b.dispatch(doLogin),
+  dispatchExit: b.dispatch(doExit),
 };
 
-export const commitUsername = commit(mutations.setUsername);
-export const commitPassword = commit(mutations.setPassword);
-
-const actions = {
-  async reset(context: LoginContext) {
-    commit(mutations.setUsername)(context, '');
-    commit(mutations.setPassword)(context, '');
-    commit(mutations.setLoginError)(context, null);
-    commit(mutations.setDisplay)(context, null);
-    commit(mutations.setStatus)(context, LoginStatus.LOADING);
-
-    try {
-      const display: PersonDisplay = await loginService.loadPersonDisplay();
-      commit(mutations.setDisplay)(context, display);
-      commit(mutations.setStatus)(context, LoginStatus.AUTH_OK);
-    } catch (e) {
-      commit(mutations.setStatus)(context, LoginStatus.LOGIN);
-    }
-  },
-
-  async login(context: LoginContext) {
-    const username: string = read(getters.getUsername)(context);
-    const password: string = read(getters.getPassword)(context);
-    try {
-      const token = await loginService.login(username, password);
-      localStorage.setItem("token", token);
-      await dispatch(actions.reset)(context);
-    } catch (e) {
-      commit(mutations.setLoginError)(context, e);
-      commit(mutations.setPassword)(context, '');
-    }
-  },
-
-  async exit(context: LoginContext) {
-    await loginService.exit();
-    localStorage.setItem("token", '');
-    commit(mutations.setLoginError)(context, null);
-    commit(mutations.setDisplay)(context, null);
-    commit(mutations.setStatus)(context, LoginStatus.LOGIN);
-  },
-};
-
-export const dispatchReset = dispatch(actions.reset);
-export const dispatchLogin = dispatch(actions.login);
-export const dispatchExit = dispatch(actions.exit);
-
-export const login = {
-  namespaced: true,
-
-  state: {
-    username: '',
-    password: '',
-    loginError: null,
-
-    status: LoginStatus.LOADING,
-    canList: [],
-    display: null,
-  },
-
-  getters: getters,
-  mutations: mutations,
-  actions: actions,
-};
+// noinspection JSUnusedGlobalSymbols
+export default login;

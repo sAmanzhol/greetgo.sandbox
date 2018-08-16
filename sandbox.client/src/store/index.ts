@@ -1,12 +1,11 @@
 import Vue from 'vue';
-import Vuex from 'vuex';
-import {login} from "@/store/login";
+import Vuex, {Store} from 'vuex';
+import {RootState} from "@/store/RootState";
+import {getStoreBuilder} from "vuex-typex";
 
 Vue.use(Vuex);
 
-export default new Vuex.Store({
-  modules: {
-    login,
-  },
-  strict: process.env.NODE_ENV !== 'production',
-});
+const store: Store<RootState> = getStoreBuilder<RootState>().vuexStore();
+
+// noinspection JSUnusedGlobalSymbols
+export default store;

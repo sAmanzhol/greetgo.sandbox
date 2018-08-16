@@ -27,54 +27,54 @@
 <script lang="ts">
   import {Component, Vue} from 'vue-property-decorator';
   import {PersonDisplay} from "../model/PersonDisplay";
-  import * as login from "../store/login";
+  import login from '../store/login';
 
   @Component
   export default class VueLogin extends Vue {
 
     get username(): string {
-      return login.readUsername(this.$store);
+      return login.getPassword()
     }
 
     updateUsername($event: any) {
-      login.commitUsername(this.$store, $event.target.value);
+      login.commitUsername($event.target.value);
     }
 
     get password(): string {
-      return login.readPassword(this.$store);
+      return login.getPassword();
     }
 
     updatePassword($event: any) {
-      login.commitPassword(this.$store, $event.target.value);
+      login.commitPassword($event.target.value);
     }
 
     get loginError(): string | null {
-      return login.readLoginError(this.$store);
+      return login.getLoginError();
     }
 
     get personDisplay(): PersonDisplay | null {
-      return login.readDisplay(this.$store);
+      return login.getDisplay();
     }
 
     async onEnter() {
-      await login.dispatchLogin(this.$store);
+      await login.dispatchLogin();
     }
 
     isWaiting() {
-      return login.readIsLoading(this.$store);
+      return login.isLoading();
     }
 
     isLogin() {
-      return login.readIsLogin(this.$store);
+      return login.isLogin();
     }
 
     // noinspection JSUnusedGlobalSymbols
     async created() {
-      await login.dispatchReset(this.$store);
+      await login.dispatchReset();
     }
 
     async onExit() {
-      await login.dispatchExit(this.$store);
+      await login.dispatchExit();
     }
   }
 </script>

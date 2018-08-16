@@ -22,7 +22,7 @@
 <script lang="ts">
   import {Component, Vue} from 'vue-property-decorator';
   import VueLogin from '@/components/VueLogin.vue';
-  import * as login from "@/store/login";
+  import login from "@/store/login";
 
   @Component({
     components: {
@@ -31,11 +31,11 @@
   })
   export default class App extends Vue {
     get viewAbout(): boolean {
-      return login.readViewAbout(this.$store);
+      return login.isViewAbout();
     }
 
     get viewUsers(): boolean {
-      return login.readViewUsers(this.$store);
+      return login.isViewUsers();
     }
   }
 </script>

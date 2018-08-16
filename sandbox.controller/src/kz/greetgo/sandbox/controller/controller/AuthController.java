@@ -28,6 +28,12 @@ public class AuthController implements Controller {
 
   public BeanGetter<AuthRegister> authRegister;
 
+  @AsIs
+  @PublicAccess
+  @OnGet("/probe")
+  public String probe() {
+    return "System is working <b>OK</b>";
+  }
 
   @AsIs
   @PublicAccess
