@@ -17,12 +17,14 @@ import static kz.greetgo.security.SecurityBuilders.newSessionStorageBuilder;
 @Bean
 public class SessionServiceFactory {
 
+///MODIFY replace Sandbox {PROJECT_CC_NAME}
   public BeanGetter<JdbcSandbox> jdbcSandbox;
 
   @Bean
   public SessionService createSessionService() {
 
     Crypto crypto = newCryptoBuilder()
+///MODIFY replace Sandbox {PROJECT_CC_NAME}
       .inDb(DbType.Postgres, jdbcSandbox.get())
       .setTableName("all_params")
       .setValueFieldName("value_blob")

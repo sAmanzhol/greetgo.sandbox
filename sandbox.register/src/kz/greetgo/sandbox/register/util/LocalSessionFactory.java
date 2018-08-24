@@ -40,10 +40,12 @@ public abstract class LocalSessionFactory implements BeanReplacer, HasAfterInjec
   }
 
   @Bean
+///MODIFY replace Sandbox {PROJECT_CC_NAME}
   public JdbcSandbox getJdbcSandbox() {
     return jdbcSandbox;
   }
 
+///MODIFY replace Sandbox {PROJECT_CC_NAME}
   private JdbcSandbox jdbcSandbox = null;
 
   private SqlSessionFactory sqlSessionFactory = null;
@@ -72,6 +74,7 @@ public abstract class LocalSessionFactory implements BeanReplacer, HasAfterInjec
       }
     });
 
+///MODIFY replace Sandbox {PROJECT_CC_NAME}
     jdbcSandbox = new JdbcSandbox(dataSource, transactionManager);
 
     Environment environment = new Environment(databaseEnvironmentId(), transactionFactory, dataSource);

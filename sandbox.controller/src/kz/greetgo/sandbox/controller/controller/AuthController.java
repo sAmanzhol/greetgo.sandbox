@@ -22,6 +22,7 @@ import kz.greetgo.sandbox.controller.util.Controller;
 import kz.greetgo.security.session.SessionIdentity;
 
 ///MODIFY replace sandbox {PROJECT_NAME}
+///MODIFY replace Sandbox {PROJECT_CC_NAME}
 import static kz.greetgo.sandbox.controller.util.SandboxViews.G_SESSION;
 
 /**
