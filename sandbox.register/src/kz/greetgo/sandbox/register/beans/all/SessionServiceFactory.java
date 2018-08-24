@@ -35,6 +35,7 @@ public class SessionServiceFactory {
       .build();
 
     SessionStorage sessionStorage = newSessionStorageBuilder()
+///MODIFY replace Sandbox {PROJECT_CC_NAME}
       .setJdbc(DbType.Postgres, jdbcSandbox.get())
       .setTableName("session_storage")
       .build();

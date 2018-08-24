@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 import static kz.greetgo.util.ServerUtil.streamToStr0;
 
 @Bean
+///MODIFY replace Sandbox {PROJECT_CC_NAME}
 public class StandAccessViews extends SandboxViews {
 
   //see --> В этом файле можно настраивать скорость работы сервисов (он работает на горячюю)
