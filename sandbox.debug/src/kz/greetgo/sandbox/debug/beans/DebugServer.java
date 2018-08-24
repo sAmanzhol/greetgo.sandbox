@@ -15,12 +15,13 @@ import java.util.Comparator;
 import java.util.List;
 
 @Bean
-public class StandServer implements HasAfterInject {
+public class DebugServer implements HasAfterInject {
   private static final int PORT = 13_13/* Reptilians is out of there */;
   public final Server server = new Server(PORT);
 
-  public StandServer start() throws Exception {
+  public DebugServer start() throws Exception {
     server.start();
+///MODIFY replace sandbox {PROJECT_NAME}
     String url = "Go to http://localhost:" + PORT + "/sandbox/api/auth/probe";
     System.err.println("[[[                                ]]]");
     System.err.println("[[[ Stand server has been launched ]]] [[[ " + url + " ]]]");
@@ -38,6 +39,7 @@ public class StandServer implements HasAfterInject {
   public void afterInject() throws Exception {
     WebAppContext webAppServlet = new WebAppContext(
       Modules.clientDir().toPath().resolve(".").toString(),
+///MODIFY replace sandbox {PROJECT_NAME}
       "/sandbox");
 
     webAppContextRegistrations.get().stream()

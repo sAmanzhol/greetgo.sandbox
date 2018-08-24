@@ -19,7 +19,7 @@ import static kz.greetgo.util.ServerUtil.streamToStr0;
 
 @Bean
 ///MODIFY replace Sandbox {PROJECT_CC_NAME}
-public class StandAccessViews extends SandboxViews {
+public class DebugViews extends SandboxViews {
 
   //see --> В этом файле можно настраивать скорость работы сервисов (он работает на горячюю)
   private final File config = new File("build/sleep_in_request.txt");
