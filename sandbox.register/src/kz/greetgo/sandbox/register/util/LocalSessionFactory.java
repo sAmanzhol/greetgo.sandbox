@@ -42,6 +42,7 @@ public abstract class LocalSessionFactory implements BeanReplacer, HasAfterInjec
   @Bean
 ///MODIFY replace Sandbox {PROJECT_CC_NAME}
   public JdbcSandbox getJdbcSandbox() {
+///MODIFY replace Sandbox {PROJECT_CC_NAME}
     return jdbcSandbox;
   }
 

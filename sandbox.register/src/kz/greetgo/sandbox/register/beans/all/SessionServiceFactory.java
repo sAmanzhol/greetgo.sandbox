@@ -5,6 +5,7 @@ import kz.greetgo.db.DbType;
 import kz.greetgo.depinject.core.Bean;
 import kz.greetgo.depinject.core.BeanGetter;
 ///MODIFY replace sandbox {PROJECT_NAME}
+///MODIFY replace Sandbox {PROJECT_CC_NAME}
 import kz.greetgo.sandbox.register.util.JdbcSandbox;
 import kz.greetgo.security.crypto.Crypto;
 import kz.greetgo.security.session.SessionService;
