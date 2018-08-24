@@ -1,3 +1,4 @@
+///MODIFY replace sandbox PROJECT_NAME
 package kz.greetgo.sandbox.register.test.util;
 
 import kz.greetgo.depinject.Depinject;
@@ -14,6 +15,7 @@ public class TestsBeanContainerCreator {
 
       try {
         DepinjectUtil.implementAndUseBeanContainers(
+///MODIFY replace sandbox PROJECT_NAME
           "kz.greetgo.sandbox.register.test",
           "build/create/recreate_src/" + new Date().getTime()
         );

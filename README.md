@@ -1,5 +1,4 @@
 # greetgo.sandbox
 
+///MODIFY replace SandBox PROJECT_NAME
 SandBox from greetgo!
-
-Added in_service

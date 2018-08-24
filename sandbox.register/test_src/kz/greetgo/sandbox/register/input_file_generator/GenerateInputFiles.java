@@ -1,3 +1,4 @@
+///MODIFY replace sandbox PROJECT_NAME
 package kz.greetgo.sandbox.register.input_file_generator;
 
 import kz.greetgo.util.RND;

@@ -1,6 +1,9 @@
+///MODIFY replace sandbox PROJECT_NAME
 package kz.greetgo.sandbox.register._develop_;
 
+///MODIFY replace sandbox PROJECT_NAME
 import kz.greetgo.sandbox.register.test.util.TestsBeanContainer;
+///MODIFY replace sandbox PROJECT_NAME
 import kz.greetgo.sandbox.register.test.util.TestsBeanContainerCreator;
 
 /**

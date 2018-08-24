@@ -1,0 +1,1 @@
+rename-to=JdbcPROJECT_CC_NAME.java

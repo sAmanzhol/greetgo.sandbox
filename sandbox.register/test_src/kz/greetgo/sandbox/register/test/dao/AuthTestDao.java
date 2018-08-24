@@ -1,5 +1,7 @@
+///MODIFY replace sandbox PROJECT_NAME
 package kz.greetgo.sandbox.register.test.dao;
 
+///MODIFY replace sandbox PROJECT_NAME
 import kz.greetgo.sandbox.controller.model.UserCan;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;

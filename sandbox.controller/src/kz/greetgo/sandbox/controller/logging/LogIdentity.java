@@ -1,3 +1,4 @@
+///MODIFY replace sandbox PROJECT_NAME
 package kz.greetgo.sandbox.controller.logging;
 
 import java.util.Random;
