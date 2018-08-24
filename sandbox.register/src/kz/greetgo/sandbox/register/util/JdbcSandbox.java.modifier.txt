@@ -1,1 +1,1 @@
-rename-to=JdbcPROJECT_CC_NAME.java
+rename-to=Jdbc{PROJECT_CC_NAME}.java

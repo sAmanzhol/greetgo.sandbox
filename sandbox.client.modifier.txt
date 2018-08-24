@@ -1,1 +1,1 @@
-rename-to=PROJECT_NAME.client
+rename-to={PROJECT_NAME}.client

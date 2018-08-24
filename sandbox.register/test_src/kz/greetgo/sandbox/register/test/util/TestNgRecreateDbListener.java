@@ -1,7 +1,7 @@
-///MODIFY replace sandbox PROJECT_NAME
+///MODIFY replace sandbox {PROJECT_NAME}
 package kz.greetgo.sandbox.register.test.util;
 
-///MODIFY replace sandbox PROJECT_NAME
+///MODIFY replace sandbox {PROJECT_NAME}
 import kz.greetgo.sandbox.register.test.beans.develop.DbWorker;
 import org.testng.ISuite;
 import org.testng.ISuiteListener;

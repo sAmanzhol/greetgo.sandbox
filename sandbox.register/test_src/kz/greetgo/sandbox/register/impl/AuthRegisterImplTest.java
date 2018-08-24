@@ -1,20 +1,20 @@
-///MODIFY replace sandbox PROJECT_NAME
+///MODIFY replace sandbox {PROJECT_NAME}
 package kz.greetgo.sandbox.register.impl;
 
 import kz.greetgo.depinject.core.BeanGetter;
-///MODIFY replace sandbox PROJECT_NAME
+///MODIFY replace sandbox {PROJECT_NAME}
 import kz.greetgo.sandbox.controller.errors.IllegalLoginOrPassword;
-///MODIFY replace sandbox PROJECT_NAME
+///MODIFY replace sandbox {PROJECT_NAME}
 import kz.greetgo.sandbox.controller.model.PersonDisplay;
-///MODIFY replace sandbox PROJECT_NAME
+///MODIFY replace sandbox {PROJECT_NAME}
 import kz.greetgo.sandbox.controller.model.SessionHolder;
-///MODIFY replace sandbox PROJECT_NAME
+///MODIFY replace sandbox {PROJECT_NAME}
 import kz.greetgo.sandbox.controller.model.UserCan;
-///MODIFY replace sandbox PROJECT_NAME
+///MODIFY replace sandbox {PROJECT_NAME}
 import kz.greetgo.sandbox.controller.register.AuthRegister;
-///MODIFY replace sandbox PROJECT_NAME
+///MODIFY replace sandbox {PROJECT_NAME}
 import kz.greetgo.sandbox.register.test.dao.AuthTestDao;
-///MODIFY replace sandbox PROJECT_NAME
+///MODIFY replace sandbox {PROJECT_NAME}
 import kz.greetgo.sandbox.register.test.util.ParentTestNg;
 import kz.greetgo.security.password.PasswordEncoder;
 import kz.greetgo.security.session.SessionIdentity;

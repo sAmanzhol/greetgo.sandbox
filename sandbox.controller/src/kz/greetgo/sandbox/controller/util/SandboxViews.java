@@ -1,4 +1,4 @@
-///MODIFY replace sandbox PROJECT_NAME
+///MODIFY replace sandbox {PROJECT_NAME}
 package kz.greetgo.sandbox.controller.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,17 +11,17 @@ import kz.greetgo.mvc.interfaces.MethodInvoker;
 import kz.greetgo.mvc.interfaces.RequestTunnel;
 import kz.greetgo.mvc.interfaces.SessionParameterGetter;
 import kz.greetgo.mvc.interfaces.Views;
-///MODIFY replace sandbox PROJECT_NAME
+///MODIFY replace sandbox {PROJECT_NAME}
 import kz.greetgo.sandbox.controller.errors.JsonRestError;
-///MODIFY replace sandbox PROJECT_NAME
+///MODIFY replace sandbox {PROJECT_NAME}
 import kz.greetgo.sandbox.controller.errors.RestError;
-///MODIFY replace sandbox PROJECT_NAME
+///MODIFY replace sandbox {PROJECT_NAME}
 import kz.greetgo.sandbox.controller.model.SessionHolder;
-///MODIFY replace sandbox PROJECT_NAME
+///MODIFY replace sandbox {PROJECT_NAME}
 import kz.greetgo.sandbox.controller.register.AuthRegister;
-///MODIFY replace sandbox PROJECT_NAME
+///MODIFY replace sandbox {PROJECT_NAME}
 import kz.greetgo.sandbox.controller.security.PublicAccess;
-///MODIFY replace sandbox PROJECT_NAME
+///MODIFY replace sandbox {PROJECT_NAME}
 import kz.greetgo.sandbox.controller.security.SecurityError;
 import org.apache.log4j.Logger;
 
@@ -32,7 +32,7 @@ import java.util.Map;
 /**
  * В этом классе реализована обработка методов контроллеров
  */
-///MODIFY replace Sandbox PROJECT_CC_NAME
+///MODIFY replace Sandbox {PROJECT_CC_NAME}
 public abstract class SandboxViews implements Views {
 
   public static final String G_SESSION = "g-session";

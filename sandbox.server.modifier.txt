@@ -1,1 +1,1 @@
-rename-to=PROJECT_NAME.server
+rename-to={PROJECT_NAME}.server

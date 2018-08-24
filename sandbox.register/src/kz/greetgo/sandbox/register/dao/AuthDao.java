@@ -1,11 +1,11 @@
-///MODIFY replace sandbox PROJECT_NAME
+///MODIFY replace sandbox {PROJECT_NAME}
 package kz.greetgo.sandbox.register.dao;
 
-///MODIFY replace sandbox PROJECT_NAME
+///MODIFY replace sandbox {PROJECT_NAME}
 import kz.greetgo.sandbox.controller.model.PersonDisplay;
-///MODIFY replace sandbox PROJECT_NAME
+///MODIFY replace sandbox {PROJECT_NAME}
 import kz.greetgo.sandbox.controller.model.UserCan;
-///MODIFY replace sandbox PROJECT_NAME
+///MODIFY replace sandbox {PROJECT_NAME}
 import kz.greetgo.sandbox.register.model.PersonLogin;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;

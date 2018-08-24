@@ -1,1 +1,1 @@
-rename-to=PROJECT_NAME
+rename-to={PROJECT_NAME}

@@ -1,1 +1,1 @@
-rename-to=PROJECT_NAME.register
+rename-to={PROJECT_NAME}.register

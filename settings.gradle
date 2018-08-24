@@ -1,4 +1,4 @@
-///MODIFY replace sandbox PROJECT_NAME
+///MODIFY replace sandbox {PROJECT_NAME}
 rootProject.name = "greetgo.sandbox.root"
 
 include 'sandbox.client'

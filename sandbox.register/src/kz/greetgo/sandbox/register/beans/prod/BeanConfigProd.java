@@ -1,4 +1,4 @@
-///MODIFY replace sandbox PROJECT_NAME
+///MODIFY replace sandbox {PROJECT_NAME}
 package kz.greetgo.sandbox.register.beans.prod;
 
 import kz.greetgo.depinject.core.BeanConfig;

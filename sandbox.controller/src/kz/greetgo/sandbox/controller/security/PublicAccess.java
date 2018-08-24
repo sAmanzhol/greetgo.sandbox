@@ -1,4 +1,4 @@
-///MODIFY replace sandbox PROJECT_NAME
+///MODIFY replace sandbox {PROJECT_NAME}
 package kz.greetgo.sandbox.controller.security;
 
 import java.lang.annotation.Documented;

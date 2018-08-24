@@ -1,4 +1,4 @@
-///MODIFY replace sandbox PROJECT_NAME
+///MODIFY replace sandbox {PROJECT_NAME}
 package kz.greetgo.sandbox.register.util.my_batis;
 
 import org.apache.ibatis.type.BaseTypeHandler;
