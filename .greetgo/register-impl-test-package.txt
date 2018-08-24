@@ -1,1 +1,2 @@
+###MODIFY replace sandbox PROJECT_NAME
 sandbox.register/test_src kz/greetgo/sandbox/register/impl

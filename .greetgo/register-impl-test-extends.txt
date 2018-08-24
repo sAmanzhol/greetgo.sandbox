@@ -1,1 +1,2 @@
+###MODIFY replace sandbox PROJECT_NAME
 kz.greetgo.sandbox.register.test.util.ParentTestNg
