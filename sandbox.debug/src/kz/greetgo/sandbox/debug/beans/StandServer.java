@@ -1,9 +1,12 @@
+///MODIFY replace sandbox {PROJECT_NAME}
 package kz.greetgo.sandbox.debug.beans;
 
 import kz.greetgo.depinject.core.Bean;
 import kz.greetgo.depinject.core.BeanGetter;
 import kz.greetgo.depinject.core.HasAfterInject;
+///MODIFY replace sandbox {PROJECT_NAME}
 import kz.greetgo.sandbox.controller.util.Modules;
+///MODIFY replace sandbox {PROJECT_NAME}
 import kz.greetgo.sandbox.debug.util.WebAppContextRegistration;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;

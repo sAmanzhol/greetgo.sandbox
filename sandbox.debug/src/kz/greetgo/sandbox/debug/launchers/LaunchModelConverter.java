@@ -1,5 +1,7 @@
+///MODIFY replace sandbox {PROJECT_NAME}
 package kz.greetgo.sandbox.debug.launchers;
 
+///MODIFY replace sandbox {PROJECT_NAME}
 import kz.greetgo.sandbox.controller.util.Modules;
 import kz.greetgo.ts_java_convert.ConvertModelBuilder;
 
@@ -11,6 +13,7 @@ public class LaunchModelConverter {
       .resolve("src").toFile();
     File destinationDir = Modules.controllerDir().toPath()
       .resolve("src").toFile();
+///MODIFY replace sandbox {PROJECT_NAME}
     String destinationPackage = "kz.greetgo.sandbox.controller.model";
 
     new ConvertModelBuilder()

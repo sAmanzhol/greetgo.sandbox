@@ -12,6 +12,7 @@ public class JdbcSandbox extends AbstractJdbcWithDataSource {
   private final DataSource dataSource;
   private final TransactionManager transactionManager;
 
+///MODIFY replace Sandbox {PROJECT_CC_NAME}
   public JdbcSandbox(DataSource dataSource, TransactionManager transactionManager) {
     this.dataSource = dataSource;
     this.transactionManager = transactionManager;

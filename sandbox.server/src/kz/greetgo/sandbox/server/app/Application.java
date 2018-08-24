@@ -1,3 +1,4 @@
+///MODIFY replace sandbox {PROJECT_NAME}
 package kz.greetgo.sandbox.server.app;
 
 import kz.greetgo.depinject.Depinject;

@@ -1,3 +1,4 @@
+///MODIFY replace sandbox {PROJECT_NAME}
 package kz.greetgo.sandbox.server.war;
 
 import kz.greetgo.depinject.gen.DepinjectUtil;
@@ -5,6 +6,7 @@ import kz.greetgo.depinject.gen.DepinjectUtil;
 public class GenerateAndCompileBeanContainers {
   public static void main(String[] args) throws Exception {
     String outDir = args.length < 1 ? "build/gen_java_out_dir" : args[0];
+///MODIFY replace sandbox {PROJECT_NAME}
     DepinjectUtil.implementBeanContainers("kz.greetgo.sandbox", outDir);
   }
 }

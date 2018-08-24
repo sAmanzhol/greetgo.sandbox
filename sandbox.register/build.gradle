@@ -1,4 +1,5 @@
 dependencies {
+///MODIFY replace sandbox {PROJECT_NAME}
   compile project(':sandbox.controller')
 
   compile "kz.greetgo.db:greetgo.db:$greetgoDbVersion"

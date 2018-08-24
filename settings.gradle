@@ -1,9 +1,15 @@
 ///MODIFY replace sandbox {PROJECT_NAME}
 rootProject.name = "greetgo.sandbox.root"
 
+///MODIFY replace sandbox {PROJECT_NAME}
 include 'sandbox.client'
+///MODIFY replace sandbox {PROJECT_NAME}
 include 'sandbox.controller'
+///MODIFY replace sandbox {PROJECT_NAME}
 include 'sandbox.debug'
+///MODIFY replace sandbox {PROJECT_NAME}
 include 'sandbox.register'
+///MODIFY replace sandbox {PROJECT_NAME}
 include 'sandbox.server'
+///MODIFY replace sandbox {PROJECT_NAME}
 include 'sandbox.server:war'
