@@ -30,6 +30,7 @@ import java.util.HashSet;
 import static kz.greetgo.conf.sys_params.SysParams.pgAdminPassword;
 import static kz.greetgo.conf.sys_params.SysParams.pgAdminUrl;
 import static kz.greetgo.conf.sys_params.SysParams.pgAdminUserid;
+///MODIFY replace sandbox {PROJECT_NAME}
 import static kz.greetgo.sandbox.register.test.util.DbUrlUtils.changeUrlDbName;
 
 @Bean

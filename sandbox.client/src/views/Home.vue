@@ -1,5 +1,6 @@
 <template>
   <div class="home">
+///MODIFY replace sandbox {PROJECT_NAME}
     <img src="../assets/sandbox.svg" width="200px">
     <div>Home page</div>
   </div>

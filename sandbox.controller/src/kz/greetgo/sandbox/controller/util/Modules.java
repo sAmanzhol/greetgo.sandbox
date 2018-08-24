@@ -16,7 +16,8 @@ public class Modules {
       return new File("..");
     }
 
-    throw new RuntimeException("Cannot find sandbox.parent dir");
+///MODIFY replace sandbox {PROJECT_NAME}
+    throw new RuntimeException("Cannot find sandbox.root dir");
   }
 
   private static File findDir(String moduleName) {

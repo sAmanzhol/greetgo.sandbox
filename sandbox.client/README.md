@@ -1,4 +1,4 @@
-# sandbox.client
+# client
 
 ## Project setup
 ```
