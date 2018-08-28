@@ -7,7 +7,7 @@ import {LoginService} from "./login/login.service";
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-//MODIFY replace sandbox {PROJECT_NAME}
+///MODIFY replace sandbox {PROJECT_NAME}
   title = 'sandbox';
 
   constructor(public login: LoginService) {}
