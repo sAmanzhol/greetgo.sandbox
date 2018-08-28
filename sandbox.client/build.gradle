@@ -9,10 +9,8 @@ task cleanLibs(type: Delete) {
 clean.dependsOn cleanLibs
 
 task dist {
-  dependsOn yarn_install
-  dependsOn yarn_build
-//  dependsOn yarn_devbuild
+  dependsOn npm_install
+  dependsOn npm_run_build
 }
 
-yarn_build.shouldRunAfter yarn_install
-yarn_devbuild.shouldRunAfter yarn_install
+npm_run_build.shouldRunAfter npm_install
