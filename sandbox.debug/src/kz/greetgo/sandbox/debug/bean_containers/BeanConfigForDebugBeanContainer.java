@@ -12,4 +12,4 @@ import kz.greetgo.sandbox.debug.beans.BeanConfigStand;
 
 @BeanConfig
 @Include({BeanConfigStand.class, BeanConfigControllers.class, BeanConfigAll.class})
-public class BeanConfigForStandBeanContainer {}
+public class BeanConfigForDebugBeanContainer {}

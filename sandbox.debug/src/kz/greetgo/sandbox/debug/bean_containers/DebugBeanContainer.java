@@ -6,7 +6,7 @@ import kz.greetgo.depinject.core.Include;
 ///MODIFY replace sandbox {PROJECT_NAME}
 import kz.greetgo.sandbox.debug.beans.DebugServer;
 
-@Include(BeanConfigForStandBeanContainer.class)
-public interface StandBeanContainer extends BeanContainer {
+@Include(BeanConfigForDebugBeanContainer.class)
+public interface DebugBeanContainer extends BeanContainer {
   DebugServer server();
 }

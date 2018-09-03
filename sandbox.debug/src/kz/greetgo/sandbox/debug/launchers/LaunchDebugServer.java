@@ -6,11 +6,11 @@ import kz.greetgo.depinject.gen.DepinjectUtil;
 ///MODIFY replace sandbox {PROJECT_NAME}
 import kz.greetgo.sandbox.controller.util.Modules;
 ///MODIFY replace sandbox {PROJECT_NAME}
-import kz.greetgo.sandbox.debug.bean_containers.StandBeanContainer;
+import kz.greetgo.sandbox.debug.bean_containers.DebugBeanContainer;
 
-public class LaunchStandServer {
+public class LaunchDebugServer {
   public static void main(String[] args) throws Exception {
-    new LaunchStandServer().run();
+    new LaunchDebugServer().run();
   }
 
   private void run() throws Exception {
@@ -19,7 +19,7 @@ public class LaunchStandServer {
       "kz.greetgo.sandbox.debug",
       Modules.standDir() + "/build/src_bean_containers");
 
-    StandBeanContainer container = Depinject.newInstance(StandBeanContainer.class);
+    DebugBeanContainer container = Depinject.newInstance(DebugBeanContainer.class);
 
     container.server().start().join();
   }
