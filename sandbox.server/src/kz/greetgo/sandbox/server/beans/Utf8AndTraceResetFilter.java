@@ -1,8 +1,6 @@
-///MODIFY replace sandbox {PROJECT_NAME}
 package kz.greetgo.sandbox.server.beans;
 
 import kz.greetgo.depinject.core.Bean;
-///MODIFY replace sandbox {PROJECT_NAME}
 import kz.greetgo.sandbox.controller.logging.LogIdentity;
 
 import javax.servlet.DispatcherType;

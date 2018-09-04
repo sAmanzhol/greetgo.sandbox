@@ -1,4 +1,3 @@
-///MODIFY replace sandbox {PROJECT_NAME}
 package kz.greetgo.sandbox.debug.util;
 
 import org.eclipse.jetty.webapp.WebAppContext;

@@ -1,4 +1,3 @@
-///MODIFY replace sandbox {PROJECT_NAME}
 package kz.greetgo.sandbox.register.util;
 
 import kz.greetgo.db.DbProxyFactory;
@@ -7,11 +6,8 @@ import kz.greetgo.db.TransactionManager;
 import kz.greetgo.depinject.core.Bean;
 import kz.greetgo.depinject.core.HasAfterInject;
 import kz.greetgo.depinject.core.replace.BeanReplacer;
-///MODIFY replace sandbox {PROJECT_NAME}
 import kz.greetgo.sandbox.controller.model.UserCan;
-///MODIFY replace sandbox {PROJECT_NAME}
 import kz.greetgo.sandbox.register.util.my_batis.CustomBooleanTypeHandler;
-///MODIFY replace sandbox {PROJECT_NAME}
 import kz.greetgo.sandbox.register.util.my_batis.CustomEnumTypeHandler;
 import org.apache.ibatis.logging.log4j.Log4jImpl;
 import org.apache.ibatis.mapping.Environment;
@@ -40,13 +36,10 @@ public abstract class LocalSessionFactory implements BeanReplacer, HasAfterInjec
   }
 
   @Bean
-///MODIFY replace Sandbox {PROJECT_CC_NAME}
   public JdbcSandbox getJdbcSandbox() {
-///MODIFY replace Sandbox {PROJECT_CC_NAME}
     return jdbcSandbox;
   }
 
-///MODIFY replace Sandbox {PROJECT_CC_NAME}
   private JdbcSandbox jdbcSandbox = null;
 
   private SqlSessionFactory sqlSessionFactory = null;
@@ -75,7 +68,6 @@ public abstract class LocalSessionFactory implements BeanReplacer, HasAfterInjec
       }
     });
 
-///MODIFY replace Sandbox {PROJECT_CC_NAME}
     jdbcSandbox = new JdbcSandbox(dataSource, transactionManager);
 
     Environment environment = new Environment(databaseEnvironmentId(), transactionFactory, dataSource);

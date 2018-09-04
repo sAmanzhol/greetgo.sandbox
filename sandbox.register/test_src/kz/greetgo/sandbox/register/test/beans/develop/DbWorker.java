@@ -1,18 +1,12 @@
-///MODIFY replace sandbox {PROJECT_NAME}
 package kz.greetgo.sandbox.register.test.beans.develop;
 
 import kz.greetgo.conf.sys_params.SysParams;
 import kz.greetgo.depinject.core.Bean;
 import kz.greetgo.depinject.core.BeanGetter;
-///MODIFY replace sandbox {PROJECT_NAME}
 import kz.greetgo.sandbox.register.beans.all.AllConfigFactory;
-///MODIFY replace sandbox {PROJECT_NAME}
 import kz.greetgo.sandbox.register.configs.DbConfig;
-///MODIFY replace sandbox {PROJECT_NAME}
 import kz.greetgo.sandbox.register.test.util.DbUrlUtils;
-///MODIFY replace sandbox {PROJECT_NAME}
 import kz.greetgo.sandbox.register.util.App;
-///MODIFY replace sandbox {PROJECT_NAME}
 import kz.greetgo.sandbox.register.util.LiquibaseManager;
 import kz.greetgo.util.ServerUtil;
 import org.apache.log4j.Logger;
@@ -30,7 +24,6 @@ import java.util.HashSet;
 import static kz.greetgo.conf.sys_params.SysParams.pgAdminPassword;
 import static kz.greetgo.conf.sys_params.SysParams.pgAdminUrl;
 import static kz.greetgo.conf.sys_params.SysParams.pgAdminUserid;
-///MODIFY replace sandbox {PROJECT_NAME}
 import static kz.greetgo.sandbox.register.test.util.DbUrlUtils.changeUrlDbName;
 
 @Bean
@@ -126,7 +119,6 @@ public class DbWorker {
     File file = allPostgresConfigFactory.get().storageFileFor(DbConfig.class);
     try (PrintStream out = new PrintStream(file, "UTF-8")) {
 
-///MODIFY replace sandbox {PROJECT_NAME}
       String name = "sandbox";
 
       out.println("url=" + changeUrlDbName(pgAdminUrl(), System.getProperty("user.name") + "_" + name));

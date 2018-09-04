@@ -1,4 +1,3 @@
-///MODIFY replace sandbox {PROJECT_NAME}
 package kz.greetgo.sandbox.controller.logging;
 
 import org.apache.log4j.spi.LoggingEvent;

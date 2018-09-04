@@ -1,4 +1,3 @@
-///MODIFY replace sandbox {PROJECT_NAME}
 package kz.greetgo.sandbox.server.beans;
 
 import kz.greetgo.depinject.core.Bean;
@@ -7,7 +6,6 @@ import kz.greetgo.mvc.builder.ExecDefinition;
 import kz.greetgo.mvc.interfaces.Views;
 import kz.greetgo.mvc.model.UploadInfo;
 import kz.greetgo.mvc.war.AppServlet;
-///MODIFY replace sandbox {PROJECT_NAME}
 import kz.greetgo.sandbox.controller.util.Controller;
 
 import java.util.ArrayList;

@@ -1,13 +1,9 @@
-///MODIFY replace sandbox {PROJECT_NAME}
 package kz.greetgo.sandbox.register.test.beans.develop;
 
 import kz.greetgo.depinject.core.Bean;
 import kz.greetgo.depinject.core.BeanGetter;
-///MODIFY replace sandbox {PROJECT_NAME}
 import kz.greetgo.sandbox.controller.model.UserCan;
-///MODIFY replace sandbox {PROJECT_NAME}
 import kz.greetgo.sandbox.register.beans.all.IdGenerator;
-///MODIFY replace sandbox {PROJECT_NAME}
 import kz.greetgo.sandbox.register.test.dao.AuthTestDao;
 import kz.greetgo.security.password.PasswordEncoder;
 import org.apache.log4j.Logger;

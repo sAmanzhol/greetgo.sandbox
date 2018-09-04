@@ -1,4 +1,3 @@
-///MODIFY replace sandbox {PROJECT_NAME}
 package kz.greetgo.sandbox.register.test.util;
 
 import kz.greetgo.depinject.testng.AbstractDepinjectTestNg;

@@ -4,7 +4,6 @@
 
 export const environment = {
   production: false,
-///MODIFY replace sandbox {PROJECT_NAME}
   urlPrefix: 'http://localhost:1313/sandbox/api',
 };
 

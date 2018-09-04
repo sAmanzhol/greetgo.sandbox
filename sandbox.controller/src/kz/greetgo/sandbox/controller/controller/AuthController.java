@@ -1,4 +1,3 @@
-///MODIFY replace sandbox {PROJECT_NAME}
 package kz.greetgo.sandbox.controller.controller;
 
 import kz.greetgo.depinject.core.Bean;
@@ -11,18 +10,12 @@ import kz.greetgo.mvc.annotations.on_methods.ControllerPrefix;
 import kz.greetgo.mvc.annotations.on_methods.OnGet;
 import kz.greetgo.mvc.annotations.on_methods.OnPost;
 import kz.greetgo.mvc.interfaces.TunnelCookies;
-///MODIFY replace sandbox {PROJECT_NAME}
 import kz.greetgo.sandbox.controller.model.PersonDisplay;
-///MODIFY replace sandbox {PROJECT_NAME}
 import kz.greetgo.sandbox.controller.register.AuthRegister;
-///MODIFY replace sandbox {PROJECT_NAME}
 import kz.greetgo.sandbox.controller.security.PublicAccess;
-///MODIFY replace sandbox {PROJECT_NAME}
 import kz.greetgo.sandbox.controller.util.Controller;
 import kz.greetgo.security.session.SessionIdentity;
 
-///MODIFY replace sandbox {PROJECT_NAME}
-///MODIFY replace Sandbox {PROJECT_CC_NAME}
 import static kz.greetgo.sandbox.controller.util.SandboxViews.G_SESSION;
 
 /**

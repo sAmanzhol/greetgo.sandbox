@@ -1,2 +1,1 @@
-###MODIFY replace sandbox {PROJECT_NAME}
 sandbox.register/src kz/greetgo/sandbox/register/dao

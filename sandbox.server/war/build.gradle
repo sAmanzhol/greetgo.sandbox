@@ -2,7 +2,6 @@ apply plugin: 'war'
 webAppDirName = 'webapps'
 
 dependencies {
-///MODIFY replace sandbox {PROJECT_NAME}
   compile project(':sandbox.server')
 
   testCompile "kz.greetgo.depinject:greetgo.depinject.gen:$depinjectVersion"
@@ -13,19 +12,15 @@ dependencies {
 
 
 war {
-///MODIFY replace sandbox {PROJECT_NAME}
   dependsOn project(':sandbox.client').tasks.dist
   doFirst {
-///MODIFY replace sandbox {PROJECT_NAME}
 //    println(project(':sandbox.client').buildDir.toPath().resolve('product').toFile())
   }
 
-///MODIFY replace sandbox {PROJECT_NAME}
   baseName 'sandbox'
 
   addExcludes rootSpec
 
-///MODIFY replace sandbox {PROJECT_NAME}
   from project(':sandbox.client').projectDir.toPath().resolve('dist').toFile()
 }
 

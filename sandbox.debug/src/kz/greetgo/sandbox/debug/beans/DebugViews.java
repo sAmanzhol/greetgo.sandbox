@@ -1,9 +1,6 @@
-///MODIFY replace sandbox {PROJECT_NAME}
 package kz.greetgo.sandbox.debug.beans;
 
 import kz.greetgo.depinject.core.Bean;
-///MODIFY replace sandbox {PROJECT_NAME}
-///MODIFY replace Sandbox {PROJECT_CC_NAME}
 import kz.greetgo.sandbox.controller.util.SandboxViews;
 
 import java.io.File;
@@ -18,7 +15,6 @@ import java.util.stream.Collectors;
 import static kz.greetgo.util.ServerUtil.streamToStr0;
 
 @Bean
-///MODIFY replace Sandbox {PROJECT_CC_NAME}
 public class DebugViews extends SandboxViews {
 
   //see --> В этом файле можно настраивать скорость работы сервисов (он работает на горячюю)

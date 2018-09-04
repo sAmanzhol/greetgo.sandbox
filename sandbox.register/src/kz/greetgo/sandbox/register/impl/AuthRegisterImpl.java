@@ -1,25 +1,17 @@
-///MODIFY replace sandbox {PROJECT_NAME}
 package kz.greetgo.sandbox.register.impl;
 
 import kz.greetgo.depinject.core.Bean;
 import kz.greetgo.depinject.core.BeanGetter;
-///MODIFY replace sandbox {PROJECT_NAME}
 import kz.greetgo.sandbox.controller.errors.IllegalLoginOrPassword;
-///MODIFY replace sandbox {PROJECT_NAME}
 import kz.greetgo.sandbox.controller.model.PersonDisplay;
-///MODIFY replace sandbox {PROJECT_NAME}
 import kz.greetgo.sandbox.controller.model.SessionHolder;
-///MODIFY replace sandbox {PROJECT_NAME}
 import kz.greetgo.sandbox.controller.register.AuthRegister;
-///MODIFY replace sandbox {PROJECT_NAME}
 import kz.greetgo.sandbox.register.dao.AuthDao;
-///MODIFY replace sandbox {PROJECT_NAME}
 import kz.greetgo.sandbox.register.model.PersonLogin;
 import kz.greetgo.security.password.PasswordEncoder;
 import kz.greetgo.security.session.SessionIdentity;
 import kz.greetgo.security.session.SessionService;
 
-///MODIFY replace sandbox {PROJECT_NAME}
 import static kz.greetgo.sandbox.controller.util.FilterUtil.skipNulls;
 
 @Bean

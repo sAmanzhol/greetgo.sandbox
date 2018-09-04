@@ -1,5 +1,4 @@
 dependencies {
-///MODIFY replace sandbox {PROJECT_NAME}
   compile project(':sandbox.register')
 
   compile "kz.greetgo.depinject:greetgo.depinject.gen:$depinjectVersion"

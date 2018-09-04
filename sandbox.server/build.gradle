@@ -3,7 +3,6 @@ plugins {
 }
 
 dependencies {
-///MODIFY replace sandbox {PROJECT_NAME}
   compile project(':sandbox.register')
 
   compile "kz.greetgo.mvc:greetgo.mvc.war:$greetgoMvcVersion"
@@ -12,6 +11,5 @@ dependencies {
 }
 
 depinject {
-///MODIFY replace sandbox {PROJECT_NAME}
   scanPackage 'kz.greetgo.sandbox.server'
 }

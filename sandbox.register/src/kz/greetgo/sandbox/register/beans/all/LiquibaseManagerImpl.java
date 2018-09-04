@@ -1,11 +1,8 @@
-///MODIFY replace sandbox {PROJECT_NAME}
 package kz.greetgo.sandbox.register.beans.all;
 
 import kz.greetgo.depinject.core.Bean;
 import kz.greetgo.depinject.core.BeanGetter;
-///MODIFY replace sandbox {PROJECT_NAME}
 import kz.greetgo.sandbox.register.configs.DbConfig;
-///MODIFY replace sandbox {PROJECT_NAME}
 import kz.greetgo.sandbox.register.util.LiquibaseManager;
 import liquibase.Liquibase;
 import liquibase.database.Database;
