@@ -1,7 +1,11 @@
 package kz.greetgo.sandbox.controller.register.model;
 
+import sun.misc.Cleaner;
+
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class SessionInfo implements Serializable {
   public final String personId;

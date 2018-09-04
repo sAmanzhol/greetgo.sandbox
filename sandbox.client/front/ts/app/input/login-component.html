@@ -1,5 +1,5 @@
 <div class="container">
-  <div class="row">
+  <div class="row" *ngIf="formlogins">
     &nbsp;
   </div>
   <div class="row">
@@ -121,5 +121,11 @@
         </div>
       </div>
     </div>
+  </div>
+  <div class="row" *ngIf="!formlogins">
+    <div>
+      {{httpService.token}}
+    </div>
+
   </div>
 </div>

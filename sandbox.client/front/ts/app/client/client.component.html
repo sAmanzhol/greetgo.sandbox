@@ -1,0 +1,187 @@
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+
+</head>
+
+<div class="container">
+  <div class ="row" >
+
+    <input  id="lastname" type="text" class="datepicker" [(ngModel)]="objectForms.lastname">
+    <label for ="lastname">Фамилия</label>
+
+
+    <input  id="firstname" type="text" class="datepicker" [(ngModel)]="objectForms.firstname"  required>
+    <label for ="firstname">Имя</label>
+
+
+
+    <input id ="patronymic" type="text" class="datepicker"  [(ngModel)]="objectForms.patronymic"  >
+    <label for ="patronymic">Отчество</label>
+
+
+      <select class="form-control" [(ngModel)]="searchStr" >
+        <option *ngFor="let user of userInfo" >{{user.gender}}</option>
+      </select>
+      <label>Пол</label>
+    <p>
+      <label >Дата рождения: </label>
+      <input type="date" name="calendar">
+    </p>
+
+
+
+    <div class="col col-sm-12">
+      <button class="waves-effect waves-light btn"  [disabled]="!objectForms.patronymic" (click)="addClient(objectForms)"> add new client </button>
+    </div>
+
+
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+
+</head>
+<div class="container">
+  <h1>Table of Clients</h1>
+  <div class="row">
+    <div class="col s8">
+
+
+
+ &lt;!&ndash;this forms&ndash;&gt;
+
+      &lt;!&ndash;filter&ndash;&gt;
+
+      <div class="row" *ngIf="clientForms">
+        <div class="input-field col s12">
+          <input  id="first_name" class="validate" [(ngModel)]="searchStr">
+          <label class="active" for="first_name">Поиск по Имени</label>
+        </div>
+      </div>
+
+
+      &lt;!&ndash;table&ndash;&gt;
+
+      <table class="highlight" class="centered" class="highlight" *ngIf="clientForms">
+        <thead>
+        <tr>
+          <th>fullname</th>
+          <th>Gender</th>
+          <th>Date of Birth</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let data of userInfo | search:searchStr" (dblclick)="showForms()"  (click)="showParamData(data)">
+          <td> {{data.name}}</td>
+          <td> {{data.gender}}</td>
+          <td> {{data.dateOfBirth}}</td>
+
+
+        </tr>
+
+        </tbody>
+      </table>
+
+
+    </div>
+
+    &lt;!&ndash;button&ndash;&gt;
+
+    <div class="col s4">
+
+      <div class="col col-sm-12">
+        <a class="waves-effect waves-light btn" (click)="showForms()"> show  </a>
+      </div>
+
+      <br><br>
+
+        <div class="col s12">
+          <a class="waves-effect waves-light btn" (click)="changeClient()"> ...</a>
+        </div>
+
+      <br><br>
+
+        <div class="col s12">
+          <a class="waves-effect waves-light btn" (click)="deleteClient()"> - </a>
+        </div>
+
+
+      &lt;!&ndash;poka na vremya&ndash;&gt;
+      <div class="col s12">
+        <a class="waves-effect waves-light btn" (click)="loadUserInfoButtonClicked()"> first </a>
+      </div>
+
+      <div class="col s12">
+        <a class="waves-effect waves-light btn" (click)="enterButtonClicked()"> second sdfdf </a>
+      </div>
+
+      <div class="col s12">
+        <a class="waves-effect waves-light btn"  href="#openModal" (click)="showModal()"> show modal</a>
+      </div>
+
+
+      <div id="openModal" class="modalDialog" *ngIf="showModalComponent" >
+        <div>
+          <a href="#close" title="Закрыть" class="close">X</a>
+
+          <div class ="row" *ngIf="!clientForms">
+
+            <input  id="firstname" type="text" class="datepicker" [(ngModel)]="objectForms.firstname"  required>
+            <label for ="firstname">firstname</label>
+
+            <input  id="lastname" type="text" class="datepicker" [(ngModel)]="objectForms.lastname">
+            <label for ="lastname">lastname</label>
+
+            <input id ="patronymic" type="text" class="datepicker"  [(ngModel)]="objectForms.patronymic"  >
+            <label for ="patronymic">patronymic</label>
+
+            <div class="col col-sm-12">
+              <button class="waves-effect waves-light btn"  [disabled]="!objectForms.patronymic" (click)="addClient(objectForms)"> add new client </button>
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+  </div>
+</div>-->

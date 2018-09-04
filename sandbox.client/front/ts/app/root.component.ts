@@ -5,19 +5,25 @@ import {AuthInfo} from "../model/AuthInfo";
 @Component({
   selector: 'root-component',
   template: `
-    <login-component
-      *ngIf="mode == 'login'"
-      (finish)="startApp()"
-    ></login-component>
-
-    <main-form-component
-      *ngIf="mode == 'main-form'"
-      (exit)="exit()"
-    ></main-form-component>
-
-    <div *ngIf="mode == 'init'">
-      Инициация системы... <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
-    </div>
+    <!--<app-hello-wolrd-vuasya>-->
+    <!--</app-hello-wolrd-vuasya>-->
+    
+    <!--<app-client> </app-client>-->
+    <!--<app-custom></app-custom>-->
+      <app-debug></app-debug>
+    <!--<app-modal></app-modal>-->
+    <!--<login-component-->
+      <!--*ngIf="mode == 'login'"-->
+      <!--(finish)="startApp()"-->
+    <!--&gt;</login-component>-->
+    <!---->
+    <!--<main-form-component-->
+      <!--*ngIf="mode == 'main-form'"-->
+      <!--(exit)="exit()"-->
+    <!--&gt;</main-form-component>-->
+    <!--<div *ngIf="mode == 'init'">-->
+      <!--Инициация системы... <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>-->
+    <!--</div>-->
   `
 })
 export class RootComponent implements OnInit {
@@ -27,7 +33,7 @@ export class RootComponent implements OnInit {
 
   ngOnInit(): void {
     this.mode = 'init';
-    this.startApp();
+    // this.startApp();
   }
 
   startApp() {

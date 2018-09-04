@@ -4,7 +4,6 @@ import kz.greetgo.depinject.core.Bean;
 import kz.greetgo.depinject.core.HasAfterInject;
 import kz.greetgo.sandbox.db.stand.model.PersonDot;
 
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.HashMap;
@@ -58,3 +57,4 @@ public class StandDb implements HasAfterInject {
     personStorage.put(p.id, p);
   }
 }
+
