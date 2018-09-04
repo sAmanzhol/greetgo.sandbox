@@ -26,6 +26,8 @@ export class LoginComponent {
 
   forgotPassword() {
     window.alert("При запуске скрипта инициации БД выводятся пользователи и их пароли: посмотрите там!");
+
+    console.log('weqewqeqwew')
   }
 
   updateEnterButton() {
