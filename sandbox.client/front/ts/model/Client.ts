@@ -23,8 +23,11 @@ export class Client {
     this.gender='';
     this.dateOfBirth='';
     this.character='';
+    // TODO: asset 9/4/18 ne nuzhno plodirovat class AddressOfRegistration i AddressOfResidence.
+    // TODO: Mozho izpolzovat tipa odin class ClientAddress i vnutri opredelit cherez enum chto eto fact ili reg address
     this.addressOfRegistration=new AddressOfRegistration();
     this.addressOfResidence = new AddressOfResidence();
+    // TODO: asset 9/4/18 i v phone
     this.phone= new Phone();
   }
 

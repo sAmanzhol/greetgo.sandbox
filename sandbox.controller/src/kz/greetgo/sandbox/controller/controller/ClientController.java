@@ -16,6 +16,7 @@ import java.util.List;
 
 @Bean
 @Mapping("/client")
+// TODO: asset 9/4/18 Nado ubrat lishnie kody
 public class ClientController implements Controller {
 
 	public BeanGetter<ClientRegister> clientRegister;
@@ -23,6 +24,7 @@ public class ClientController implements Controller {
 	@ToJson
 	@NoSecurity
 	@Mapping("/userInfo")
+	// TODO: asset 9/4/18 List<Asd> i imena Mappingov dolzhno sovpodat s imenem methoda dlya chitablenosti
 	public Collection<Client> userInfo() {
 		return clientRegister.get().getUserInfo();
 	}
@@ -98,6 +100,7 @@ public class ClientController implements Controller {
 	@ToJson
 	@NoSecurity
 	@Mapping("/test-debug")
+	// TODO: asset 9/5/18 Udalit 
 	public ClientDetails testDebug(@Par("test") @Json ClientAsd jsons) {
 		System.out.println("test: " + jsons);
 

@@ -16,7 +16,7 @@ import {Client} from "../../model/Client";
   styles: [require('./debug.component.css')],
   providers: [UsersService],
 })
-
+// TODO: asset 9/4/18 Razdeli classy list i edit client ili customer
 export class DebugComponent implements OnInit {
   tmpClient: Client;
 
@@ -29,7 +29,7 @@ export class DebugComponent implements OnInit {
     character:"character"
   }
 
-
+// TODO: asset 9/4/18 sozdai class ClientFilter ili tipa takoe.
   searchFilter = {
     firstname: '',
     lastname: '',
@@ -48,7 +48,7 @@ export class DebugComponent implements OnInit {
   pagins = [];
   editButtonOrAddButton = false;
 
-
+// TODO: asset 9/4/18 Uberi ne izpolzuimy peremennye
   constructor(private userService: UsersService, private http: HttpService) {
   }
 
@@ -62,6 +62,8 @@ export class DebugComponent implements OnInit {
 
   // CRUD
   getClient() {
+    // TODO: asset 9/4/18 U nas konvensya API ssylke userInfo -> user-info i pereimenu userInfo na client-list ili customer-list chto by bylo ponyatno
+    // TODO: asset 9/4/18 Sozdai class tipa Client ili CustomerRecord dlya lista
     let self = this;
     this.http.get("/client/userInfo").map((response) => response.json())
       .map(users => {
@@ -86,7 +88,7 @@ export class DebugComponent implements OnInit {
       console.log("ITS!!!!!")
     })
   }
-
+// TODO: asset 9/4/18 I dlya Character tozhe nuzhno sozdat class
   getCharacter() {
 
     this.http.get('/client/getCharacter').subscribe(res => {
@@ -203,6 +205,7 @@ export class DebugComponent implements OnInit {
 
 
   //function CLICK for TABLE
+  // TODO: asset 9/4/18 imena methodo dolzhno byt ponyatnym tipa onSelect()
   getHeadMarkClient(headMarkTable) {
     let sort = {sort: headMarkTable};
     let self = this;

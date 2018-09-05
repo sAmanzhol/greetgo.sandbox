@@ -2,6 +2,10 @@ import {Component, OnInit} from "@angular/core";
 import {HttpService} from "./HttpService";
 import {AuthInfo} from "../model/AuthInfo";
 
+/*
+ *TODO: asset 9/4/18 Nado ubart lishnie komentari i companenty.
+ *TODO I pereimenu companenty chtoby bilo ponyatnoo tipa client-list(ClientList) ili customer-list
+ */
 @Component({
   selector: 'root-component',
   template: `
