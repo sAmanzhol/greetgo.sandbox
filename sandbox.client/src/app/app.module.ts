@@ -10,7 +10,8 @@ import {FormsModule} from "@angular/forms";
 import {ClientListComponent} from './client-list/client-list.component';
 import {ClientListService} from "./client-list/client-list.service";
 import { AboutComponent } from './about/about.component';
-import { TestComponent } from './test/test.component';
+import { TestComponent } from './test/client-table.component';
+import { ClientDetailComponent } from './client-detail/client-detail.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { TestComponent } from './test/test.component';
     ClientListComponent,
     AboutComponent,
     TestComponent,
+    ClientDetailComponent,
   ],
   imports: [
     BrowserModule, HttpClientModule, FormsModule,

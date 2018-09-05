@@ -1,0 +1,13 @@
+package kz.greetgo.sandbox.controller.register;
+
+import kz.greetgo.sandbox.controller.model.ClientRecord;
+
+import java.util.List;
+
+/**
+ * Created by msultanova on 9/5/18.
+ */
+public interface ClientRegister {
+
+    List<ClientRecord> getClientList();
+}

@@ -1,0 +1,41 @@
+<div>
+  <p>
+    testttttt!
+  </p>
+  <table>
+    <thead>
+    <tr>
+      <th>ФИО</th>
+      <th>характер</th>
+      <th>возраст</th>
+      <th>общий остаток счетов</th>
+      <th>максимальный остаток</th>
+      <th>минимальный остаток</th>
+      <th>Buttons</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let r of clientTableService.list">
+      <td>{{r.fio}}</td>
+      <td>{{r.character}}</td>
+      <td>{{r.age}}</td>
+      <td>{{r.totalBalance}}</td>
+      <td>{{r.maxBalance}}</td>
+      <td>{{r.minBalance}}</td>
+
+
+      <td>
+
+        <!--<button #btn (click)="alert('Hello world!'); btn.attachedProp = true;">+++</button>-->
+        <!--<button type="button" onclick="alert('Hello world!')">+</button>-->
+        <button type="button" onclick="alert('Hello world!')">...</button>
+        <!--<button type="button" onclick="alert('Hello world!')">-</button>-->
+      </td>
+
+
+
+      <!--<app-client-detail [buttonIsPressed]="btn.attachedProp"></app-client-detail>-->
+    </tr>
+    </tbody>
+  </table>
+</div>
