@@ -9,8 +9,8 @@ import {AuthInfo} from "../model/AuthInfo";
     <!--</app-hello-wolrd-vuasya>-->
     
     <!--<app-client> </app-client>-->
-    <!--<app-custom></app-custom>-->
-      <app-debug></app-debug>
+    <app-custom></app-custom>
+      <!--<app-debug></app-debug>-->
     <!--<app-modal></app-modal>-->
     <!--<login-component-->
       <!--*ngIf="mode == 'login'"-->
@@ -59,3 +59,17 @@ export class RootComponent implements OnInit {
     this.mode = 'login';
   }
 }
+
+
+
+export class Hero {
+
+  constructor(
+    public id: number,
+    public name: string,
+    public power: string,
+    public alterEgo?: string
+  ) {  }
+
+}
+

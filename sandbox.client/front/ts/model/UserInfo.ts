@@ -25,3 +25,9 @@ export class UserInfo {
     return ret;
   }
 }
+
+
+var users: UserInfo = new UserInfo();
+users.phoneType = PhoneType.EMBEDDED
+for(var key in users)
+  users[key]

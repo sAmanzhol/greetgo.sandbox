@@ -1,6 +1,7 @@
 import {AddressOfResidence} from "./AddressOfResidence";
 import {AddressOfRegistration} from "./AddressOfRegistration";
 import {Phone} from "./Phone";
+import {PhoneType} from "./PhoneType";
 
 export class Client {
   public id:number/*int*/;
@@ -24,9 +25,8 @@ export class Client {
     this.character='';
     this.addressOfRegistration=new AddressOfRegistration();
     this.addressOfResidence = new AddressOfResidence();
-    this.phone = new Phone()
+    this.phone= new Phone();
   }
-
 
 }
 
