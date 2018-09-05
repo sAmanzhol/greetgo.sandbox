@@ -10,7 +10,7 @@ import {AuthInfo} from "../model/AuthInfo";
     
     <!--<app-client> </app-client>-->
     <app-custom></app-custom>
-      <!--<app-debug></app-debug>-->
+      <app-debug></app-debug>
     <!--<app-modal></app-modal>-->
     <!--<login-component-->
       <!--*ngIf="mode == 'login'"-->
