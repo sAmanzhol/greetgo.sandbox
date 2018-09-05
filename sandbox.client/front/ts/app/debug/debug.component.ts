@@ -16,7 +16,7 @@ import {Client} from "../../model/Client";
   styles: [require('./debug.component.css')],
   providers: [UsersService],
 })
-// TODO: asset 9/4/18 Razdeli classy list i edit client ili customer
+// TODO: asset 9/4/18 Razdeli componenty list i edit client ili customer
 export class DebugComponent implements OnInit {
   tmpClient: Client;
 
@@ -29,12 +29,13 @@ export class DebugComponent implements OnInit {
     character:"character"
   }
 
-// TODO: asset 9/4/18 sozdai class ClientFilter ili tipa takoe.
+// TODO: asset 9/4/18 sozdai class ClientFilter ili tipa takoe. MODEL
   searchFilter = {
     firstname: '',
     lastname: '',
     patronymic: '',
   };
+// TODO: asset 9/4/18 sozdai ENUM
   genders = {
     male: 'Мужчина',
     female: 'Женщина',
@@ -48,7 +49,7 @@ export class DebugComponent implements OnInit {
   pagins = [];
   editButtonOrAddButton = false;
 
-// TODO: asset 9/4/18 Uberi ne izpolzuimy peremennye
+// TODO: asset 9/4/18 Uberi ne izpolzuimy peremennye USERSERVICE
   constructor(private userService: UsersService, private http: HttpService) {
   }
 
@@ -205,7 +206,7 @@ export class DebugComponent implements OnInit {
 
 
   //function CLICK for TABLE
-  // TODO: asset 9/4/18 imena methodo dolzhno byt ponyatnym tipa onSelect()
+
   getHeadMarkClient(headMarkTable) {
     let sort = {sort: headMarkTable};
     let self = this;
@@ -233,7 +234,7 @@ export class DebugComponent implements OnInit {
     });
     this.indexes.index = 0;
   }
-
+  // TODO: asset 9/4/18 imena methodo dolzhno byt ponyatnym tipa onSelect() i ewe tmpClient
   getMarkClient(client) {
     this.tmpClient = client;
     this.chooseClient = true;
@@ -377,7 +378,7 @@ export class DebugComponent implements OnInit {
 
   }
 
-
+//TODO UBRAAAATTTTT!!!!
   testDebug() {
     let test: ClientAsd = new ClientAsd();
     test.name = "asdasd";

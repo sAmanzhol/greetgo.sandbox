@@ -1,23 +1,23 @@
-<head>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+  <head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
 
-</head>
+  </head>
 
-<div class="container">
-  <h1 class="center-align">Table of Clients</h1>
-  <!--first row-->
-  <div class="row">
+  <div class="container">
+    <h1 class="center-align">Table of Clients</h1>
+    <!--first row-->
+    <div class="row">
 
-    <!--header -->
-    <div class="col s12">
+      <!--header -->
+      <div class="col s12">
 
-      <div class="col s9">
-        <h3 class="center-align">Фильтрация</h3>
-      </div>
-      <div class="col s3">
-        <h3>Кнопки</h3>
-      </div>
+        <div class="col s9">
+          <h3 class="center-align">Фильтрация</h3>
+        </div>
+        <div class="col s3">
+          <h3>Кнопки</h3>
+        </div>
 
     </div>
     <!--header -->
@@ -129,7 +129,7 @@
               {{pag+1}}
             </a>
           </div>
-          <div class="col s3" *ngIf="i != 0 && i==indexes.index-1 && i != pagins.length-1">
+          <div class="col s3" *ngIf="i != 0 && i==indexes.index-1 && i != pagins.length-1 ">
             <a class="waves-effect waves-light btn" [id]="indexes.index" (click)="changePagination(pag)">
               -
             </a>
@@ -317,7 +317,8 @@
               </button>
             </div>
             <div class="col col-sm-12">
-              <button class="waves-effect waves-light btn"
+              <button class="waves-effect waves-light btn" [disabled]="firstname.invalid || (gender1.invalid || gender2.invalid) || date.invalid
+              || charater.invalid  || addressOfRegistrationStreet.invalid || addressOfRegistrationHome.invalid || addressOfRegistrationApartment.invalid"
                       *ngIf="editButtonOrAddButton"
                       (click)="editClient()"> edit client
               </button>

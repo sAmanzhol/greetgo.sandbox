@@ -1,7 +1,7 @@
-import {AddressOfResidence} from "./AddressOfResidence";
 import {AddressOfRegistration} from "./AddressOfRegistration";
 import {Phone} from "./Phone";
 import {PhoneType} from "./PhoneType";
+import {AddressOfResidence} from "./AddressOfResidence";
 
 export class Client {
   public id:number/*int*/;
