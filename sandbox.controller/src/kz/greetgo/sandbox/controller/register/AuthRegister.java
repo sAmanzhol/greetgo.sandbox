@@ -70,4 +70,7 @@ public interface AuthRegister {
    * @return детальная информация о пользователе
    */
   UserInfo getUserInfo(String personId);
+
+
+
 }

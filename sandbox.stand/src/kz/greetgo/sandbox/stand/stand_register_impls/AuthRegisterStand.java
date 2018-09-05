@@ -80,6 +80,7 @@ public class AuthRegisterStand implements AuthRegister {
     throw new AuthError(err.toString());
   }
 
+
   private final ThreadLocal<SessionInfo> sessionInfoThreadLocal = new InheritableThreadLocal<>();
 
   @Override

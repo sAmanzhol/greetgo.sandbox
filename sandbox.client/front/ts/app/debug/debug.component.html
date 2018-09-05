@@ -1,0 +1,300 @@
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+
+</head>
+
+<div class="container">
+  <h1 class="center-align">Table of Clients</h1>
+  <!--first row-->
+  <div class="row">
+
+    <!--header -->
+    <div class="col s12">
+
+      <div class="col s9">
+        <h3 class="center-align">Фильтрация</h3>
+      </div>
+      <div class="col s3">
+        <h3>Кнопки</h3>
+      </div>
+
+    </div>
+    <!--header -->
+
+
+    <!--work filter-->
+    <div class="col s9 ">
+
+      <div class="row" >
+        <div class="col s12">
+          <input  id="filterFirstname" [(ngModel)]="searchFilter.firstname" >
+          <label  for="filterFirstname">Поиск по Имени</label>
+        </div>
+      </div>
+
+      <div class="row" >
+        <div class="col s12">
+          <input  id="filterLastname" [(ngModel)]="searchFilter.lastname" >
+          <label  for="filterLastname">Поиск по Фамилии</label>
+        </div>
+      </div>
+      <div class="row" >
+        <div class="col s12">
+          <input  id="filterPatronymic" [(ngModel)]="searchFilter.patronymic">
+          <label for="filterPatronymic">Поиск по Отчеству</label>
+        </div>
+      </div>
+      <div class ="row">
+        <div class="col s12">
+          <a class="waves-effect waves-light btn " (click)="getFilter()" > filter</a>
+        </div>
+      </div>
+
+    </div>
+    <!--work filter-->
+
+    <!--button-->
+    <div class="col s3">
+
+      <div class="col s12">
+        <a class="waves-effect waves-light btn" href="#openModal"  (click)="showAddForm()" > Add</a>
+      </div>
+      <br><br>
+      <div class="col s12" *ngIf="!chooseClient "   >
+        <button class="waves-effect waves-light btn"  [disabled]="!chooseClient"  > Edit</button>
+      </div>
+      <div class="col s12" *ngIf="chooseClient ">
+        <a class="waves-effect waves-light btn"  href="#openModal"  (click)="showEditForm()" > Edit</a>
+      </div>
+      <br><br>
+      <div class="col s12">
+        <button class="waves-effect waves-light btn"  [disabled]="!chooseClient"  (click)="deleteClient()"> Delete </button>
+      </div>
+
+      <br><br>
+      <div class="col s12">
+        <button class="waves-effect waves-light btn" (click)="testDebug()"> Test debug </button>
+      </div>
+
+    </div>
+    <!--button-->
+
+    <!--table-->
+    <div class="col s10">
+
+      <table  class="centered"  >
+        <thead>
+        <tr class="card-panel teal lighten-2">
+            <th (click)="getHeadMarkClient(headMarkTable.firstname)" >ФИО</th>
+            <th (click)="getHeadMarkClient(headMarkTable.character)" >Характер</th>
+            <th (click)="getHeadMarkClient(headMarkTable.dateOfBirth)" >возраст</th>
+            <th (click)="getHeadMarkClient(headMarkTable.totalAccountBalance)" >общий остаток счетов</th>
+            <th (click)="getHeadMarkClient(headMarkTable.maximumBalance)" >максимальный остаток</th>
+            <th (click)="getHeadMarkClient(headMarkTable.minimumBalance)" >минимальный остаток</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let client of clients; first as isFirst" [class.asd]="tmpClient === client" (click)="getMarkClient(client)" >
+          <td>{{client.firstname}} {{client.lastname}} {{client.patronymic}}</td>
+          <td>{{client.character}}</td>
+          <td>{{client.dateOfBirth}}</td>
+          <td>{{client.totalAccountBalance}}</td>
+          <td>{{client.maximumBalance}}</td>
+          <td> {{client.minimumBalance}}</td>
+        </tr>
+        </tbody>
+      </table>
+
+    </div>
+    <!--table-->
+
+    <!--pagination-->
+    <div class="col s10">
+      <div class="col s1">
+        <button class="waves-effect waves-light btn"  (click)="leftChangePagination()" ><<</button>
+      </div>
+
+      <div class="col s3">
+
+      </div>
+
+      <div class ="col s7" >
+        <div *ngFor="let pag of pagins;index as i; first as isFirst; last as isLast "   class="popopo"  >
+
+          <div class ="col s1" *ngIf="isFirst" >
+            <a class="waves-effect waves-light btn"  (click)="changePagination(pag)" >
+              {{pag+1}}
+            </a>
+          </div>
+          <div class ="col s3" *ngIf="i != 0 && i==indexes.index-1 && i != pagins.length-1" >
+            <a class="waves-effect waves-light btn" [id]="indexes.index"  (click)="changePagination(pag)" >
+              -
+            </a>
+          </div>
+          <div class ="col s2" *ngIf="i != 0 && i==indexes.index && i != pagins.length-1"  >
+            <a class="waves-effect waves-light btn" [id]="indexes.index" (click)="changePagination(pag)" >
+              {{pag+1}}
+            </a>
+          </div>
+          <div class ="col s3" *ngIf=" i != 0 && i==indexes.index+1 && i != pagins.length-1"  >
+            <a class="waves-effect waves-light btn" [id]="indexes.index" (click)="changePagination(pag)" >
+              +
+            </a>
+          </div>
+          <div class ="col s2 "  *ngIf="isLast"  >
+            <a class="waves-effect waves-light btn"(click)="changePagination(pag)" >
+              {{pag+1}}
+            </a>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="col s1">
+        <a class="waves-effect waves-light btn" (click)="rigthChangePagination()"  > >></a>
+      </div>
+    </div>
+    <!--pagination-->
+
+    <!--modal form-->
+    <div id="openModal" class="modalDialog z-depth-5 "  >
+      <div>
+        <a href="#close" title="Закрыть" class="close">X</a>
+
+        <div class="container">
+          <div class ="row" >
+
+            <div class="col s4">
+              <input  id="firstname"  name="name" type="text" [(ngModel)]="formClientParameters.firstname" />
+              <label for ="firstname">Фамилия</label>
+            </div>
+            <div class="col s4">
+              <input  id="lastname" type="text" [(ngModel)]="formClientParameters.lastname" />
+              <label for ="lastname">Имя</label>
+            </div>
+              <div class="col s4">
+                <input id ="patronymic" type="text" [(ngModel)]="formClientParameters.patronymic" />
+                <label for ="patronymic">Отчество</label>
+              </div>
+          </div>
+
+            <div>
+              <div>
+                Пол:
+              </div>
+              <p>
+                <label>
+                  <input name="group1" type="radio"  [value]="genders.male" [(ngModel)]="formClientParameters.gender"  />
+                  <span>Мужчина</span>
+                </label>
+                <label>
+                  <input name="group1" type="radio" [value]="genders.female" [(ngModel)]="formClientParameters.gender"  />
+                  <span>Женщина</span>
+                </label>
+              </p>
+            </div>
+
+            <input id ="dateOfBirth" type="date" [(ngModel)]="formClientParameters.dateOfBirth" >
+            <label for ="dateOfBirth">Дата Рождения</label>
+
+            <select class="form-control" name="company"   [(ngModel)]="formClientParameters.character"   >
+              <option  *ngFor="let character of characters" [value]="character">
+                {{character}}
+              </option>
+            </select>
+            <label>Характер</label>
+
+            <div class="row">
+              <div class="col s12">
+              <p>
+              Адрес проживания (фактический)
+              </p>
+
+              </div>
+              <div class="col s4">
+                <input  id="addressOfResidenceStreet" type="text"  [(ngModel)]="formClientParameters.addressOfResidence.street" >
+                <label for="addressOfResidenceStreet">Улица</label>
+              </div>
+              <div class="col s4">
+                <input  id="addressOfResidenceHome" type="text" [(ngModel)]="formClientParameters.addressOfResidence.home" >
+                <label for="addressOfResidenceHome">Дом</label>
+              </div>
+              <div class="col s4">
+                <input  id="addressOfResidenceApartment" type="text" [(ngModel)]="formClientParameters.addressOfResidence.apartment" >
+                <label for="addressOfResidenceApartment">Квартира</label>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col s12">
+              <p>
+              Адрес регистрации *
+              </p>
+              </div>
+              <div class="col s4">
+
+                <input  id="addressOfRegistrationStreet" type="text" [(ngModel)]="formClientParameters.addressOfRegistration.street" >
+                <label for="addressOfRegistrationStreet">Улица</label>
+              </div>
+              <div class="col s4">
+
+                <input  id="addressOfRegistrationHome" type="text" [(ngModel)]="formClientParameters.addressOfRegistration.home" >
+                <label for="addressOfRegistrationHome">Дом</label>
+              </div>
+              <div class="col s4">
+                <input  id="addressOfRegistrationApartment" type="text" [(ngModel)]="formClientParameters.addressOfRegistration.apartment" >
+                <label for="addressOfRegistrationApartment">Квартира</label>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col s12">
+              <p>
+              Телефоны  (один мобильный обязателен)
+              </p>
+              </div>
+
+              <input id ="phoneHome" type="number" [(ngModel)]="formClientParameters.phone.home"  maxlength="10" >
+              <label for ="phoneHome">Домашний</label>
+              <input id ="phoneWork" type="number" [(ngModel)]="formClientParameters.phone.work" >
+              <label for ="phoneWork">Телефон</label>
+
+              <input id ="phoneMobile1" type="number" [(ngModel)]="formClientParameters.phone.mobile1" >
+              <label for ="phoneMobile1">Мобильный</label>
+              <input id ="phoneMobile2" type="number" [(ngModel)]="formClientParameters.phone.mobile2" >
+              <label for ="phoneMobile2">Мобильный</label>
+              <input id ="phoneMobile3" type="number" [(ngModel)]="formClientParameters.phone.mobile3"  >
+              <label for ="phoneMobile3">Мобильный</label>
+
+            </div>
+
+
+
+
+
+            <div class="row">
+              <div class="col col-sm-12"  >
+                <button class="waves-effect waves-light btn"  *ngIf="!editButtonOrAddButton"  (click)="addClient()" > add new client </button>
+              </div>
+              <div class="col col-sm-12" >
+                <button  class="waves-effect waves-light btn" *ngIf="editButtonOrAddButton" (click)="editClient()" > edit client </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--modal form-->
+
+
+
+
+  <!--first row-->
+
+
+
+</div>
+
+

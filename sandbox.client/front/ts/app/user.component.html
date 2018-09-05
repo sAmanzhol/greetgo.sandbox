@@ -1,0 +1,112 @@
+
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
+</head>
+<div id="1">
+
+  <a href="#" class="knopka" (click)="addUser()">addUser</a>
+  <a href="#" class="knopka">кнопка</a>
+  <a href="#" class="knopka">кнопка</a>
+
+</div>
+
+<div id="1" *ngIf="showForms">
+
+  <div class="row" >
+
+      <div class="input-field col s2">
+
+        <input id="firstname" type="text" class="validate" [(ngModel)]="currentForms.firstname" >
+        <label class="active" for="firstname">First Name</label>
+
+
+      </div>
+  </div>
+
+    <div class="row" >
+      <div class="input-field col s2">
+
+        <input id="lastname" type="text" class="validate"  [(ngModel)]="currentForms.lastname" >
+        <label class="active" for="lastname">Last Name</label>
+
+      </div>
+    </div>
+  <div class="row" >
+    <div class="input-field col s2">
+
+      <input id="patronymic" type="text" class="validate"  [(ngModel)]="currentForms.patronymic" >
+      <label class="active" for="lastname">patronymic</label>
+
+    </div>
+  </div>
+
+
+  <div class = "row">
+    <div class="input-field col s2">
+
+      <input id="gender" type="text" class="validate"  [(ngModel)]="currentForms.gender" >
+      <label class="active" for="gender">Gender</label>
+    </div>
+    </div>
+
+  <div class = "row">
+    <div class="input-field col s2">
+
+      <input id="dateOfBirth" type="text" class="validate"  [(ngModel)]="currentForms.dateOfBirth" >
+      <label class="active" for="dateOfBirth">dateOfBirth</label>
+    </div>
+  </div>
+
+  <div class = "row">
+    <div class="input-field col s2">
+
+      <input id="addressOfResidence" type="text" class="validate"  [(ngModel)]="currentForms.addressOfResidence" >
+      <label class="active" for="addressOfResidence">addressOfResidence</label>
+    </div>
+  </div>
+  <div class = "row">
+    <div class="input-field col s2">
+
+      <input id="addressOfRegistration" type="text" class="validate"  [(ngModel)]="currentForms.addressOfRegistration" >
+      <label class="active" for="addressOfRegistration">addressOfRegistration</label>
+    </div>
+  </div>
+
+
+
+
+
+  `
+
+
+    <button (click)="addNewData()" >
+      Add
+    </button>
+
+
+
+</div>
+
+
+<div id="3">
+  <table cellspacing="0">
+    <tr>
+      <th *ngFor="let setting of settings" (click)="changeUser(setting.name)" >{{setting.name}}</th>
+
+    </tr>
+    <tr *ngFor="let data of datas" >
+      <td ><div>
+        <span [ngClass]="{'marked':isMarked}"  (click)="getUsers()" > {{data.name.split(' ')[0]}}</span>
+      </div></td>
+      <td>{{data.name.split(' ')[1]}}</td>
+      <td>{{data.name.split(' ')[2]}}</td>
+      <td>{{data.gender}}</td>
+      <td>{{data.dateOfBirth}}</td>
+      <td>{{data.character}}</td>
+      <td>{{data.addressOfResidence}}</td>
+      <td>{{data.addressOfRegistration}}</td>
+      <td *ngIf="data.phone"> mobile: {{data.phone}}</td>
+
+    </tr>
+  </table>
+</div>

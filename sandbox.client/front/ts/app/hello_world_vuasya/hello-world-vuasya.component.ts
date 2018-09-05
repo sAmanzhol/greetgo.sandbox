@@ -1,15 +1,16 @@
-import {Component, EventEmitter, Output} from "@angular/core";
+import {Component, EventEmitter, OnInit, Output} from "@angular/core";
 import {HttpService} from "../HttpService";
 import "rxjs/add/operator/catch";
 import "rxjs/add/operator/map";
 import "rxjs/add/operator/toPromise";
 
 @Component({
-  selector: 'login-component',
-  template: require('./login-component.html'),
-  styles: [require('./login-component.css')],
+  selector:'app-hello-wolrd-vuasya',
+  template: require('./hello-world-vuasya.component.html'),
+  styles: [require('./hello-world-vuasya.component.css')],
+
 })
-export class LoginComponent {
+export class HelloWorldVuasyaComponent implements OnInit{
   registration: boolean = false;
   enterButtonEnabled: boolean = false;
 
@@ -22,27 +23,20 @@ export class LoginComponent {
 
   @Output() finish = new EventEmitter<void>();
 
+  ngOnInit(){}
   constructor(private httpService: HttpService) {}
 
-  forgotPassword() {
-    window.alert("При запуске скрипта инициации БД выводятся пользователи и их пароли: посмотрите там!");
-  }
-
-  updateEnterButton() {
-    this.enterButtonEnabled = !!this.fieldEnterLogin && !!this.fieldEnterPassword;
-    console.log("this.enterButtonEnabled = " + this.enterButtonEnabled)
-  }
 
   enterButtonClicked() {
     this.disabled = true;
     this.enterButtonEnabled = false;
 
-    this.httpService.post("/auth/login", {
+    this.httpService.post("/hello/greeting", {
       accountName: this.fieldEnterLogin,
-      password: this.fieldEnterPassword,
     }).toPromise().then(res => {
       this.disabled = false;
       this.httpService.token = res.text();
+      console.log('lololol')
       this.errorMessage = null;
       if (this.fieldEnterLogin == 'root') {
         localStorage.removeItem("lastGoodLogin");
@@ -62,8 +56,5 @@ export class LoginComponent {
     });
   }
 
-  registrationButtonClicked() {
-    window.alert("Регистрация ещё не работает");
-    this.registration = false;
-  }
+
 }
