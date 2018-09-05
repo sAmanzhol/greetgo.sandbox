@@ -169,7 +169,7 @@
 
             <div class="col s4">
               <input id="firstname" type="text" [(ngModel)]="formClientParameters.firstname" #firstname="ngModel"
-                     required pattern="[A-Za-z]{1,}" />
+                     required pattern="[A-Za-zА-Яа-яЁё]{1,}" />
               <label for="firstname">Фамилия</label>
             </div>
 
@@ -317,7 +317,7 @@
               </button>
             </div>
             <div class="col col-sm-12">
-              <button class="waves-effect waves-light btn" [disabled]="firstname.invalid || gender.invalid || date.invalid || charater.invalid  || addressOfRegistration.invalid"
+              <button class="waves-effect waves-light btn"
                       *ngIf="editButtonOrAddButton"
                       (click)="editClient()"> edit client
               </button>
