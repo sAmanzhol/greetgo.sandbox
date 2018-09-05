@@ -4,4 +4,6 @@ export class Phone{
   public mobile1:number/*int*/;
   public mobile2:number/*int*/;
   public mobile3:number/*int*/;
+  
+  //ASD
 }
