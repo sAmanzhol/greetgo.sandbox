@@ -1,34 +1,28 @@
-<form [formGroup]="myForm" novalidate (ngSubmit)="submit()">
+<div>
   <div class="form-group">
     <label>Имя</label>
-    <input class="form-control" name="name" formControlName="userName" />
-
-    <div class="alert alert-danger"
-         *ngIf="myForm.controls['userName'].invalid && myForm.controls['userName'].touched">
+    <input class="form-control" name="name" [(ngModel)]="user.name" #name="ngModel" required />
+    <div [hidden]="name.valid || name.untouched" class="alert alert-danger">
       Не указано имя
     </div>
   </div>
   <div class="form-group">
     <label>Email</label>
-    <input class="form-control" name="email" formControlName="userEmail" />
-
-    <div class="alert alert-danger"
-         *ngIf="myForm.controls['userEmail'].invalid && myForm.controls['userEmail'].touched">
+    <input class="form-control" name="email" [(ngModel)]="user.email" #email="ngModel"
+           required pattern="[a-zA-Z_]+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}" />
+    <div [hidden]="email.valid || email.untouched" class="alert alert-danger">
       Некорректный email
     </div>
   </div>
-  <div formArrayName="phones">
-    <div class="form-group" *ngFor="let phone of myForm.controls['phones'].controls; let i = index">
-      <label>Телефон</label>
-      <input class="form-control" formControlName="{{i}}" />
+  <div class="form-group">
+    <label>Телефон</label>
+    <input class="form-control" name="phone" [(ngModel)]="user.phone" #phone="ngModel"
+           required pattern="[0-9]{10}" />
+    <div [hidden]="phone.valid || phone.untouched" class="alert alert-danger">
+      Некорректный телефон
     </div>
   </div>
   <div class="form-group">
-    <button class="btn btn-default" (click)="addPhone()">
-      Добавить телефон
-    </button>
-    <button class="btn btn-default" [disabled]="myForm.invalid">
-      Отправить
-    </button>
+    <button class="btn btn-default" (click)="addUser()">Добавить</button>
   </div>
-</form>`
+</div>

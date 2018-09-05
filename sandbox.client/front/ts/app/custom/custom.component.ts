@@ -1,9 +1,6 @@
 import {Component, Input, OnInit} from "@angular/core";
 import {UsersService} from "../users.service";
-import {HttpService} from "../HttpService";
-import {PhoneType} from "../../model/PhoneType";
-import {UserInfo} from "../../model/UserInfo";
-import {FormArray, FormControl, FormGroup, Validators} from "@angular/forms";
+
 
 export class User{
   name: string;
@@ -26,28 +23,13 @@ export class User{
 export class CustomComponent {
 
 
+  user: User = new User();
+  addUser(){
+    console.log(this.user);
+  }
 
-  myForm : FormGroup;
-  constructor(){
-    this.myForm = new FormGroup({
 
-      "userName": new FormControl("Tom", [Validators.required]),
-      "userEmail": new FormControl("", [
-        Validators.required,
-        Validators.pattern("[a-zA-Z_]+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}")
-      ]),
-      "phones": new FormArray([
-        new FormControl("+7", Validators.required)
-      ])
-    });
-  }
-  addPhone(){
-    // if()
-    (<FormArray>this.myForm.controls["phones"]).push(new FormControl("+7", Validators.required));
-  }
-  submit(){
-    console.log(this.myForm);
-  }
+  dasdsa
 
 }
 

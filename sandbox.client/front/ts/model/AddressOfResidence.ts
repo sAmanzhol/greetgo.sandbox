@@ -1,5 +1,3 @@
-import {assertDebuggerStatement} from "babel-types";
-
 export class AddressOfResidence{
 
   public street: string;
