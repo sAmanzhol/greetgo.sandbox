@@ -1,4 +1,4 @@
-import {PhoneType} from "./type/PhoneType";
+import {PhoneType} from "./PhoneType";
 
 export class UserInfo {
   public id: string;
@@ -26,8 +26,3 @@ export class UserInfo {
   }
 }
 
-
-var users: UserInfo = new UserInfo();
-users.phoneType = PhoneType.EMBEDDED
-for(var key in users)
-  users[key]

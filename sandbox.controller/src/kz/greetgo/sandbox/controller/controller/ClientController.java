@@ -5,6 +5,8 @@ import kz.greetgo.depinject.core.BeanGetter;
 import kz.greetgo.mvc.annotations.*;
 import kz.greetgo.sandbox.controller.model.ClientAsd;
 import kz.greetgo.sandbox.controller.model.ClientDetails;
+import kz.greetgo.sandbox.controller.model.ClientFilter;
+import kz.greetgo.sandbox.controller.model.ClientRecord;
 import kz.greetgo.sandbox.controller.register.ClientRegister;
 import kz.greetgo.sandbox.controller.register.model.Client;
 import kz.greetgo.sandbox.controller.security.NoSecurity;
@@ -28,6 +30,16 @@ public class ClientController implements Controller {
 	public Collection<Client> userInfo() {
 		return clientRegister.get().getUserInfo();
 	}
+
+
+	@ToJson
+
+	@Mapping("/client-list")
+	// TODO: asset 9/4/18 List<Asd> i imena Mappingov dolzhno sovpodat s imenem methoda dlya chitablenosti
+	public Collection<ClientRecord> clientList() {
+		return clientRegister.get().clientList();
+	}
+
 
 	@ToJson
 
@@ -105,13 +117,20 @@ public class ClientController implements Controller {
 		System.out.println("test: " + jsons);
 
 		ClientDetails ret = new ClientDetails();
-		ret.aaa = RND.str(10);
-		ret.sss = RND.str(10);
+//		ret.aaa = RND.str(10);
+//		ret.sss = RND.str(10);
 
 		System.out.println("ret: " + ret);
 
 		return ret;
 
+	}
+
+	@ToJson
+	@Mapping("/client-filter")
+	public Collection<ClientRecord> clientFilter(@Par("clientFilter") @Json ClientFilter clientFilter){
+		System.out.println(clientFilter);
+		return clientRegister.get().clientFilter(clientFilter);
 	}
 
 

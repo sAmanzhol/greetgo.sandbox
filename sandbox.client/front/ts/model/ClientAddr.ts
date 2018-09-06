@@ -1,4 +1,4 @@
-import {AddrType} from "./type/AddrType";
+import {AddrType} from "./AddrType";
 
 export class ClientAddr {
   public type: AddrType;

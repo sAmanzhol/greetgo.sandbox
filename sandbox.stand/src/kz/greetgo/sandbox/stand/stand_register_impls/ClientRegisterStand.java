@@ -2,6 +2,8 @@ package kz.greetgo.sandbox.stand.stand_register_impls;
 
 import kz.greetgo.depinject.core.Bean;
 import kz.greetgo.depinject.core.BeanGetter;
+import kz.greetgo.sandbox.controller.model.ClientFilter;
+import kz.greetgo.sandbox.controller.model.ClientRecord;
 import kz.greetgo.sandbox.controller.register.ClientRegister;
 import kz.greetgo.sandbox.controller.register.model.Address;
 import kz.greetgo.sandbox.controller.register.model.Client;
@@ -245,6 +247,18 @@ public class ClientRegisterStand implements ClientRegister {
 	@Override
 	public List<String> getCharacter() {
 		return cdb.get().character;
+	}
+
+	@Override
+	public Collection<ClientRecord> clientFilter(ClientFilter clientFilter) {
+		getUserSort(clientFilter.orderBy);
+		return null;
+
+	}
+
+	@Override
+	public Collection<ClientRecord> clientList() {
+		return null;
 	}
 
 

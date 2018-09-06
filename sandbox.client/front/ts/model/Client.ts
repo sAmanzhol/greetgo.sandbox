@@ -1,6 +1,6 @@
 import {AddressOfRegistration} from "./AddressOfRegistration";
 import {Phone} from "./Phone";
-import {PhoneType} from "./type/PhoneType";
+import {PhoneType} from "./PhoneType";
 import {AddressOfResidence} from "./AddressOfResidence";
 
 export class Client {

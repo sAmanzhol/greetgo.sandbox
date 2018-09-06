@@ -1,4 +1,4 @@
-import {PhoneType} from "./type/PhoneType";
+import {PhoneType} from "./PhoneType";
 
 export class ClientPhone {
   public type:PhoneType;

@@ -8,42 +8,49 @@ import {ClientAsd} from "../../model/ClientAsd";
 import {ClientDetails} from "../../model/ClientDetails";
 import {Client} from "../../model/Client";
 import {ClientFilter} from "../../model/ClientFilter";
+import {ClientRecord} from "../../model/ClientRecord";
 
 @Component({
-  selector: 'client-list',
-  template: require('./client-list.component.html'),
-  styles: [require('./client-list.component.css')],
+  selector: 'app-modal',
+  template: require('./modal.component.html'),
+  styles: [require('./modal.component.css')],
   providers: [UsersService],
 })
 // TODO: asset 9/4/18 Razdeli componenty list i edit client ili customer
-export class ClientListComponent implements OnInit {
+export class ModalComponent implements OnInit {
+
+  clientFilter:ClientFilter=new ClientFilter();
+  clientRecord:Array<ClientRecord>=new Array<ClientRecord>();
+
   tmpClient: Client;
   formClientParameters: Client = new Client();
   cloneFormClientParameters: Client = new Client();
 
-  headMarkTable= {
-    firstname:"firstname",
-    character:"character",
-    dateOfBirth:'dateOfBirth',
-    totalAccountBalance:'totalAccountBalance',
-    minimumBalance:'minimumBalance',
-    maximumBalance:'maximumBalance'
-  }
-
-
-  clientFilter:ClientFilter=new ClientFilter();
-
-  getClientFilter(filter){
+  getClientFilterFilter() {
     let self = this;
-    this.clientFilter.assign(filter)
-    this.http.get("client/client-filter",{filter:JSON.stringify(self.clientFilter)})
-    .subscribe(res => {
-      let ret: Client = res.json();
-      console.log(ret);
-      console.log("I!!!!!")
-
-    })
+    this.http.get('/client/client-filter',{clientFilter:JSON.stringify(self.clientFilter)})
   }
+
+  getClientFilterSort(orderBy:string,sort:boolean){
+    let self = this;
+    this.clientFilter.orderBy=orderBy;
+    this.clientFilter.sort= !sort;
+    this.http.get('/client/client-filter',{clientFilter:JSON.stringify(self.clientFilter)})
+      .subscribe(
+        res =>{
+          let ret: ClientDetails = res.json();
+          console.log(ret)
+        }
+      )
+
+
+  }
+  getClientFilterPagination(offSet){
+    let self = this;
+    this.clientFilter.offSet=offSet
+    this.http.get('/client/client-filter',{clientFilter:JSON.stringify(self.clientFilter)})
+  }
+
 
 // TODO: asset 9/4/18 sozdai class ClientFilter ili tipa takoe. MODEL
   searchFilter = {
@@ -66,7 +73,7 @@ export class ClientListComponent implements OnInit {
   editButtonOrAddButton = false;
 
 // TODO: asset 9/4/18 Uberi ne izpolzuimy peremennye USERSERVICE
-  constructor(private userService: UsersService, private http: HttpService) {
+  constructor(private http: HttpService) {
   }
 
   ngOnInit() {
@@ -76,34 +83,20 @@ export class ClientListComponent implements OnInit {
 
   }
 
-
+sl=[];
   // CRUD
   getClient() {
     // TODO: asset 9/4/18 U nas konvensya API ssylke userInfo -> user-info i pereimenu userInfo na client-list ili customer-list chto by bylo ponyatno
     // TODO: asset 9/4/18 Sozdai class tipa Client ili CustomerRecord dlya lista
     let self = this;
-    this.http.get("/client/userInfo").map((response) => response.json())
-      .map(users => {
-        return users.map(u => {
-          return {
-            id: u.id,
-            firstname: u.firstname,
-            lastname: u.lastname,
-            patronymic: u.patronymic,
-            dateOfBirth: u.dateOfBirth,
-            character: u.character,
-            totalAccountBalance: u.totalAccountBalance,
-            maximumBalance: u.maximumBalance,
-            minimumBalance: u.minimumBalance,
-
-          }
-        })
-
-      }).subscribe((data) => {
-      self.clients = data;
-      console.log(this.clients);
-      console.log("ITS!!!!!")
+    this.http.get("/client/client-list").subscribe((data) => {
+        var red = data.json();
+      for(let i =0;i<red.length;i++)
+      self.clientRecord.push(red[i]);
+      console.log(self.clientRecord[0]);
+      console.log("SASORI")
     })
+
   }
 // TODO: asset 9/4/18 I dlya Character tozhe nuzhno sozdat class
   getCharacter() {
@@ -217,34 +210,7 @@ export class ClientListComponent implements OnInit {
 
   //function CLICK for TABLE
 
-  getHeadMarkClient(headMarkTable) {
-    var sort = {sort: headMarkTable};
-    let self = this;
-    this.http.get("/client/userSort", sort)
-      .map((response) => response.json())
-      .map(users => {
-        return users.map(u => {
-          return {
-            id: u.id,
-            firstname: u.firstname,
-            lastname: u.lastname,
-            patronymic: u.patronymic,
-            dateOfBirth: u.dateOfBirth,
-            character: u.character,
-            totalAccountBalance: u.totalAccountBalance,
-            maximumBalance: u.maximumBalance,
-            minimumBalance: u.minimumBalance,
 
-          }
-        })
-
-      }).subscribe((data) => {
-      self.clients = data;
-      console.log(this.clients);
-      console.log("ITS!!!!!")
-    });
-    this.indexes.index = 0;
-  }
   // TODO: asset 9/4/18 imena methodo dolzhno byt ponyatnym tipa onSelect() i ewe tmpClient
   getMarkClient(client) {
     this.tmpClient = client;

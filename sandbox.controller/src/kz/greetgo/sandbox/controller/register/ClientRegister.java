@@ -1,5 +1,7 @@
 package kz.greetgo.sandbox.controller.register;
 
+import kz.greetgo.sandbox.controller.model.ClientFilter;
+import kz.greetgo.sandbox.controller.model.ClientRecord;
 import kz.greetgo.sandbox.controller.register.model.Client;
 
 import java.util.Collection;
@@ -26,4 +28,8 @@ public interface ClientRegister {
     Collection<Client> editUserInfo(Client edit);
 
     List<String> getCharacter();
+
+	Collection<ClientRecord> clientFilter(ClientFilter clientFilter);
+
+	Collection<ClientRecord> clientList();
 }

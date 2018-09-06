@@ -1,9 +1,9 @@
 
-import {GenderType} from "./type/GenderType";
+import {GenderType} from "./GenderType";
 import {ClientPhone} from "./ClientPhone";
 import {ClientAddr} from "./ClientAddr";
 import {Charm} from "./Charm";
-import {AddrType} from "./type/AddrType";
+import {AddrType} from "./AddrType";
 
 export class ClientDetails {
   public id:number/*int*/;

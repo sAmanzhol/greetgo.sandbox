@@ -1,41 +1,39 @@
-  <head>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
 
-  </head>
-
-  <div class="container">
-    <!--first row-->
-    <div class="row">
+<div class="container">
+  <!--first row-->
+  <div class="row">
 
 
     <!--work filter-->
     <div class="col s12 ">
 
 
-        <div class="col s3">
-          <input id="filterFirstname" [(ngModel)]="searchFilter.firstname">
-          <label for="filterFirstname">Поиск по Имени</label>
-        </div>
+      <div class="col s3">
+        <input id="filterFirstname" [(ngModel)]="clientFilter.firstname">
+        <label for="filterFirstname">Поиск по Имени</label>
+      </div>
 
 
-        <div class="col s3">
-          <input id="filterLastname" [(ngModel)]="searchFilter.lastname">
-          <label for="filterLastname">Поиск по Фамилии</label>
-        </div>
+      <div class="col s3">
+        <input id="filterLastname" [(ngModel)]="clientFilter.lastname">
+        <label for="filterLastname">Поиск по Фамилии</label>
+      </div>
 
 
-        <div class="col s3">
-          <input id="filterPatronymic" [(ngModel)]="searchFilter.patronymic">
-          <label for="filterPatronymic">Поиск по Отчеству</label>
-        </div>
+      <div class="col s3">
+        <input id="filterPatronymic" [(ngModel)]="clientFilter.patronymic" >
+        <label for="filterPatronymic">Поиск по Отчеству</label>
+      </div>
 
 
-        <div class="col s3">
-          <a class="waves-effect waves-light btn icon material-icons" (click)="getFilter()">search</a>
-        </div>
-
+      <div class="col s3">
+        <a class="waves-effect waves-light btn icon material-icons" (click)="getClientFilter(0)">search</a>
+      </div>
 
     </div>
     <!--work filter-->
@@ -47,17 +45,17 @@
 
       <table class="centered">
         <thead>
-        <tr class="card-panel teal lighten-2">
-          <th (click)="getHeadMarkClient(headMarkTable.firstname)"  >ФИО</th>
-          <th (click)="getHeadMarkClient(headMarkTable.character )" >Характер</th>
-          <th (click)="getHeadMarkClient(headMarkTable.dateOfBirth)" >возраст</th>
-          <th (click)="getHeadMarkClient(headMarkTable.totalAccountBalance)" >общий остаток счетов</th>
-          <th (click)="getHeadMarkClient(headMarkTable.maximumBalance)">максимальный остаток</th>
-          <th (click)="getHeadMarkClient(headMarkTable.minimumBalance)">минимальный остаток</th>
+        <tr class="card-panel teal lighten-2" >
+          <th (click)="getClientFilterSort('firstname',clientFilter.sort)" >ФИО</th>
+          <th (click)="getClientFilterSort('character',clientFilter.sort)" >Характер</th>
+          <th (click)="getClientFilterSort('dateOfBirth',clientFilter.sort)" >возраст</th>
+          <th (click)="getClientFilterSort('totalAccountBalance',clientFilter.sort)" >общий остаток счетов</th>
+          <th (click)="getClientFilterSort('maximumBalance',clientFilter.sort)" >максимальный остаток</th>
+          <th (click)="getClientFilterSort('minimumBalance',clientFilter.sort)" >минимальный остаток</th>
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let client of clients; first as isFirst" [class.asd]="tmpClient === client"
+        <tr *ngFor="let client of clientRecord; first as isFirst" [class.asd]="tmpClient === client"
             (click)="getMarkClient(client)">
           <td>{{client.firstname}} {{client.lastname}} {{client.patronymic}}</td>
           <td>{{client.character}}</td>
@@ -71,32 +69,32 @@
 
     </div>
     <!--table-->
-      <!--button-->
-      <div class="col s2">
+    <!--button-->
+    <div class="col s2">
 
-        <div class="col s12">
-          <a class="waves-effect waves-light btn material-icons " href="#openModal" (click)="showAddForm()">add</a>
-        </div>
-        <br><br>
-        <div class="col s12" *ngIf="!chooseClient ">
-          <button class="waves-effect waves-light btn material-icons " [disabled]="!chooseClient">more_horiz</button>
-        </div>
-        <div class="col s12" *ngIf="chooseClient ">
-          <a class="waves-effect waves-light btn material-icons " href="#openModal" (click)="showEditForm()">more_horiz</a>
-        </div>
-        <br><br>
-        <div class="col s12">
-          <button class="waves-effect waves-light btn material-icons " [disabled]="!chooseClient" (click)="deleteClient()">remove
-          </button>
-        </div>
-
-        <br><br>
-        <div class="col s12">
-          <button class="waves-effect waves-light btn" (click)="testDebug()"> Test debug</button>
-        </div>
-
+      <div class="col s12">
+        <a class="waves-effect waves-light btn material-icons " href="#openModal" (click)="showAddForm()">add</a>
       </div>
-      <!--button-->
+      <br><br>
+      <div class="col s12" *ngIf="!chooseClient ">
+        <button class="waves-effect waves-light btn material-icons " [disabled]="!chooseClient">more_horiz</button>
+      </div>
+      <div class="col s12" *ngIf="chooseClient ">
+        <a class="waves-effect waves-light btn material-icons " href="#openModal" (click)="showEditForm()">more_horiz</a>
+      </div>
+      <br><br>
+      <div class="col s12">
+        <button class="waves-effect waves-light btn material-icons " [disabled]="!chooseClient" (click)="deleteClient()">remove
+        </button>
+      </div>
+
+      <br><br>
+      <div class="col s12">
+        <button class="waves-effect waves-light btn" (click)="testDebug()"> Test debug</button>
+      </div>
+
+    </div>
+    <!--button-->
 
     <!--pagination-->
     <div class="col s10">
