@@ -23,5 +23,6 @@ export class ClientRecord{
     this.maxBalance = a.maxBalance;
     this.totalBalance = a.totalBalance;
     this.minBalance = a.minBalance;
+    this.clientId = a.clientId;
   }
 }

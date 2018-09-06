@@ -39,9 +39,9 @@ public class ClienRegisterImpl implements ClientRegister {
         createClients();
         if (clients != null) {
 
-            ClientRecord tempClientRecord = new ClientRecord();
-            for (Client client : clients) {
 
+            for (Client client : clients) {
+                ClientRecord tempClientRecord = new ClientRecord();
                 //tempClientRecord.setFio(client.surname + " " + client.name + " " + client.patronymic);
                 tempClientRecord.fio = client.surname + " " + client.name + " " + client.patronymic;
                 tempClientRecord.age = client.age;

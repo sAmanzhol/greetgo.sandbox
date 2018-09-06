@@ -8,29 +8,19 @@ import {ClientDetailComponent} from "../client-detail/client-detail.component";
   templateUrl: './client-table.component.html',
   styleUrls: ['./client-table.component.css']
 })
+
 export class TestComponent implements OnInit {
 
-
-  @Input() buttonIsPressed = false;
 
   constructor(public clientTableService: ClientTableService, public dialog: MatDialog) {
   }
 
-  print(message: string) {
-    this.buttonIsPressed = true;
-    console.log(message);
-  }
-
-  openDialog() {
-    const dialogRef = this.dialog.open(ClientDetailComponent);
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
+  openDialog(id: number) {
+    let dialogRef = this.dialog.open(ClientDetailComponent, {
+      data: id,
     });
-  }
 
-  showModal() {
-    this.buttonIsPressed = true;
+
   }
 
   ngOnInit() {

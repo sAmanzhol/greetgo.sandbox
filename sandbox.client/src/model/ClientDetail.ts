@@ -13,5 +13,19 @@ export class ClientDetail{
   public actualAddress: Address;
   public registrationAddress: Address;
   public phones: Phone[];
-  public clientId: number/*long*/;
+
+  public static create(a: any): ClientDetail {
+    const ret = new ClientDetail();
+    ret.assign(a);
+    return ret;
+  }
+  assign(a: any) {
+    this.surname = a.surname;
+    this.name = a.name;
+    this.patronymic = a.patronymic;
+    this.character = a.character;
+    this.actualAddress = a.actualAddress;
+    this.registrationAddress = a.registrationAddress;
+    this.phones = a.phones;
+  }
 }

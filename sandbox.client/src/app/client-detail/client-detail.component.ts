@@ -1,32 +1,27 @@
-import {Component, OnInit} from "@angular/core";
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {Component, Inject, OnInit} from "@angular/core";
+import {MAT_DIALOG_DATA} from "@angular/material";
+import {ClientDetail} from "../../model/ClientDetail";
+import {ClientDetailService} from "./client-detail.service";
 
 
 @Component({
   selector: 'app-client-detail',
   templateUrl: './client-detail.component.html',
-  styleUrls: ['./client-detail.component.css']
+  styleUrls: ['./client-detail.component.css'],
+
 })
+
+
 export class ClientDetailComponent implements OnInit {
 
-  test() {
-    console.log("Hi!!");
-  }
 
-  // options: FormGroup;
-  //
-  // constructor(fb: FormBuilder) {
-  //   this.options = fb.group({
-  //     hideRequired: false,
-  //     floatLabel: 'auto',
-  //   });
-  // }
 
-  constructor() {
-
+  constructor(clientDetailService: ClientDetailService, @Inject(MAT_DIALOG_DATA) public data: any) {
   }
 
   ngOnInit() {
+    //this.clientDetailService.load(this.data);
+
   }
 
 }
