@@ -1,5 +1,4 @@
-import {Component, Input, NgModule, OnInit} from '@angular/core';
-import {BrowserModule} from "@angular/platform-browser";
+import {Component, OnInit} from "@angular/core";
 
 @Component({
   selector: 'app-client-detail',
@@ -8,9 +7,12 @@ import {BrowserModule} from "@angular/platform-browser";
 })
 export class ClientDetailComponent implements OnInit {
 
-  @Input() buttonIsPressed = false;
+  test() {
+    console.log("Hi!!");
+  }
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
   }

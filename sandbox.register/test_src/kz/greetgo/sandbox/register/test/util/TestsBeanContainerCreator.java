@@ -14,7 +14,7 @@ public class TestsBeanContainerCreator {
 
       try {
         DepinjectUtil.implementAndUseBeanContainers(
-          "kz.greetgo.sandbox.register.test",
+          "kz.greetgo.sandbox.register.client-table",
           "build/create/recreate_src/" + new Date().getTime()
         );
       } catch (Exception e) {

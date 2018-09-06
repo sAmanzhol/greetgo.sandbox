@@ -1,3 +1,11 @@
-<p>
+<h2 mat-dialog-title>Install Angular</h2>
+<mat-dialog-content class="mat-typography">
   client-detail works!
-</p>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-icon-button (click)="test()">
+    <mat-icon aria-label="Remove icon-button">remove</mat-icon>
+  </button>
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Install</button>
+</mat-dialog-actions>
