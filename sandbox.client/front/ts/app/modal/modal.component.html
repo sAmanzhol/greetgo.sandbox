@@ -99,7 +99,7 @@
     <!--pagination-->
     <div class="col s10">
       <div class="col s1">
-        <button class="waves-effect waves-light btn" (click)="leftChangePagination()"><<</button>
+        <button class="waves-effect waves-light btn" [disabled]="clientFilter.offSet <= 0" (click)="getClientFilterPagination(clientFilter.offSet-1)"><<</button>
       </div>
 
       <div class="col s3">
@@ -107,39 +107,16 @@
       </div>
 
       <div class="col s7">
-        <div *ngFor="let pag of pagins;index as i; first as isFirst; last as isLast " class="popopo">
-
-          <div class="col s1" *ngIf="isFirst">
-            <a class="waves-effect waves-light btn" (click)="changePagination(pag)">
-              {{pag+1}}
-            </a>
-          </div>
-          <div class="col s3" *ngIf="i != 0 && i==indexes.index-1 && i != pagins.length-1 ">
-            <a class="waves-effect waves-light btn" [id]="indexes.index" (click)="changePagination(pag)">
-              -
-            </a>
-          </div>
-          <div class="col s2" *ngIf="i != 0 && i==indexes.index && i != pagins.length-1">
-            <a class="waves-effect waves-light btn" [id]="indexes.index" (click)="changePagination(pag)">
-              {{pag+1}}
-            </a>
-          </div>
-          <div class="col s3" *ngIf=" i != 0 && i==indexes.index+1 && i != pagins.length-1">
-            <a class="waves-effect waves-light btn" [id]="indexes.index" (click)="changePagination(pag)">
-              +
-            </a>
-          </div>
-          <div class="col s2 " *ngIf="isLast">
-            <a class="waves-effect waves-light btn" (click)="changePagination(pag)">
-              {{pag+1}}
-            </a>
-          </div>
-
+        <div class="col s2" ></div>
+        <div class="col s1" >
+          <a class="waves-effect waves-light btn" (click)="getClientFilterPagination(clientFilter.offSet)">
+          {{clientFilter.offSet+1}}</a>
         </div>
+
       </div>
 
       <div class="col s1">
-        <a class="waves-effect waves-light btn" (click)="rigthChangePagination()"> >></a>
+        <a class="waves-effect waves-light btn" (click)="getClientFilterPagination(clientFilter.offSet+1)"> >></a>
       </div>
     </div>
     <!--pagination-->

@@ -28,6 +28,9 @@ public class ClientRegisterStand implements ClientRegister {
 	public BeanGetter<StandDb> db;
 	public BeanGetter<ClientDb> cdb;
 	public double page = 1;
+	public int pageList =0;
+	public int countList =10;
+	public int maxPageList;
 
 	@Override
 	public Collection<Client> getUserInfo() {
@@ -43,6 +46,31 @@ public class ClientRegisterStand implements ClientRegister {
 		return client;
 
 	}
+	@Override
+	public Collection<ClientRecord> clientList() {
+		maxPageList=cdb.get().client.size();
+		List<ClientRecord> list = new ArrayList<>();
+		int i =0;
+		for (Map.Entry<Integer, Client> cl : cdb.get().client.entrySet()) {
+			if(i==countList*(pageList+1)) break;
+			if(cdb.get().client.size()==i) break;
+			if(i>= pageList*countList){
+			ClientRecord clientRecord = new ClientRecord();
+			clientRecord.id=cl.getValue().id;
+			clientRecord.firstname=cl.getValue().firstname;
+			clientRecord.lastname=cl.getValue().lastname;
+			clientRecord.patronymic=cl.getValue().patronymic;
+			clientRecord.character=cl.getValue().character;
+			clientRecord.dateOfBirth=cl.getValue().dateOfBirth;
+			clientRecord.totalAccountBalance=cl.getValue().totalAccountBalance;
+			clientRecord.maximumBalance=cl.getValue().maximumBalance;
+			clientRecord.minimumBalance=cl.getValue().minimumBalance;
+			list.add(clientRecord);}
+			i++;
+		}
+		return list;
+	}
+
 
 	@Override
 	public Collection<Client> getFilter(String firstname, String lastname, String patronymic) {
@@ -115,7 +143,6 @@ public class ClientRegisterStand implements ClientRegister {
 		if (sizes % 10 != 0) {
 			++page;
 		}
-
 
 		return page;
 	}
@@ -251,15 +278,46 @@ public class ClientRegisterStand implements ClientRegister {
 
 	@Override
 	public Collection<ClientRecord> clientFilter(ClientFilter clientFilter) {
-		getUserSort(clientFilter.orderBy);
-		return null;
 
+		List<ClientRecord> list = new ArrayList<ClientRecord>();
+		if(clientFilter.offSet >= maxPageList){
+			pageList=maxPageList;
+			}
+		else {
+			//Eto ya dolzhen otpravit' v ngOnInit
+			pageList = clientFilter.offSet;
+			}
+		int i =0;
+
+		for (Map.Entry<Integer, Client> cl : cdb.get().client.entrySet()) {
+			if(i==countList*(pageList+1)) break;
+			if(cdb.get().client.size()==i) break;
+			if(i>pageList*countList){
+			ClientRecord clientRecord = new ClientRecord();
+			clientRecord.id=cl.getValue().id;
+			clientRecord.firstname=cl.getValue().firstname;
+			clientRecord.lastname=cl.getValue().lastname;
+			clientRecord.patronymic=cl.getValue().patronymic;
+			clientRecord.character=cl.getValue().character;
+			clientRecord.dateOfBirth=cl.getValue().dateOfBirth;
+			clientRecord.totalAccountBalance=cl.getValue().totalAccountBalance;
+			clientRecord.maximumBalance=cl.getValue().maximumBalance;
+			clientRecord.minimumBalance=cl.getValue().minimumBalance;
+			list.add(clientRecord);}
+			i++;
+
+		}
+
+		switch(clientFilter.orderBy) {
+			case "firstname":
+				list.sort(new ClientRecord.SortedByFirstname());
+				break;
+		}
+		System.out.println(list);
+		return list;
 	}
 
-	@Override
-	public Collection<ClientRecord> clientList() {
-		return null;
-	}
+
 
 
 	private Address rndAddress(Address add) {

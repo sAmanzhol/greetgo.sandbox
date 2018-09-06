@@ -127,6 +127,7 @@ public class ClientController implements Controller {
 	}
 
 	@ToJson
+	@NoSecurity
 	@Mapping("/client-filter")
 	public Collection<ClientRecord> clientFilter(@Par("clientFilter") @Json ClientFilter clientFilter){
 		System.out.println(clientFilter);

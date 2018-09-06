@@ -22,7 +22,7 @@ public class ClientDb implements HasAfterInject {
             character.add(RND.str(6));
 
         }
-        for(int i=0;i<20;i++){
+        for(int i=0;i<55;i++){
             Client c = new Client();
             c.id=client.size();
             c.firstname=RND.str(8);

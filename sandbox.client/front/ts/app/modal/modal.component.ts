@@ -35,21 +35,62 @@ export class ModalComponent implements OnInit {
     let self = this;
     this.clientFilter.orderBy=orderBy;
     this.clientFilter.sort= !sort;
+      var clientRec:ClientRecord = new ClientRecord();
+      var clientRecs:Array<ClientRecord> = new Array<ClientRecord>();
+      var dates=[];
     this.http.get('/client/client-filter',{clientFilter:JSON.stringify(self.clientFilter)})
-      .subscribe(
-        res =>{
-          let ret: ClientDetails = res.json();
-          console.log(ret)
-        }
-      )
+        .subscribe(data => {
+           dates = data.json();
+           for(let i =0; i<dates.length;i++){
+             clientRec=dates[i];
+             console.log(clientRec.id + " PRIMITIVE")
+             clientRecs.push(clientRec);
+            console.log(clientRecs[i].id + " ARRAY")
+           }
+           self.clientRecord = clientRecs;
+            console.log(self.clientRecord.length);
 
+        })
+  }
+    getClientFilterPagination(offSet){
+        let self = this;
+        self.clientFilter.offSet=offSet;
+        var clientRec:ClientRecord = new ClientRecord();
+        var clientRecs:Array<ClientRecord> = new Array<ClientRecord>();
+        let dates:ClientRecord[];
+        console.log(self.clientFilter.offSet);
+        this.http.get('/client/client-filter',{clientFilter:JSON.stringify(self.clientFilter)})
+            .subscribe(data => {
+                dates = data.json();
+                if(dates.length ==0){
+                 self.clientFilter.offSet = self.clientFilter.offSet-1;
+                }
+                else {
+                    for (let i = 0; i < dates.length; i++) {
+                        clientRec = dates[i];
+                        clientRecs.push(clientRec);
+                    }
+                    self.clientRecord = clientRecs;
+                    console.log(self.clientRecord.length);
+                }
+            })
+    }
 
-  }
-  getClientFilterPagination(offSet){
-    let self = this;
-    this.clientFilter.offSet=offSet
-    this.http.get('/client/client-filter',{clientFilter:JSON.stringify(self.clientFilter)})
-  }
+    // CRUD
+    getClient() {
+        // TODO: asset 9/4/18 U nas konvensya API ssylke userInfo -> user-info i pereimenu userInfo na client-list ili customer-list chto by bylo ponyatno
+        // TODO: asset 9/4/18 Sozdai class tipa Client ili CustomerRecord dlya lista
+        let self = this;
+        this.http.get("/client/client-list").subscribe((data) => {
+            var red = data.json();
+            for(let i =0;i<red.length;i++)
+                self.clientRecord.push(red[i]);
+            console.log(self.clientRecord[0]);
+            console.log("SASORI")
+        })
+
+    }
+
 
 
 // TODO: asset 9/4/18 sozdai class ClientFilter ili tipa takoe. MODEL
@@ -83,21 +124,8 @@ export class ModalComponent implements OnInit {
 
   }
 
-sl=[];
   // CRUD
-  getClient() {
-    // TODO: asset 9/4/18 U nas konvensya API ssylke userInfo -> user-info i pereimenu userInfo na client-list ili customer-list chto by bylo ponyatno
-    // TODO: asset 9/4/18 Sozdai class tipa Client ili CustomerRecord dlya lista
-    let self = this;
-    this.http.get("/client/client-list").subscribe((data) => {
-        var red = data.json();
-      for(let i =0;i<red.length;i++)
-      self.clientRecord.push(red[i]);
-      console.log(self.clientRecord[0]);
-      console.log("SASORI")
-    })
 
-  }
 // TODO: asset 9/4/18 I dlya Character tozhe nuzhno sozdat class
   getCharacter() {
 
