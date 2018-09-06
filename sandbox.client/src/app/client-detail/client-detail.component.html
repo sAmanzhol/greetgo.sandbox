@@ -1,11 +1,30 @@
 <h2 mat-dialog-title>Install Angular</h2>
 <mat-dialog-content class="mat-typography">
+
+  <p>
+    <mat-form-field appearance="legacy">
+      <mat-label>NAMS</mat-label>
+      <input matInput placeholder="nAMS">
+      <!-- <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+      <mat-hint>Hint</mat-hint> -->
+    </mat-form-field>
+  </p>
+  <p>
+  <mat-form-field>
+    <!--[hideRequiredMarker]="options.value.hideRequired"-->
+    <!--[floatLabel]="options.value.floatLabel">-->
+    <mat-select required>
+      <mat-option value="option">Option</mat-option>
+    </mat-select>
+    <mat-label>По дефолту</mat-label>
+  </mat-form-field>
+
+
+  </p>
+
   client-detail works!
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-  <button mat-icon-button (click)="test()">
-    <mat-icon aria-label="Remove icon-button">remove</mat-icon>
-  </button>
   <button mat-button mat-dialog-close>Cancel</button>
-  <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Install</button>
+  <!--<button mat-button [mat-dialog-close]="true" cdkFocusInitial>Install</button>-->
 </mat-dialog-actions>

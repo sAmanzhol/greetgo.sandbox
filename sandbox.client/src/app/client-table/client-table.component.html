@@ -1,7 +1,4 @@
 <div>
-  <p>
-    testttttt!
-  </p>
   <table>
     <thead>
     <tr>
@@ -23,7 +20,15 @@
       <td>{{r.maxBalance}}</td>
       <td>{{r.minBalance}}</td>
       <td>
-        <button #btn (click)="openDialog()">+++</button>
+        <button mat-icon-button (click)="openDialog()">
+          <mat-icon aria-label="Remove icon-button">add</mat-icon>
+        </button>
+        <button mat-icon-button (click)="openDialog()">
+          <mat-icon aria-label="Remove icon-button">remove</mat-icon>
+        </button>
+        <button mat-icon-button (click)="openDialog()">
+          <mat-icon aria-label="Remove icon-button">...</mat-icon>
+        </button>
       </td>
     </tr>
     </tbody>

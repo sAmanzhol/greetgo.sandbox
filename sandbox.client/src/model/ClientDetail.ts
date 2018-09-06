@@ -6,7 +6,6 @@ import {Phone} from "./Phone";
  */
 export class ClientDetail{
 
-  public detailId: number/*int*/;
   public surname: string;
   public name: string;
   public patronymic: string;
@@ -14,4 +13,5 @@ export class ClientDetail{
   public actualAddress: Address;
   public registrationAddress: Address;
   public phones: Phone[];
+  public clientId: number/*long*/;
 }

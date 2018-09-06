@@ -12,7 +12,10 @@ import {AboutComponent} from "./about/about.component";
 import {TestComponent} from "./client-table/client-table.component";
 import {ClientDetailComponent} from "./client-detail/client-detail.component";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import {MatButtonModule, MatDialogModule, MatIconModule} from "@angular/material";
+import {
+  MatButtonModule, MatDialogModule, MatIconModule, MatInputModule, MatSelectModule,
+  MatTableModule
+} from "@angular/material";
 
 @NgModule({
   declarations: [
@@ -25,7 +28,7 @@ import {MatButtonModule, MatDialogModule, MatIconModule} from "@angular/material
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   imports: [
-    BrowserModule, HttpClientModule, FormsModule, BrowserAnimationsModule, MatDialogModule, MatIconModule, MatButtonModule
+    BrowserModule, HttpClientModule, FormsModule, BrowserAnimationsModule, MatDialogModule, MatIconModule, MatButtonModule, MatTableModule, MatInputModule, MatSelectModule
   ],
   entryComponents: [ClientDetailComponent],
   providers: [HttpService, LoginService, ClientListService],
