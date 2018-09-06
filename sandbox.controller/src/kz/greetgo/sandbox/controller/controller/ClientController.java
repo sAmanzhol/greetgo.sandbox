@@ -22,7 +22,7 @@ public class ClientController implements Controller {
 	public BeanGetter<ClientRegister> clientRegister;
 
 	@ToJson
-	@NoSecurity
+
 	@Mapping("/userInfo")
 	// TODO: asset 9/4/18 List<Asd> i imena Mappingov dolzhno sovpodat s imenem methoda dlya chitablenosti
 	public Collection<Client> userInfo() {
@@ -30,21 +30,21 @@ public class ClientController implements Controller {
 	}
 
 	@ToJson
-	@NoSecurity
+
 	@Mapping("/getFilter")
 	public Collection<Client> getFilter(@Par("firstname") String firstname, @Par("lastname") String lastname, @Par("patronymic") String patronymic) {
 		return clientRegister.get().getFilter(firstname, lastname, patronymic);
 	}
 
 	@ToJson
-	@NoSecurity
+
 	@Mapping("/userSort")
 	public Collection<Client> userSort(@Par("sort") String sort) {
 		return clientRegister.get().getUserSort(sort);
 	}
 
 	@AsIs
-	@NoSecurity
+
 	@Mapping("/pagination")
 	public Double pagination() {
 		return clientRegister.get().pagination();
@@ -52,7 +52,7 @@ public class ClientController implements Controller {
 
 
 	@ToJson
-	@NoSecurity
+
 	@Mapping("/getCharacter")
 	public List<String> getCharacter() {
 		return clientRegister.get().getCharacter();
@@ -60,14 +60,14 @@ public class ClientController implements Controller {
 
 
 	@ToJson
-	@NoSecurity
+
 	@Mapping("/getPagination")
 	public Collection<Client> getPagination(@Par("index") Integer index) {
 		return clientRegister.get().getPagination(index);
 	}
 
 	@ToJson
-	@NoSecurity
+
 	@Mapping("/addUserInfo")
 	public Collection<Client> addUserInfo(@Par("client") @Json Client client) {
 		System.out.println(client.firstname + "SOSOSO");
@@ -75,14 +75,14 @@ public class ClientController implements Controller {
 	}
 
 	@ToJson
-	@NoSecurity
+
 	@Mapping("/deleteUserInfo")
 	public Collection<Client> deleteUserInfo(@Par("id") Integer id) {
 		return clientRegister.get().deleteUserInfo(id);
 	}
 
 	@ToJson
-	@NoSecurity
+
 	@Mapping("/editUserInfo")
 	public Collection<Client> editUserInfo(@Par("edit") @Json Client edit) {
 		return clientRegister.get().editUserInfo(edit);
@@ -90,7 +90,7 @@ public class ClientController implements Controller {
 
 
 	@ToJson
-	@NoSecurity
+
 	@Mapping("/getClientForEdit")
 	public Collection<Client> getClientForEdit(@Par("id") Integer id) {
 		return clientRegister.get().getClientForEdit(id);
@@ -98,7 +98,7 @@ public class ClientController implements Controller {
 
 
 	@ToJson
-	@NoSecurity
+
 	@Mapping("/test-debug")
 	// TODO: asset 9/5/18 Udalit 
 	public ClientDetails testDebug(@Par("test") @Json ClientAsd jsons) {

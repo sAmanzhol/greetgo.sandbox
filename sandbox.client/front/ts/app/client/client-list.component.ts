@@ -11,17 +11,15 @@ import {Client} from "../../model/Client";
 
 
 @Component({
-  selector: 'app-debug',
-  template: require('./debug.component.html'),
-  styles: [require('./debug.component.css')],
+  selector: 'client-list',
+  template: require('./client-list.component.html'),
+  styles: [require('./client-list.component.css')],
   providers: [UsersService],
 })
 // TODO: asset 9/4/18 Razdeli componenty list i edit client ili customer
-export class DebugComponent implements OnInit {
+export class ClientListComponent implements OnInit {
   tmpClient: Client;
-
   formClientParameters: Client = new Client();
-
   cloneFormClientParameters: Client = new Client();
 
   headMarkTable: {
@@ -387,7 +385,7 @@ export class DebugComponent implements OnInit {
     this.http.post("/client/test-debug", {test: JSON.stringify(test)}).subscribe(res => {
       let ret: ClientDetails = res.json();
 
-      console.log("ret.aaa: " + ret.aaa + ", ret.sss: " + ret.sss);
+      console.log("ret.aaa: " + ret.firstname + ", ret.sss: " + ret.lastname);
     });
   }
 

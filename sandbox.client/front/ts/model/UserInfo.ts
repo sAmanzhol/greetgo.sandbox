@@ -1,4 +1,4 @@
-import {PhoneType} from "./PhoneType";
+import {PhoneType} from "./type/PhoneType";
 
 export class UserInfo {
   public id: string;
