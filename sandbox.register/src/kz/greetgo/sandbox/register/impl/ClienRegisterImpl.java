@@ -2,6 +2,7 @@ package kz.greetgo.sandbox.register.impl;
 
 import kz.greetgo.depinject.core.Bean;
 import kz.greetgo.sandbox.controller.model.*;
+import kz.greetgo.sandbox.controller.model.Character;
 import kz.greetgo.sandbox.controller.register.ClientRegister;
 
 import java.util.ArrayList;
@@ -15,6 +16,8 @@ public class ClienRegisterImpl implements ClientRegister {
 
     List<Client> clients = null;
     List<ClientRecord> clientRecords = null;
+    List<Character> characters = null;
+    List<Gender> genders = null;
 
     public void createClients() {
 
@@ -24,10 +27,30 @@ public class ClienRegisterImpl implements ClientRegister {
         phones.add(new Phone(PhoneType.MOBILE, "7474938358"));
         phones.add(new Phone(PhoneType.HOME, "7273810983"));
 
-        clients.add(new Client(1, "Sultanova", "Madina", "Mahammadnova", CharacterType.OPENNESS, 20, 1000, 5, 5000, null, new Address("Mamyr-4", "311", 38), null));
-        clients.add(new Client(2, "Ajs", "Gvlv", "Mahammadnova", CharacterType.OPENNESS, 7, 100, 0, 5, null, new Address("Mamyr-4", "311", 38), null));
-        clients.add(new Client(3, "Vsis", "Akkdd", "Mahammadnova", CharacterType.OPENNESS, 75, 100, 8, 5545, null, new Address("Mamyr-4", "311", 38), null));
-        clients.add(new Client(4, "Tllxlx", "Bodd", "Mahammadnova", CharacterType.OPENNESS, 1, 100, 825, 574, null, new Address("Mamyr-4", "311", 38), null));
+        genders = new ArrayList<Gender>();
+        Gender male = new Gender(GenderType.M, "мужской");
+        Gender female = new Gender(GenderType.F, "женский");
+        genders.add(male);
+        genders.add(female);
+
+        characters = new ArrayList<>();
+        Character opennesCharacter = new Character(CharacterType.OPENNESS, "открытый");
+        Character agreeablenessCharacter = new Character(CharacterType.AGREEABLENESS, "любзеный");
+        Character conscientiousnessCharacter = new Character(CharacterType.CONSCIENTIOUSNESS, "добросовестный");
+        Character extraversionCharacter = new Character(CharacterType.EXTRAVERSION, "экстраверт");
+        Character neuroticismCharacter = new Character(CharacterType.NEUROTICISM, "невротичный");
+
+        characters.add(opennesCharacter);
+        characters.add(agreeablenessCharacter);
+        characters.add(conscientiousnessCharacter);
+        characters.add(extraversionCharacter);
+        characters.add(neuroticismCharacter);
+
+
+        clients.add(new Client(1, "Sultanova", "Madina", "Mahammadnova", female, opennesCharacter, 20, 1000, 5, 5000, null, new Address("Mamyr-4", "311", 38), null));
+        clients.add(new Client(2, "Ajs", "Gvlv", "osoos", male,  agreeablenessCharacter, 7, 100, 0, 5, null, new Address("Mamyr-4", "311", 38), null));
+        clients.add(new Client(3, "Vsis", "Akkdd", "llsls", female, extraversionCharacter, 75, 100, 8, 5545, null, new Address("Mamyr-4", "311", 38), null));
+        clients.add(new Client(4, "Tllxlx", "Bodd", "lslslsl", male, neuroticismCharacter, 1, 100, 825, 574, null, new Address("Mamyr-4", "311", 38), null));
 
     }
 
@@ -53,30 +76,22 @@ public class ClienRegisterImpl implements ClientRegister {
                 clientRecords.add(tempClientRecord);
             }
         }
-
-
-
-//        clientRecords.add(new ClientRecord("Aida Aidova", "melancholic", 14, 10, 0, 11));
-//        clientRecords.add(new ClientRecord("Almas Adam", "melancholic", 100, 180, 15, 350));
         return clientRecords;
     }
 
-    public ClientDetail getClienDetailById(long id){
+    @Override
+    public ClientDetail getClienDetailById(long id) {
         ClientDetail clientDetail = null;
 
         if(clients != null){
             for(Client client : clients){
                 if(client.id == id){
-                    clientDetail = new ClientDetail(client.surname, client.name, client.patronymic, client.character, client.actualAddress, client.registrationAddress, client.phones, client.id);
+                    clientDetail = new ClientDetail(client.surname, client.name, client.patronymic, null, null, client.character, null, client.actualAddress, client.registrationAddress, client.phones, client.id);
                 }
             }
         }
-
         return clientDetail;
-
     }
-
-
 }
 
 

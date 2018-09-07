@@ -2,9 +2,11 @@ package kz.greetgo.sandbox.controller.controller;
 
 import kz.greetgo.depinject.core.Bean;
 import kz.greetgo.depinject.core.BeanGetter;
+import kz.greetgo.mvc.annotations.Par;
 import kz.greetgo.mvc.annotations.ToJson;
 import kz.greetgo.mvc.annotations.on_methods.ControllerPrefix;
 import kz.greetgo.mvc.annotations.on_methods.OnGet;
+import kz.greetgo.sandbox.controller.model.ClientDetail;
 import kz.greetgo.sandbox.controller.model.ClientRecord;
 import kz.greetgo.sandbox.controller.register.ClientRegister;
 import kz.greetgo.sandbox.controller.security.PublicAccess;
@@ -27,6 +29,14 @@ public class ClientController implements Controller {
     public List<ClientRecord> list() {
 
         return clientRegisterBeanGetter.get().getClientList();
+    }
+
+    @ToJson
+    @PublicAccess
+    @OnGet("/detail")
+    public ClientDetail getDetail(@Par("id") Long id){
+        return clientRegisterBeanGetter.get().getClienDetailById(id);
+        //return null;
     }
 
 

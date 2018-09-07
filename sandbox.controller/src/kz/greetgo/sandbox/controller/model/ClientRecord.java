@@ -6,7 +6,7 @@ package kz.greetgo.sandbox.controller.model;
  */
 public class ClientRecord {
     public String fio;
-    public CharacterType character;
+    public Character character;
     public int age;
     public int totalBalance;
     public int minBalance;
@@ -16,40 +16,13 @@ public class ClientRecord {
     public ClientRecord() {
     }
 
-    public ClientRecord(String fio, CharacterType character, int age, int totalBalance, int minBalance, int maxBalance) {
+    public ClientRecord(String fio, Character character, int age, int totalBalance, int minBalance, int maxBalance, long clientId) {
         this.fio = fio;
         this.character = character;
         this.age = age;
         this.totalBalance = totalBalance;
         this.minBalance = minBalance;
         this.maxBalance = maxBalance;
-    }
-
-    public void setFio(String fio) {
-        this.fio = fio;
-    }
-
-    public void setCharacter(CharacterType character) {
-        this.character = character;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
-    public void setTotalBalance(int totalBalance) {
-        this.totalBalance = totalBalance;
-    }
-
-    public void setMinBalance(int minBalance) {
-        this.minBalance = minBalance;
-    }
-
-    public void setMaxBalance(int maxBalance) {
-        this.maxBalance = maxBalance;
-    }
-
-    public void setClientId(long clientId) {
         this.clientId = clientId;
     }
 }

@@ -1,18 +1,65 @@
 <h2 mat-dialog-title>Install Angular</h2>
 <mat-dialog-content class="mat-typography">
 
-  <p>
+
     <mat-form-field appearance="legacy">
-      <mat-label>NAMS</mat-label>
-      <input matInput placeholder="nAMS">
-      <!-- <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
-      <mat-hint>Hint</mat-hint> -->
+      <mat-label>Фамилия</mat-label>
+      <input matInput placeholder="{{clientDetailService.clientDetail.surname}}" value="{{clientDetailService.clientDetail.surname}}">
     </mat-form-field>
-  </p>
+    <br>
+    <mat-form-field appearance="legacy">
+      <mat-label>Фамилия</mat-label>
+      <input matInput placeholder="{{clientDetailService.clientDetail.name}}" value="{{clientDetailService.clientDetail.surname}}">
+    </mat-form-field>
+  <br>
+    <mat-form-field appearance="legacy">
+      <mat-label>Фамилия</mat-label>
+      <input matInput placeholder="{{clientDetailService.clientDetail.patronymic}}" value="{{clientDetailService.clientDetail.surname}}">
+    </mat-form-field>
+  <br>
+    <mat-form-field appearance="legacy">
+      <mat-label>Фамилия</mat-label>
+      <input matInput placeholder="{{clientDetailService.clientDetail}}" value="{{clientDetailService.clientDetail.surname}}">
+    </mat-form-field>
+  <br>
+    <mat-form-field appearance="legacy">
+      <mat-label>Фамилия</mat-label>
+      <input matInput placeholder="{{clientDetailService.clientDetail.name}}" value="{{clientDetailService.clientDetail.surname}}">
+    </mat-form-field>
+  <br>
+    <mat-form-field appearance="legacy">
+      <mat-label>Фамилия</mat-label>
+      <input matInput placeholder="{{clientDetailService.clientDetail.name}}" value="{{clientDetailService.clientDetail.surname}}">
+    </mat-form-field>
+  <br>
+    <mat-form-field appearance="legacy">
+      <mat-label>Фамилия</mat-label>
+      <input matInput placeholder="{{clientDetailService.clientDetail.name}}" value="{{clientDetailService.clientDetail.surname}}">
+    </mat-form-field>
+  <br>
+    <mat-form-field appearance="legacy">
+      <mat-label>Фамилия</mat-label>
+      <input matInput placeholder="{{clientDetailService.clientDetail.name}}" value="{{clientDetailService.clientDetail.surname}}">
+    </mat-form-field>
+  <br>
+    <mat-form-field appearance="legacy">
+      <mat-label>Фамилия</mat-label>
+      <input matInput placeholder="{{clientDetailService.clientDetail.name}}" value="{{clientDetailService.clientDetail.surname}}">
+    </mat-form-field>
+  <br>
+    <mat-form-field appearance="legacy">
+      <mat-label>Фамилия</mat-label>
+      <input matInput placeholder="{{clientDetailService.clientDetail.name}}" value="{{clientDetailService.clientDetail.surname}}">
+    </mat-form-field>
+  <br>
+    <mat-form-field appearance="legacy">
+      <mat-label>Фамилия</mat-label>
+      <input matInput placeholder="{{clientDetailService.clientDetail.name}}" value="{{clientDetailService.clientDetail.surname}}">
+    </mat-form-field>
+
+
   <p>
   <mat-form-field>
-    <!--[hideRequiredMarker]="options.value.hideRequired"-->
-    <!--[floatLabel]="options.value.floatLabel">-->
     <mat-select required>
       <mat-option value="option">Option</mat-option>
     </mat-select>
@@ -21,8 +68,10 @@
 
 
   </p>
+  <custom-counter [(counter)]="counterValue"></custom-counter>
+  <p><code>counterValue = {{counterValue}}</code></p>
 
-  client-detail works!
+  {{clientDetailService.clientDetail.surname}}
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button mat-button mat-dialog-close>Cancel</button>

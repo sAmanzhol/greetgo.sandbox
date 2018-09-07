@@ -16,6 +16,10 @@ import {
   MatButtonModule, MatDialogModule, MatIconModule, MatInputModule, MatSelectModule,
   MatTableModule
 } from "@angular/material";
+import {HttpModule} from "@angular/http";
+import {CustomCounterComponent} from "./client-detail/custom-counter-component";
+import { AddComponent } from './add/add.component';
+import { EditComponent } from './edit/edit.component';
 
 @NgModule({
   declarations: [
@@ -25,9 +29,12 @@ import {
     AboutComponent,
     TestComponent,
     ClientDetailComponent,
+    CustomCounterComponent,
+    AddComponent,
+    EditComponent,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  // exports: [MatDialogModule],
+  // exports: [],
   imports: [
     BrowserModule,
     HttpClientModule,
@@ -39,6 +46,7 @@ import {
     MatTableModule,
     MatInputModule,
     MatSelectModule,
+    HttpModule,
   ],
   entryComponents: [ClientDetailComponent],
   providers: [HttpService, LoginService, ClientListService],

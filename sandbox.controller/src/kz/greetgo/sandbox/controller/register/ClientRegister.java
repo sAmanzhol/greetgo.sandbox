@@ -1,5 +1,6 @@
 package kz.greetgo.sandbox.controller.register;
 
+import kz.greetgo.sandbox.controller.model.ClientDetail;
 import kz.greetgo.sandbox.controller.model.ClientRecord;
 
 import java.util.List;
@@ -10,4 +11,5 @@ import java.util.List;
 public interface ClientRegister {
 
     List<ClientRecord> getClientList();
+    ClientDetail getClienDetailById(long id);
 }
