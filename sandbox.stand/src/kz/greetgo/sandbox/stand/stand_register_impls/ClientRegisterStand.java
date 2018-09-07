@@ -314,7 +314,7 @@ public class ClientRegisterStand implements ClientRegister {
 		/*for (Map.Entry<Integer, Client> cl : cdb.get().client.entrySet()) {
 			list.add(cl.getValue());
 		}
-
+			пу
 		return list;*/
 
 		return rec;
