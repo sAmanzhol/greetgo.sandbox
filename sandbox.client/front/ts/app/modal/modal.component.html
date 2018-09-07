@@ -32,7 +32,7 @@
 
 
       <div class="col s3">
-        <a class="waves-effect waves-light btn icon material-icons" (click)="getClientFilter(0)">search</a>
+        <a class="waves-effect waves-light btn icon material-icons" (click)="getClientFilterFilter()">search</a>
       </div>
 
     </div>
@@ -66,6 +66,7 @@
         </tr>
         </tbody>
       </table>
+
 
     </div>
     <!--table-->
@@ -130,18 +131,18 @@
           <div class="row">
 
             <div class="col s4">
-              <input id="firstname" type="text" [(ngModel)]="formClientParameters.firstname" #firstname="ngModel"
+              <input id="firstname" type="text" [(ngModel)]="clientDetails.firstname" #firstname="ngModel"
                      required pattern="[A-Za-zА-Яа-яЁё]{1,}" />
               <label for="firstname">Фамилия</label>
             </div>
 
             <div class="col s4">
-              <input id="lastname" type="text" [(ngModel)]="formClientParameters.lastname" #lastname="ngModel"
+              <input id="lastname" type="text" [(ngModel)]="clientDetails.lastname" #lastname="ngModel"
                      required />
               <label for="lastname">Имя</label>
             </div>
             <div class="col s4">
-              <input id="patronymic" type="text" [(ngModel)]="formClientParameters.patronymic" #patronymic="ngModel"
+              <input id="patronymic" type="text" [(ngModel)]="clientDetails.patronymic" #patronymic="ngModel"
                      required/>
               <label for="patronymic">Отчество</label>
             </div>
@@ -156,11 +157,11 @@
             </div>
             <p>
               <label>
-                <input name="group1" type="radio" checked [value]="genders.male" [(ngModel)]="formClientParameters.gender"   #gender1 ="ngModel" [checked]="genders.male"/>
+                <input name="group1" type="radio" checked [value]="genders[0]" [(ngModel)]="clientDetails.gender"   #gender1 ="ngModel" />
                 <span>Мужчина</span>
               </label>
               <label>
-                <input name="group1" type="radio" [value]="genders.female" [(ngModel)]="formClientParameters.gender" #gender2 ="ngModel"  required />
+                <input name="group1" type="radio" [value]="genders[1]" [(ngModel)]="clientDetails.gender" #gender2 ="ngModel"  required />
                 <span>Женщина</span>
               </label>
             </p>
@@ -169,13 +170,13 @@
             </div>
           </div>
 
-          <input id="dateOfBirth" type="date" [(ngModel)]="formClientParameters.dateOfBirth"  #date="ngModel" required />
+          <input id="dateOfBirth" type="date" [(ngModel)]="clientDetails.dateOfBirth"  #date="ngModel" required />
           <label for="dateOfBirth">Дата Рождения</label>
           <div *ngIf="date.invalid " class="alert alert-danger">
             не заполнено поле
           </div>
 
-          <select class="form-control" name="company" [(ngModel)]="formClientParameters.character"  #charater="ngModel" required>
+          <select class="form-control" name="company" [(ngModel)]="clientDetails.character.name"  #charater="ngModel" required>
             <option *ngFor="let character of characters" [value]="character">
               {{character}}
             </option>
@@ -194,16 +195,16 @@
             </div>
             <div class="col s4">
               <input id="addressOfResidenceStreet" type="text"
-                     [(ngModel)]="formClientParameters.addressOfResidence.street">
+                     [(ngModel)]="clientDetails.addressOfResidence.street">
               <label for="addressOfResidenceStreet">Улица</label>
             </div>
             <div class="col s4">
-              <input id="addressOfResidenceHome" type="text" [(ngModel)]="formClientParameters.addressOfResidence.home">
+              <input id="addressOfResidenceHome" type="text" [(ngModel)]="clientDetails.addressOfResidence.house">
               <label for="addressOfResidenceHome">Дом</label>
             </div>
             <div class="col s4">
               <input id="addressOfResidenceApartment" type="text"
-                     [(ngModel)]="formClientParameters.addressOfResidence.apartment">
+                     [(ngModel)]="clientDetails.addressOfResidence.flat">
               <label for="addressOfResidenceApartment">Квартира</label>
             </div>
           </div>
@@ -217,18 +218,18 @@
             <div class="col s4">
 
               <input id="addressOfRegistrationStreet" type="text"
-                     [(ngModel)]="formClientParameters.addressOfRegistration.street"  #addressOfRegistrationStreet="ngModel" required />
+                     [(ngModel)]="clientDetails.addressOfRegistration.street"  #addressOfRegistrationStreet="ngModel" required />
               <label for="addressOfRegistrationStreet">Улица</label>
             </div>
             <div class="col s4">
 
               <input id="addressOfRegistrationHome" type="text"
-                     [(ngModel)]="formClientParameters.addressOfRegistration.home" #addressOfRegistrationHome="ngModel" required />
+                     [(ngModel)]="clientDetails.addressOfRegistration.house" #addressOfRegistrationHome="ngModel" required />
               <label for="addressOfRegistrationHome">Дом</label>
             </div>
             <div class="col s4">
               <input id="addressOfRegistrationApartment" type="text"
-                     [(ngModel)]="formClientParameters.addressOfRegistration.apartment" #addressOfRegistrationApartment="ngModel" required/>
+                     [(ngModel)]="clientDetails.addressOfRegistration.flat" #addressOfRegistrationApartment="ngModel" required/>
               <label for="addressOfRegistrationApartment">Квартира</label>
             </div>
             <div *ngIf="addressOfRegistrationStreet.invalid || addressOfRegistrationHome.invalid || addressOfRegistrationApartment.invalid " class="alert alert-danger">
@@ -245,26 +246,11 @@
               </p>
             </div>
 
-            <input id="phoneHome" type="number" [(ngModel)]="formClientParameters.phone.home" maxlength="10" #phoneHome="ngModel" required />
+            <input id="phoneHome" type="text" [(ngModel)]="clientDetails.phone[0].number" maxlength="10" #phoneHome="ngModel" required />
             <label for="phoneHome">Домашний</label>
             <div *ngIf="phoneHome.invalid " class="alert alert-danger">
               не заполнено поле
             </div>
-
-
-
-            <input id="phoneWork" type="number" [(ngModel)]="formClientParameters.phone.work" >
-            <label for="phoneWork">Телефон</label>
-
-            <input id="phoneMobile1" type="number" [(ngModel)]="formClientParameters.phone.mobile1" #phoneMobile="ngModel" required >
-            <label for="phoneMobile1">Мобильный</label>
-            <div *ngIf="phoneMobile.invalid " class="alert alert-danger">
-              не заполнено поле
-            </div>
-            <input id="phoneMobile2" type="number" [(ngModel)]="formClientParameters.phone.mobile2">
-            <label for="phoneMobile2">Мобильный</label>
-            <input id="phoneMobile3" type="number" [(ngModel)]="formClientParameters.phone.mobile3">
-            <label for="phoneMobile3">Мобильный</label>
 
           </div>
 

@@ -55,7 +55,7 @@ public class ClientDb implements HasAfterInject {
     }
     private Phone rndPhone(){
         Phone phone =new Phone();
-        phone.home =RND.plusInt(100000000);
+        phone.home =RND.str(9);
         phone.work =RND.plusInt(100000000);
         phone.mobile1 =RND.plusInt(100000000);
         phone.mobile2 =RND.plusInt(100000000);

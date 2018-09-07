@@ -8,6 +8,7 @@ export class ClientFilter {
   public sort:boolean;
   public offSet:number/*int*/;
 
+
   public assign(o: any): ClientFilter{
     this.firstname= o.firstname;
     this.lastname = o.lastname;
@@ -15,6 +16,7 @@ export class ClientFilter {
     this.orderBy = o.orderBy;
     this.sort = o.sort;
     this.offSet = o.offSet;
+
     return this;
   }
   constructor(){

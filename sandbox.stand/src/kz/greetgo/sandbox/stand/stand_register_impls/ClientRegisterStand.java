@@ -2,8 +2,7 @@ package kz.greetgo.sandbox.stand.stand_register_impls;
 
 import kz.greetgo.depinject.core.Bean;
 import kz.greetgo.depinject.core.BeanGetter;
-import kz.greetgo.sandbox.controller.model.ClientFilter;
-import kz.greetgo.sandbox.controller.model.ClientRecord;
+import kz.greetgo.sandbox.controller.model.*;
 import kz.greetgo.sandbox.controller.register.ClientRegister;
 import kz.greetgo.sandbox.controller.register.model.Address;
 import kz.greetgo.sandbox.controller.register.model.Client;
@@ -13,6 +12,7 @@ import kz.greetgo.sandbox.db.stand.beans.ClientDb;
 import kz.greetgo.sandbox.db.stand.beans.StandDb;
 
 import java.io.File;
+import java.lang.reflect.Array;
 import java.nio.file.Path;
 import java.util.*;
 
@@ -27,9 +27,10 @@ public class ClientRegisterStand implements ClientRegister {
 
 	public BeanGetter<StandDb> db;
 	public BeanGetter<ClientDb> cdb;
+	public ClientFilter filter = new ClientFilter();
 	public double page = 1;
-	public int pageList =0;
-	public int countList =10;
+	public int pageList = 0;
+	public int countList = 10;
 	public int maxPageList;
 
 	@Override
@@ -46,26 +47,35 @@ public class ClientRegisterStand implements ClientRegister {
 		return client;
 
 	}
+
 	@Override
 	public Collection<ClientRecord> clientList() {
-		maxPageList=cdb.get().client.size();
+
 		List<ClientRecord> list = new ArrayList<>();
-		int i =0;
+		//MAXPAGELIST в онгИНИТЕ
+		maxPageList = (cdb.get().client.size() / countList);
+
+		int i = 0;
+
 		for (Map.Entry<Integer, Client> cl : cdb.get().client.entrySet()) {
-			if(i==countList*(pageList+1)) break;
-			if(cdb.get().client.size()==i) break;
-			if(i>= pageList*countList){
-			ClientRecord clientRecord = new ClientRecord();
-			clientRecord.id=cl.getValue().id;
-			clientRecord.firstname=cl.getValue().firstname;
-			clientRecord.lastname=cl.getValue().lastname;
-			clientRecord.patronymic=cl.getValue().patronymic;
-			clientRecord.character=cl.getValue().character;
-			clientRecord.dateOfBirth=cl.getValue().dateOfBirth;
-			clientRecord.totalAccountBalance=cl.getValue().totalAccountBalance;
-			clientRecord.maximumBalance=cl.getValue().maximumBalance;
-			clientRecord.minimumBalance=cl.getValue().minimumBalance;
-			list.add(clientRecord);}
+
+			if (i == countList * (pageList + 1)) break;
+
+			if (cdb.get().client.size() == i) break;
+
+			if (i >= pageList * countList) {
+				ClientRecord clientRecord = new ClientRecord();
+				clientRecord.id = cl.getValue().id;
+				clientRecord.firstname = cl.getValue().firstname;
+				clientRecord.lastname = cl.getValue().lastname;
+				clientRecord.patronymic = cl.getValue().patronymic;
+				clientRecord.character = cl.getValue().character;
+				clientRecord.dateOfBirth = cl.getValue().dateOfBirth;
+				clientRecord.totalAccountBalance = cl.getValue().totalAccountBalance;
+				clientRecord.maximumBalance = cl.getValue().maximumBalance;
+				clientRecord.minimumBalance = cl.getValue().minimumBalance;
+				list.add(clientRecord);
+			}
 			i++;
 		}
 		return list;
@@ -176,10 +186,10 @@ public class ClientRegisterStand implements ClientRegister {
 
 	@Override
 	public Collection<Client> addUserInfo(Client client) {
-		if(client.firstname==""){return null;}
+		if (client.firstname == "") {return null;}
 
 		List<Client> list = new ArrayList<>();
-		Client c = new Client();
+		/*Client c = new Client();
 		c.firstname = client.firstname;
 		c.lastname = client.lastname;
 		c.patronymic = client.patronymic;
@@ -196,7 +206,7 @@ public class ClientRegisterStand implements ClientRegister {
 
 		for (Map.Entry<Integer, Client> cl : cdb.get().client.entrySet()) {
 			list.add(cl.getValue());
-		}
+		}*/
 
 
 		return list;
@@ -206,7 +216,7 @@ public class ClientRegisterStand implements ClientRegister {
 	@Override
 	public Collection<Client> editUserInfo(Client edit) {
 		List<Client> list = new ArrayList<>();
-		Client c = new Client();
+		/*Client c = new Client();
 		Client.setCounter();
 		c.id = edit.id;
 		c.firstname = edit.firstname;
@@ -225,7 +235,7 @@ public class ClientRegisterStand implements ClientRegister {
 
 		for (Map.Entry<Integer, Client> cl : cdb.get().client.entrySet()) {
 			list.add(cl.getValue());
-		}
+		}*/
 
 
 		return list;
@@ -270,73 +280,173 @@ public class ClientRegisterStand implements ClientRegister {
 	}
 
 
-
 	@Override
 	public List<String> getCharacter() {
 		return cdb.get().character;
 	}
 
 	@Override
-	public Collection<ClientRecord> clientFilter(ClientFilter clientFilter) {
+	public ClientFilter clientListSet() {
 
-		List<ClientRecord> list = new ArrayList<ClientRecord>();
-		if(clientFilter.offSet >= maxPageList){
-			pageList=maxPageList;
-			}
-		else {
+		return null;
+	}
+
+	@Override
+	public ClientRecord clientDetailsSave(ClientDetails clientDetails) {
+		List<ClientRecord> list = new ArrayList<>();
+		List<Client> listClient = new ArrayList<>();
+		Client c = new Client();
+
+		ClientRecord rec = new ClientRecord();
+		c.firstname = clientDetails.firstname;
+		c.lastname = clientDetails.lastname;
+		c.patronymic = clientDetails.patronymic;
+//		c.gender =  clientDetails.gender;
+		c.dateOfBirth = clientDetails.dateOfBirth;
+		c.character = clientDetails.character.name;
+		c.addressOfRegistration = rndAddress(clientDetails.addressOfRegistration);
+		c.addressOfResidence = rndAddress(clientDetails.addressOfResidence);
+		cdb.get().client.put(cdb.get().client.size(), c);
+
+		rec.minimumBalance = c.minimumBalance ;
+		rec.firstname =c.firstname;
+		list.add(rec);
+		/*for (Map.Entry<Integer, Client> cl : cdb.get().client.entrySet()) {
+			list.add(cl.getValue());
+		}
+
+		return list;*/
+
+		return rec;
+	}
+
+	@Override
+	public Collection<ClientRecord> clientFilter(ClientFilter clientFilter) {
+		List<ClientRecord> list = new ArrayList<>();
+		if (clientFilter.offSet > maxPageList) {
+			filter.offSet = maxPageList;
+			return list;
+		} else {
 			//Eto ya dolzhen otpravit' v ngOnInit
 			pageList = clientFilter.offSet;
-			}
-		int i =0;
+
+			filter.offSet = clientFilter.offSet;
+			filter.orderBy = clientFilter.orderBy;
+			filter.sort = clientFilter.sort;
+			filter.lastname = clientFilter.lastname;
+			filter.firstname = clientFilter.firstname;
+			filter.patronymic = clientFilter.patronymic;
+		}
+		int i = 0;
 
 		for (Map.Entry<Integer, Client> cl : cdb.get().client.entrySet()) {
-			if(i==countList*(pageList+1)) break;
-			if(cdb.get().client.size()==i) break;
-			if(i>pageList*countList){
-			ClientRecord clientRecord = new ClientRecord();
-			clientRecord.id=cl.getValue().id;
-			clientRecord.firstname=cl.getValue().firstname;
-			clientRecord.lastname=cl.getValue().lastname;
-			clientRecord.patronymic=cl.getValue().patronymic;
-			clientRecord.character=cl.getValue().character;
-			clientRecord.dateOfBirth=cl.getValue().dateOfBirth;
-			clientRecord.totalAccountBalance=cl.getValue().totalAccountBalance;
-			clientRecord.maximumBalance=cl.getValue().maximumBalance;
-			clientRecord.minimumBalance=cl.getValue().minimumBalance;
-			list.add(clientRecord);}
+			if (i == countList * (pageList + 1)) break;
+			if (cdb.get().client.size() == i) break;
+			if (i > pageList * countList - 1) {
+				ClientRecord clientRecord = new ClientRecord();
+				clientRecord.id = cl.getValue().id;
+				clientRecord.firstname = cl.getValue().firstname;
+				clientRecord.lastname = cl.getValue().lastname;
+				clientRecord.patronymic = cl.getValue().patronymic;
+				clientRecord.character = cl.getValue().character;
+				clientRecord.dateOfBirth = cl.getValue().dateOfBirth;
+				clientRecord.totalAccountBalance = cl.getValue().totalAccountBalance;
+				clientRecord.maximumBalance = cl.getValue().maximumBalance;
+				clientRecord.minimumBalance = cl.getValue().minimumBalance;
+				list.add(clientRecord);
+			}
 			i++;
-
 		}
 
-		switch(clientFilter.orderBy) {
+		switch (clientFilter.orderBy) {
 			case "firstname":
-				list.sort(new ClientRecord.SortedByFirstname());
+				list.sort(new ClientRegisterStand.SortedByFirstname(clientFilter.sort));
+				break;
+			case "character":
+				list.sort(new ClientRegisterStand.SortedByCharacter(clientFilter.sort));
 				break;
 		}
-		System.out.println(list);
-		return list;
+
+		if (!clientFilter.firstname.equals("") || !clientFilter.lastname.equals("") || !clientFilter.patronymic.equals("")) {
+
+
+			List<ClientRecord> list1 = new ArrayList<>();
+			ClientRecord clientRecord = new ClientRecord();
+			clientRecord.firstname = clientFilter.firstname;
+			clientRecord.lastname = clientFilter.lastname;
+			clientRecord.patronymic = clientFilter.patronymic;
+
+			for (ClientRecord clientRecord1 : list) {
+				if (clientRecord1.firstname.equals(clientRecord.firstname)
+					&& (clientRecord1.lastname.equals(clientRecord.lastname) || clientFilter.lastname.isEmpty())
+					&& (clientRecord1.patronymic.equals(clientRecord.patronymic) || clientFilter.patronymic.isEmpty())) {
+					System.out.println("done");
+					list1.add(clientRecord1);
+
+				} else {
+					System.out.println("NOT FOUND");
+				}
+			}
+			return list1;
+		} else {
+			System.out.println(list);
+			return list;
+		}
+
 	}
 
 
-
-
-	private Address rndAddress(Address add) {
+	private Address rndAddress(ClientAddr add) {
 		Address address = new Address();
 		address.street = add.street;
-		address.home = add.home;
-		address.apartment = add.apartment;
+		address.home = add.house;
+		address.apartment = add.flat;
 		return address;
 
 	}
 
-	private Phone rndPhone(Phone ph) {
-		Phone phone = new Phone();
-		phone.home = ph.home;
-		phone.work = ph.work;
-		phone.mobile1 = ph.mobile1;
-		phone.mobile2 = ph.mobile2;
-		phone.mobile3 = ph.mobile3;
-		return phone;
+
+	// теперь собственно реализуем интерфейс Comparator, для сортировки по названию
+	public static class SortedByFirstname implements Comparator<ClientRecord> {
+
+		private boolean sort;
+
+		public SortedByFirstname(boolean sort) {
+			this.sort = sort;
+		}
+
+		public int compare(ClientRecord obj1, ClientRecord obj2 ) {
+
+			String str1 = obj1.firstname + obj1.lastname;
+			String str2 = obj2.firstname + obj2.lastname;
+			if(sort)
+				return str1.compareTo(str2);
+			else {
+				return str2.compareTo(str1);
+			}
+		}
+
+	}
+	// теперь собственно реализуем интерфейс Comparator, для сортировки по названию
+	public static class SortedByCharacter implements Comparator<ClientRecord> {
+
+		private boolean sort;
+
+		public SortedByCharacter(boolean sort) {
+			this.sort = sort;
+		}
+
+		public int compare(ClientRecord obj1, ClientRecord obj2 ) {
+
+			String str1 = obj1.character;
+			String str2 = obj2.character;
+			if(sort)
+				return str1.compareTo(str2);
+			else {
+				return str2.compareTo(str1);
+			}
+		}
+
 	}
 
 

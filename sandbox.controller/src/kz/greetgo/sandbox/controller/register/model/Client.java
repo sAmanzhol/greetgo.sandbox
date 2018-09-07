@@ -1,6 +1,8 @@
 package kz.greetgo.sandbox.controller.register.model;
 
 
+import kz.greetgo.sandbox.controller.model.GenderType;
+
 import java.util.Comparator;
 import java.util.Date;
 
@@ -195,13 +197,6 @@ public class Client  {
         this.patronymic = patronymic;
     }
 
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
 
     public String getDateOfBirth() {
         return dateOfBirth;

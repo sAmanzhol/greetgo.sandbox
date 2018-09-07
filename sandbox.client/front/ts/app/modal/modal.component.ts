@@ -9,6 +9,7 @@ import {ClientDetails} from "../../model/ClientDetails";
 import {Client} from "../../model/Client";
 import {ClientFilter} from "../../model/ClientFilter";
 import {ClientRecord} from "../../model/ClientRecord";
+import {GenderType} from "../../model/GenderType";
 
 @Component({
   selector: 'app-modal',
@@ -21,16 +22,44 @@ export class ModalComponent implements OnInit {
 
   clientFilter:ClientFilter=new ClientFilter();
   clientRecord:Array<ClientRecord>=new Array<ClientRecord>();
-
+  clientDetails:ClientDetails = new ClientDetails();
   tmpClient: Client;
   formClientParameters: Client = new Client();
   cloneFormClientParameters: Client = new Client();
+  genders:GenderType[] = [GenderType.MALE,GenderType.FEMALE];
+
+
+
+  getClientFilter(){
+    var self = this;
+    this.http.get('/client/client-filter-set')
+      .subscribe(data => {
+        console.log('TADAM')
+         self.clientFilter.assign(data.json());
+
+      })
+  }
 
   getClientFilterFilter() {
     let self = this;
+    var clientRec:ClientRecord = new ClientRecord();
+    var clientRecs:Array<ClientRecord> = new Array<ClientRecord>();
+    var dates=[];
     this.http.get('/client/client-filter',{clientFilter:JSON.stringify(self.clientFilter)})
-  }
+      .subscribe(data => {
+        dates = data.json();
+          for (let i = 0; i < dates.length; i++) {
+            clientRec = dates[i];
+            clientRecs.push(clientRec);
+          }
+          self.clientRecord = clientRecs;
+          console.log(self.clientRecord.length);
 
+      })
+    self.getClientFilter();
+
+
+  }
   getClientFilterSort(orderBy:string,sort:boolean){
     let self = this;
     this.clientFilter.orderBy=orderBy;
@@ -39,18 +68,20 @@ export class ModalComponent implements OnInit {
       var clientRecs:Array<ClientRecord> = new Array<ClientRecord>();
       var dates=[];
     this.http.get('/client/client-filter',{clientFilter:JSON.stringify(self.clientFilter)})
-        .subscribe(data => {
-           dates = data.json();
-           for(let i =0; i<dates.length;i++){
-             clientRec=dates[i];
-             console.log(clientRec.id + " PRIMITIVE")
-             clientRecs.push(clientRec);
-            console.log(clientRecs[i].id + " ARRAY")
-           }
-           self.clientRecord = clientRecs;
-            console.log(self.clientRecord.length);
-
-        })
+      .subscribe(data => {
+        dates = data.json();
+        if(dates.length ==0){
+          self.clientFilter.offSet = self.clientFilter.offSet-1;
+        }
+        else {
+          for (let i = 0; i < dates.length; i++) {
+            clientRec = dates[i];
+            clientRecs.push(clientRec);
+          }
+          self.clientRecord = clientRecs;
+          console.log(self.clientRecord.length);
+        }
+      })
   }
     getClientFilterPagination(offSet){
         let self = this;
@@ -58,7 +89,7 @@ export class ModalComponent implements OnInit {
         var clientRec:ClientRecord = new ClientRecord();
         var clientRecs:Array<ClientRecord> = new Array<ClientRecord>();
         let dates:ClientRecord[];
-        console.log(self.clientFilter.offSet);
+        console.log(self.clientFilter.offSet + " IS OFFSET that i'm sending to Server");
         this.http.get('/client/client-filter',{clientFilter:JSON.stringify(self.clientFilter)})
             .subscribe(data => {
                 dates = data.json();
@@ -70,8 +101,9 @@ export class ModalComponent implements OnInit {
                         clientRec = dates[i];
                         clientRecs.push(clientRec);
                     }
+
                     self.clientRecord = clientRecs;
-                    console.log(self.clientRecord.length);
+
                 }
             })
     }
@@ -100,10 +132,6 @@ export class ModalComponent implements OnInit {
     patronymic: '',
   };
 // TODO: asset 9/4/18 sozdai ENUM
-  genders = {
-    male: 'Мужчина',
-    female: 'Женщина',
-  };
   characters = [];
 
 
@@ -115,12 +143,11 @@ export class ModalComponent implements OnInit {
 
 // TODO: asset 9/4/18 Uberi ne izpolzuimy peremennye USERSERVICE
   constructor(private http: HttpService) {
+
   }
 
   ngOnInit() {
     this.getClient();
-    this.pagination();
-    this.getCharacter();
 
   }
 
@@ -140,15 +167,16 @@ export class ModalComponent implements OnInit {
   };
 
   addClient() {
-    let forms: Client = new Client();
-    this.goRec(this.formClientParameters, forms);
-    console.log(forms);
-    this.http.get('/client/addUserInfo', {client: JSON.stringify((forms))}).subscribe(res => {
-      let ret: Client = res.json();
-      console.log(ret);
-      console.log("I!!!!!")
 
-    })
+    var self = this;
+  console.log(this.clientDetails);
+
+    this.http.get('/client/client-details-save', {clientDetails: JSON.stringify((self.clientDetails))})
+      .subscribe(res => {
+
+        console.log(res.json().firstname + "ITSSS ADDD")
+        this.clientRecord.push(res.json())
+      })
   }
 
 
@@ -260,84 +288,6 @@ export class ModalComponent implements OnInit {
   }
 
 
-  //ALL Function for PAGINATION
-  pagination() {
-
-    let pagin: number | string;
-    this.http.get("/client/pagination").toPromise().then(res => {
-      pagin = res.text();
-      console.log('lololol');
-      pagin = Number(pagin);
-      console.log(pagin);
-      for (let i = 0; i < pagin; i++) {
-        this.pagins[i] = i;
-      }
-    })
-
-  }
-
-  changePagination(index) {
-
-    this.pagination();
-
-    console.log(index);
-    let self = this;
-
-    this.indexes.index = index;
-
-    this.http.get("/client/getPagination", this.indexes).map((response) => response.json())
-      .map(users => {
-        return users.map(u => {
-          return {
-            id: u.id,
-            firstname: u.firstname,
-            lastname: u.lastname,
-            patronymic: u.patronymic,
-            character: u.character,
-            dateOfBirth: u.dateOfBirth,
-            totalAccountBalance: u.totalAccountBalance,
-            maximumBalance: u.maximumBalance,
-            minimumBalance: u.minimumBalance,
-
-          }
-        })
-      }).subscribe((data) => {
-      self.clients = data;
-      console.log(self.clients)
-    })
-
-
-  }
-
-  rigthChangePagination() {
-    if (this.indexes.index == null) {
-      this.indexes.index = 0
-    }
-
-
-    if (this.indexes.index == this.pagins.length - 1) {
-      this.indexes.index = this.pagins.length - 1;
-    }
-    else {
-      ++this.indexes.index;
-    }
-    this.changePagination(this.indexes.index)
-  }
-
-  leftChangePagination() {
-    if (this.indexes.index == null) {
-      this.indexes.index = 0
-    }
-
-    if (this.indexes.index == 0) {
-      this.indexes.index = 0;
-    }
-    else {
-      --this.indexes.index
-    }
-
-    this.changePagination(this.indexes.index)
-  }
 
 
   //SHOW FUNCTIONS I DON'T WHAT IS THAT
@@ -375,26 +325,10 @@ export class ModalComponent implements OnInit {
       self.formClientParameters = ret[0];
       console.log(ret[0].firstname);
       console.log(self.formClientParameters.addressOfRegistration);
-
     });
-
-
     this.editButtonOrAddButton = true;
-
   }
 
-//TODO UBRAAAATTTTT!!!!
-  testDebug() {
-    let test: ClientAsd = new ClientAsd();
-    test.name = "asdasd";
-    test.surname = "tttt";
-
-    this.http.post("/client/test-debug", {test: JSON.stringify(test)}).subscribe(res => {
-      let ret: ClientDetails = res.json();
-
-      console.log("ret.aaa: " + ret.firstname + ", ret.sss: " + ret.lastname);
-    });
-  }
 
 }
 

@@ -6,5 +6,6 @@ export class ClientPhone {
 
   constructor(){
     this.number='';
+    this.type=PhoneType.WORK
   }
 }

@@ -41,6 +41,7 @@ public class ClientController implements Controller {
 	}
 
 
+
 	@ToJson
 
 	@Mapping("/getFilter")
@@ -127,11 +128,25 @@ public class ClientController implements Controller {
 	}
 
 	@ToJson
-	@NoSecurity
 	@Mapping("/client-filter")
 	public Collection<ClientRecord> clientFilter(@Par("clientFilter") @Json ClientFilter clientFilter){
 		System.out.println(clientFilter);
 		return clientRegister.get().clientFilter(clientFilter);
+	}
+
+	@ToJson
+	@NoSecurity
+	@Mapping("/client-filter-set")
+	// TODO: asset 9/4/18 List<Asd> i imena Mappingov dolzhno sovpodat s imenem methoda dlya chitablenosti
+	public ClientFilter clientListSet() {
+		System.out.println("CLIENTFILTER FILTER");
+		return clientRegister.get().clientListSet();
+	}
+	@ToJson
+	@NoSecurity
+	@Mapping("/client-details-save")
+	public ClientRecord clientDetailsSave( @Par("clientDetails")@Json ClientDetails clientDetails) {
+		return clientRegister.get().clientDetailsSave(clientDetails);
 	}
 
 
