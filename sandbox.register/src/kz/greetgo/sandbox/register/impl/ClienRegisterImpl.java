@@ -19,6 +19,7 @@ public class ClienRegisterImpl implements ClientRegister {
     List<Character> characters = null;
     List<Gender> genders = null;
 
+
     public void createClients() {
 
         clients = new ArrayList<>();
@@ -86,7 +87,7 @@ public class ClienRegisterImpl implements ClientRegister {
         if(clients != null){
             for(Client client : clients){
                 if(client.id == id){
-                    clientDetail = new ClientDetail(client.surname, client.name, client.patronymic, null, null, client.character, null, client.actualAddress, client.registrationAddress, client.phones, client.id);
+                    clientDetail = new ClientDetail(client.surname, client.name, client.patronymic, client.gender, genders, client.character, characters, client.actualAddress, client.registrationAddress, client.phones, client.id);
                 }
             }
         }

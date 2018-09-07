@@ -1,4 +1,4 @@
-<h2 mat-dialog-title>Install Angular</h2>
+<h2 mat-dialog-title>Редактирование</h2>
 <mat-dialog-content class="mat-typography">
 
 
@@ -8,55 +8,59 @@
     </mat-form-field>
     <br>
     <mat-form-field appearance="legacy">
-      <mat-label>Фамилия</mat-label>
-      <input matInput placeholder="{{clientDetailService.clientDetail.name}}" value="{{clientDetailService.clientDetail.surname}}">
+      <mat-label>Имя</mat-label>
+      <input matInput placeholder="{{clientDetailService.clientDetail.name}}" value="{{clientDetailService.clientDetail.name}}">
     </mat-form-field>
   <br>
     <mat-form-field appearance="legacy">
-      <mat-label>Фамилия</mat-label>
-      <input matInput placeholder="{{clientDetailService.clientDetail.patronymic}}" value="{{clientDetailService.clientDetail.surname}}">
+      <mat-label>Отчество</mat-label>
+      <input matInput placeholder="{{clientDetailService.clientDetail.patronymic}}" value="{{clientDetailService.clientDetail.patronymic}}">
     </mat-form-field>
   <br>
     <mat-form-field appearance="legacy">
-      <mat-label>Фамилия</mat-label>
-      <input matInput placeholder="{{clientDetailService.clientDetail}}" value="{{clientDetailService.clientDetail.surname}}">
+      <mat-label>Пол</mat-label>
+      <input matInput placeholder="{{clientDetailService.clientDetail.gender}}" value="{{clientDetailService.clientDetail.gender}}">
     </mat-form-field>
   <br>
     <mat-form-field appearance="legacy">
-      <mat-label>Фамилия</mat-label>
-      <input matInput placeholder="{{clientDetailService.clientDetail.name}}" value="{{clientDetailService.clientDetail.surname}}">
+      <mat-label>Дата рождения</mat-label>
+      <input matInput placeholder="dateOfBirth" value="0201014">
     </mat-form-field>
   <br>
-    <mat-form-field appearance="legacy">
-      <mat-label>Фамилия</mat-label>
-      <input matInput placeholder="{{clientDetailService.clientDetail.name}}" value="{{clientDetailService.clientDetail.surname}}">
-    </mat-form-field>
-  <br>
-    <mat-form-field appearance="legacy">
-      <mat-label>Фамилия</mat-label>
-      <input matInput placeholder="{{clientDetailService.clientDetail.name}}" value="{{clientDetailService.clientDetail.surname}}">
-    </mat-form-field>
-  <br>
-    <mat-form-field appearance="legacy">
-      <mat-label>Фамилия</mat-label>
-      <input matInput placeholder="{{clientDetailService.clientDetail.name}}" value="{{clientDetailService.clientDetail.surname}}">
-    </mat-form-field>
-  <br>
-    <mat-form-field appearance="legacy">
-      <mat-label>Фамилия</mat-label>
-      <input matInput placeholder="{{clientDetailService.clientDetail.name}}" value="{{clientDetailService.clientDetail.surname}}">
-    </mat-form-field>
-  <br>
-    <mat-form-field appearance="legacy">
-      <mat-label>Фамилия</mat-label>
-      <input matInput placeholder="{{clientDetailService.clientDetail.name}}" value="{{clientDetailService.clientDetail.surname}}">
-    </mat-form-field>
-  <br>
-    <mat-form-field appearance="legacy">
-      <mat-label>Фамилия</mat-label>
-      <input matInput placeholder="{{clientDetailService.clientDetail.name}}" value="{{clientDetailService.clientDetail.surname}}">
-    </mat-form-field>
+  <mat-form-field>
+    <mat-label>Характер</mat-label>
+    <mat-select required>
+      <mat-option *ngFor="let r of clientDetailService.clientDetail.character" value="{{r.characterType}}">{{r.characterTypeRuss}}</mat-option>
+    </mat-select>
+    <mat-label>{{clientDetailService.clientDetail.character.characterTypeRuss}}</mat-label>
+  </mat-form-field>
 
+
+
+
+
+<!--<p>Адрес проживания</p>-->
+  <!--<mat-form-field appearance="legacy">-->
+      <!--<mat-label>Улица</mat-label>-->
+      <!--<input matInput placeholder="{{clientDetailService.clientDetail.actualAddress.street}}" value="{{{{clientDetailService.clientDetail.actualAddress.street}}">-->
+    <!--</mat-form-field>-->
+    <!--<mat-form-field appearance="legacy">-->
+      <!--<mat-label>Дом</mat-label>-->
+      <!--<input matInput placeholder="{{clientDetailService.clientDetail.actualAddress.house}}" value="{{clientDetailService.clientDetail.actualAddress.house}}">-->
+    <!--</mat-form-field>-->
+    <!--<mat-form-field appearance="legacy">-->
+      <!--<mat-label>Квартира</mat-label>-->
+      <!--<input matInput placeholder="{{clientDetailService.clientDetail.actualAddress.apartment}}" value="{{clientDetailService.clientDetail.actualAddress.apartment}}">-->
+    <!--</mat-form-field>-->
+
+
+  <!--<br>-->
+    <!--<mat-form-field appearance="legacy">-->
+      <!--<mat-label>Телефоны</mat-label>-->
+      <!--<input  *ngFor="let r of clientDetailService.clientDetail.phones" matInput placeholder="{{r.phoneType}}" value="{{r.number}}">-->
+    <!--</mat-form-field>-->
+  <!--<br>-->
+  <!---->
 
   <p>
   <mat-form-field>
