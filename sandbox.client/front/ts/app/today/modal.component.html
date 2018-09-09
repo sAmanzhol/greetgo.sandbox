@@ -1,0 +1,303 @@
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+
+<div class="container">
+    <!--first row-->
+    <div class="row">
+
+
+        <!--work filter-->
+        <div class="col s12 ">
+
+            <div class="col s3">
+                <input id="filterFirstname" [(ngModel)]="clientFilter.firstname">
+                <label for="filterFirstname">Поиск по Имени</label>
+            </div>
+
+            <div class="col s3">
+                <input id="filterLastname" [(ngModel)]="clientFilter.lastname">
+                <label for="filterLastname">Поиск по Фамилии</label>
+            </div>
+
+            <div class="col s3">
+                <input id="filterPatronymic" [(ngModel)]="clientFilter.patronymic">
+                <label for="filterPatronymic">Поиск по Отчеству</label>
+            </div>
+
+
+            <div class="col s3">
+                <a class="waves-effect waves-light btn icon material-icons" (click)="getClientFilterFilter()">search</a>
+            </div>
+
+        </div>
+        <!--work filter-->
+
+
+        <!--table-->
+        <div class="col s10">
+            <table class="centered">
+                <thead>
+                <tr class="card-panel teal lighten-2">
+                    <th (click)="getClientFilterSort('firstname',clientFilter.sort)">ФИО</th>
+                    <th (click)="getClientFilterSort('character',clientFilter.sort)">Характер</th>
+                    <th (click)="getClientFilterSort('dateOfBirth',clientFilter.sort)">возраст</th>
+                    <th (click)="getClientFilterSort('totalAccountBalance',clientFilter.sort)">общий остаток счетов</th>
+                    <th (click)="getClientFilterSort('maximumBalance',clientFilter.sort)">максимальный остаток</th>
+                    <th (click)="getClientFilterSort('minimumBalance',clientFilter.sort)">минимальный остаток</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let client of clientRecord; first as isFirst" [class.mark]="clientMark === client"
+                    (click)="getMarkClient(client)">
+                    <td>{{client.firstname}} {{client.lastname}} {{client.patronymic}}</td>
+                    <td>{{client.character.name}}</td>
+                    <td>{{client.dateOfBirth}}</td>
+                    <td>{{client.totalAccountBalance}}</td>
+                    <td>{{client.maximumBalance}}</td>
+                    <td> {{client.minimumBalance}}</td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+        <!--table-->
+
+
+        <!--button-->
+        <div class="col s2">
+
+        <div class="col s12">
+        <a class="waves-effect waves-light btn material-icons " href="#openModal" (click)="showAddForm()">add</a>
+        </div>
+        <br><br>
+        <div class="col s12" *ngIf="!clientChoose ">
+        <button class="waves-effect waves-light btn material-icons " [disabled]="!clientChoose">more_horiz</button>
+        </div>
+        <div class="col s12" *ngIf="clientChoose ">
+        <a class="waves-effect waves-light btn material-icons " href="#openModal" (click)="showEditForm()">more_horiz</a>
+        </div>
+        <br><br>
+        <div class="col s12">
+        <button class="waves-effect waves-light btn material-icons " [disabled]="!clientChoose" (click)="deleteClient()">remove
+        </button>
+        </div>
+
+
+        </div>
+        <!--button-->
+
+        <!--pagination-->
+        <div class="col s10">
+            <div class="col s1">
+                <button class="waves-effect waves-light btn" [disabled]="clientFilter.page <= 0"
+                        (click)="getClientFilterPagination(clientFilter.page-1)"><<
+                </button>
+            </div>
+
+            <div class="col s3">
+
+            </div>
+
+            <div class="col s7">
+                <div class="col s1">
+                    <a class="waves-effect waves-light btn" (click)="getClientFilterPagination(0)">
+                        {{1}}</a>
+                </div>
+                <div class="col s1"></div>
+                <div class="col s1">
+                    <a class="waves-effect waves-light btn" (click)="getClientFilterPagination(clientFilter.page)">
+                        {{clientFilter.page+1}}</a>
+                </div>
+                <div class="col s1"></div>
+                <div class="col s1">
+                    <a class="waves-effect waves-light btn" (click)="getClientFilterPagination(clientFilter.pageTotal)">
+                        {{clientFilter.pageTotal+1}}</a>
+                </div>
+                <div class="col s1"></div>
+                <div class="col s4">
+                    <label>Размер Страницы</label>
+                    <select class="form-control" name="recordSize"  (change)="getClientFilterFilter()" [(ngModel)]="clientFilter.recordSize">
+                        <option  value="10">10</option>
+                        <option (keyup)="getClientFilterFilter()" value="20">20</option>
+                        <option (keyup)="getClientFilterFilter()" value="25">25</option>
+                        <option (keyup)="getClientFilterFilter()" value="50">50</option>
+                    </select>
+
+                </div>
+
+            </div>
+
+            <div class="col s1">
+                <a class="waves-effect waves-light btn" (click)="getClientFilterPagination(clientFilter.page+1)"> >></a>
+            </div>
+        </div>
+        <!--pagination-->
+
+        <!--modal form-->
+        <div id="openModal" class="modalDialog z-depth-5 ">
+        <div>
+        <a href="#close" title="Закрыть" class="close">X</a>
+
+        <div class="container">
+        <div class="row">
+
+        <div class="col s4">
+        <input id="firstname" type="text" [(ngModel)]="clientDetails.firstname" #firstname="ngModel"
+        required pattern="[A-Za-zА-Яа-яЁё]{1,}" />
+        <label for="firstname">Фамилия</label>
+        </div>
+
+        <div class="col s4">
+        <input id="lastname" type="text" [(ngModel)]="clientDetails.lastname" #lastname="ngModel"
+        required />
+        <label for="lastname">Имя</label>
+        </div>
+        <div class="col s4">
+        <input id="patronymic" type="text" [(ngModel)]="clientDetails.patronymic" #patronymic="ngModel"
+        required/>
+        <label for="patronymic">Отчество</label>
+        </div>
+        <div *ngIf="firstname.invalid || lastname.invalid " class="alert alert-danger">
+        не заполнено поле
+        </div>
+
+        </div>
+        <div>
+        <div>
+        Пол:
+        </div>
+        <p>
+        <label>
+        <input name="group1" type="radio" checked [value]="genders[0]" [(ngModel)]="clientDetails.gender"   #gender1 ="ngModel" required/>
+        <span>Мужчина</span>
+        </label>
+        <label>
+        <input name="group1" type="radio" [value]="genders[1]" [(ngModel)]="clientDetails.gender" #gender2 ="ngModel"  required />
+        <span>Женщина</span>
+        </label>
+        </p>
+        <div *ngIf="gender2.invalid" class="alert alert-danger">
+        не заполнено поле
+        </div>
+        </div>
+
+        <input id="dateOfBirth" type="date" [(ngModel)]="clientDetails.dateOfBirth"  #date="ngModel" required />
+        <label for="dateOfBirth">Дата Рождения</label>
+        <div *ngIf="date.invalid " class="alert alert-danger">
+        не заполнено поле
+        </div>
+
+        <select class="form-control" name="company" [(ngModel)]="clientDetails.character.id"  #charater="ngModel" required>
+        <option *ngFor="let character of charm" [value]="character.id">
+        {{character.name}}
+        </option>
+        </select>
+        <label>Характер</label>
+        <div *ngIf="charater.untouched && charater.pristine" class="alert alert-danger">
+        не заполнено поле
+        </div>
+
+        <div class="row">
+        <div class="col s12">
+        <p>
+        Адрес проживания (фактический)
+        </p>
+
+        </div>
+        <div class="col s4">
+        <input id="addressOfResidenceStreet" type="text"
+        [(ngModel)]="clientDetails.addressOfResidence.street">
+        <label for="addressOfResidenceStreet">Улица</label>
+        </div>
+        <div class="col s4">
+        <input id="addressOfResidenceHome" type="text" [(ngModel)]="clientDetails.addressOfResidence.house">
+        <label for="addressOfResidenceHome">Дом</label>
+        </div>
+        <div class="col s4">
+        <input id="addressOfResidenceApartment" type="text"
+        [(ngModel)]="clientDetails.addressOfResidence.flat">
+        <label for="addressOfResidenceApartment">Квартира</label>
+        </div>
+        </div>
+
+        <div class="row">
+        <div class="col s12">
+        <p>
+        Адрес регистрации *
+        </p>
+        </div>
+        <div class="col s4">
+
+        <input id="addressOfRegistrationStreet" type="text"
+        [(ngModel)]="clientDetails.addressOfRegistration.street"  #addressOfRegistrationStreet="ngModel" required />
+        <label for="addressOfRegistrationStreet">Улица</label>
+        </div>
+        <div class="col s4">
+
+        <input id="addressOfRegistrationHome" type="text"
+        [(ngModel)]="clientDetails.addressOfRegistration.house" #addressOfRegistrationHome="ngModel" required />
+        <label for="addressOfRegistrationHome">Дом</label>
+        </div>
+        <div class="col s4">
+        <input id="addressOfRegistrationApartment" type="text"
+        [(ngModel)]="clientDetails.addressOfRegistration.flat" #addressOfRegistrationApartment="ngModel" required/>
+        <label for="addressOfRegistrationApartment">Квартира</label>
+        </div>
+        <div *ngIf="addressOfRegistrationStreet.invalid || addressOfRegistrationHome.invalid || addressOfRegistrationApartment.invalid " class="alert alert-danger">
+        не заполнено поле
+        </div>
+
+
+        </div>
+
+        <div class="row">
+        <!--<div class="col s12">-->
+        <!--<p>-->
+        <!--Телефоны (один мобильный обязателен)-->
+        <!--</p>-->
+        <!--</div>-->
+
+        <!--<input id="phoneHome" type="text" [(ngModel)]="clientDetails.phone[0].number" maxlength="10" #phoneHome="ngModel" required />-->
+        <!--<label for="phoneHome">Домашний</label>-->
+        <!--<div *ngIf="phoneHome.invalid " class="alert alert-danger">-->
+        <!--не заполнено поле-->
+        <!--</div>-->
+
+        </div>
+
+
+        <div class="row">
+        <div class="col col-sm-12">
+        <button class="waves-effect waves-light btn" [disabled]="firstname.invalid || (gender1.invalid || gender2.invalid) || date.invalid
+        || charater.invalid  || addressOfRegistrationStreet.invalid || addressOfRegistrationHome.invalid || addressOfRegistrationApartment.invalid"
+        *ngIf="editButtonOrAddButton"
+        (click)="addClient()"> add new client
+        </button>
+        </div>
+        <div class="col col-sm-12">
+        <button class="waves-effect waves-light btn" [disabled]="firstname.invalid || (gender1.invalid || gender2.invalid) || date.invalid
+        || charater.invalid  || addressOfRegistrationStreet.invalid || addressOfRegistrationHome.invalid || addressOfRegistrationApartment.invalid"
+        *ngIf="!editButtonOrAddButton"
+        (click)="editClient()"> edit client
+        </button>
+        </div>
+        </div>
+
+        </div>
+        </div>
+
+        </div>
+        </div>
+        <!--modal form-->
+
+
+        <!--first row-->
+
+
+    </div>
+
+
