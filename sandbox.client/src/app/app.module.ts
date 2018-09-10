@@ -13,13 +13,18 @@ import {TestComponent} from "./client-table/client-table.component";
 import {ClientDetailComponent} from "./client-detail/client-detail.component";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {
-  MatButtonModule, MatDialogModule, MatIconModule, MatInputModule, MatSelectModule,
+  MatButtonModule,
+  MatDatepickerModule,
+  MatDialogModule,
+  MatIconModule,
+  MatInputModule,
+  MatNativeDateModule,
+  MatSelectModule,
   MatTableModule
 } from "@angular/material";
-import {HttpModule} from "@angular/http";
 import {CustomCounterComponent} from "./client-detail/custom-counter-component";
-import { AddComponent } from './add/add.component';
-import { EditComponent } from './edit/edit.component';
+import {AddComponent} from "./add/add.component";
+import {EditComponent} from "./edit/edit.component";
 
 @NgModule({
   declarations: [
@@ -31,7 +36,7 @@ import { EditComponent } from './edit/edit.component';
     ClientDetailComponent,
     CustomCounterComponent,
     AddComponent,
-    EditComponent,
+    EditComponent
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   // exports: [],
@@ -46,7 +51,9 @@ import { EditComponent } from './edit/edit.component';
     MatTableModule,
     MatInputModule,
     MatSelectModule,
-    HttpModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+
   ],
   entryComponents: [ClientDetailComponent],
   providers: [HttpService, LoginService, ClientListService],

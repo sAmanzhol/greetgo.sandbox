@@ -6,6 +6,7 @@ import kz.greetgo.sandbox.controller.model.Character;
 import kz.greetgo.sandbox.controller.register.ClientRegister;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -47,11 +48,11 @@ public class ClienRegisterImpl implements ClientRegister {
         characters.add(extraversionCharacter);
         characters.add(neuroticismCharacter);
 
-
-        clients.add(new Client(1, "Sultanova", "Madina", "Mahammadnova", female, opennesCharacter, 20, 1000, 5, 5000, null, new Address("Mamyr-4", "311", 38), null));
-        clients.add(new Client(2, "Ajs", "Gvlv", "osoos", male,  agreeablenessCharacter, 7, 100, 0, 5, null, new Address("Mamyr-4", "311", 38), null));
-        clients.add(new Client(3, "Vsis", "Akkdd", "llsls", female, extraversionCharacter, 75, 100, 8, 5545, null, new Address("Mamyr-4", "311", 38), null));
-        clients.add(new Client(4, "Tllxlx", "Bodd", "lslslsl", male, neuroticismCharacter, 1, 100, 825, 574, null, new Address("Mamyr-4", "311", 38), null));
+        //Date d = new Date("1998-12-08");
+        clients.add(new Client(1, "Sultanova", "Madina", "Mahammadnova", female, "1998-12-08", opennesCharacter, 20, 1000, 5, 5000, null, new Address("Mamyr-4", "311", 38), phones));
+        clients.add(new Client(2, "Ajs", "Gvlv", "osoos", male, "1998-12-08", agreeablenessCharacter, 7, 100, 0, 5, null, new Address("Mamyr-4", "311", 38), phones));
+        clients.add(new Client(3, "Vsis", "Akkdd", "llsls", female, "1998-12-08", extraversionCharacter, 75, 100, 8, 5545, null, new Address("Mamyr-4", "311", 38), phones));
+        clients.add(new Client(4, "Tllxlx", "Bodd", "lslslsl", male, "1998-12-08", neuroticismCharacter, 1, 100, 825, 574, null, new Address("Mamyr-4", "311", 38), phones));
 
     }
 
@@ -84,10 +85,11 @@ public class ClienRegisterImpl implements ClientRegister {
     public ClientDetail getClienDetailById(long id) {
         ClientDetail clientDetail = null;
 
-        if(clients != null){
-            for(Client client : clients){
-                if(client.id == id){
-                    clientDetail = new ClientDetail(client.surname, client.name, client.patronymic, client.gender, genders, client.character, characters, client.actualAddress, client.registrationAddress, client.phones, client.id);
+        if (clients != null) {
+            for (Client client : clients) {
+                if (client.id == id) {
+                    clientDetail = new ClientDetail(client.surname, client.name, client.patronymic, client.gender, genders, client.birthDay, client.character, characters, client.actualAddress, client.registrationAddress, client.phones, client.id);
+                    //new ClientDetail(client.surname, client.name, client.patronymic, client.gender, genders, client.birthDay,  client.character, characters, client.actualAddress, client.registrationAddress, client.phones, client.id);
                 }
             }
         }
