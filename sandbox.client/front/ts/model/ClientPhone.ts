@@ -6,7 +6,7 @@ export class ClientPhone {
 
   constructor(){
     this.number='+7 7';
-    this.type=PhoneType.HOME
+    this.type=PhoneType.MOBILE
 
   }
   public assign(o:any):ClientPhone{

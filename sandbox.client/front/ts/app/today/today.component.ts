@@ -8,6 +8,8 @@ import {ClientFilter} from "../../model/ClientFilter";
 import {ClientDetails} from "../../model/ClientDetails";
 import {GenderType} from "../../model/GenderType";
 import {Charm} from "../../model/Charm";
+import {PhoneType} from "../../model/PhoneType";
+import {ClientPhone} from "../../model/ClientPhone";
 
 
 @Component({
@@ -28,12 +30,17 @@ export class TodayComponent implements OnInit {
     clientDetails: ClientDetails = new ClientDetails();
     genders: GenderType[] = [GenderType.MALE, GenderType.FEMALE];
     charm: Charm[] = [new Charm()];
+    phoneType:PhoneType[]= [PhoneType.HOME,PhoneType.WORK,PhoneType.MOBILE,PhoneType.EMBEDDED]
 
     ngOnInit() {
         this.getClient();
         this.getCharm();
     }
 
+    addNewPhone(){
+        this.clientDetails.phone.push(new ClientPhone());
+        console.log("DATAs");
+    }
 
     getMarkClient(clientRecord) {
         this.clientMark = clientRecord;
