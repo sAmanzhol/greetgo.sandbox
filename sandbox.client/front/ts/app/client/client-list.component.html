@@ -1,85 +1,46 @@
-<head>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+  <head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-</head>
+  </head>
 
-<div class="container">
-  <h1 class="center-align">Table of Clients</h1>
-  <!--first row-->
-  <div class="row">
-
-    <!--header -->
-    <div class="col s12">
-
-      <div class="col s9">
-        <h3 class="center-align">Фильтрация</h3>
-      </div>
-      <div class="col s3">
-        <h3>Кнопки</h3>
-      </div>
-
-    </div>
-    <!--header -->
+  <div class="container">
+    <!--first row-->
+    <div class="row">
 
 
     <!--work filter-->
-    <div class="col s9 ">
+    <div class="col s12 ">
 
-      <div class="row">
-        <div class="col s12">
+
+        <div class="col s3">
           <input id="filterFirstname" [(ngModel)]="searchFilter.firstname">
           <label for="filterFirstname">Поиск по Имени</label>
         </div>
-      </div>
 
-      <div class="row">
-        <div class="col s12">
+
+        <div class="col s3">
           <input id="filterLastname" [(ngModel)]="searchFilter.lastname">
           <label for="filterLastname">Поиск по Фамилии</label>
         </div>
-      </div>
-      <div class="row">
-        <div class="col s12">
+
+
+        <div class="col s3">
           <input id="filterPatronymic" [(ngModel)]="searchFilter.patronymic">
           <label for="filterPatronymic">Поиск по Отчеству</label>
         </div>
-      </div>
-      <div class="row">
-        <div class="col s12">
-          <a class="waves-effect waves-light btn " (click)="getFilter()"> filter</a>
+
+
+        <div class="col s3">
+          <a class="waves-effect waves-light btn icon material-icons" (click)="getFilter()">search</a>
         </div>
-      </div>
+
 
     </div>
     <!--work filter-->
 
-    <!--button-->
-    <div class="col s3">
 
-      <div class="col s12">
-        <a class="waves-effect waves-light btn" href="#openModal" (click)="showAddForm()"> Add</a>
-      </div>
-      <br><br>
-      <div class="col s12" *ngIf="!chooseClient ">
-        <button class="waves-effect waves-light btn" [disabled]="!chooseClient"> Edit</button>
-      </div>
-      <div class="col s12" *ngIf="chooseClient ">
-        <a class="waves-effect waves-light btn" href="#openModal" (click)="showEditForm()"> Edit</a>
-      </div>
-      <br><br>
-      <div class="col s12">
-        <button class="waves-effect waves-light btn" [disabled]="!chooseClient" (click)="deleteClient()"> Delete
-        </button>
-      </div>
-
-      <br><br>
-      <div class="col s12">
-        <button class="waves-effect waves-light btn" (click)="testDebug()"> Test debug</button>
-      </div>
-
-    </div>
-    <!--button-->
 
     <!--table-->
     <div class="col s10">
@@ -87,10 +48,10 @@
       <table class="centered">
         <thead>
         <tr class="card-panel teal lighten-2">
-          <th (click)="getHeadMarkClient(headMarkTable.firstname)">ФИО</th>
-          <th (click)="getHeadMarkClient(headMarkTable.character)">Характер</th>
-          <th (click)="getHeadMarkClient(headMarkTable.dateOfBirth)">возраст</th>
-          <th (click)="getHeadMarkClient(headMarkTable.totalAccountBalance)">общий остаток счетов</th>
+          <th (click)="getHeadMarkClient(headMarkTable.firstname)"  >ФИО</th>
+          <th (click)="getHeadMarkClient(headMarkTable.character )" >Характер</th>
+          <th (click)="getHeadMarkClient(headMarkTable.dateOfBirth)" >возраст</th>
+          <th (click)="getHeadMarkClient(headMarkTable.totalAccountBalance)" >общий остаток счетов</th>
           <th (click)="getHeadMarkClient(headMarkTable.maximumBalance)">максимальный остаток</th>
           <th (click)="getHeadMarkClient(headMarkTable.minimumBalance)">минимальный остаток</th>
         </tr>
@@ -110,6 +71,32 @@
 
     </div>
     <!--table-->
+      <!--button-->
+      <div class="col s2">
+
+        <div class="col s12">
+          <a class="waves-effect waves-light btn material-icons " href="#openModal" (click)="showAddForm()">add</a>
+        </div>
+        <br><br>
+        <div class="col s12" *ngIf="!chooseClient ">
+          <button class="waves-effect waves-light btn material-icons " [disabled]="!chooseClient">more_horiz</button>
+        </div>
+        <div class="col s12" *ngIf="chooseClient ">
+          <a class="waves-effect waves-light btn material-icons " href="#openModal" (click)="showEditForm()">more_horiz</a>
+        </div>
+        <br><br>
+        <div class="col s12">
+          <button class="waves-effect waves-light btn material-icons " [disabled]="!chooseClient" (click)="deleteClient()">remove
+          </button>
+        </div>
+
+        <br><br>
+        <div class="col s12">
+          <button class="waves-effect waves-light btn" (click)="testDebug()"> Test debug</button>
+        </div>
+
+      </div>
+      <!--button-->
 
     <!--pagination-->
     <div class="col s10">
@@ -129,7 +116,7 @@
               {{pag+1}}
             </a>
           </div>
-          <div class="col s3" *ngIf="i != 0 && i==indexes.index-1 && i != pagins.length-1">
+          <div class="col s3" *ngIf="i != 0 && i==indexes.index-1 && i != pagins.length-1 ">
             <a class="waves-effect waves-light btn" [id]="indexes.index" (click)="changePagination(pag)">
               -
             </a>
@@ -189,21 +176,20 @@
 
           </div>
           <div>
-
             <div>
               Пол:
             </div>
             <p>
               <label>
-                <input name="group1" type="radio" [value]="genders.male" [(ngModel)]="formClientParameters.gender" #gender1 ="ngModel" required />
+                <input name="group1" type="radio" checked [value]="genders.male" [(ngModel)]="formClientParameters.gender"   #gender1 ="ngModel" [checked]="genders.male"/>
                 <span>Мужчина</span>
               </label>
               <label>
-                <input name="group1" type="radio" [value]="genders.female" [(ngModel)]="formClientParameters.gender" #gender2 ="ngModel" required />
+                <input name="group1" type="radio" [value]="genders.female" [(ngModel)]="formClientParameters.gender" #gender2 ="ngModel"  required />
                 <span>Женщина</span>
               </label>
             </p>
-            <div *ngIf="gender1.invalid || gender2.invalid" class="alert alert-danger">
+            <div *ngIf="gender2.invalid" class="alert alert-danger">
               не заполнено поле
             </div>
           </div>
@@ -317,7 +303,8 @@
               </button>
             </div>
             <div class="col col-sm-12">
-              <button class="waves-effect waves-light btn"
+              <button class="waves-effect waves-light btn" [disabled]="firstname.invalid || (gender1.invalid || gender2.invalid) || date.invalid
+              || charater.invalid  || addressOfRegistrationStreet.invalid || addressOfRegistrationHome.invalid || addressOfRegistrationApartment.invalid"
                       *ngIf="editButtonOrAddButton"
                       (click)="editClient()"> edit client
               </button>

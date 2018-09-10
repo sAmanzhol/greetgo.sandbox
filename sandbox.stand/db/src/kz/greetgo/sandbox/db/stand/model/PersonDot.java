@@ -18,7 +18,6 @@ public class PersonDot {
     ret.surname = surname;
     ret.name = name;
     ret.patronymic = patronymic;
-    ret.phoneType = PhoneType.MOBILE;
     return ret;
   }
 

@@ -2,5 +2,5 @@ package kz.greetgo.sandbox.controller.model;
 
 
 
-public class ClientDetails {
+public class Charm {
 }

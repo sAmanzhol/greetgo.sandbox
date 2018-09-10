@@ -1,7 +1,7 @@
 package kz.greetgo.sandbox.controller.register.model;
 
 public  class Phone {
-    public int home;
+    public String home;
     public int work;
     public int mobile1;
     public int mobile2;
@@ -10,13 +10,7 @@ public  class Phone {
     public Phone() {
     }
 
-    public int getHome() {
-        return home;
-    }
 
-    public void setHome(int home) {
-        this.home = home;
-    }
 
     public int getWork() {
         return work;

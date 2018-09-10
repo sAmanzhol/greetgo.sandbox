@@ -2,75 +2,109 @@ package kz.greetgo.sandbox.db.stand.beans;
 
 import kz.greetgo.depinject.core.Bean;
 import kz.greetgo.depinject.core.HasAfterInject;
-import kz.greetgo.sandbox.controller.register.model.Address;
+import kz.greetgo.sandbox.controller.model.model.*;
 import kz.greetgo.sandbox.controller.register.model.Client;
-import kz.greetgo.sandbox.controller.register.model.Phone;
 import kz.greetgo.util.RND;
 
 import java.util.*;
 
 @Bean
 public class ClientDb implements HasAfterInject {
-    public Map<Integer, Client> client = new HashMap <Integer, Client>();
-    public static List<String> character = new ArrayList<>();
-
+    public Map<String, Client> client = new HashMap<String, Client>();
+    public List<Charm> charm = new ArrayList<>();
 
     @Override
     public void afterInject() throws Exception {
-
-        for(int i =0; i<10;i++){
-            character.add(RND.str(6));
-
+        for (int i = 0; i < 10; i++) {
+            Charm c = new Charm();
+            c.id = i;
+            c.energy = i + 10;
+            c.description = RND.str(10);
+            c.name = RND.str(10);
+            charm.add(c);
         }
-        for(int i=0;i<20;i++){
+        for (int i = 1; i <= 58; i++) {
             Client c = new Client();
-            c.id=client.size();
-            c.firstname=RND.str(8);
-            c.lastname=RND.str(8);
-            c.patronymic=RND.str(8);
-            c.gender=RND.str(8);
-            c.dateOfBirth=dateOfBirth();
-            c.character=RndCharacter();
-            c.setTotalAccountBalance(RND.plusInt(1000));
-            c.setMaximumBalance(RND.plusInt(1000));
-            c.setMinimumBalance(RND.plusInt(1000));
-            c.addressOfRegistration=rndAddress();
-            c.addressOfResidence=rndAddress();
-            c.phone =rndPhone();
-            client.put(i,c);
+            c.id = i;
+            c.firstname = "nazar";
+            c.lastname = RND.str(8);
+            c.patronymic = RND.str(8);
+            c.character = RndCharacter();
+            c.dateOfBirth = RndDateOfBirth();
+            c.totalAccountBalance = RND.plusInt(1000);
+            c.maximumBalance = RND.plusInt(1000);
+            c.minimumBalance = RND.plusInt(1000);
+            c.gender = GenderType.MALE;
+            c.addressOfResidence = rndAddress();
+            c.addressOfResidence.type = AddrType.FACT;
+            c.addressOfRegistration = rndAddress();
+            c.addressOfRegistration.type = AddrType.REG;
+            c.phone = rndPhoneClient();
+            client.put(RND.str(10),c);
+
+        }for (int i = 1; i <= 58; i++) {
+            Client c = new Client();
+            c.id = i;
+            c.firstname = "abu";
+            c.lastname = RND.str(8);
+            c.patronymic = RND.str(8);
+            c.character = RndCharacter();
+            c.dateOfBirth = RndDateOfBirth();
+            c.totalAccountBalance = RND.plusInt(1000);
+            c.maximumBalance = RND.plusInt(1000);
+            c.minimumBalance = RND.plusInt(1000);
+            c.gender = GenderType.MALE;
+            c.addressOfResidence = rndAddress();
+            c.addressOfResidence.type = AddrType.FACT;
+            c.addressOfRegistration = rndAddress();
+            c.addressOfRegistration.type = AddrType.REG;
+            c.phone = rndPhoneClient();
+            client.put(RND.str(10),c);
         }
 
-        Client.setCounter();
+
 
     }
 
-    private Address rndAddress() {
 
-        Address address = new Address();
-        address.street= RND.str(9);
-        address.home=RND.str(9);
-        address.apartment=RND.str(9);
+    public static ClientAddr rndAddress() {
+        ClientAddr address = new ClientAddr();
+        address.street = RND.str(9);
+        address.house = RND.str(9);
+        address.flat = RND.str(9);
         return address;
+    }
+
+    public static List<ClientPhone> rndPhoneClient() {
+        List<ClientPhone> list = new ArrayList<>();
+        ClientPhone phone = new ClientPhone();
+        for (int i = 0; i < 4; i++) {
+            phone.number = "+7" + (int) (Math.random() * 1000 + 100000);
+            phone.type = rndPhoneType(i);
+            list.add(phone);
+        }
+        return list;
+    }
+
+    public static PhoneType rndPhoneType(int i) {
+        List<PhoneType> list = new ArrayList<>();
+        list.add(PhoneType.HOME);
+        list.add(PhoneType.WORK);
+        list.add(PhoneType.MOBILE);
+        list.add(PhoneType.EMBEDDED);
+        return list.get(i);
 
     }
-    private Phone rndPhone(){
-        Phone phone =new Phone();
-        phone.home =RND.plusInt(100000000);
-        phone.work =RND.plusInt(100000000);
-        phone.mobile1 =RND.plusInt(100000000);
-        phone.mobile2 =RND.plusInt(100000000);
-        phone.mobile3 =RND.plusInt(100000000);
-        return phone;
+
+    public static String RndDateOfBirth() {
+        return (int) (Math.random() * 1000 + 1000) + "-" + (int) (Math.random() + 10) + "-" + (int) ((Math.random() + 10) + (Math.random() * 10) + 1);
     }
-    private String dateOfBirth(){
-        return (int) (Math.random() * 1000 + 1000) + "-"  + (int) (Math.random() + 10)  + "-"+ (int) ((Math.random() + 10)  + (Math.random() *10 ) + 1 );
-		}
 
-		private static String RndCharacter(){
+    public  Charm RndCharacter() {
 
-        int rand = (int) (Math.random()*9+1);
+        int rand = (int) (Math.random() * 9 + 1);
 
-        return character.get(rand);
+        return charm.get(rand);
     }
 
 

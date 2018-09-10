@@ -1,40 +1,57 @@
-import {Component, OnInit,} from "@angular/core";
-import {HttpService} from "../HttpService";
 import "rxjs/add/operator/catch";
 import "rxjs/add/operator/map";
 import "rxjs/add/operator/toPromise";
+import {Component, OnInit,} from "@angular/core";
+import {HttpService} from "../HttpService";
 import {UsersService} from "../users.service";
 import {ClientAsd} from "../../model/ClientAsd";
 import {ClientDetails} from "../../model/ClientDetails";
 import {Client} from "../../model/Client";
-// import {HeadMarkTable} from "../../model/HeadMarkTable";
-
+import {ClientFilter} from "../../model/ClientFilter";
 
 @Component({
-  selector: 'app-debug',
-  template: require('./debug.component.html'),
-  styles: [require('./debug.component.css')],
+  selector: 'client-list',
+  template: require('./client-list.component.html'),
+  styles: [require('./client-list.component.css')],
   providers: [UsersService],
 })
-// TODO: asset 9/4/18 Razdeli classy list i edit client ili customer
-export class DebugComponent implements OnInit {
+// TODO: asset 9/4/18 Razdeli componenty list i edit client ili customer
+export class ClientListComponent implements OnInit {
   tmpClient: Client;
-
   formClientParameters: Client = new Client();
-
   cloneFormClientParameters: Client = new Client();
 
-  headMarkTable: {
-    firsname:"firstname",
-    character:"character"
+  headMarkTable= {
+    firstname:"firstname",
+    character:"character",
+    dateOfBirth:'dateOfBirth',
+    totalAccountBalance:'totalAccountBalance',
+    minimumBalance:'minimumBalance',
+    maximumBalance:'maximumBalance'
   }
 
-// TODO: asset 9/4/18 sozdai class ClientFilter ili tipa takoe.
+
+  clientFilter:ClientFilter=new ClientFilter();
+
+  getClientFilter(filter){
+    let self = this;
+    this.clientFilter.assign(filter)
+    this.http.get("client/client-filter",{filter:JSON.stringify(self.clientFilter)})
+    .subscribe(res => {
+      let ret: Client = res.json();
+      console.log(ret);
+      console.log("I!!!!!")
+
+    })
+  }
+
+// TODO: asset 9/4/18 sozdai class ClientFilter ili tipa takoe. MODEL
   searchFilter = {
     firstname: '',
     lastname: '',
     patronymic: '',
   };
+// TODO: asset 9/4/18 sozdai ENUM
   genders = {
     male: 'Мужчина',
     female: 'Женщина',
@@ -48,7 +65,7 @@ export class DebugComponent implements OnInit {
   pagins = [];
   editButtonOrAddButton = false;
 
-// TODO: asset 9/4/18 Uberi ne izpolzuimy peremennye
+// TODO: asset 9/4/18 Uberi ne izpolzuimy peremennye USERSERVICE
   constructor(private userService: UsersService, private http: HttpService) {
   }
 
@@ -101,16 +118,10 @@ export class DebugComponent implements OnInit {
     })
   };
 
-
   addClient() {
-
-
     let forms: Client = new Client();
-
     this.goRec(this.formClientParameters, forms);
     console.log(forms);
-
-
     this.http.get('/client/addUserInfo', {client: JSON.stringify((forms))}).subscribe(res => {
       let ret: Client = res.json();
       console.log(ret);
@@ -205,11 +216,12 @@ export class DebugComponent implements OnInit {
 
 
   //function CLICK for TABLE
-  // TODO: asset 9/4/18 imena methodo dolzhno byt ponyatnym tipa onSelect()
+
   getHeadMarkClient(headMarkTable) {
-    let sort = {sort: headMarkTable};
+    var sort = {sort: headMarkTable};
     let self = this;
-    this.http.get("/client/userSort", sort).map((response) => response.json())
+    this.http.get("/client/userSort", sort)
+      .map((response) => response.json())
       .map(users => {
         return users.map(u => {
           return {
@@ -233,7 +245,7 @@ export class DebugComponent implements OnInit {
     });
     this.indexes.index = 0;
   }
-
+  // TODO: asset 9/4/18 imena methodo dolzhno byt ponyatnym tipa onSelect() i ewe tmpClient
   getMarkClient(client) {
     this.tmpClient = client;
     this.chooseClient = true;
@@ -377,7 +389,7 @@ export class DebugComponent implements OnInit {
 
   }
 
-
+//TODO UBRAAAATTTTT!!!!
   testDebug() {
     let test: ClientAsd = new ClientAsd();
     test.name = "asdasd";
@@ -386,7 +398,7 @@ export class DebugComponent implements OnInit {
     this.http.post("/client/test-debug", {test: JSON.stringify(test)}).subscribe(res => {
       let ret: ClientDetails = res.json();
 
-      console.log("ret.aaa: " + ret.aaa + ", ret.sss: " + ret.sss);
+      console.log("ret.aaa: " + ret.firstname + ", ret.sss: " + ret.lastname);
     });
   }
 
