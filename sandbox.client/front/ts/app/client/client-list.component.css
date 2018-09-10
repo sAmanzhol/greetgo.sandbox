@@ -58,11 +58,11 @@
   display: inline-block;
 }
 
-.asd{
-  background: yellow;
+.mark{
+  background: rgb(158, 199, 182);
 }
 tbody tr:active{
-  background: red;
+  background: rgb(46, 255, 196);;
 }
 
 
