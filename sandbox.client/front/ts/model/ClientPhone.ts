@@ -5,7 +5,13 @@ export class ClientPhone {
   public number:string;
 
   constructor(){
-    this.number='';
-    this.type=PhoneType.WORK
+    this.number='+7 7';
+    this.type=PhoneType.MOBILE
+
+  }
+  public assign(o:any):ClientPhone{
+    this.type=o.type;
+    this.number=o.number;
+    return this;
   }
 }
