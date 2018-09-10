@@ -21,5 +21,8 @@ public class Client {
     public ClientAddr addressOfResidence;
     public ClientAddr addressOfRegistration;
     public List<ClientPhone> phone;
+    public Client(){
+        character= new Charm();
+    }
 
 }

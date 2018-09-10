@@ -10,11 +10,11 @@ import java.util.Collection;
 
 public interface ClientRegister {
 
-    Collection<ClientRecord> clientList();
+
 
     Collection<ClientRecord> clientFilter(ClientFilter clientFilter);
 
-    ClientFilter clientFilterSet();
+    Integer clientFilterSet();
 
     Collection<Charm> clientCharm();
 

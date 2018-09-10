@@ -7,4 +7,11 @@ public class Charm {
     public String name;
     public String description;
     public int energy;
+
+    public Charm(){
+        this.id=0;
+        this.name="";
+        this.energy=0;
+        this.description="";
+    }
 }

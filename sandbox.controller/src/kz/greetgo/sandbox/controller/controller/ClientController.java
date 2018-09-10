@@ -23,13 +23,6 @@ public class ClientController implements Controller {
 
 	@ToJson
 	@NoSecurity
-	@Mapping("/client-list")
-	public Collection<ClientRecord> clientList() {
-		return clientRegister.get().clientList();
-	}
-
-	@ToJson
-	@NoSecurity
 	@Mapping("/client-filter")
 	public Collection<ClientRecord> clientFilter(@Par("clientFilter") @Json ClientFilter clientFilter) {
 		System.out.println(clientFilter);
@@ -39,7 +32,7 @@ public class ClientController implements Controller {
 	@ToJson
 	@NoSecurity
 	@Mapping("/client-filter-set")
-	public ClientFilter clientFilterSet() {
+	public Integer clientFilterSet() {
 		return clientRegister.get().clientFilterSet();
 	}
 

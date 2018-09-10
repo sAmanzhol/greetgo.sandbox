@@ -14,12 +14,12 @@
 
       <div class="col s3">
         <input id="filterFirstname" [(ngModel)]="clientFilter.firstname">
-        <label for="filterFirstname">Поиск по Имени</label>
+        <label for="filterLastname">Поиск по Фамилии</label>
       </div>
 
       <div class="col s3">
         <input id="filterLastname" [(ngModel)]="clientFilter.lastname">
-        <label for="filterLastname">Поиск по Фамилии</label>
+        <label for="filterFirstname">Поиск по Имени</label>
       </div>
 
       <div class="col s3">
@@ -29,7 +29,7 @@
 
 
       <div class="col s3">
-        <a class="waves-effect waves-light btn icon material-icons" (click)="getClientFilterFilter()">search</a>
+        <a class="waves-effect waves-light btn icon material-icons" (click)="getClientFilterFilter(clientFilter)">search</a>
       </div>
 
     </div>
@@ -54,7 +54,7 @@
         <tr *ngFor="let client of clientRecord; first as isFirst" [class.mark]="clientMark === client"
             (click)="getMarkClient(client)">
           <td>{{client.firstname}} {{client.lastname}} {{client.patronymic}}</td>
-          <td>{{client.character.name}}</td>
+          <td>{{client.characterName}}</td>
           <td>{{client.dateOfBirth}}</td>
           <td>{{client.totalAccountBalance}}</td>
           <td>{{client.maximumBalance}}</td>
@@ -135,7 +135,7 @@
       </div>
 
       <div class="col s1">
-        <a class="waves-effect waves-light btn" (click)="getClientFilterPagination(clientFilter.page+1)"> >></a>
+        <button class="waves-effect waves-light btn"  [disabled]="clientFilter.page==clientFilter.pageTotal" (click)="getClientFilterPagination(clientFilter.page+1)"> >></button>
       </div>
     </div>
     <!--pagination-->
@@ -150,13 +150,13 @@
 
             <div class="col s4">
               <input id="firstname" type="text" [(ngModel)]="clientDetails.firstname" #firstname="ngModel"
-                     required pattern="[A-Za-zА-Яа-яЁё]{1,}"/>
+                     required pattern="[A-Za-zА-Яа-яЁё]{2,}"/>
               <label for="firstname">Фамилия</label>
             </div>
 
             <div class="col s4">
               <input id="lastname" type="text" [(ngModel)]="clientDetails.lastname" #lastname="ngModel"
-                     required/>
+                     required pattern="[A-Za-zА-Яа-яЁё]{2,}"/>
               <label for="lastname">Имя</label>
             </div>
             <div class="col s4">
@@ -196,7 +196,7 @@
             не заполнено поле
           </div>
 
-          <select class="form-control" name="company" [(ngModel)]="clientDetails.character.id" #charater="ngModel"
+          <select class="form-control" name="company" [(ngModel)]="clientDetails.characterId" #charater="ngModel"
                   required>
             <option *ngFor="let character of charm" [value]="character.id">
               {{character.name}}
@@ -272,23 +272,29 @@
               </p>
             </div>
             <div class="col s7">
-              <input type="text" [(ngModel)]="clientDetails.phone[0].number" maxlength="10" #phoneMobile="ngModel"
-                     required/>
+              <input type="number" [(ngModel)]="clientDetails.phone[0].number" minlength="11" maxlength="15"
+                     #phoneMobile="ngModel"
+                     required pattern="[7-8]{1}[0-9]{10,}"/>
             </div>
 
             <div class="col s3">
-              <select class="form-control" [(ngModel)]="clientDetails.phone[0].type" required>
+              <select class="form-control" [(ngModel)]="clientDetails.phone[0].type" phoneMobileType="ngModel"
+                      #phoneMobileType="ngModel"
+                      required>
                 <option [value]="phoneType[2]">
                   {{phoneType[2]}}
+
                 </option>
               </select>
+
             </div>
-            <div *ngIf="phoneMobile.untouched" class="alert alert-danger">
-              не заполнено поле
+            <div class="2" *ngIf="phoneMobile.invalid || phoneMobileType.invalid" class="alert alert-danger">
+              не правильно заполнено поле
             </div>
+
             <div *ngFor="let phone of clientDetails.phone; first as isFirst; index as i">
               <div class="col s7">
-                <input type="text" *ngIf="!isFirst" [(ngModel)]="phone.number" maxlength="10" #phoneMobile="ngModel"
+                <input type="text" *ngIf="!isFirst" [(ngModel)]="phone.number" minlength="11" maxlength="15"
                        required/>
               </div>
 
@@ -302,8 +308,14 @@
               </div>
             </div>
 
-            <div class="col s2">
-              <button class="waves-effect waves-light btn material-icons" (click)="addNewPhone()">exposure_plus_1
+            <div class="col s1">
+              <button class="waves-effect waves-light btn material-icons"
+                      (click)="editablePhoneNumberOfClientDetails(+1)">exposure_plus_1
+              </button>
+            </div>
+            <div class="col s1">
+              <button class="waves-effect waves-light btn material-icons"
+                      (click)="editablePhoneNumberOfClientDetails(-1)">exposure_minus_1
               </button>
             </div>
 
@@ -311,20 +323,24 @@
 
 
           <div class="row">
-            <div class="col col-sm-12">
-              <button class="waves-effect waves-light btn" [disabled]="firstname.invalid || (gender1.invalid || gender2.invalid) || date.invalid
-        || charater.invalid  || addressOfRegistrationStreet.invalid || addressOfRegistrationHome.invalid || addressOfRegistrationApartment.invalid"
+            <div class="col s4">
+              <button class="waves-effect waves-light btn"  href="#close" [disabled]="firstname.invalid || (gender1.invalid || gender2.invalid) || date.invalid
+        || charater.invalid  || addressOfRegistrationStreet.invalid || addressOfRegistrationHome.invalid || addressOfRegistrationApartment.invalid || phoneMobile.invalid"
                       *ngIf="editButtonOrAddButton"
                       (click)="addClient()"> add new client
               </button>
             </div>
-            <div class="col col-sm-12">
-              <button class="waves-effect waves-light btn" [disabled]="firstname.invalid || (gender1.invalid || gender2.invalid) || date.invalid
-        || charater.invalid  || addressOfRegistrationStreet.invalid || addressOfRegistrationHome.invalid || addressOfRegistrationApartment.invalid"
+            <div class="col s4">
+              <button class="waves-effect waves-light btn"  href="#close" [disabled]="firstname.invalid || (gender1.invalid || gender2.invalid) || date.invalid
+        || charater.invalid  || addressOfRegistrationStreet.invalid || addressOfRegistrationHome.invalid || addressOfRegistrationApartment.invalid || phoneMobile.invalid "
                       *ngIf="!editButtonOrAddButton"
-                      (click)="editClient()"> edit client
+                        (click)="editClient()"> edit client
               </button>
             </div>
+            <div class="col s4">
+              <a class="waves-effect waves-light btn material-icons " href="#close">close</a>
+            </div>
+
           </div>
 
         </div>
