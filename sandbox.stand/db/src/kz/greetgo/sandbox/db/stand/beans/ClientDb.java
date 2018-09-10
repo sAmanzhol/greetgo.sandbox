@@ -41,6 +41,25 @@ public class ClientDb implements HasAfterInject {
             c.addressOfRegistration.type = AddrType.REG;
             c.phone = rndPhoneClient();
             client.put(RND.str(10),c);
+
+        }for (int i = 1; i <= 58; i++) {
+            Client c = new Client();
+            c.id = i;
+            c.firstname = "abu";
+            c.lastname = RND.str(8);
+            c.patronymic = RND.str(8);
+            c.character = RndCharacter();
+            c.dateOfBirth = RndDateOfBirth();
+            c.totalAccountBalance = RND.plusInt(1000);
+            c.maximumBalance = RND.plusInt(1000);
+            c.minimumBalance = RND.plusInt(1000);
+            c.gender = GenderType.MALE;
+            c.addressOfResidence = rndAddress();
+            c.addressOfResidence.type = AddrType.FACT;
+            c.addressOfRegistration = rndAddress();
+            c.addressOfRegistration.type = AddrType.REG;
+            c.phone = rndPhoneClient();
+            client.put(RND.str(10),c);
         }
 
 

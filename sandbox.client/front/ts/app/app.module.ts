@@ -7,6 +7,7 @@ import {LoginComponent} from "./input/login.component";
 import {MainFormComponent} from "./main_form/main_form.component";
 import {HttpService} from "./HttpService";
 import {TodayComponent} from "./today/today.component";
+import {ClientListComponent} from "./client/client-list.component";
 
 
 
@@ -16,7 +17,7 @@ import {TodayComponent} from "./today/today.component";
     BrowserModule, HttpModule, JsonpModule, FormsModule, ReactiveFormsModule
   ],
   declarations: [
-    RootComponent, LoginComponent, MainFormComponent , TodayComponent
+    RootComponent, LoginComponent, MainFormComponent , TodayComponent, ClientListComponent
   ],
   bootstrap: [RootComponent],
   providers: [HttpService],
