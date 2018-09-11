@@ -12,9 +12,9 @@ public interface ClientRegister {
 
 
 
-    Collection<ClientRecord> clientFilter(ClientFilter clientFilter);
+    Collection<ClientRecord> getClientList(ClientFilter clientFilter);
 
-    Integer clientFilterSet();
+    Integer getClientTotalRecord(ClientFilter clientFilter);
 
     Collection<Charm> clientCharm();
 

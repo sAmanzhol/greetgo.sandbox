@@ -30,15 +30,12 @@ public class ClientRegisterStand implements ClientRegister {
 	public BeanGetter<ClientDb> cdb;
 	public int recordTotal;
 
-	@Override
-	public Integer clientFilterSet() {
-		return recordTotal;
-	}
 
 	@Override
 	public Collection<Charm> clientCharm() {
 		return cdb.get().charm;
 	}
+
 
 	@Override
 	public ClientRecord clientDetailsSave(ClientDetails clientDetails) {
@@ -142,8 +139,7 @@ public class ClientRegisterStand implements ClientRegister {
 
 
 
-	@Override
-	public Collection<ClientRecord> clientFilter(ClientFilter clientFilter) {
+	public List<ClientRecord> filterInner(ClientFilter clientFilter){
 		if (clientFilter.page > clientFilter.pageTotal) clientFilter.page = clientFilter.pageTotal;
 		if (clientFilter.page < 0) clientFilter.page = 0;
 
@@ -187,12 +183,14 @@ public class ClientRegisterStand implements ClientRegister {
 
 
 		if (clientFilter.firstname.equals("") && clientFilter.lastname.equals("") && clientFilter.patronymic.equals("")) {
-		for (ClientRecord clientRecord1 : list) {
-			System.out.print(clientRecord1.id + "ITS ---- LIST222-----");
+			for (ClientRecord clientRecord1 : list) {
+				System.out.print(clientRecord1.id + "ITS ---- LIST222-----");
+			}
+
+			return list;
+//			return cicleClientRecord(list, clientFilter);
 		}
 
-		return cicleClientRecord(list, clientFilter);
-		}
 
 		else {
 			ClientRecord clientRecord = new ClientRecord();
@@ -201,8 +199,8 @@ public class ClientRegisterStand implements ClientRegister {
 			clientRecord.patronymic = clientFilter.patronymic;
 			for (ClientRecord clientRecord1 : list) {
 				if ((clientRecord1.firstname.equals(clientRecord.firstname) ||clientFilter.firstname.isEmpty() )
-					&& (clientRecord1.lastname.equals(clientRecord.lastname) || clientFilter.lastname.isEmpty())
-					&& (clientRecord1.patronymic.equals(clientRecord.patronymic) || clientFilter.patronymic.isEmpty())) {
+						&& (clientRecord1.lastname.equals(clientRecord.lastname) || clientFilter.lastname.isEmpty())
+						&& (clientRecord1.patronymic.equals(clientRecord.patronymic) || clientFilter.patronymic.isEmpty())) {
 					System.out.println("done");
 					list1.add(clientRecord1);
 				} else {
@@ -213,9 +211,32 @@ public class ClientRegisterStand implements ClientRegister {
 				System.out.print(clientRecord1.id + "ITS --- LIST1 ----");
 			}
 
-			return cicleClientRecord(list1, clientFilter);
+			return list1;
+//			return cicleClientRecord(list1, clientFilter);
 		}
 	}
+
+	@Override
+	public Integer getClientTotalRecord(ClientFilter clientFilter) {
+		return  filterInner(clientFilter).size();
+	}
+
+	@Override
+	public Collection<ClientRecord> getClientList(ClientFilter clientFilter) {
+		return cicleClientRecord(filterInner(clientFilter),clientFilter);
+	}
+
+	/*public int total(ClientFilter filter){
+		List<ClientRecord> list = filterInner(filter);
+
+		return list.size();
+	}
+
+	public List<ClientRecord> cList(){
+		List<ClientRecord> list = filterInner(filter);
+
+		return cutList(list, page, pageSize);
+	}*/
 
 
 	public Collection<ClientRecord> cicleClientRecord(Collection<ClientRecord> listClientRecord, ClientFilter clientFilter) {

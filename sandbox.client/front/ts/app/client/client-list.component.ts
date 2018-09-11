@@ -41,7 +41,7 @@ export class ClientListComponent implements OnInit {
 
   getTotalRecord() {
     var self = this;
-   this.http.get('/client/client-filter-set').subscribe(data=>{
+   this.http.get('/client/client-total-record',{clientFilter:JSON.stringify(self.clientFilter)}).subscribe(data=>{
      self.recordTotal=data.json();
      self.clientFilter.recordTotal=self.recordTotal;
      self.clientFilter.pageTotal= Math.floor(self.clientFilter.recordTotal/self.clientFilter.recordSize);
@@ -51,7 +51,7 @@ export class ClientListComponent implements OnInit {
 
   getClient() {
     let self = this;
-    this.http.get("/client/client-filter", {clientFilter: JSON.stringify(self.clientFilter)}).subscribe((data) => {
+    this.http.get("/client/client-list", {clientFilter: JSON.stringify(self.clientFilter)}).subscribe((data) => {
       self.clientRecord = data.json();
     })
   }
@@ -63,7 +63,7 @@ export class ClientListComponent implements OnInit {
     if(self.clientFilter.page>self.clientFilter.pageTotal){
       self.clientFilter.page=self.clientFilter.pageTotal;
     }
-    this.http.get('/client/client-filter', {clientFilter: JSON.stringify(self.clientFilter)})
+    this.http.get('/client/client-list', {clientFilter: JSON.stringify(self.clientFilter)})
       .subscribe(data => {
         self.clientRecord = data.json();
         this.getTotalRecord();
@@ -79,7 +79,7 @@ export class ClientListComponent implements OnInit {
     self.clientFilter.lastname=clienfilter.lastname;
     self.clientFilter.patronymic=clienfilter.patronymic;}
     self.clientFilter.page=0;
-    this.http.get('/client/client-filter', {clientFilter: JSON.stringify(self.clientFilter)})
+    this.http.get('/client/client-list', {clientFilter: JSON.stringify(self.clientFilter)})
       .subscribe(data => {
         self.clientRecord = data.json();
         this.getTotalRecord();
@@ -87,11 +87,11 @@ export class ClientListComponent implements OnInit {
 
   }
 
-  getClientFilterSort(orderBy: string, sort: boolean) {
+  getClientFilterSort(orderBy: string) {
     let self = this;
     this.clientFilter.orderBy = orderBy;
-    this.clientFilter.sort = !sort;
-    this.http.get('/client/client-filter', {clientFilter: JSON.stringify(self.clientFilter)})
+    this.clientFilter.sort = !this.clientFilter.sort;
+    this.http.get('/client/client-list', {clientFilter: JSON.stringify(self.clientFilter)})
       .subscribe(data => {
         self.clientRecord = data.json();
         this.getTotalRecord();
@@ -138,14 +138,20 @@ export class ClientListComponent implements OnInit {
   }
 
   editablePhoneNumberOfClientDetails(sum: number) {
-    if (sum == +1)
-      this.clientDetails.phone.push(new ClientPhone());
+    let name:string;
+    let counter:number=1;
+    if (sum == +1){
+      counter++;
+      name = "#phoneMobileType1"+counter;
+      this.clientDetails.phone.push(new ClientPhone(name));}
     else {
       if (this.clientDetails.phone.length > 1) {
-        console.log('toto')
+        console.log('toto');
+        counter--;
         this.clientDetails.phone.splice(-1, 1);
       }
       else {
+
         console.log(this.clientDetails.phone);
       }
     }

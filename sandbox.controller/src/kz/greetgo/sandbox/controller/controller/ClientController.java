@@ -22,47 +22,40 @@ public class ClientController implements Controller {
 	public BeanGetter<ClientRegister> clientRegister;
 
 	@ToJson
-	@NoSecurity
-	@Mapping("/client-filter")
-	public Collection<ClientRecord> clientFilter(@Par("clientFilter") @Json ClientFilter clientFilter) {
+	@Mapping("/client-list")
+	public Collection<ClientRecord> clientList(@Par("clientFilter") @Json ClientFilter clientFilter) {
 		System.out.println(clientFilter);
-		return clientRegister.get().clientFilter(clientFilter);
+		return clientRegister.get().getClientList(clientFilter);
 	}
 
 	@ToJson
-	@NoSecurity
-	@Mapping("/client-filter-set")
-	public Integer clientFilterSet() {
-		return clientRegister.get().clientFilterSet();
+	@Mapping("/client-total-record")
+	public Integer clientTotalRecord(@Par("clientFilter") @Json ClientFilter clientFilter) {
+		return clientRegister.get().getClientTotalRecord(clientFilter);
 	}
 
 	@ToJson
-	@NoSecurity
 	@Mapping("/client-charm")
 	public Collection<Charm> clientCharm() {
 		return clientRegister.get().clientCharm();
 	}
 
 	@ToJson
-	@NoSecurity
 	@Mapping("/client-details-save")
 	public ClientRecord clientDetailsSave(@Par("clientDetails") @Json ClientDetails clientDetails) {
 		return clientRegister.get().clientDetailsSave(clientDetails);
 	}
 
 	@ToJson
-	@NoSecurity
 	@Mapping("/client-details-delete")
 	public ClientDetails clientDetailsDelete(@Par("clientMark") @Json ClientRecord clientMark) {
 		return clientRegister.get().clientDetailsDelete(clientMark);
 	}
 
 	@ToJson
-	@NoSecurity
 	@Mapping("/client-details-set")
 	public ClientDetails clientDetailsSet(@Par("clientMark") @Json ClientRecord clientMark) {
 		return clientRegister.get().clientDetailsSet(clientMark);
 	}
-
 
 }

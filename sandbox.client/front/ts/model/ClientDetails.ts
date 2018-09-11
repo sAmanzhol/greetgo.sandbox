@@ -27,7 +27,7 @@ export class ClientDetails {
         this.addressOfRegistration.type = AddrType.REG;
         this.addressOfResidence = new ClientAddr();
         this.addressOfResidence.type = AddrType.FACT;
-        this.phone = [new ClientPhone()];
+        this.phone = [new ClientPhone("#phoneMobileType1")];
     }
 
     public assign(o: any): ClientDetails {

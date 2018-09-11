@@ -41,12 +41,12 @@
       <table class="centered">
         <thead>
         <tr class="card-panel teal lighten-2">
-          <th (click)="getClientFilterSort('firstname',clientFilter.sort)">ФИО</th>
-          <th (click)="getClientFilterSort('character',clientFilter.sort)">Характер</th>
-          <th (click)="getClientFilterSort('dateOfBirth',clientFilter.sort)">возраст</th>
-          <th (click)="getClientFilterSort('totalAccountBalance',clientFilter.sort)">общий остаток счетов</th>
-          <th (click)="getClientFilterSort('maximumBalance',clientFilter.sort)">максимальный остаток</th>
-          <th (click)="getClientFilterSort('minimumBalance',clientFilter.sort)">минимальный остаток</th>
+          <th (click)="getClientFilterSort('firstname')">ФИО</th>
+          <th (click)="getClientFilterSort('character')" >Характер</th>
+          <th (click)="getClientFilterSort('dateOfBirth')">возраст</th>
+          <th (click)="getClientFilterSort('totalAccountBalance')">общий остаток счетов</th>
+          <th (click)="getClientFilterSort('maximumBalance')">максимальный остаток</th>
+          <th (click)="getClientFilterSort('minimumBalance')">минимальный остаток</th>
 
         </tr>
         </thead>
@@ -272,13 +272,13 @@
               </p>
             </div>
             <div class="col s7">
-              <input type="number" [(ngModel)]="clientDetails.phone[0].number" minlength="11" maxlength="15"
+              <input type="text" [(ngModel)]="clientDetails.phone[0].number" minlength="11" maxlength="12"
                      #phoneMobile="ngModel"
-                     required pattern="[7-8]{1}[0-9]{10,}"/>
+                     required pattern="[+8]{1}[7-8]{1}[0-9]{9,}"/>
             </div>
 
             <div class="col s3">
-              <select class="form-control" [(ngModel)]="clientDetails.phone[0].type" phoneMobileType="ngModel"
+              <select class="form-control" [(ngModel)]="clientDetails.phone[0].type"
                       #phoneMobileType="ngModel"
                       required>
                 <option [value]="phoneType[2]">
@@ -288,29 +288,34 @@
               </select>
 
             </div>
-            <div class="2" *ngIf="phoneMobile.invalid || phoneMobileType.invalid" class="alert alert-danger">
+            <div  *ngIf="phoneMobile.invalid || phoneMobileType.invalid" class="alert alert-danger">
               не правильно заполнено поле
             </div>
 
             <div *ngFor="let phone of clientDetails.phone; first as isFirst; index as i">
               <div class="col s7">
-                <input type="text" *ngIf="!isFirst" [(ngModel)]="phone.number" minlength="11" maxlength="15"
-                       required/>
+                <input type="text" *ngIf="!isFirst" [(ngModel)]="phone.number" minlength="11" maxlength="12"
+                       [(ngModel)]="phone.number"
+                       [ngModel]="phone.name"
+
+                       required pattern="[+8]{1}[7-8]{1}[0-9]{9,}"/>
               </div>
 
               <div class="col s3">
-                <select class="form-control" *ngIf="!isFirst" [(ngModel)]="phone.type" required>
-                  <option *ngFor="let type of phoneType" [value]="type">
+                <select class="form-control" *ngIf="!isFirst"  required
+                        [(ngModel)]="phone.type"
+                        >
+                  <option *ngFor="let type of phoneType" [value]="type" >
                     {{type}}
                   </option>
 
                 </select>
               </div>
-            </div>
 
+            </div>
             <div class="col s1">
               <button class="waves-effect waves-light btn material-icons"
-                      (click)="editablePhoneNumberOfClientDetails(+1)">exposure_plus_1
+                      [disabled]="clientDetails.phone[5]!=null "  (click)="editablePhoneNumberOfClientDetails(+1)">exposure_plus_1
               </button>
             </div>
             <div class="col s1">
