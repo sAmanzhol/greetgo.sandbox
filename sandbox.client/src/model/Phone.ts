@@ -4,5 +4,6 @@ import {PhoneType} from "./PhoneType";
  */
 export class Phone{
   public phoneType: PhoneType;
+  public phoneTypeRuss: string;
   public number: string;
 }

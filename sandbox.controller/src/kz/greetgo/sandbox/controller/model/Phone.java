@@ -5,10 +5,12 @@ package kz.greetgo.sandbox.controller.model;
  */
 public class Phone {
     public PhoneType phoneType;
+    public String phoneTypeRuss;
     public String number;
 
-    public Phone(PhoneType phoneType, String number) {
+    public Phone(PhoneType phoneType, String phoneTypeRuss, String number) {
         this.phoneType = phoneType;
+        this.phoneTypeRuss = phoneTypeRuss;
         this.number = number;
     }
 }

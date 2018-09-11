@@ -21,7 +21,6 @@ export class ClientDetail {
 
 
   public static create(a: any): ClientDetail {
-    debugger;
     const ret = new ClientDetail();
     ret.assign(a);
     return ret;

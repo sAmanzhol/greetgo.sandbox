@@ -6,7 +6,6 @@ import kz.greetgo.sandbox.controller.model.Character;
 import kz.greetgo.sandbox.controller.register.ClientRegister;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -26,8 +25,8 @@ public class ClienRegisterImpl implements ClientRegister {
         clients = new ArrayList<>();
         List<Phone> phones = new ArrayList<>();
 
-        phones.add(new Phone(PhoneType.MOBILE, "7474938358"));
-        phones.add(new Phone(PhoneType.HOME, "7273810983"));
+        phones.add(new Phone(PhoneType.MOBILE, "Мобильный", "7474938358"));
+        phones.add(new Phone(PhoneType.HOME,"Домашний", "7273810983"));
 
         genders = new ArrayList<Gender>();
         Gender male = new Gender(GenderType.M, "мужской");

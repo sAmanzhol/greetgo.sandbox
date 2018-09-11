@@ -1,32 +1,32 @@
 <h2 mat-dialog-title>Редактирование</h2>
 <mat-dialog-content class="mat-typography">
 
-  <p *ngIf="clientDetailService.clientDetail.surname != null">
-    <mat-form-field appearance="legacy">
+  <p *ngIf="clientToSave?.surname">
+    <mat-form-field>
       <mat-label>Фамилия</mat-label>
-      <input matInput placeholder="{{clientDetailService.clientDetail.surname}}"
-             value="{{clientDetailService.clientDetail.surname}}">
+      <input matInput [(ngModel)]="clientToSave.surname">
     </mat-form-field>
   </p>
-  <p *ngIf="clientDetailService.clientDetail.name != null">
+  <p>
     <mat-form-field appearance="legacy">
       <mat-label>Имя</mat-label>
-      <input matInput placeholder="{{clientDetailService.clientDetail.name}}"
-             value="{{clientDetailService.clientDetail.name}}">
+      <input matInput [(ngModel)]="clientToSave.name">
     </mat-form-field>
   </p>
 
-  <p *ngIf="clientDetailService.clientDetail.patronymic != null">
+  <p>
     <mat-form-field appearance="legacy">
       <mat-label>Отчество</mat-label>
-      <input matInput placeholder="{{clientDetailService.clientDetail.patronymic}}"
-             value="{{clientDetailService.clientDetail.patronymic}}">
+      <input matInput [(ngModel)]="clientToSave.patronymic">
     </mat-form-field>
   </p>
+
   <p *ngIf="clientDetailService.clientDetail.gender != null">Пол:
+
+
     <mat-form-field>
-      <mat-select required>
-        <mat-option *ngFor="let r of clientDetailService.clientDetail.genders" value="{{r.genderType}}">
+      <mat-select [(value)]="clientToSave.gender">
+        <mat-option *ngFor="let r of clientDetailService.clientDetail.genders" value="{{r}}">
           {{r.genderTypeRuss}}
         </mat-option>
       </mat-select>
@@ -34,10 +34,10 @@
     </mat-form-field>
   </p>
 
-  <p *ngIf="nextDay != null">
+  <p *ngIf="birthday">
     <mat-form-field class="example-full-width">
       <input matInput [matDatepickerFilter]="myFilter" [matDatepicker]="picker" placeholder="Дата рождения"
-             [(ngModel)]="nextDay">
+             [(ngModel)]="birthday">
       <!--[(ngModel)] = "{{clientDetailService.clientDetail.birthDay.toString()}}">-->
       <!--value="{{clientDetailService.clientDetail.birthDay}}">-->
       <!--[(ngModel)] = "nextDay">-->
@@ -49,8 +49,9 @@
 
   <p *ngIf="clientDetailService.clientDetail.character != null">Характер:
     <mat-form-field>
-      <mat-select required>
-        <mat-option *ngFor="let r of clientDetailService.clientDetail.characters" value="{{r.characterType}}">
+      <mat-select [(value)]="clientToSave.character">
+        <!--required>-->
+        <mat-option *ngFor="let r of clientDetailService.clientDetail.characters" value="{{r}}">
           {{r.characterTypeRuss}}
         </mat-option>
       </mat-select>
@@ -59,68 +60,53 @@
   </p>
 
 
-  <p *ngIf="clientDetailService.clientDetail.actualAddress != null">Адрес проживания<br>
+  <p *ngIf="clientToSave?.actualAddress">Адрес проживания<br>
     <mat-form-field appearance="legacy">
       <mat-label>Улица</mat-label>
-      <input matInput placeholder="{{clientDetailService.clientDetail.actualAddress.street}}"
-             value="{{clientDetailService.clientDetail.actualAddress.street}}">
+      <input matInput [(ngModel)]="clientToSave.actualAddress.street">
     </mat-form-field>
 
     <mat-form-field appearance="legacy">
       <mat-label>Дом</mat-label>
-      <input matInput placeholder="{{clientDetailService.clientDetail.actualAddress.house}}"
-             value="{{clientDetailService.clientDetail.actualAddress.house}}">
+      <input matInput [(ngModel)]="clientToSave.actualAddress.house">
     </mat-form-field>
     <br>
 
     <mat-form-field appearance="legacy">
       <mat-label>Квартира</mat-label>
-      <input matInput placeholder="{{clientDetailService.clientDetail.actualAddress.apartment}}"
-             value="{{clientDetailService.clientDetail.actualAddress.apartment}}">
+      <input matInput [(ngModel)]="clientToSave.actualAddress.apartment">
     </mat-form-field>
   </p>
-  <p *ngIf="clientDetailService.clientDetail.registrationAddress != null">Адрес регистрации<br>
+  <p *ngIf="clientToSave?.registrationAddress">Адрес регистрации<br>
     <mat-form-field appearance="legacy">
       <mat-label>Улица</mat-label>
-      <input matInput placeholder="{{clientDetailService.clientDetail.registrationAddress.street}}"
-             value="{{clientDetailService.clientDetail.registrationAddress.street}}">
+      <input matInput [(ngModel)]="clientToSave.registrationAddress.street">
     </mat-form-field>
 
     <mat-form-field appearance="legacy">
       <mat-label>Дом</mat-label>
-      <input matInput placeholder="{{clientDetailService.clientDetail.registrationAddress.house}}"
-             value="{{clientDetailService.clientDetail.registrationAddress.house}}">
+      <input matInput [(ngModel)]="clientToSave.registrationAddress.house">
     </mat-form-field>
     <br>
     <mat-form-field appearance="legacy">
       <mat-label>Квартира</mat-label>
-      <input matInput placeholder="{{clientDetailService.clientDetail.registrationAddress.apartment}}"
-             value="{{clientDetailService.clientDetail.registrationAddress.apartment}}">
+      <input matInput [(ngModel)]="clientToSave.registrationAddress.apartment">
     </mat-form-field>
   </p>
-  <p *ngFor="let r of clientDetailService.clientDetail.phones">
+  <p>Телефоны</p>
+  <p *ngFor="let r of clientToSave.phones">
     <mat-form-field appearance="legacy">
-      <mat-label>Телефоны</mat-label>
-      <input matInput placeholder="{{r.phoneType}}" value="{{r.number}}">
+      <mat-label>{{r.phoneTypeRuss}}</mat-label>
+      <input matInput [(ngModel)]="r.number">
     </mat-form-field>
   </p>
   <br>
 
-
-  <!--<p>-->
-  <!--<mat-form-field>-->
-  <!--<mat-select required>-->
-  <!--<mat-option value="option">Option</mat-option>-->
-  <!--</mat-select>-->
-  <!--<mat-label>По дефолту</mat-label>-->
-  <!--</mat-form-field>-->
-
+  <!--<p  *ngIf="clientDetailService?.clientDetail?.registrationAddress">-->
+  <!--<input type="text" [(ngModel)]="firstName" />-->
+  <!--<button mat-button  (click)="onClickMe()" >ADD</button>-->
 
   <!--</p>-->
-  <custom-counter [(counter)]="counterValue"></custom-counter>
-  <p><code>counterValue = {{counterValue}}</code></p>
-
-  {{clientDetailService.clientDetail.surname}}
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button mat-button mat-dialog-close>Cancel</button>

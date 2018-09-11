@@ -21,15 +21,10 @@ export class ClientDetailService {
       .then(body => ClientDetail.create(body));
 
   }
-
   async load(id: number) {
     try {
       this.loading = true;
       this.clientDetail = await this.loadClientRecord(id);
-      //debugger;
-      if (clientDetail == null)
-        console.log("clientDetail == 0")
-      cosole.log(clientDetail.toString());
       this.loading = false;
     } catch (e) {
       this.loading = false;

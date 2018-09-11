@@ -13,18 +13,13 @@ import {TestComponent} from "./client-table/client-table.component";
 import {ClientDetailComponent} from "./client-detail/client-detail.component";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {
-  MatButtonModule,
-  MatDatepickerModule,
-  MatDialogModule,
-  MatIconModule,
-  MatInputModule,
-  MatNativeDateModule,
+  MatButtonModule, MatDatepickerModule, MatDialogModule, MatIconModule, MatInputModule, MatNativeDateModule,
   MatSelectModule,
   MatTableModule
 } from "@angular/material";
-import {CustomCounterComponent} from "./client-detail/custom-counter-component";
-import {AddComponent} from "./add/add.component";
-import {EditComponent} from "./edit/edit.component";
+import {HttpModule} from "@angular/http";
+import { AddComponent } from './add/add.component';
+import { EditComponent } from './edit/edit.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +29,6 @@ import {EditComponent} from "./edit/edit.component";
     AboutComponent,
     TestComponent,
     ClientDetailComponent,
-    CustomCounterComponent,
     AddComponent,
     EditComponent
   ],
@@ -53,7 +47,6 @@ import {EditComponent} from "./edit/edit.component";
     MatSelectModule,
     MatDatepickerModule,
     MatNativeDateModule,
-
   ],
   entryComponents: [ClientDetailComponent],
   providers: [HttpService, LoginService, ClientListService],
