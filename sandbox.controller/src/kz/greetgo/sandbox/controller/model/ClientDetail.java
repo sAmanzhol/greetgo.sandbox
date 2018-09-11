@@ -1,6 +1,7 @@
 package kz.greetgo.sandbox.controller.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -12,7 +13,7 @@ public class ClientDetail {
     public String patronymic;
     public Gender gender;
     public List<Gender> genders;
-    public String birthDay;
+    public Date birthDay;
     public Character character;
     public List<Character> characters;
     public Address actualAddress;
@@ -23,7 +24,7 @@ public class ClientDetail {
     public ClientDetail() {
     }
 
-    public ClientDetail(String surname, String name, String patronymic, Gender gender, List<Gender> genders, String birthDay, Character character, List<Character> characters, Address actualAddress, Address registrationAddress, List<Phone> phones, long clientId) {
+    public ClientDetail(String surname, String name, String patronymic, Gender gender, List<Gender> genders, Date birthDay, Character character, List<Character> characters, Address actualAddress, Address registrationAddress, List<Phone> phones, long clientId) {
 
         this.surname = surname;
         this.name = name;

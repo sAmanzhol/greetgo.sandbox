@@ -3,6 +3,7 @@ import {ClientTableService} from "./client-table.service";
 import {MatDialog} from "@angular/material";
 import {ClientDetailComponent} from "../client-detail/client-detail.component";
 import {EditComponent} from "../edit/edit.component";
+import {ClientRecord} from "../../model/ClientRecord";
 
 @Component({
   selector: 'app-test',
@@ -20,16 +21,19 @@ export class TestComponent implements OnInit {
     let dialogRef = this.dialog.open(ClientDetailComponent, {
       data: id,
     });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed = ' + result);
+      //debugger;
+      this.clientTableService.addClientToList(result);
+    });
   }
 
-    openEditDialog(id: number) {
-      let dialogRef = this.dialog.open(EditComponent, {
-        data: id,
-      });
-
+  delete(id: number) {
+    this.clientTableService.deleteClient(id);
   }
 
   ngOnInit() {
     this.clientTableService.load();
   }
+
 }

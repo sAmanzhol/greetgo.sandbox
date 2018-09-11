@@ -12,7 +12,7 @@ export class ClientDetail {
   public patronymic: string;
   public gender: Gender;
   public genders: Gender[];
-  public birthDay: String;
+  public birthDay: Date;
   public character: Character;
   public characters: Character[];
   public actualAddress: Address;

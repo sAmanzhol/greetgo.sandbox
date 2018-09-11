@@ -2,12 +2,16 @@ package kz.greetgo.sandbox.controller.controller;
 
 import kz.greetgo.depinject.core.Bean;
 import kz.greetgo.depinject.core.BeanGetter;
+import kz.greetgo.mvc.annotations.Json;
 import kz.greetgo.mvc.annotations.Par;
 import kz.greetgo.mvc.annotations.ToJson;
 import kz.greetgo.mvc.annotations.on_methods.ControllerPrefix;
+import kz.greetgo.mvc.annotations.on_methods.OnDelete;
 import kz.greetgo.mvc.annotations.on_methods.OnGet;
+import kz.greetgo.mvc.annotations.on_methods.OnPost;
 import kz.greetgo.sandbox.controller.model.ClientDetail;
 import kz.greetgo.sandbox.controller.model.ClientRecord;
+import kz.greetgo.sandbox.controller.model.ClientToSave;
 import kz.greetgo.sandbox.controller.register.ClientRegister;
 import kz.greetgo.sandbox.controller.security.PublicAccess;
 import kz.greetgo.sandbox.controller.util.Controller;
@@ -27,7 +31,6 @@ public class ClientController implements Controller {
     @PublicAccess
     @OnGet("/list")
     public List<ClientRecord> list() {
-
         return clientRegisterBeanGetter.get().getClientList();
     }
 
@@ -39,5 +42,22 @@ public class ClientController implements Controller {
         //return null;
     }
 
+
+    @ToJson
+    @PublicAccess
+    @OnPost("/save")
+    public ClientRecord save(@Json @Par("toSave") ClientToSave toSave){
+        return clientRegisterBeanGetter.get().saveClient(toSave);
+        //return null;
+    }
+
+    //delete
+    @ToJson
+    @PublicAccess
+    @OnDelete("/delete")
+    public ClientRecord delete(@Par("id") Long id){
+        //return clientRegisterBeanGetter.get().saveClient(toSave);
+        return null;
+    }
 
 }

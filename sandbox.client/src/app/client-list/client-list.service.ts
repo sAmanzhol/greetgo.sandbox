@@ -21,7 +21,6 @@ export class ClientListService {
 
   async load() {
     try {
-
       this.loading = true;
       this.list = await this.loadRecords();
       this.loading = false;

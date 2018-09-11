@@ -1,5 +1,5 @@
 import {Component, Inject, Input, OnInit} from "@angular/core";
-import {MAT_DIALOG_DATA} from "@angular/material";
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material";
 import {ClientDetailService} from "./client-detail.service";
 import {ClientToSave} from "../../model/ClientToSave";
 import {ClientDetail} from "../../model/ClientDetail";
@@ -17,25 +17,24 @@ export class ClientDetailComponent implements OnInit {
 
   public clientToSave: ClientToSave = new ClientToSave();
   clientDetail: ClientDetail = new ClientDetail;
-  birthday: Date;
 
-  constructor(public clientDetailService: ClientDetailService, @Inject(MAT_DIALOG_DATA) public data: number) {
+  constructor(public clientDetailService: ClientDetailService, public dialogRef: MatDialogRef<ClientDetailComponent>, @Inject(MAT_DIALOG_DATA) public data: number) {
   }
-
   ngOnInit() {
     this.init();
   }
-
   async init() {
     this.clientDetailService.load(this.data);
-    this.clientDetail = await this.clientDetailService.loadClientRecord(this.data);
+    this.clientDetail = await this.clientDetailService.loadClientDetailRecord(this.data);
     this.clientToSave = ClientToSave.create(this.clientDetail, this.data);
-    this.birthday = new Date(this.clientToSave.birthDay);
+  }
+  async saveClient() {
+    //debugger;
+    let a = await this.clientDetailService.saveClient(this.clientToSave);
+    //debugger;
+    this.dialogRef.close(a);
   }
 
-  save() {
-
-  }
 }
 
 

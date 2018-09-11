@@ -7,6 +7,9 @@ public class Gender {
     public GenderType genderType;
     public String genderTypeRuss;
 
+    public Gender() {
+    }
+
     public Gender(GenderType genderType, String genderTypeRuss) {
         this.genderType = genderType;
         this.genderTypeRuss = genderTypeRuss;

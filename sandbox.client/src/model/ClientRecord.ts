@@ -16,6 +16,16 @@ export class ClientRecord{
     ret.assign(a);
     return ret;
   }
+  public update(a:ClientRecord): ClientRecord{
+    this.age = a.age;
+    this.fio = a.fio;
+    this.character = a.character;
+    this.maxBalance = a.maxBalance;
+    this.totalBalance = a.totalBalance;
+    this.minBalance = a.minBalance;
+    this.clientId = a.clientId;
+    return this;
+  }
   assign(a: any) {
     this.age = a.age;
     this.fio = a.fio;

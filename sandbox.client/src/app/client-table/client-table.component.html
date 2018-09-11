@@ -1,4 +1,9 @@
 <div>
+  <br>
+  <button mat-icon-button (click)="openDialog(r.clientId)">
+    <mat-icon aria-label="Remove icon-button">add</mat-icon>
+  </button>
+  <br>
   <table>
     <thead>
     <tr>
@@ -21,15 +26,14 @@
       <td>{{r.maxBalance}}</td>
       <td>{{r.minBalance}}</td>
       <td>
-        <button mat-icon-button (click)="openDialog(r.clientId)">
-          <mat-icon aria-label="Remove icon-button">add</mat-icon>
-        </button>
-        <button mat-icon-button (click)="openDialog(r.clientId)">
+        <button mat-icon-button (click)="delete(r.clientId)">
           <mat-icon aria-label="Remove icon-button">remove</mat-icon>
         </button>
+
         <button mat-icon-button (click)="openDialog(r.clientId)">
           <mat-icon aria-label="Remove icon-button">...</mat-icon>
         </button>
+
       </td>
     </tr>
     </tbody>
