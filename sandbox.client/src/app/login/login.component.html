@@ -1,12 +1,7 @@
 <div >
   <div >
-    <input type="text" placeholder="Username" >
-    <input type="password" placeholder="Password" >
-    <button >Войти</button>
-  </div>
-
-  <div>
-    Вошли как
-    <a class="exit">Выйти</a>
+    <input type="text" placeholder="Username" (keyup)="setLoginValue($event)" >
+    <input type="password" placeholder="Password" (keyup)="setPassValue($event)" >
+    <button (click)="logIn()" >Войти</button>
   </div>
 </div>
