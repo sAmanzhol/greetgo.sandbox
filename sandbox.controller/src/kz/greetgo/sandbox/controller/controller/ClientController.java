@@ -6,10 +6,7 @@ import kz.greetgo.mvc.annotations.Json;
 import kz.greetgo.mvc.annotations.Mapping;
 import kz.greetgo.mvc.annotations.Par;
 import kz.greetgo.mvc.annotations.ToJson;
-import kz.greetgo.sandbox.controller.model.model.Charm;
-import kz.greetgo.sandbox.controller.model.model.ClientDetails;
-import kz.greetgo.sandbox.controller.model.model.ClientFilter;
-import kz.greetgo.sandbox.controller.model.model.ClientRecord;
+import kz.greetgo.sandbox.controller.model.model.*;
 import kz.greetgo.sandbox.controller.register.ClientRegister;
 import kz.greetgo.sandbox.controller.security.NoSecurity;
 import kz.greetgo.sandbox.controller.util.Controller;
@@ -42,20 +39,20 @@ public class ClientController implements Controller {
 
 	@ToJson
 	@Mapping("/client-details-save")
-	public ClientRecord clientDetailsSave(@Par("clientDetails") @Json ClientDetails clientDetails) {
+	public ClientRecord clientDetailsSave(@Par("clientToSave") @Json ClientDetails clientDetails) {
 		return clientRegister.get().clientDetailsSave(clientDetails);
 	}
 
 	@ToJson
 	@Mapping("/client-details-delete")
-	public ClientDetails clientDetailsDelete(@Par("clientMark") @Json ClientRecord clientMark) {
-		return clientRegister.get().clientDetailsDelete(clientMark);
+	public ClientDetails clientDetailsDelete(@Par("clientMark") Integer clientMarkId) {
+		return clientRegister.get().clientDetailsDelete(clientMarkId);
 	}
 
 	@ToJson
 	@Mapping("/client-details-set")
-	public ClientDetails clientDetailsSet(@Par("clientMark") @Json ClientRecord clientMark) {
-		return clientRegister.get().clientDetailsSet(clientMark);
+	public ClientDetails clientDetailsSet(@Par("clientMark") Integer clientMarkId) {
+		return clientRegister.get().clientDetailsSet(clientMarkId);
 	}
 
 }

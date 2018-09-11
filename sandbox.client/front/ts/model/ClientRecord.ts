@@ -12,7 +12,6 @@ export class ClientRecord {
   public minimumBalance:number/*int*/;
 
   constructor(){
-    this.id =0;
     this.firstname="";
     this.lastname="";
     this.patronymic="";

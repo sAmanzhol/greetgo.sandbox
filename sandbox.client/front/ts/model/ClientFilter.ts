@@ -17,7 +17,7 @@ export class ClientFilter {
         this.sort = true;
         this.page = 0;
       this.recordTotal = 0;
-      this.recordSize = 20;
+      this.recordSize = 10;
       this.pageTotal = 1
 
     }

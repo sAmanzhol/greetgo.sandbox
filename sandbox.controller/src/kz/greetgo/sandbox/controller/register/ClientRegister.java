@@ -1,9 +1,6 @@
 package kz.greetgo.sandbox.controller.register;
 
-import kz.greetgo.sandbox.controller.model.model.Charm;
-import kz.greetgo.sandbox.controller.model.model.ClientDetails;
-import kz.greetgo.sandbox.controller.model.model.ClientFilter;
-import kz.greetgo.sandbox.controller.model.model.ClientRecord;
+import kz.greetgo.sandbox.controller.model.model.*;
 
 
 import java.util.Collection;
@@ -20,8 +17,8 @@ public interface ClientRegister {
 
     ClientRecord clientDetailsSave(ClientDetails clientDetails);
 
-    ClientDetails clientDetailsSet(ClientRecord clientMark);
+    ClientDetails clientDetailsSet(Integer clientMarkId);
 
-    ClientDetails clientDetailsDelete(ClientRecord clientMark);
+    ClientDetails clientDetailsDelete(Integer clientMarkId);
 
 }

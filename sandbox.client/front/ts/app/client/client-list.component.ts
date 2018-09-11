@@ -10,6 +10,8 @@ import {GenderType} from "../../model/GenderType";
 import {Charm} from "../../model/Charm";
 import {PhoneType} from "../../model/PhoneType";
 import {ClientPhone} from "../../model/ClientPhone";
+import {ClientToSave} from "../../model/ClientToSave";
+import {isNumber} from "util";
 
 
 @Component({
@@ -20,8 +22,9 @@ import {ClientPhone} from "../../model/ClientPhone";
 export class ClientListComponent implements OnInit {
   constructor(private http: HttpService) {
   }
+
   editButtonOrAddButton: boolean = true;
-  clientChoose: boolean = false;
+  showAddOrEditChoose: boolean;
   clientRecord: ClientRecord[] = [new ClientRecord()];
   clientMark: ClientRecord;
   clientFilter: ClientFilter;
@@ -29,23 +32,24 @@ export class ClientListComponent implements OnInit {
   genders: GenderType[] = [GenderType.MALE, GenderType.FEMALE];
   charm: Charm[] = [];
   phoneType: PhoneType[] = [PhoneType.HOME, PhoneType.WORK, PhoneType.MOBILE, PhoneType.EMBEDDED]
-  recordTotal:number;
+  recordTotal: number;
+
 
   ngOnInit() {
     this.clientFilter = new ClientFilter();
     this.getClient();
     this.getTotalRecord();
-    this.getCharm()
+
   }
 
 
   getTotalRecord() {
     var self = this;
-   this.http.get('/client/client-total-record',{clientFilter:JSON.stringify(self.clientFilter)}).subscribe(data=>{
-     self.recordTotal=data.json();
-     self.clientFilter.recordTotal=self.recordTotal;
-     self.clientFilter.pageTotal= Math.floor(self.clientFilter.recordTotal/self.clientFilter.recordSize);
-   })
+    this.http.get('/client/client-total-record', {clientFilter: JSON.stringify(self.clientFilter)}).subscribe(data => {
+      self.recordTotal = data.json();
+      self.clientFilter.recordTotal = self.recordTotal;
+      self.clientFilter.pageTotal = Math.floor(self.clientFilter.recordTotal / self.clientFilter.recordSize);
+    })
   }
 
 
@@ -58,15 +62,14 @@ export class ClientListComponent implements OnInit {
 
 
   getClientFilterPagination(page) {
-    let self = this;
-    self.clientFilter.page = page;
-    if(self.clientFilter.page>self.clientFilter.pageTotal){
-      self.clientFilter.page=self.clientFilter.pageTotal;
+    let self = this;    self.clientFilter.page = page;
+    if (self.clientFilter.page > self.clientFilter.pageTotal) {
+      self.clientFilter.page = self.clientFilter.pageTotal;
     }
     this.http.get('/client/client-list', {clientFilter: JSON.stringify(self.clientFilter)})
       .subscribe(data => {
         self.clientRecord = data.json();
-        this.getTotalRecord();
+
       });
 
 
@@ -74,11 +77,12 @@ export class ClientListComponent implements OnInit {
 
   getClientFilterFilter(clienfilter) {
     let self = this;
-    if(clienfilter){
-    self.clientFilter.firstname=clienfilter.firstname;
-    self.clientFilter.lastname=clienfilter.lastname;
-    self.clientFilter.patronymic=clienfilter.patronymic;}
-    self.clientFilter.page=0;
+    if (clienfilter) {
+      self.clientFilter.firstname = clienfilter.firstname;
+      self.clientFilter.lastname = clienfilter.lastname;
+      self.clientFilter.patronymic = clienfilter.patronymic;
+    }
+    self.clientFilter.page = 0;
     this.http.get('/client/client-list', {clientFilter: JSON.stringify(self.clientFilter)})
       .subscribe(data => {
         self.clientRecord = data.json();
@@ -94,15 +98,14 @@ export class ClientListComponent implements OnInit {
     this.http.get('/client/client-list', {clientFilter: JSON.stringify(self.clientFilter)})
       .subscribe(data => {
         self.clientRecord = data.json();
-        this.getTotalRecord();
       })
   }
 
   deleteClient() {
     var self = this;
-    self.clientChoose=false;
+
     let id = self.clientMark.id;
-    this.http.get('/client/client-details-delete', {clientMark: JSON.stringify(self.clientMark)}).subscribe(data => {
+    this.http.get('/client/client-details-delete', {clientMark: self.clientMark.id}).subscribe(data => {
       for (let i = 0; i < self.clientRecord.length; i++) {
         if (self.clientRecord[i].id == id) {
           self.clientRecord.splice(i, 1)
@@ -110,92 +113,88 @@ export class ClientListComponent implements OnInit {
         }
       }
     })
+    self.clientMark=new ClientRecord();
   }
+   clientMark1:ClientRecord;
 
-  editClient() {
+  addOrEdit() {
     var self = this;
-    let dates: ClientRecord;
-    this.http.get('/client/client-details-save', {clientDetails: JSON.stringify(self.clientDetails)}).subscribe(data => {
-      dates = data.json();
-      for (let i = 0; i < self.clientRecord.length; i++) {
-        if (self.clientRecord[i].id == dates.id) {
-          self.clientRecord.splice(i, 1, dates);
+    let clientToSave: ClientToSave = new ClientToSave();
+    clientToSave.assign(self.clientDetails);
+    this.http.get('/client/client-details-save', {clientToSave: JSON.stringify(clientToSave)}).subscribe(data => {
+      var clientRec = data.json();
+      if (!self.clientDetails.id) {
+        self.clientRecord.push(clientRec);
 
+      }
+      else if (self.clientDetails.id) {
+        for (let i = 0; i < self.clientRecord.length; i++) {
+          if (self.clientRecord[i].id == data.json().id) {
+            self.clientRecord.splice(i, 1, clientRec);
+
+          }
         }
       }
+
+      self.clientMark=clientRec;
     })
 
-  }
-  addClient() {
-    var self = this;
-    // self.clientDetails.id = null;
-    console.log(self.clientDetails.characterId + "THIS ID OF CHRACTER");
-    this.http.get('/client/client-details-save', {clientDetails: JSON.stringify(self.clientDetails)}).subscribe(data => {
-      self.clientRecord.push(data.json());
 
-    })
 
   }
 
-  editablePhoneNumberOfClientDetails(sum: number) {
-    let name:string;
-    let counter:number=1;
-    if (sum == +1){
-      counter++;
-      name = "#phoneMobileType1"+counter;
-      this.clientDetails.phone.push(new ClientPhone(name));}
-    else {
+  editablePhoneNumberOfClientDetails(isNewNumber:boolean, noNumber: number) {
+
+    if (isNewNumber===true) {
+
+      this.clientDetails.phone.push(new ClientPhone());
+    }
+    else if(isNewNumber==false) {
       if (this.clientDetails.phone.length > 1) {
-        console.log('toto');
-        counter--;
-        this.clientDetails.phone.splice(-1, 1);
+
+        this.clientDetails.phone.splice(noNumber, 1);
       }
       else {
 
-        console.log(this.clientDetails.phone);
+
       }
     }
   }
 
   getMarkClient(clientRecord) {
     this.clientMark = clientRecord;
-    this.clientChoose = true;
-    console.log(window.location.href);
-    console.log(this.clientMark);
+
   }
 
   getCharm() {
     var self = this;
     this.http.get('/client/client-charm').subscribe(data => {
       self.charm = data.json();
-      console.log("dasdsa");
-
 
     })
   }
 
-  showEditForm() {
-    var self = this;
-    this.editButtonOrAddButton = false;
-    this.clientChoose=false;
-    this.http.get('/client/client-details-set', {clientMark: JSON.stringify(self.clientMark)}).subscribe(data => {
-        self.clientDetails = data.json();
-        self.getCharm();
-      }
-    )
-  }
 
-  showAddForm() {
-    this.clientChoose=false;
+  showAddFormOrEditForm(isEditOrAdd) {
     var self = this;
-    this.editButtonOrAddButton = true;
+
+    this.clientDetails=new ClientDetails();
+    self.showAddOrEditChoose = isEditOrAdd;
     self.getCharm();
-    self.clientMark=new ClientRecord();
-    self.clientDetails=new ClientDetails();
+    if (self.showAddOrEditChoose) {
+      this.editButtonOrAddButton = true;
+      self.clientMark = new ClientRecord();
+
+    }
+    else if (!self.showAddOrEditChoose) {
+      this.editButtonOrAddButton = false;
+      this.http.get('/client/client-details-set', {clientMark: self.clientMark.id}).subscribe(data => {
+          self.clientDetails = ClientDetails.copy(data.json());
+
+      }
+      )
+    }
   }
-
-
-
 
 
 }

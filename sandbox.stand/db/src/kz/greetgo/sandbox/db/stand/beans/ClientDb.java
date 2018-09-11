@@ -73,7 +73,7 @@ public class ClientDb implements HasAfterInject {
         List<ClientPhone> list = new ArrayList<>();
         ClientPhone phone = new ClientPhone();
         for (int i = 0; i < 4; i++) {
-            phone.number = "+7" + (int) (Math.random() * 1000 + 100000);
+            phone.number = "+7" + (int) (Math.random() * 1000 + 100000000);
             phone.type = rndPhoneType(2);
             list.add(phone);
         }

@@ -2,10 +2,7 @@ package kz.greetgo.sandbox.stand.stand_register_impls;
 
 import kz.greetgo.depinject.core.Bean;
 import kz.greetgo.depinject.core.BeanGetter;
-import kz.greetgo.sandbox.controller.model.model.Charm;
-import kz.greetgo.sandbox.controller.model.model.ClientDetails;
-import kz.greetgo.sandbox.controller.model.model.ClientFilter;
-import kz.greetgo.sandbox.controller.model.model.ClientRecord;
+import kz.greetgo.sandbox.controller.model.model.*;
 import kz.greetgo.sandbox.controller.register.ClientRegister;
 import kz.greetgo.sandbox.controller.register.model.Client;
 import kz.greetgo.sandbox.controller.register.model.UserParamName;
@@ -28,7 +25,6 @@ public class ClientRegisterStand implements ClientRegister {
 
 	public BeanGetter<StandDb> db;
 	public BeanGetter<ClientDb> cdb;
-	public int recordTotal;
 
 
 	@Override
@@ -40,7 +36,7 @@ public class ClientRegisterStand implements ClientRegister {
 	@Override
 	public ClientRecord clientDetailsSave(ClientDetails clientDetails) {
 		ClientRecord clientRecord = new ClientRecord();
-		System.out.println(clientDetails.id);
+
 		String key = RND.str(10);
 		if (clientDetails.id == null) {
 			Client client = new Client();
@@ -106,10 +102,10 @@ public class ClientRegisterStand implements ClientRegister {
 	}
 
 	@Override
-	public ClientDetails clientDetailsSet(ClientRecord clientMark) {
+	public ClientDetails clientDetailsSet(Integer clientMarkId) {
 		ClientDetails clientDetails = new ClientDetails();
 		for (Map.Entry<String, Client> item : cdb.get().client.entrySet()) {
-			if (clientMark.id == item.getValue().id) {
+			if (clientMarkId == item.getValue().id) {
 				clientDetails.id = item.getValue().id;
 				clientDetails.firstname = item.getValue().firstname;
 				clientDetails.lastname = item.getValue().lastname;
@@ -126,10 +122,10 @@ public class ClientRegisterStand implements ClientRegister {
 	}
 
 	@Override
-	public ClientDetails clientDetailsDelete(ClientRecord clientMark) {
+	public ClientDetails clientDetailsDelete(Integer clientMarkId) {
 		String key = "";
 		for (Map.Entry<String, Client> item : cdb.get().client.entrySet()) {
-			if (item.getValue().id == clientMark.id) {
+			if (item.getValue().id == clientMarkId) {
 				key = item.getKey();
 			}
 		}
@@ -183,12 +179,7 @@ public class ClientRegisterStand implements ClientRegister {
 
 
 		if (clientFilter.firstname.equals("") && clientFilter.lastname.equals("") && clientFilter.patronymic.equals("")) {
-			for (ClientRecord clientRecord1 : list) {
-				System.out.print(clientRecord1.id + "ITS ---- LIST222-----");
-			}
-
 			return list;
-//			return cicleClientRecord(list, clientFilter);
 		}
 
 
@@ -201,18 +192,11 @@ public class ClientRegisterStand implements ClientRegister {
 				if ((clientRecord1.firstname.equals(clientRecord.firstname) ||clientFilter.firstname.isEmpty() )
 						&& (clientRecord1.lastname.equals(clientRecord.lastname) || clientFilter.lastname.isEmpty())
 						&& (clientRecord1.patronymic.equals(clientRecord.patronymic) || clientFilter.patronymic.isEmpty())) {
-					System.out.println("done");
 					list1.add(clientRecord1);
-				} else {
-					System.out.println("NOT FOUND");
 				}
-			}
-			for (ClientRecord clientRecord1 : list1) {
-				System.out.print(clientRecord1.id + "ITS --- LIST1 ----");
 			}
 
 			return list1;
-//			return cicleClientRecord(list1, clientFilter);
 		}
 	}
 
@@ -226,23 +210,10 @@ public class ClientRegisterStand implements ClientRegister {
 		return cicleClientRecord(filterInner(clientFilter),clientFilter);
 	}
 
-	/*public int total(ClientFilter filter){
-		List<ClientRecord> list = filterInner(filter);
-
-		return list.size();
-	}
-
-	public List<ClientRecord> cList(){
-		List<ClientRecord> list = filterInner(filter);
-
-		return cutList(list, page, pageSize);
-	}*/
-
 
 	public Collection<ClientRecord> cicleClientRecord(Collection<ClientRecord> listClientRecord, ClientFilter clientFilter) {
 		List<ClientRecord> list = new ArrayList<>();
 		int i = 0;
-		recordTotal= listClientRecord.size();
 		clientFilter.pageTotal = (int) Math.floor(clientFilter.recordTotal / clientFilter.recordSize);
 		if (clientFilter.page > clientFilter.pageTotal) {
 			clientFilter.page = clientFilter.pageTotal;
@@ -254,7 +225,6 @@ public class ClientRegisterStand implements ClientRegister {
 				list.add(clientRecord1);
 			}
 
-			System.out.print(clientRecord1.id + "ITS ---- LIST3333-----");
 		}
 		return list;
 	}

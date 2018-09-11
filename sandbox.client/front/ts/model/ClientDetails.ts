@@ -3,6 +3,7 @@ import {ClientPhone} from "./ClientPhone";
 import {ClientAddr} from "./ClientAddr";
 import {Charm} from "./Charm";
 import {AddrType} from "./AddrType";
+import {UserInfo} from "./UserInfo";
 
 export class ClientDetails {
     public id: number/*int*/|null;
@@ -14,7 +15,7 @@ export class ClientDetails {
     public characterId: number;
     public addressOfResidence: ClientAddr;
     public addressOfRegistration: ClientAddr;
-    public phone: ClientPhone[];
+    public phone: ClientPhone[]=[new ClientPhone()];
 
     constructor() {
         this.firstname = '';
@@ -27,7 +28,8 @@ export class ClientDetails {
         this.addressOfRegistration.type = AddrType.REG;
         this.addressOfResidence = new ClientAddr();
         this.addressOfResidence.type = AddrType.FACT;
-        this.phone = [new ClientPhone("#phoneMobileType1")];
+
+
     }
 
     public assign(o: any): ClientDetails {
@@ -38,15 +40,26 @@ export class ClientDetails {
         this.gender = o.gender;
         this.dateOfBirth = o.dateOfBirth;
         this.characterId = o.characterId
+      if(o.addressOfRegistration){
         this.addressOfRegistration.street = o.addressOfRegistration.street;
         this.addressOfRegistration.house = o.addressOfRegistration.house;
         this.addressOfRegistration.flat = o.addressOfRegistration.flat;
-        this.addressOfRegistration.type = AddrType.REG;
-        this.addressOfResidence.street = o.addressOfRegistration.street;
-        this.addressOfResidence.house = o.addressOfRegistration.house;
-        this.addressOfResidence.flat = o.addressOfRegistration.flat;
-        this.addressOfResidence.type = AddrType.FACT;
+        this.addressOfRegistration.type = AddrType.REG;}
+        if(o.addressOfResidence){
+        this.addressOfResidence.street = o.addressOfResidence.street;
+        this.addressOfResidence.house = o.addressOfResidence.house;
+        this.addressOfResidence.flat = o.addressOfResidence.flat;
+        this.addressOfResidence.type = AddrType.FACT;}
         this.phone = o.phone;
         return this;
     }
+
+  public static copy(a: any): ClientDetails {
+    let ret = new ClientDetails();
+    ret.assign(a);
+    return ret;
+  }
+
+
+
 }
