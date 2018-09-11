@@ -10,6 +10,9 @@ import {LoginService} from "./login.service";
 export class LoginComponent {
   login = '';
   pass = '';
+  role = '';
+  _admin: boolean = false;
+  _user: boolean = false;
   constructor(private lService: LoginService) { }
 
   setLoginValue(event: any) {
@@ -21,7 +24,14 @@ export class LoginComponent {
   }
 
   logIn() {
-    this.lService.setUserRole(this.login, this.pass);
-    //console.log(this.login + '  ' + this.pass);
+    this.role = this.lService.setUserRole(this.login, this.pass);
+    if(this.role == 'Admin') {
+      this._admin = true;
+      this._user = false;
+    }
+    if(this.role == 'User') {
+      this._user = true;
+      this._admin = false;
+    }
   }
 }

@@ -12,15 +12,14 @@ export class LoginService implements OnInit {
   ngOnInit(): void {
   }
 
-  setUserRole(l: string, p:string) {
+  setUserRole(l: string, p:string): string {
     if(p==='123' && l==='pushkin'){
       this.role=Role.User;
     }
     if(p==='admin' && l==='admin'){
       this.role=Role.Admin;
     }
-
-    console.log(this.role);
+    return this.role;
   }
 
 }

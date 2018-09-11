@@ -5,3 +5,8 @@
     <button (click)="logIn()" >Войти</button>
   </div>
 </div>
+
+<br><br><br>
+
+<app-admin *ngIf="_admin"></app-admin>
+<app-user *ngIf="_user"></app-user>
