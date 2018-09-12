@@ -14,6 +14,7 @@ import {ClientService} from "./service/client.service";
 import {DataTableModule, DialogModule} from "primeng/primeng";
 import {TableModule} from "primeng/table";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {ButtonModule} from 'primeng/components/button/button';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
     AppRoutingModule,
     DataTableModule,
     TableModule,
-    DialogModule
+    DialogModule,
+    ButtonModule
   ],
   providers: [HttpService, ClientService],
   bootstrap: [AppComponent]

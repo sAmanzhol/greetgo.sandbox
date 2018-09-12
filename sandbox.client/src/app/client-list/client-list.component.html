@@ -1,4 +1,4 @@
-
+<p-button label="Добавить + "></p-button>
 <p-table [value]="clients">
   <ng-template pTemplate="header">
     <tr>
@@ -8,6 +8,7 @@
       <th>Общий остаток счетов</th>
       <th>Максимальный остаток</th>
       <th>Минимальный остаток</th>
+      <th>Действия</th>
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-data>
@@ -18,6 +19,10 @@
       <td>{{data.totalBalance}}</td>
       <td>{{data.maxBalance}}</td>
       <td>{{data.minBalance}}</td>
+      <td>
+        <p-button> ...</p-button>
+        <p-button> -</p-button>
+      </td>
     </tr>
   </ng-template>
 </p-table>
@@ -25,9 +30,3 @@
 <p-dialog [modal]="true" header="Title" [(visible)]="display">
   Content
 </p-dialog>
-
-<div class="edit-buttons">
-  <button> +</button>
-  <button> ...</button>
-  <button> -</button>
-</div>
