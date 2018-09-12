@@ -18,6 +18,7 @@ export interface Client {
 export class ClientListComponent implements OnInit {
   clients: Client[];
   display:boolean = false;
+  disabled:boolean = true;
 
   constructor(private _service: ClientService) {
   }

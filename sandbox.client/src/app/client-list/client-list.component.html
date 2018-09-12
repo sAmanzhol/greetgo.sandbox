@@ -1,4 +1,4 @@
-<p-button label="Добавить + "></p-button>
+<p-button label="Добавить + " class="add-btn"></p-button>
 <p-table [value]="clients">
   <ng-template pTemplate="header">
     <tr>
@@ -12,7 +12,7 @@
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-data>
-    <tr (click)="display =true">
+    <tr class="tRow" (click)="disabled = !disabled">
       <td>{{data.FIO}}</td>
       <td>{{data.character}}</td>
       <td>{{data.age}}</td>
@@ -20,8 +20,8 @@
       <td>{{data.maxBalance}}</td>
       <td>{{data.minBalance}}</td>
       <td>
-        <p-button> ...</p-button>
-        <p-button> -</p-button>
+        <p-button [(disabled)]="disabled" class="edit-btn" (click)="display = true"> ... </p-button>
+        <p-button [(disabled)]="disabled" class="delete-btn"> - </p-button>
       </td>
     </tr>
   </ng-template>
