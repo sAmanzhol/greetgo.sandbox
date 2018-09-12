@@ -1,0 +1,34 @@
+
+<p-table [value]="clients">
+  <ng-template pTemplate="header">
+    <tr>
+      <th>ФИО</th>
+      <th>Характер</th>
+      <th>Возраст</th>
+      <th>Общий остаток счетов</th>
+      <th>Максимальный остаток</th>
+      <th>Минимальный остаток</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-data>
+    <tr (click)="display =true">
+      <td>{{data.FIO}}</td>
+      <td>{{data.character}}</td>
+      <td>{{data.age}}</td>
+      <td>{{data.totalBalance}}</td>
+      <td>{{data.maxBalance}}</td>
+      <td>{{data.minBalance}}</td>
+    </tr>
+  </ng-template>
+</p-table>
+
+
+<p-dialog [modal]="true" header="Title" [(visible)]="display">
+  Content
+</p-dialog>
+
+<div class="edit-buttons">
+  <button> +</button>
+  <button> ...</button>
+  <button> -</button>
+</div>

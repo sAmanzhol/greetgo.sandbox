@@ -1,12 +1,9 @@
-<div >
-  <div >
-    <input type="text" placeholder="Username" (keyup)="setLoginValue($event)" >
-    <input type="password" placeholder="Password" (keyup)="setPassValue($event)" >
-    <button (click)="logIn()" >Войти</button>
+<div>
+  <div>
+    <input type="text" placeholder="Username">
+    <input type="password" placeholder="Password">
+    <button>
+      <a routerLink="/client-list">Войти</a>
+    </button>
   </div>
 </div>
-
-<br><br><br>
-
-<app-admin *ngIf="_admin"></app-admin>
-<app-user *ngIf="_user"></app-user>
