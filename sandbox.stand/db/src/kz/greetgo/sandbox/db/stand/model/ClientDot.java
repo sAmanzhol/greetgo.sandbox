@@ -1,4 +1,4 @@
-package kz.greetgo.sandbox.controller.register.model;
+package kz.greetgo.sandbox.db.stand.model;
 
 import kz.greetgo.sandbox.controller.model.model.Charm;
 import kz.greetgo.sandbox.controller.model.model.ClientAddr;
@@ -7,7 +7,7 @@ import kz.greetgo.sandbox.controller.model.model.GenderType;
 
 import java.util.List;
 
-public class Client {
+public class ClientDot {
     public int id;
     public String firstname;
     public String lastname;
@@ -21,7 +21,7 @@ public class Client {
     public ClientAddr addressOfResidence;
     public ClientAddr addressOfRegistration;
     public List<ClientPhone> phone;
-    public Client(){
+    public ClientDot(){
         character= new Charm();
     }
 

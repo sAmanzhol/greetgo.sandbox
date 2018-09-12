@@ -1,0 +1,160 @@
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+</head>
+
+
+<div class="container">
+  <!--first row-->
+  <div class="row">
+
+
+    <!--work filter-->
+    <div class="col s12 ">
+
+      <div class="col s3">
+        <input id="filterFirstname" [(ngModel)]="clientFilter.firstname">
+        <label for="filterLastname">Поиск по Фамилии</label>
+      </div>
+
+      <div class="col s3">
+        <input id="filterLastname" [(ngModel)]="clientFilter.lastname">
+        <label for="filterFirstname">Поиск по Имени</label>
+      </div>
+
+      <div class="col s3">
+        <input id="filterPatronymic" [(ngModel)]="clientFilter.patronymic">
+        <label for="filterPatronymic">Поиск по Отчеству</label>
+      </div>
+
+
+      <div class="col s3">
+        <a class="waves-effect waves-light btn icon material-icons"
+           (click)="filter(clientFilter)">search</a>
+      </div>
+
+    </div>
+    <!--work filter-->
+
+
+    <!--table-->
+    <div class="col s10">
+      <table class="centered">
+        <thead>
+        <tr class="card-panel teal lighten-2">
+          <th (click)="sort('firstname')">ФИО</th>
+          <th (click)="sort('character')">Характер</th>
+          <th (click)="sort('dateOfBirth')">возраст</th>
+          <th (click)="sort('totalAccountBalance')">общий остаток счетов</th>
+          <th (click)="sort('maximumBalance')">максимальный остаток</th>
+          <th (click)="sort('minimumBalance')">минимальный остаток</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let clientDot of clientRecord; first as isFirst " [class.mark]="clientOnSelect === clientDot "
+            (click)="onSelect(clientDot)">
+          <td>{{clientDot.firstname}} {{clientDot.lastname}} {{clientDot.patronymic}}</td>
+          <td>{{clientDot.characterName}}</td>
+          <td>{{clientDot.dateOfBirth}}</td>
+          <td>{{clientDot.totalAccountBalance}}</td>
+          <td>{{clientDot.maximumBalance}}</td>
+          <td> {{clientDot.minimumBalance}}</td>
+        </tr>
+        </tbody>
+      </table>
+
+    </div>
+    <!--table-->
+
+
+    <!--button-->
+    <div class="col s2">
+
+      <div class="col s12">
+        <button class="waves-effect waves-light btn material-icons " (click)="showAddFormOrEditForm(true)">add</button>
+      </div>
+      <br><br>
+
+      <div class="col s12">
+        <button class="waves-effect waves-light btn material-icons "
+                [disabled]="!clientOnSelect || !clientOnSelect.id" (click)="showAddFormOrEditForm(false)">more_horiz
+        </button>
+      </div>
+      <br><br>
+      <div class="col s12">
+        <button class="waves-effect waves-light btn material-icons " [disabled]="!clientOnSelect || !clientOnSelect.id"
+                (click)="deleteClient()">remove
+        </button>
+      </div>
+
+
+    </div>
+    <!--button-->
+
+    <!--pagination-->
+    <div class="col s10">
+      <div class="col s1">
+        <button class="waves-effect waves-light btn" [disabled]="clientFilter.page <= 0"
+                (click)="changePagination(clientFilter.page-1)"><<
+        </button>
+      </div>
+
+      <div class="col s3">
+
+      </div>
+
+      <div class="col s7">
+        <div class="col s1">
+          <a class="waves-effect waves-light btn" (click)="changePagination(0)">
+            {{1}}</a>
+        </div>
+        <div class="col s1"></div>
+        <div class="col s1">
+          <a class="waves-effect waves-light btn" (click)="changePagination(clientFilter.page)">
+            {{clientFilter.page+1}}</a>
+        </div>
+        <div class="col s1"></div>
+        <div class="col s1">
+          <a class="waves-effect waves-light btn" (click)="changePagination(clientFilter.pageTotal)">
+            {{clientFilter.pageTotal+1}}</a>
+        </div>
+        <div class="col s1"></div>
+        <div class="col s4">
+          <label>Размер Страницы</label>
+          <select class="form-control" name="recordSize" (change)="filter()"
+                  [(ngModel)]="clientFilter.recordSize">
+            <option value="10">10</option>
+            <option (keyup)="filter()" value="20">20</option>
+            <option (keyup)="filter()" value="25">25</option>
+            <option (keyup)="filter()" value="50">50</option>
+          </select>
+
+        </div>
+
+      </div>
+
+      <div class="col s1">
+        <button class="waves-effect waves-light btn" [disabled]="clientFilter.page==clientFilter.pageTotal"
+                (click)="changePagination(clientFilter.page+1)"> >>
+        </button>
+      </div>
+    </div>
+    <!--pagination-->
+
+    <!--modal form-->
+
+    <client-edit-form (onChangedClientRecord)="changeClientRecord($event)"></client-edit-form>
+
+
+    <!--modal form-->
+
+    <!--first row-->
+
+
+  </div>
+
+
+</div>

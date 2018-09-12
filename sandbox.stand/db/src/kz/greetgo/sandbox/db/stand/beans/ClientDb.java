@@ -3,21 +3,21 @@ package kz.greetgo.sandbox.db.stand.beans;
 import kz.greetgo.depinject.core.Bean;
 import kz.greetgo.depinject.core.HasAfterInject;
 import kz.greetgo.sandbox.controller.model.model.*;
-import kz.greetgo.sandbox.controller.register.model.Client;
+import kz.greetgo.sandbox.db.stand.model.ClientDot;
 import kz.greetgo.util.RND;
 
 import java.util.*;
 
 @Bean
 public class ClientDb implements HasAfterInject {
-    public Map<String, Client> client = new HashMap<String, Client>();
+    public Map<String, ClientDot> client = new HashMap<String, ClientDot>();
     public List<Charm> charm = new ArrayList<>();
 
     @Override
     public void afterInject() throws Exception {
         createCharm();
         for (int i = 1; i <= 115; i++) {
-            Client c = new Client();
+            ClientDot c = new ClientDot();
             c.id = i;
             c.firstname = "nazar";
             c.lastname = RND.str(8);
@@ -36,8 +36,8 @@ public class ClientDb implements HasAfterInject {
             client.put(RND.str(10),c);
 
         }
-        for (int i = 1; i <= 115; i++) {
-            Client c = new Client();
+        for (int i = 116; i <= 230; i++) {
+            ClientDot c = new ClientDot();
             c.id = i;
             c.firstname = "abu";
             c.lastname = RND.str(8);
@@ -56,6 +56,7 @@ public class ClientDb implements HasAfterInject {
             client.put(RND.str(10),c);
 
         }
+
 
 
     }
@@ -91,21 +92,32 @@ public class ClientDb implements HasAfterInject {
     }
 
     public void createCharm(){
-        charm.add(createCharmInner("Ленивый"));
-        charm.add(createCharmInner("Бодрый"));
-        charm.add(createCharmInner("Смелый"));
-        charm.add(createCharmInner("Оптимистичный"));
+        charm.add(createCharmInner("Ленивый", true));
+        charm.add(createCharmInner("Бодрый",true));
+        charm.add(createCharmInner("Смелый",true));
+        charm.add(createCharmInner("Оптимистичный",true));
+        charm.add(createCharmInner("Устойчивый",false));
+        charm.add(createCharmInner("Тихий",false));
+        charm.add(createCharmInner("Грустный",false));
     }
 
-    public Charm createCharmInner(String name){
+    public Charm createCharmInner(String name, boolean isActually){
         Charm c = new Charm();
         c.id = RND.plusInt(100);
         c.energy = RND.plusInt(100);
         c.description = RND.str(10);
+        c.actually=isActually;
         c.name = name;
 
         return c;
     }
+    public static Boolean RndBoolean(){
+    	int i = (int) (Math.random()*10 -5);
+    	if(i >= 0)
+    	return true;
+    	else
+    		return false;
+		}
 
     public static String RndDateOfBirth() {
         return (int) (Math.random() * 1000 + 1000) + "-" + (int) (Math.random() + 10) + "-" + (int) ((Math.random() + 10) + (Math.random() * 10) + 1);
@@ -113,7 +125,7 @@ public class ClientDb implements HasAfterInject {
 
     public  Charm RndCharacter() {
 
-        int rand = (int) (Math.random() * 3);
+        int rand = (int) (Math.random() * 7);
 
         return charm.get(rand);
     }

@@ -21,4 +21,5 @@ public interface ClientRegister {
 
     ClientDetails clientDetailsDelete(Integer clientMarkId);
 
+	  Charm getClientAddCharmId(Integer charmId);
 }

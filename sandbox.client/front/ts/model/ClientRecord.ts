@@ -1,7 +1,7 @@
 import {Charm} from "./Charm";
 
 export class ClientRecord {
-  public id:number/*int*/;
+  public id:number/*int*/|null;
   public firstname:string|null;
   public lastname:string|null;
   public patronymic:string|null;
