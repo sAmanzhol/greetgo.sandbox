@@ -20,6 +20,7 @@
 
 .modalDialog > div {
   border: #2d8c6b solid 0.1em;
+
   width: 1000px;
   position: relative;
   margin: 0.1% auto;
@@ -58,11 +59,11 @@
   display: inline-block;
 }
 
-.asd{
-  background: yellow;
+.mark{
+  background: rgb(158, 199, 182);
 }
 tbody tr:active{
-  background: red;
+  background: rgb(46, 255, 196);;
 }
 
 

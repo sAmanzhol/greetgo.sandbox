@@ -7,9 +7,9 @@ import {AuthInfo} from "../model/AuthInfo";
     template: `
 
         <!--<app-modal></app-modal>-->
-        <app-today></app-today>
+        <!--<app-today></app-today>-->
         <!--Рабочая состояния-->
-        <!-- <head>
+         <head>
            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
            <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
            <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -25,7 +25,7 @@ import {AuthInfo} from "../model/AuthInfo";
          ></main-form-component>
          <div *ngIf="mode == 'init'">
            Инициация системы... <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
-         </div>-->
+         </div>
     `
 })
 export class RootComponent implements OnInit {

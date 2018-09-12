@@ -6,7 +6,7 @@ public class ClientRecord {
     public String firstname;
     public String lastname;
     public String patronymic;
-    public Charm character;
+    public String characterName;
     public String dateOfBirth;
     public int totalAccountBalance;
     public int maximumBalance;
@@ -16,7 +16,7 @@ public class ClientRecord {
         this.firstname="";
         this.lastname="";
         this.patronymic="";
-        this.character=new Charm();
+        this.characterName=new Charm().name;
         this.dateOfBirth="2018-10-22";
         this.totalAccountBalance=0;
         this.maximumBalance=0;

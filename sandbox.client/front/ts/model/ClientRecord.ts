@@ -5,18 +5,17 @@ export class ClientRecord {
   public firstname:string|null;
   public lastname:string|null;
   public patronymic:string|null;
-  public character:Charm;
+  public characterName:string;
   public dateOfBirth:string;
   public totalAccountBalance:number/*int*/;
   public maximumBalance:number/*int*/;
   public minimumBalance:number/*int*/;
 
   constructor(){
-    this.id =0;
     this.firstname="";
     this.lastname="";
     this.patronymic="";
-    this.character=new Charm();
+    this.characterName=new Charm().name;
     this.dateOfBirth="2018-10-22";
     this.totalAccountBalance=0;
     this.maximumBalance=0;
@@ -28,7 +27,7 @@ export class ClientRecord {
     this.firstname=o.firstname;
     this.lastname=o.lastname;
     this.patronymic=o.patronymic;
-    this.character=o.character;
+    this.characterName=o.characterName;
     this.dateOfBirth=o.dateOfBirth;
     this.totalAccountBalance=o.totalAccountBalance;
     this.maximumBalance=o.maximumBalance;

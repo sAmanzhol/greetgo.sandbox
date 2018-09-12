@@ -16,9 +16,9 @@ export class ClientFilter {
         this.orderBy = "";
         this.sort = true;
         this.page = 0;
-        this.pageTotal = 0;
-        this.recordSize = 10;
-        this.recordTotal = 0;
+      this.recordTotal = 0;
+      this.recordSize = 10;
+      this.pageTotal = 1
 
     }
     public assign(o: any): ClientFilter {
