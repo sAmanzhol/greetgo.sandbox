@@ -5,6 +5,6 @@ import {CharacterType} from "./CharacterType";
 
 
 export class Character{
-  public characterType: CharacterType;
-  public characterTypeRuss: string;
+  public type: CharacterType;
+  public typeRuss: string;
 }

@@ -17,4 +17,7 @@ public class Address {
         this.house = house;
         this.apartment = apartment;
     }
+    public static Address empty(){
+        return new Address("", "", 0);
+    }
 }

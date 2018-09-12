@@ -36,7 +36,9 @@ export class ClientDetailService {
   }
     saveClient(ToSave: ClientToSave){
     //debugger;
-     return this.http.post("/client/save", {'toSave': JSON.stringify(ToSave)}) // {params: HttpParams})
+      let s = JSON.stringify(ToSave);
+      //debugger;
+     return this.http.post("/client/save", {'toSave': s}) // {params: HttpParams})
       .toPromise()
       .then(resp => resp.body as any)
       .then(body => ClientRecord.create(body));

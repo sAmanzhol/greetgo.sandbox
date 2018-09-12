@@ -10,12 +10,14 @@ export class ClientToSave{
   public name: string;
   public patronymic:string ;
   public age: number/*int*/;
-  public gender: Gender;
+  public gender: Gender = new Gender();
   public birthDay: Date;
-  public character: Character;
-  public actualAddress: Address;
-  public registrationAddress: Address;
+  public character: Character = new Character();
+  public actualAddress: Address = new Address();
+  public registrationAddress: Address = new Address();
   public phones: Phone[];
+
+
 
   static create(clientDetail: ClientDetail): ClientToSave {
     //debugger;
@@ -24,7 +26,6 @@ export class ClientToSave{
     return ret;
   }
   assign(a: ClientDetail) {
-    // FIXME: msultanova 9/12/18   add clientId to Details
     if(a.clientID)
       this.clientID = a.clientId;
     if(a.surname)

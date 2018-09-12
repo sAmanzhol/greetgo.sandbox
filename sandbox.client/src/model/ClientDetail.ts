@@ -12,14 +12,14 @@ export class ClientDetail {
   public name: string;
   public patronymic: string;
   public gender: Gender;
-  public genders: Gender[];
+  public genders: Gender[] = new Gender();
   public birthDay: Date;
   public character: Character;
-  public characters: Character[];
-  public actualAddress: Address;
-  public registrationAddress: Address;
+  public characters: Character[] = new Character();
+  public actualAddress: Address = new Address();
+  public registrationAddress: Address = new Address();
   public phones: Phone[];
-  public phoneDetailList: PhoneDetail[]
+  public phoneDetailList: PhoneDetail[];
   public clientId: number/*long*/;
 
 

@@ -67,10 +67,10 @@ public class ClienRegisterImpl implements ClientRegister {
         }catch (ParseException e) {
             e.printStackTrace();
         }
-        clients.add(new Client(1, "Sultanova", "Madina", "Mahammadnova", female, birthdayDate, opennesCharacter, 20, 1000, 5, 5000, null, new Address("Mamyr-4", "311", 38), phones));
-        clients.add(new Client(2, "Ajs", "Gvlv", "osoos", male, birthdayDate, agreeablenessCharacter, 7, 100, 0, 5, null, new Address("Mamyr-4", "311", 38), phones));
-        clients.add(new Client(3, "Vsis", "Akkdd", "llsls", female, birthdayDate, extraversionCharacter, 75, 100, 8, 5545, null, new Address("Mamyr-4", "311", 38), phones));
-        clients.add(new Client(4, "Tllxlx", "Bodd", "lslslsl", male, birthdayDate, neuroticismCharacter, 1, 100, 825, 574, null, new Address("Mamyr-4", "311", 38), phones));
+        clients.add(new Client(1, "Sultanova", "Madina", "Mahammadnova", female, birthdayDate, opennesCharacter, 20, 1000, 5, 5000, Address.empty(), new Address("Mamyr-4", "311", 38), phones));
+        clients.add(new Client(2, "Ajs", "Gvlv", "osoos", male, birthdayDate, agreeablenessCharacter, 7, 100, 0, 5, Address.empty(), new Address("Mamyr-4", "311", 38), phones));
+        clients.add(new Client(3, "Vsis", "Akkdd", "llsls", female, birthdayDate, extraversionCharacter, 75, 100, 8, 5545, Address.empty(), new Address("Mamyr-4", "311", 38), phones));
+        clients.add(new Client(4, "Tllxlx", "Bodd", "lslslsl", male, birthdayDate, neuroticismCharacter, 1, 100, 825, 574, Address.empty(), new Address("Mamyr-4", "311", 38), phones));
 
     }
 
@@ -96,10 +96,17 @@ public class ClienRegisterImpl implements ClientRegister {
         clientRecord.maxBalance = client.maxBalance;
         clientRecord.character = client.character;
         clientRecord.clientId = client.id;
+        //clientRecord.phones = client.phones;
         return clientRecord;
     }
     public Client createClientFromToSave(ClientToSave toSave){
         Client client = new Client();
+        if(toSave.clientID > 0) {
+            client.id = toSave.clientID;
+        }
+        else {
+            client.id = clients.get(clients.size() - 1).id + 1;
+        }
         client.name = toSave.name;
         client.surname = toSave.surname;
         client.patronymic = toSave.patronymic;
@@ -108,34 +115,14 @@ public class ClienRegisterImpl implements ClientRegister {
         client.birthDay = toSave.birthDay;
         client.gender = toSave.gender;
         client.character = toSave.character;
-        client.id = toSave.clientID;
         client.phones = toSave.phones;
         client.registrationAddress = toSave.registrationAddress;
         return client;
     }
 
-    public Client updateClientFromToSave(ClientToSave toSave, Client client){
-        client.name = toSave.name;
-        client.surname = toSave.surname;
-        client.patronymic = toSave.patronymic;
-        client.actualAddress = toSave.actualAddress;
-        //client.age = toSave.age;
-        client.birthDay = toSave.birthDay;
-        client.gender = toSave.gender;
-        client.character = toSave.character;
-        if(toSave.clientID != -1)
-            client.id = toSave.clientID;
-        else
-            client.id = clients.get(clients.size()-1).id+1;
-        client.phones = toSave.phones;
-        client.registrationAddress = toSave.registrationAddress;
-
-        return client;
-    }
     @Override
-    public ClientDetail getClienDetailById(long id) {
-        ClientDetail clientDetail = new ClientDetail(genders, characters, phoneDetails);
-        ;
+    public ClientDetail getClientDetailById(long id) {
+        ClientDetail clientDetail = ClientDetail.forSave(genders, characters, phoneDetails);
 
         if (clients != null) {
             for (Client client : clients) {
@@ -150,17 +137,19 @@ public class ClienRegisterImpl implements ClientRegister {
 
     @Override
     public ClientRecord saveClient(ClientToSave toSave) {
-
+        ClientRecord clientRecord = new ClientRecord();
         if (clients != null) {
             for (Client client : clients) {
                 if (client.id == toSave.clientID) {
-                    client = updateClientFromToSave(toSave, client);
+                    client = createClientFromToSave(toSave);
                     return  createRecordFromClient(client);
                 }
             }
-            return createRecordFromClient(createClientFromToSave(toSave));
+            Client newClient = createClientFromToSave(toSave);
+            clients.add(newClient);
+            return createRecordFromClient(newClient);
         }
-        return null;
+        return clientRecord;
     }
 
     @Override
@@ -177,5 +166,3 @@ public class ClienRegisterImpl implements ClientRegister {
         }
     }
 }
-
-

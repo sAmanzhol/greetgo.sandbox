@@ -23,16 +23,16 @@ public class ClientDetail {
     public List<PhoneDetail> phoneDetailList;
     public long clientId;
 
+
     public ClientDetail() {
     }
 
-    public ClientDetail(List<Gender> genders, List<Character> characters, List<PhoneDetail> phoneDetailList) {
-        this.genders = genders;
-        this.characters = characters;
-        this.phones = phones;
-        this.phoneDetailList = phoneDetailList;
+    public static ClientDetail forSave(List<Gender> genders, List<Character> characters, List<PhoneDetail> phoneDetailList) {
+        return new ClientDetail("", "", "", 0, new Gender(), genders, null,
+                new Character(), characters, Address.empty(), Address.empty(), new ArrayList<>(), phoneDetailList, -1);
     }
-    public ClientDetail initalize(ClientDetail clientDetail){
+
+    public ClientDetail initalize(ClientDetail clientDetail) {
         this.surname = clientDetail.surname;
         this.name = clientDetail.name;
         this.patronymic = clientDetail.patronymic;
@@ -47,7 +47,9 @@ public class ClientDetail {
         return this;
     }
 
-    public ClientDetail(String surname, String name, String patronymic, int age, Gender gender, List<Gender> genders, Date birthDay, Character character, List<Character> characters, Address actualAddress, Address registrationAddress, List<Phone> phones, List<PhoneDetail> phoneDetailList, long clientId) {
+    public ClientDetail(String surname, String name, String patronymic, int age, Gender gender, List<Gender> genders, Date birthDay,
+                        Character character, List<Character> characters, Address actualAddress, Address registrationAddress,
+                        List<Phone> phones, List<PhoneDetail> phoneDetailList, long clientId) {
         this.surname = surname;
         this.name = name;
         this.patronymic = patronymic;

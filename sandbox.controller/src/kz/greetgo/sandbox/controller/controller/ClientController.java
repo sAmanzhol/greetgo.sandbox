@@ -38,7 +38,7 @@ public class ClientController implements Controller {
     @PublicAccess
     @OnGet("/detail")
     public ClientDetail getDetail(@Par("id") Long id){
-        return clientRegisterBeanGetter.get().getClienDetailById(id);
+        return clientRegisterBeanGetter.get().getClientDetailById(id);
         //return null;
     }
 
