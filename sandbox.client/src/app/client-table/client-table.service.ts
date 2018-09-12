@@ -19,8 +19,7 @@ export class ClientTableService {
   loadRecords(): Promise<ClientRecord[]> {
     return this.http.get("/client/list")
       .toPromise()
-      .then(resp =>
-        resp.body as Array<any>)
+      .then(resp => resp.body as Array<any>)
       .then(body => body.map(r => ClientRecord.create(r)));
   }
 
@@ -38,19 +37,13 @@ export class ClientTableService {
     }
   }
 
-  deleteClient(id: number) {
-    this.http.delete("/client/delete", {'id': id});
-    this.deleteClientFromList(id);
+  public deleteClient(rec: ClientRecord) {
+    this.http.delete("/client/delete", {'id': rec.clientId}).subscribe(res => console.log(res));
+    this.deleteClientFromList(rec);
   }
 
-  deleteClientFromList(id: number) {
-    this.list.forEach(function(clientRecord){
-      if (id == clientRecord.clientId) {
-        console.log("Delete id: " + id);
-      }
-    });
-
-
+  deleteClientFromList(rec: ClientRecord) {
+    this.list.splice(this.list.indexOf(rec), 1);
 }
 
   addClientToList(rec: ClientRecord) {

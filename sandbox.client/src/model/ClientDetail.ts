@@ -2,6 +2,7 @@ import {Address} from "./Address";
 import {Phone} from "./Phone";
 import {Gender} from "./Gender";
 import {Character} from "./Character";
+import {PhoneDetail} from "./PhoneDetail";
 /**
  * Created by msultanova on 9/5/18.
  */
@@ -18,6 +19,8 @@ export class ClientDetail {
   public actualAddress: Address;
   public registrationAddress: Address;
   public phones: Phone[];
+  public phoneDetailList: PhoneDetail[]
+  public clientId: number/*long*/;
 
 
   public static create(a: any): ClientDetail {
@@ -26,17 +29,77 @@ export class ClientDetail {
     return ret;
   }
 
+
+  constructor(surname: string, name: string, patronymic: string, gender: Gender, genders: Gender[], birthDay: Date, character: Character, characters: Character[], actualAddress: Address, registrationAddress: Address, phones: Phone[], phoneDetailList: PhoneDetail[], clientId: number) {
+    this.surname = surname;
+    this.name = name;
+    this.patronymic = patronymic;
+    this.gender = gender;
+    this.genders = genders;
+    this.birthDay = birthDay;
+    this.character = character;
+    this.characters = characters;
+    this.actualAddress = actualAddress;
+    this.registrationAddress = registrationAddress;
+    this.phones = phones;
+    this.phoneDetailList = phoneDetailList;
+    this.clientId = clientId;
+  }
+
+  // constructor(genders: Gender[], characters: Character[], phones: Phone[], clientId: number) {
+  //   this.surname = surname;
+  //   this.name = name;
+  //   this.patronymic = patronymic;
+  //   this.gender = gender;
+  //   this.genders = genders;
+  //   this.birthDay = birthDay;
+  //   this.character = character;
+  //   this.characters = characters;
+  //   this.actualAddress = actualAddress;
+  //   this.registrationAddress = registrationAddress;
+  //   this.phones = phones;
+  //   this.clientId = clientId;
+  // }
+
   assign(a: any) {
-    this.surname = a.surname;
-    this.name = a.name;
-    this.patronymic = a.patronymic;
-    this.gender = a.gender;
-    this.genders = a.genders;
-    this.birthDay = a.birthDay;
-    this.character = a.character;
-    this.characters = a.characters;
-    this.actualAddress = a.actualAddress;
-    this.registrationAddress = a.registrationAddress;
-    this.phones = a.phones;
+    if(a.surname) {
+      this.surname = a.surname;
+    }
+    if(a.name) {
+      this.name = a.name;
+    }
+    if(a.patronymic) {
+      this.patronymic = a.patronymic;
+    }
+    if(a.gender) {
+      this.gender = a.gender;
+    }
+    if(a.genders) {
+      this.genders = a.genders;
+    }
+    if(a.birthDay) {
+      this.birthDay = a.birthDay;
+    }
+    if(a.character) {
+      this.character = a.character;
+    }
+    if(a.characters) {
+      this.characters = a.characters;
+    }
+    if(a.actualAddress) {
+      this.actualAddress = a.actualAddress;
+    }
+    if(a.registrationAddress) {
+      this.registrationAddress = a.registrationAddress;
+    }
+    if(a.phones) {
+      this.phones = a.phones;
+    }
+    if(a.clientId) {
+      this.clientId = a.clientId;
+    }
+    if(a.phoneDetailList){
+      this.phoneDetailList = a.phoneDetailList;
+    }
   }
 }

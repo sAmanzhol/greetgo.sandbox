@@ -1,7 +1,7 @@
 <h2 mat-dialog-title>Редактирование</h2>
 <mat-dialog-content class="mat-typography">
 
-  <p *ngIf="clientToSave?.surname">
+  <p>
     <mat-form-field>
       <mat-label>Фамилия</mat-label>
       <input matInput [(ngModel)]="clientToSave.surname">
@@ -34,13 +34,10 @@
     </mat-form-field>
   </p>
 
-  <p *ngIf="clientToSave.birthDay">
+  <p>
     <mat-form-field class="example-full-width">
       <input matInput [matDatepickerFilter]="myFilter" [matDatepicker]="picker" placeholder="Дата рождения"
              [(ngModel)]="clientToSave.birthDay">
-      <!--[(ngModel)] = "{{clientDetailService.clientDetail.birthDay.toString()}}">-->
-      <!--value="{{clientDetailService.clientDetail.birthDay}}">-->
-      <!--[(ngModel)] = "nextDay">-->
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
@@ -71,12 +68,12 @@
       <input matInput [(ngModel)]="clientToSave.actualAddress.house">
     </mat-form-field>
     <br>
-
     <mat-form-field appearance="legacy">
       <mat-label>Квартира</mat-label>
       <input matInput [(ngModel)]="clientToSave.actualAddress.apartment">
     </mat-form-field>
   </p>
+
   <p *ngIf="clientToSave?.registrationAddress">Адрес регистрации<br>
     <mat-form-field appearance="legacy">
       <mat-label>Улица</mat-label>

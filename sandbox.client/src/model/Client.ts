@@ -8,6 +8,7 @@ export class Client{
   public id: number/*long*/;
   public surname: string;
   public name: string;
+  public age: number/*int*/;
   public patronymic: string;
   public character: CharacterType;
   public age: number/*int*/;

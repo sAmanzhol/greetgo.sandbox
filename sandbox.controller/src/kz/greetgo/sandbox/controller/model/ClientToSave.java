@@ -8,6 +8,7 @@ public class ClientToSave {
  public long clientID;
  public String surname;
  public String name;
+ public int age;
  public String patronymic;
  public Gender gender;
  public Date birthDay;

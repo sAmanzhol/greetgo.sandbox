@@ -55,9 +55,9 @@ public class ClientController implements Controller {
     @ToJson
     @PublicAccess
     @OnDelete("/delete")
-    public ClientRecord delete(@Par("id") Long id){
-        //return clientRegisterBeanGetter.get().saveClient(toSave);
-        return null;
+    public void delete(@Par("id") Long id){
+        clientRegisterBeanGetter.get().deleteClient(id);
+        //return null;
     }
 
 }

@@ -16,7 +16,7 @@ import {ClientDetail} from "../../model/ClientDetail";
 export class ClientDetailComponent implements OnInit {
 
   public clientToSave: ClientToSave = new ClientToSave();
-  clientDetail: ClientDetail = new ClientDetail;
+  clientDetail: ClientDetail = new ClientDetail();
 
   constructor(public clientDetailService: ClientDetailService, public dialogRef: MatDialogRef<ClientDetailComponent>, @Inject(MAT_DIALOG_DATA) public data: number) {
   }
@@ -26,7 +26,7 @@ export class ClientDetailComponent implements OnInit {
   async init() {
     this.clientDetailService.load(this.data);
     this.clientDetail = await this.clientDetailService.loadClientDetailRecord(this.data);
-    this.clientToSave = ClientToSave.create(this.clientDetail, this.data);
+      this.clientToSave = ClientToSave.create(this.clientDetail);
   }
   async saveClient() {
     //debugger;

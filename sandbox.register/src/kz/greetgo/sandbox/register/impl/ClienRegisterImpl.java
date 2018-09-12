@@ -5,7 +5,6 @@ import kz.greetgo.sandbox.controller.model.*;
 import kz.greetgo.sandbox.controller.model.Character;
 import kz.greetgo.sandbox.controller.register.ClientRegister;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -22,19 +21,29 @@ public class ClienRegisterImpl implements ClientRegister {
     List<ClientRecord> clientRecords = null;
     List<Character> characters = null;
     List<Gender> genders = null;
+    List<PhoneDetail> phoneDetails = null;
 
 
     public void createClients() {
 
         clients = new ArrayList<>();
-        List<Phone> phones = new ArrayList<>();
 
-        phones.add(new Phone(PhoneType.MOBILE, "Мобильный", "7474938358"));
-        phones.add(new Phone(PhoneType.HOME,"Домашний", "7273810983"));
+        phoneDetails = new ArrayList<PhoneDetail>();
+        PhoneDetail phoneDetail1 = new PhoneDetail(PhoneType.MOBILE, "Мобильный");
+        PhoneDetail phoneDetail2 = new PhoneDetail(PhoneType.HOME, "Домашний");
+        PhoneDetail phoneDetail3 = new PhoneDetail(PhoneType.WORK, "Рабочий");
+        phoneDetails.add(phoneDetail1);
+        phoneDetails.add(phoneDetail2);
+        phoneDetails.add(phoneDetail3);
+
+
+        List<Phone> phones = new ArrayList<>();
+        phones.add(new Phone(phoneDetail1, "7474938358"));
+        phones.add(new Phone(phoneDetail2, "7273810983"));
 
         genders = new ArrayList<Gender>();
-        Gender male = new Gender(GenderType.M, "мужской");
-        Gender female = new Gender(GenderType.F, "женский");
+        Gender male = new Gender(GenderType.MALE, "мужской");
+        Gender female = new Gender(GenderType.FEMALE, "женский");
         genders.add(male);
         genders.add(female);
 
@@ -50,14 +59,6 @@ public class ClienRegisterImpl implements ClientRegister {
         characters.add(conscientiousnessCharacter);
         characters.add(extraversionCharacter);
         characters.add(neuroticismCharacter);
-
-//        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-//        try {
-//            Date date = formatter.parse("20/12/1998");
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-//
 
         Date birthdayDate= new Date();
 
@@ -75,9 +76,7 @@ public class ClienRegisterImpl implements ClientRegister {
 
     @Override
     public List<ClientRecord> getClientList() {
-
         clientRecords = new ArrayList<>();
-
         createClients();
         if (clients != null) {
             for (Client client : clients) {
@@ -105,14 +104,13 @@ public class ClienRegisterImpl implements ClientRegister {
         client.surname = toSave.surname;
         client.patronymic = toSave.patronymic;
         client.actualAddress = toSave.actualAddress;
-        //client.age = toSave.age;
+        client.age = toSave.age;
         client.birthDay = toSave.birthDay;
         client.gender = toSave.gender;
         client.character = toSave.character;
         client.id = toSave.clientID;
         client.phones = toSave.phones;
         client.registrationAddress = toSave.registrationAddress;
-
         return client;
     }
 
@@ -125,7 +123,10 @@ public class ClienRegisterImpl implements ClientRegister {
         client.birthDay = toSave.birthDay;
         client.gender = toSave.gender;
         client.character = toSave.character;
-        client.id = toSave.clientID;
+        if(toSave.clientID != -1)
+            client.id = toSave.clientID;
+        else
+            client.id = clients.get(clients.size()-1).id+1;
         client.phones = toSave.phones;
         client.registrationAddress = toSave.registrationAddress;
 
@@ -133,12 +134,13 @@ public class ClienRegisterImpl implements ClientRegister {
     }
     @Override
     public ClientDetail getClienDetailById(long id) {
-        ClientDetail clientDetail = null;
+        ClientDetail clientDetail = new ClientDetail(genders, characters, phoneDetails);
+        ;
 
         if (clients != null) {
             for (Client client : clients) {
                 if (client.id == id) {
-                    clientDetail = new ClientDetail(client.surname, client.name, client.patronymic, client.gender, genders, client.birthDay, client.character, characters, client.actualAddress, client.registrationAddress, client.phones, client.id);
+                    clientDetail = clientDetail.initalize(new ClientDetail(client.surname, client.name, client.patronymic,client.age, client.gender, genders, client.birthDay, client.character, characters, client.actualAddress, client.registrationAddress, client.phones, phoneDetails, client.id));
                     //new ClientDetail(client.surname, client.name, client.patronymic, client.gender, genders, client.birthDay,  client.character, characters, client.actualAddress, client.registrationAddress, client.phones, client.id);
                 }
             }

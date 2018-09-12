@@ -9,7 +9,7 @@ import {FormsModule} from "@angular/forms";
 import {ClientListComponent} from "./client-list/client-list.component";
 import {ClientListService} from "./client-list/client-list.service";
 import {AboutComponent} from "./about/about.component";
-import {TestComponent} from "./client-table/client-table.component";
+import {ClientTableComponent} from "./client-table/client-table.component";
 import {ClientDetailComponent} from "./client-detail/client-detail.component";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {
@@ -27,7 +27,7 @@ import { EditComponent } from './edit/edit.component';
     LoginComponent,
     ClientListComponent,
     AboutComponent,
-    TestComponent,
+    ClientTableComponent,
     ClientDetailComponent,
     AddComponent,
     EditComponent

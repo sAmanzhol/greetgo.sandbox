@@ -34,7 +34,7 @@ export class ClientDetailService {
       console.error(e);
     }
   }
-  saveClient(ToSave: ClientToSave){
+    saveClient(ToSave: ClientToSave){
     //debugger;
      return this.http.post("/client/save", {'toSave': JSON.stringify(ToSave)}) // {params: HttpParams})
       .toPromise()

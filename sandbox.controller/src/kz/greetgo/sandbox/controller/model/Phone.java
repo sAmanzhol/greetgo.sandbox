@@ -4,16 +4,14 @@ package kz.greetgo.sandbox.controller.model;
  * Created by msultanova on 9/5/18.
  */
 public class Phone {
-    public PhoneType phoneType;
-    public String phoneTypeRuss;
+    public PhoneDetail phoneDetail;
     public String number;
 
     public Phone() {
     }
 
-    public Phone(PhoneType phoneType, String phoneTypeRuss, String number) {
-        this.phoneType = phoneType;
-        this.phoneTypeRuss = phoneTypeRuss;
+    public Phone(PhoneDetail phoneDetail, String number) {
+        this.phoneDetail = phoneDetail;
         this.number = number;
     }
 }

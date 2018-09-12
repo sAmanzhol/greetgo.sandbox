@@ -11,7 +11,7 @@ import {ClientRecord} from "../../model/ClientRecord";
   styleUrls: ['./client-table.component.css']
 })
 
-export class TestComponent implements OnInit {
+export class ClientTableComponent implements OnInit {
 
 
   constructor(public clientTableService: ClientTableService, public dialog: MatDialog) {
@@ -24,12 +24,14 @@ export class TestComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed = ' + result);
       //debugger;
-      this.clientTableService.addClientToList(result);
+      if(result) {
+        this.clientTableService.addClientToList(result);
+      }
     });
   }
 
-  delete(id: number) {
-    this.clientTableService.deleteClient(id);
+  delete(rec: ClientRecord) {
+    this.clientTableService.deleteClient(rec);
   }
 
   ngOnInit() {

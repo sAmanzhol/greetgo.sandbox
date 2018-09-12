@@ -11,6 +11,7 @@ public class ClientDetail {
     public String surname;
     public String name;
     public String patronymic;
+    public int age;
     public Gender gender;
     public List<Gender> genders;
     public Date birthDay;
@@ -18,17 +19,39 @@ public class ClientDetail {
     public List<Character> characters;
     public Address actualAddress;
     public Address registrationAddress;
-    public List<Phone> phones = new ArrayList<>();
+    public List<Phone> phones;
+    public List<PhoneDetail> phoneDetailList;
     public long clientId;
 
     public ClientDetail() {
     }
 
-    public ClientDetail(String surname, String name, String patronymic, Gender gender, List<Gender> genders, Date birthDay, Character character, List<Character> characters, Address actualAddress, Address registrationAddress, List<Phone> phones, long clientId) {
+    public ClientDetail(List<Gender> genders, List<Character> characters, List<PhoneDetail> phoneDetailList) {
+        this.genders = genders;
+        this.characters = characters;
+        this.phones = phones;
+        this.phoneDetailList = phoneDetailList;
+    }
+    public ClientDetail initalize(ClientDetail clientDetail){
+        this.surname = clientDetail.surname;
+        this.name = clientDetail.name;
+        this.patronymic = clientDetail.patronymic;
+        this.age = clientDetail.age;
+        this.gender = clientDetail.gender;
+        this.birthDay = clientDetail.birthDay;
+        this.character = clientDetail.character;
+        this.actualAddress = clientDetail.actualAddress;
+        this.registrationAddress = clientDetail.registrationAddress;
+        this.phones = clientDetail.phones;
+        this.clientId = clientDetail.clientId;
+        return this;
+    }
 
+    public ClientDetail(String surname, String name, String patronymic, int age, Gender gender, List<Gender> genders, Date birthDay, Character character, List<Character> characters, Address actualAddress, Address registrationAddress, List<Phone> phones, List<PhoneDetail> phoneDetailList, long clientId) {
         this.surname = surname;
         this.name = name;
         this.patronymic = patronymic;
+        this.age = age;
         this.gender = gender;
         this.genders = genders;
         this.birthDay = birthDay;
@@ -37,6 +60,7 @@ public class ClientDetail {
         this.actualAddress = actualAddress;
         this.registrationAddress = registrationAddress;
         this.phones = phones;
+        this.phoneDetailList = phoneDetailList;
         this.clientId = clientId;
     }
 }

@@ -1,10 +1,11 @@
 import {CharacterType} from "./CharacterType";
+import {Character} from "./Character";
 /**
  * Created by msultanova on 9/4/18.
  */
 export class ClientRecord{
   public fio: string;
-  public character: CharacterType;
+  public character: Character;
   public age: number/*int*/;
   public totalBalance: number/*int*/;
   public minBalance: number/*int*/;

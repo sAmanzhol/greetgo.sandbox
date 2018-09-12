@@ -33,7 +33,7 @@ public class LogIdentity {
 
   public static void appendLogIdentity(StringBuilder buf) {
     if (machine != null) {
-      buf.append("M:").append(machine).append(',');
+      buf.append("MALE:").append(machine).append(',');
     }
     buf.append("RUN:").append(RUN);
     {
