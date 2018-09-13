@@ -1,5 +1,5 @@
-<p-button label="Добавить + " class="add-btn"></p-button>
-<p-table [value]="clients">
+<p-button label="Добавить + " class="add-btn" (onClick)="add()"></p-button>
+<p-table [value]="clients" selectionMode="single">
   <ng-template pTemplate="header">
     <tr>
       <th>ФИО</th>
@@ -11,22 +11,121 @@
       <th>Действия</th>
     </tr>
   </ng-template>
+
   <ng-template pTemplate="body" let-data>
-    <tr class="tRow" (click)="disabled = !disabled">
-      <td>{{data.FIO}}</td>
+    <tr class="tRow" [class.selected]="data===selectedClient" (click)="onSelect(data)">
+      <td>{{data.lastName}} {{data.name}} {{data.fatherName}}</td>
       <td>{{data.character}}</td>
       <td>{{data.age}}</td>
       <td>{{data.totalBalance}}</td>
       <td>{{data.maxBalance}}</td>
       <td>{{data.minBalance}}</td>
       <td>
-        <p-button [(disabled)]="disabled" class="edit-btn" (click)="display = true"> ... </p-button>
-        <p-button [(disabled)]="disabled" class="delete-btn"> - </p-button>
+        <p-button [disabled]="data!=selectedClient" class="edit-btn" (click)="edit(data.id)" label="..."></p-button>
+        <p-button [disabled]="data!=selectedClient" class="delete-btn" label="-"></p-button>
       </td>
     </tr>
   </ng-template>
 </p-table>
 
-<p-dialog [modal]="true" header="Title" [(visible)]="display">
-  Content
+<p-dialog [modal]="true" [(visible)]="display">
+  <p-header>
+    Клиент
+  </p-header>
+  <form *ngIf="clientDetail">
+    <div>
+      <label>Фамилия</label>
+      <input type="text" name="lastName" [(ngModel)]="clientDetail.lastName"/>
+    </div>
+    <div>
+      <label>Имя</label>
+      <input type="text" name="name" [(ngModel)]="clientDetail.name"/>
+    </div>
+    <div>
+      <label>Отчество</label>
+      <input type="text" name="fatherName" [(ngModel)]="clientDetail.fatherName"/>
+    </div>
+    <div>
+      <label>Пол</label>
+      <div class="ui-g" style="width:250px;margin-bottom:10px">
+        <p-radioButton class="ui-g-12" name="gender" value="Мужской" label="Мужской"
+                       [(ngModel)]="clientDetail.gender"></p-radioButton>
+        <p-radioButton class="ui-g-12" name="gender" value="Женский" label="Женский"
+                       [(ngModel)]="clientDetail.gender"></p-radioButton>
+      </div>
+    </div>
+
+    <div>
+      <div>
+        <label>Дата рождения</label>
+        <p-calendar [monthNavigator]="true" [yearNavigator]="true" yearRange="1900:2030"
+                    name="birthDate" [(ngModel)]="clientDetail.birthDate"></p-calendar>
+      </div>
+    </div>
+    <div>
+      <label class="first">Характер</label>
+      <p-dropdown [options]="characters" [(ngModel)]="clientDetail.character" name="character" optionLabel="value"
+                  placeholder="Выберите характер"></p-dropdown>
+    </div>
+
+    <div>
+      <h4>Адрес проживания (фактический)</h4>
+      <div>
+        <label>Улица</label>
+        <input type="text" name="factStreet" [(ngModel)]="clientDetail.factStreet"/>
+      </div>
+      <div>
+        <label>Дом</label>
+        <input type="text" name="factNo" [(ngModel)]="clientDetail.factNo"/>
+      </div>
+      <div>
+        <label>Квартира</label>
+        <input type="text" name="factFlat" [(ngModel)]="clientDetail.factFlat"/>
+      </div>
+    </div>
+
+    <div>
+      <h4>Адрес регистрации</h4>
+      <div>
+        <label>Улица</label>
+        <input type="text" name="regStreet" [(ngModel)]="clientDetail.regStreet"/>
+      </div>
+      <div>
+        <label>Дом</label>
+        <input type="text" name="regNo" [(ngModel)]="clientDetail.regNo"/>
+      </div>
+      <div>
+        <label>Квартира</label>
+        <input type="text" name="regFlat" [(ngModel)]="clientDetail.regFlat"/>
+      </div>
+    </div>
+
+    <div>
+      <h4>Телефоны (один мобильный обязателен)</h4>
+      <div>
+        <label>Домашний</label>
+        <input type="text" name="homePhoneNumber" [(ngModel)]="clientDetail.homePhoneNumber"/>
+      </div>
+      <div>
+        <label>Рабочий</label>
+        <input type="text" name="workPhoneNumber" [(ngModel)]="clientDetail.workPhoneNumber"/>
+      </div>
+      <div>
+        <label>Мобильный1</label>
+        <input type="text" name="mobileNumber1" [(ngModel)]="clientDetail.mobileNumber1"/>
+      </div>
+      <div>
+        <label>Мобильный2</label>
+        <input type="text" name="mobileNumber2" [(ngModel)]="clientDetail.mobileNumber2"/>
+      </div>
+      <div>
+        <label>Мобильный3</label>
+        <input type="text" name="mobileNumber3" [(ngModel)]="clientDetail.mobileNumber3"/>
+      </div>
+    </div>
+  </form>
+  <p-footer>
+    <p-button icon="pi pi-check" label="Сохранить" (onclick)="saveClient()"></p-button>
+    <p-button label="Отмена" (onClick)="cancel()"></p-button>
+  </p-footer>
 </p-dialog>

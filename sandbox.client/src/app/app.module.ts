@@ -11,10 +11,13 @@ import {ClientListComponent} from './client-list/client-list.component';
 import {AppRoutingModule} from './app-routing.module';
 
 import {ClientService} from "./service/client.service";
-import {DataTableModule, DialogModule} from "primeng/primeng";
+import {DataTableModule, DialogModule, InputTextModule} from "primeng/primeng";
 import {TableModule} from "primeng/table";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {ButtonModule} from 'primeng/components/button/button';
+import {DropdownModule} from 'primeng/components/dropdown/dropdown';
+import {RadioButtonModule} from 'primeng/components/radiobutton/radiobutton';
+import {CalendarModule} from 'primeng/components/calendar/calendar';
 
 @NgModule({
   declarations: [
@@ -31,7 +34,11 @@ import {ButtonModule} from 'primeng/components/button/button';
     DataTableModule,
     TableModule,
     DialogModule,
-    ButtonModule
+    ButtonModule,
+    InputTextModule,
+    DropdownModule,
+    RadioButtonModule,
+    CalendarModule
   ],
   providers: [HttpService, ClientService],
   bootstrap: [AppComponent]

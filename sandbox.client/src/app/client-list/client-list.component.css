@@ -6,6 +6,7 @@
   margin-left: 30px;
 }
 
-.tRow:checked{
-  background-color: cadetblue;
+.selected {
+  background-color: cadetblue !important;
+  color: white !important;
 }
