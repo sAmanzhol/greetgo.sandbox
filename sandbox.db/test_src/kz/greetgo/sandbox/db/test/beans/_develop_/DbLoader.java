@@ -28,6 +28,9 @@ public class DbLoader {
       .peek(PersonDot::showInfo)
       .forEach(authTestDao.get()::insertPersonDot);
 
+
+
+
     logger.info("Finish loading test data");
   }
 }

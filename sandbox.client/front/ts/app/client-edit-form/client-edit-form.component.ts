@@ -18,10 +18,9 @@ import {ClientToSave} from "../../model/ClientToSave";
   styles: [require('./client-edit-form.component.css')],
 })
 export class ClientEditFormComponent implements OnInit {
-  constructor(private http: HttpService) {
-  }
-
+  constructor(private http: HttpService) {}
   ngOnInit() {
+    this.isOpen=false;
   }
 
   @Output() onChangedClientRecord = new EventEmitter<ClientRecord>();
@@ -31,6 +30,7 @@ export class ClientEditFormComponent implements OnInit {
   charm: Charm[] = [];
   phoneType: PhoneType[] = [PhoneType.HOME, PhoneType.WORK, PhoneType.MOBILE, PhoneType.EMBEDDED];
   titleName: string;
+  isOpen:boolean=false;
 
 
   getCharm() {
@@ -69,7 +69,7 @@ export class ClientEditFormComponent implements OnInit {
   }
 
   closeForm() {
-    $("#id01").hide()
+    this.isOpen=false;
   }
 
   getCharmById() {
@@ -93,8 +93,9 @@ export class ClientEditFormComponent implements OnInit {
 
 
   showAddFormOrEditForm(clientId) {
-    $("#id01").show();
+
     var self = this;
+    self.isOpen=true;
     self.titleName = "Добавить";
     this.clientDetails = new ClientDetails();
     self.getCharm();

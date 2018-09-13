@@ -14,3 +14,7 @@ hr {
   background: red;
 }
 
+.open{
+  display: block;
+}
+

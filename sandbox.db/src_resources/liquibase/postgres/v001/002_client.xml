@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+  <changeSet author="anazar" id="002_client-001">
+    <sql endDelimiter=";;"><![CDATA[
+      create table client (
+        id int not null,
+        firstname varchar(50) not null,
+        lastname varchar(255),
+        patronymic varchar(255),
+        birth_date data,
+        charm int,
+        primary key(id),
+        foreign key(charm) references charm(id)
+      )
+    ]]></sql>
+  </changeSet>
+
+  <changeSet author="anazar" id="002_client-001">
+    <sql endDelimiter=";;"><![CDATA[
+      create table client (
+        id int not null,
+        firstname varchar(50) not null,
+        lastname varchar(255),
+        patronymic varchar(255),
+        birth_date data,
+        charm int,
+        primary key(id),
+        foreign key(charm) references charm(id)
+      )
+    ]]></sql>
+  </changeSet>
+
+
+</databaseChangeLog>

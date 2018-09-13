@@ -7,8 +7,6 @@ import java.util.Collection;
 
 public interface ClientRegister {
 
-
-
     Collection<ClientRecord> getClientList(ClientFilter clientFilter);
 
     Integer getClientTotalRecord(ClientFilter clientFilter);
