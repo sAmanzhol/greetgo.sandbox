@@ -3,6 +3,7 @@ import {Phone} from "./Phone";
 import {Gender} from "./Gender";
 import {Character} from "./Character";
 import {PhoneDetail} from "./PhoneDetail";
+
 /**
  * Created by msultanova on 9/5/18.
  */
@@ -11,11 +12,12 @@ export class ClientDetail {
   public surname: string;
   public name: string;
   public patronymic: string;
+  public age: number/*int*/;
   public gender: Gender;
-  public genders: Gender[] = new Gender();
+  public genders: Gender[];
   public birthDay: Date;
   public character: Character;
-  public characters: Character[] = new Character();
+  public characters: Character[];
   public actualAddress: Address = new Address();
   public registrationAddress: Address = new Address();
   public phones: Phone[];
@@ -29,22 +31,6 @@ export class ClientDetail {
     return ret;
   }
 
-
-  constructor(surname: string, name: string, patronymic: string, gender: Gender, genders: Gender[], birthDay: Date, character: Character, characters: Character[], actualAddress: Address, registrationAddress: Address, phones: Phone[], phoneDetailList: PhoneDetail[], clientId: number) {
-    this.surname = surname;
-    this.name = name;
-    this.patronymic = patronymic;
-    this.gender = gender;
-    this.genders = genders;
-    this.birthDay = birthDay;
-    this.character = character;
-    this.characters = characters;
-    this.actualAddress = actualAddress;
-    this.registrationAddress = registrationAddress;
-    this.phones = phones;
-    this.phoneDetailList = phoneDetailList;
-    this.clientId = clientId;
-  }
 
   // constructor(genders: Gender[], characters: Character[], phones: Phone[], clientId: number) {
   //   this.surname = surname;
@@ -62,44 +48,47 @@ export class ClientDetail {
   // }
 
   assign(a: any) {
-    if(a.surname) {
+    if (a.surname) {
       this.surname = a.surname;
     }
-    if(a.name) {
+    if (a.name) {
       this.name = a.name;
     }
-    if(a.patronymic) {
+    if (a.patronymic) {
       this.patronymic = a.patronymic;
     }
-    if(a.gender) {
+    if (a.gender) {
       this.gender = a.gender;
     }
-    if(a.genders) {
+    if (a.genders) {
       this.genders = a.genders;
     }
-    if(a.birthDay) {
+    if (a.birthDay) {
       this.birthDay = a.birthDay;
     }
-    if(a.character) {
+    if (a.character) {
       this.character = a.character;
     }
-    if(a.characters) {
+    if (a.characters) {
       this.characters = a.characters;
     }
-    if(a.actualAddress) {
+    if (a.actualAddress) {
       this.actualAddress = a.actualAddress;
     }
-    if(a.registrationAddress) {
+    if (a.registrationAddress) {
       this.registrationAddress = a.registrationAddress;
     }
-    if(a.phones) {
+    if (a.phones) {
       this.phones = a.phones;
     }
-    if(a.clientId) {
+    if (a.clientId) {
       this.clientId = a.clientId;
     }
-    if(a.phoneDetailList){
+    if (a.phoneDetailList) {
       this.phoneDetailList = a.phoneDetailList;
+    }
+    if (a.age) {
+      this.age = a.age;
     }
   }
 }
