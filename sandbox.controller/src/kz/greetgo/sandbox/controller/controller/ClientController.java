@@ -12,6 +12,7 @@ import kz.greetgo.sandbox.controller.security.NoSecurity;
 import kz.greetgo.sandbox.controller.util.Controller;
 
 import java.util.Collection;
+import java.util.List;
 
 @Bean
 @Mapping("/client")
@@ -20,7 +21,7 @@ public class ClientController implements Controller {
 
 	@ToJson
 	@Mapping("/client-list")
-	public Collection<ClientRecord> clientList(@Par("clientFilter") @Json ClientFilter clientFilter) {
+	public List<ClientRecord> clientList(@Par("clientFilter") @Json ClientFilter clientFilter) {
 		System.out.println(clientFilter);
 		return clientRegister.get().getClientList(clientFilter);
 	}
@@ -33,7 +34,7 @@ public class ClientController implements Controller {
 
 	@ToJson
 	@Mapping("/client-charm")
-	public Collection<Charm> clientCharm() {
+	public List<Charm> clientCharm() {
 		return clientRegister.get().clientCharm();
 	}
 

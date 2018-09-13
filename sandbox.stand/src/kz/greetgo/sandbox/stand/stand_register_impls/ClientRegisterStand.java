@@ -20,7 +20,7 @@ public class ClientRegisterStand implements ClientRegister {
 
 
 	@Override
-	public Collection<Charm> clientCharm() {
+	public List<Charm> clientCharm() {
 		List<Charm> list = new ArrayList<>();
 		for (Charm c : cdb.get().charm) {
 			if (c.actually)
@@ -148,6 +148,11 @@ public class ClientRegisterStand implements ClientRegister {
 		return charm;
 	}
 
+	@Override
+	public Integer cacl(int i, int b) {
+		return i+b;
+	}
+
 
 	public List<ClientRecord> filterInner(ClientFilter clientFilter) {
 		if (clientFilter.page > clientFilter.pageTotal) clientFilter.page = clientFilter.pageTotal;
@@ -216,12 +221,12 @@ public class ClientRegisterStand implements ClientRegister {
 	}
 
 	@Override
-	public Collection<ClientRecord> getClientList(ClientFilter clientFilter) {
+	public List<ClientRecord> getClientList(ClientFilter clientFilter) {
 		return cicleClientRecord(filterInner(clientFilter), clientFilter);
 	}
 
 
-	public Collection<ClientRecord> cicleClientRecord(Collection<ClientRecord> listClientRecord, ClientFilter clientFilter) {
+	public List<ClientRecord> cicleClientRecord(Collection<ClientRecord> listClientRecord, ClientFilter clientFilter) {
 		List<ClientRecord> list = new ArrayList<>();
 		int i = 0;
 		clientFilter.pageTotal = (int) Math.floor(clientFilter.recordTotal / clientFilter.recordSize);

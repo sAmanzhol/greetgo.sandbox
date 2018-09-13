@@ -4,14 +4,15 @@ import kz.greetgo.sandbox.controller.model.model.*;
 
 
 import java.util.Collection;
+import java.util.List;
 
 public interface ClientRegister {
 
-    Collection<ClientRecord> getClientList(ClientFilter clientFilter);
+    List<ClientRecord> getClientList(ClientFilter clientFilter);
 
     Integer getClientTotalRecord(ClientFilter clientFilter);
 
-    Collection<Charm> clientCharm();
+    List<Charm> clientCharm();
 
     ClientRecord clientDetailsSave(ClientDetails clientDetails);
 
@@ -20,4 +21,5 @@ public interface ClientRegister {
     ClientDetails clientDetailsDelete(Integer clientMarkId);
 
 	  Charm getClientAddCharmId(Integer charmId);
+	  Integer cacl(int i,int b);
 }
