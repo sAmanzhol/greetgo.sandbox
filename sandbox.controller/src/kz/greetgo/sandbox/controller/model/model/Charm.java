@@ -7,6 +7,7 @@ public class Charm {
     public String name;
     public String description;
     public int energy;
+    public boolean actually;
 
     public Charm(){
         this.id=0;

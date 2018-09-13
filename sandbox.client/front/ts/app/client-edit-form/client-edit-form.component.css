@@ -1,0 +1,16 @@
+
+hr {
+  display: block;
+  margin: 2em;
+  border-style: inset;
+  border-width: 1px;
+}
+
+#id01 {
+  display: none;
+}
+
+.strikethrough {
+  background: red;
+}
+

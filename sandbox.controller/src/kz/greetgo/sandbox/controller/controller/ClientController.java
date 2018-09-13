@@ -55,4 +55,10 @@ public class ClientController implements Controller {
 		return clientRegister.get().clientDetailsSet(clientMarkId);
 	}
 
+	@ToJson
+	@Mapping("/client-add-charm-id")
+	public Charm clientAddCharmId(@Par("charmId") Integer charmId){
+		return clientRegister.get().getClientAddCharmId(charmId);
+	}
+
 }

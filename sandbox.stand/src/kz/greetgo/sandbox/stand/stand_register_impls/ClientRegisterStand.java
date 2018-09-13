@@ -2,34 +2,32 @@ package kz.greetgo.sandbox.stand.stand_register_impls;
 
 import kz.greetgo.depinject.core.Bean;
 import kz.greetgo.depinject.core.BeanGetter;
-import kz.greetgo.sandbox.controller.model.model.*;
+import kz.greetgo.sandbox.controller.model.model.Charm;
+import kz.greetgo.sandbox.controller.model.model.ClientDetails;
+import kz.greetgo.sandbox.controller.model.model.ClientFilter;
+import kz.greetgo.sandbox.controller.model.model.ClientRecord;
 import kz.greetgo.sandbox.controller.register.ClientRegister;
-import kz.greetgo.sandbox.controller.register.model.Client;
-import kz.greetgo.sandbox.controller.register.model.UserParamName;
 import kz.greetgo.sandbox.db.stand.beans.ClientDb;
-import kz.greetgo.sandbox.db.stand.beans.StandDb;
+import kz.greetgo.sandbox.db.stand.model.ClientDot;
 import kz.greetgo.util.RND;
 
-import java.io.File;
-import java.nio.file.Path;
 import java.util.*;
 
 @Bean
 public class ClientRegisterStand implements ClientRegister {
 
-	private final Path storageDir = new File("build/user_param_storage").toPath();
-
-	private File getUserParamFile(UserParamName name) {
-		return storageDir.resolve(name.name() + ".txt").toFile();
-	}
-
-	public BeanGetter<StandDb> db;
 	public BeanGetter<ClientDb> cdb;
 
 
 	@Override
 	public Collection<Charm> clientCharm() {
-		return cdb.get().charm;
+		List<Charm> list = new ArrayList<>();
+		for (Charm c : cdb.get().charm) {
+			if (c.actually)
+				list.add(c);
+		}
+
+		return list;
 	}
 
 
@@ -39,35 +37,35 @@ public class ClientRegisterStand implements ClientRegister {
 
 		String key = RND.str(10);
 		if (clientDetails.id == null) {
-			Client client = new Client();
-			client.id = cdb.get().client.size() + 1;
-			client.firstname = clientDetails.firstname;
-			client.lastname = clientDetails.lastname;
-			client.patronymic = clientDetails.patronymic;
-			client.gender = clientDetails.gender;
-			client.dateOfBirth = clientDetails.dateOfBirth;
+			ClientDot clientDot = new ClientDot();
+			clientDot.id = cdb.get().client.size() + 1;
+			clientDot.firstname = clientDetails.firstname;
+			clientDot.lastname = clientDetails.lastname;
+			clientDot.patronymic = clientDetails.patronymic;
+			clientDot.gender = clientDetails.gender;
+			clientDot.dateOfBirth = clientDetails.dateOfBirth;
 			for (Charm ch : cdb.get().charm) {
 				if (ch.id == clientDetails.characterId) {
-					client.character = ch;
+					clientDot.character = ch;
 				}
 			}
-			client.addressOfRegistration = clientDetails.addressOfRegistration;
-			client.addressOfResidence = clientDetails.addressOfResidence;
-			client.phone = clientDetails.phone;
-			cdb.get().client.put(key, client);
-			client = cdb.get().client.get(key);
-			clientRecord.id = client.id;
-			clientRecord.firstname = client.firstname;
-			clientRecord.lastname = client.lastname;
-			clientRecord.patronymic = client.patronymic;
-			clientRecord.characterName = client.character.name;
-			clientRecord.dateOfBirth = client.dateOfBirth;
-			clientRecord.totalAccountBalance = client.totalAccountBalance;
-			clientRecord.maximumBalance = client.maximumBalance;
-			clientRecord.minimumBalance = client.minimumBalance;
+			clientDot.addressOfRegistration = clientDetails.addressOfRegistration;
+			clientDot.addressOfResidence = clientDetails.addressOfResidence;
+			clientDot.phone = clientDetails.phone;
+			cdb.get().client.put(key, clientDot);
+			clientDot = cdb.get().client.get(key);
+			clientRecord.id = clientDot.id;
+			clientRecord.firstname = clientDot.firstname;
+			clientRecord.lastname = clientDot.lastname;
+			clientRecord.patronymic = clientDot.patronymic;
+			clientRecord.characterName = clientDot.character.name;
+			clientRecord.dateOfBirth = clientDot.dateOfBirth;
+			clientRecord.totalAccountBalance = clientDot.totalAccountBalance;
+			clientRecord.maximumBalance = clientDot.maximumBalance;
+			clientRecord.minimumBalance = clientDot.minimumBalance;
 			return clientRecord;
 		} else {
-			for (Map.Entry<String, Client> item : cdb.get().client.entrySet()) {
+			for (Map.Entry<String, ClientDot> item : cdb.get().client.entrySet()) {
 				if (item.getValue().id == clientDetails.id) {
 					key = item.getKey();
 					item.getValue().firstname = clientDetails.firstname;
@@ -85,16 +83,16 @@ public class ClientRegisterStand implements ClientRegister {
 					item.getValue().phone = clientDetails.phone;
 				}
 			}
-			Client client = cdb.get().client.get(key);
-			clientRecord.id = client.id;
-			clientRecord.firstname = client.firstname;
-			clientRecord.lastname = client.lastname;
-			clientRecord.patronymic = client.patronymic;
-			clientRecord.characterName = client.character.name;
-			clientRecord.dateOfBirth = client.dateOfBirth;
-			clientRecord.totalAccountBalance = client.totalAccountBalance;
-			clientRecord.maximumBalance = client.maximumBalance;
-			clientRecord.minimumBalance = client.minimumBalance;
+			ClientDot clientDot = cdb.get().client.get(key);
+			clientRecord.id = clientDot.id;
+			clientRecord.firstname = clientDot.firstname;
+			clientRecord.lastname = clientDot.lastname;
+			clientRecord.patronymic = clientDot.patronymic;
+			clientRecord.characterName = clientDot.character.name;
+			clientRecord.dateOfBirth = clientDot.dateOfBirth;
+			clientRecord.totalAccountBalance = clientDot.totalAccountBalance;
+			clientRecord.maximumBalance = clientDot.maximumBalance;
+			clientRecord.minimumBalance = clientDot.minimumBalance;
 			return clientRecord;
 
 		}
@@ -104,7 +102,7 @@ public class ClientRegisterStand implements ClientRegister {
 	@Override
 	public ClientDetails clientDetailsSet(Integer clientMarkId) {
 		ClientDetails clientDetails = new ClientDetails();
-		for (Map.Entry<String, Client> item : cdb.get().client.entrySet()) {
+		for (Map.Entry<String, ClientDot> item : cdb.get().client.entrySet()) {
 			if (clientMarkId == item.getValue().id) {
 				clientDetails.id = item.getValue().id;
 				clientDetails.firstname = item.getValue().firstname;
@@ -124,7 +122,7 @@ public class ClientRegisterStand implements ClientRegister {
 	@Override
 	public ClientDetails clientDetailsDelete(Integer clientMarkId) {
 		String key = "";
-		for (Map.Entry<String, Client> item : cdb.get().client.entrySet()) {
+		for (Map.Entry<String, ClientDot> item : cdb.get().client.entrySet()) {
 			if (item.getValue().id == clientMarkId) {
 				key = item.getKey();
 			}
@@ -133,15 +131,31 @@ public class ClientRegisterStand implements ClientRegister {
 		return null;
 	}
 
+	@Override
+	public Charm getClientAddCharmId(Integer charmId) {
+		if (charmId == null) {
+			return null;
+		}
+		Charm charm = new Charm();
+		for (int i = 0; i < cdb.get().charm.size(); i++) {
+			if (charmId == cdb.get().charm.get(i).id) {
+				return cdb.get().charm.get(i);
+			}
+		}
+		charm.id = charmId;
+		charm.name = String.valueOf(charmId);
+		charm.actually = false;
+		return charm;
+	}
 
 
-	public List<ClientRecord> filterInner(ClientFilter clientFilter){
+	public List<ClientRecord> filterInner(ClientFilter clientFilter) {
 		if (clientFilter.page > clientFilter.pageTotal) clientFilter.page = clientFilter.pageTotal;
 		if (clientFilter.page < 0) clientFilter.page = 0;
 
 		List<ClientRecord> list = new ArrayList<>();
 		List<ClientRecord> list1 = new ArrayList<>();
-		for (Map.Entry<String, Client> cl : cdb.get().client.entrySet()) {
+		for (Map.Entry<String, ClientDot> cl : cdb.get().client.entrySet()) {
 			ClientRecord clientRecord = new ClientRecord();
 			clientRecord.id = cl.getValue().id;
 			clientRecord.firstname = cl.getValue().firstname;
@@ -177,21 +191,17 @@ public class ClientRegisterStand implements ClientRegister {
 		}
 
 
-
 		if (clientFilter.firstname.equals("") && clientFilter.lastname.equals("") && clientFilter.patronymic.equals("")) {
 			return list;
-		}
-
-
-		else {
+		} else {
 			ClientRecord clientRecord = new ClientRecord();
 			clientRecord.firstname = clientFilter.firstname;
 			clientRecord.lastname = clientFilter.lastname;
 			clientRecord.patronymic = clientFilter.patronymic;
 			for (ClientRecord clientRecord1 : list) {
-				if ((clientRecord1.firstname.equals(clientRecord.firstname) ||clientFilter.firstname.isEmpty() )
-						&& (clientRecord1.lastname.equals(clientRecord.lastname) || clientFilter.lastname.isEmpty())
-						&& (clientRecord1.patronymic.equals(clientRecord.patronymic) || clientFilter.patronymic.isEmpty())) {
+				if ((clientRecord1.firstname.equals(clientRecord.firstname) || clientFilter.firstname.isEmpty())
+					&& (clientRecord1.lastname.equals(clientRecord.lastname) || clientFilter.lastname.isEmpty())
+					&& (clientRecord1.patronymic.equals(clientRecord.patronymic) || clientFilter.patronymic.isEmpty())) {
 					list1.add(clientRecord1);
 				}
 			}
@@ -202,12 +212,12 @@ public class ClientRegisterStand implements ClientRegister {
 
 	@Override
 	public Integer getClientTotalRecord(ClientFilter clientFilter) {
-		return  filterInner(clientFilter).size();
+		return filterInner(clientFilter).size();
 	}
 
 	@Override
 	public Collection<ClientRecord> getClientList(ClientFilter clientFilter) {
-		return cicleClientRecord(filterInner(clientFilter),clientFilter);
+		return cicleClientRecord(filterInner(clientFilter), clientFilter);
 	}
 
 
@@ -228,7 +238,6 @@ public class ClientRegisterStand implements ClientRegister {
 		}
 		return list;
 	}
-
 
 
 	public static class SortedByFirstname implements Comparator<ClientRecord> {

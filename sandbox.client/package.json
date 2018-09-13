@@ -6,8 +6,7 @@
     "gulp": "gulp",
     "postinstall1": "gulp build",
     "tsc": "tsc",
-    "start": "gulp start",
-    "stop": "gulp stop"
+    "start": "gulp start"
   },
   "dependencies": {
     "@angular/animations": "^4.3.6",

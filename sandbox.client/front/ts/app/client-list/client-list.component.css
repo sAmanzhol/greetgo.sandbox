@@ -1,0 +1,9 @@
+
+.mark {
+  background: rgb(158, 199, 182);
+}
+
+tbody tr:active {
+  background: rgb(46, 255, 196);;
+}
+

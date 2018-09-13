@@ -8,9 +8,9 @@ Install nodeJS with versions:
 
 ### Run stand environment
 
-Start stand client
+Start stand clientDot
 
-    cd sandbox.client
+    cd sandbox.clientDot
     npm i
     npm start
 
