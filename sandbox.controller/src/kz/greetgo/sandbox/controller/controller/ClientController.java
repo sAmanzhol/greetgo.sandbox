@@ -6,18 +6,20 @@ import kz.greetgo.mvc.annotations.Json;
 import kz.greetgo.mvc.annotations.Mapping;
 import kz.greetgo.mvc.annotations.Par;
 import kz.greetgo.mvc.annotations.ToJson;
-import kz.greetgo.sandbox.controller.model.model.*;
+import kz.greetgo.sandbox.controller.model.model.Charm;
+import kz.greetgo.sandbox.controller.model.model.ClientDetails;
+import kz.greetgo.sandbox.controller.model.model.ClientFilter;
+import kz.greetgo.sandbox.controller.model.model.ClientRecord;
 import kz.greetgo.sandbox.controller.register.ClientRegister;
-import kz.greetgo.sandbox.controller.security.NoSecurity;
 import kz.greetgo.sandbox.controller.util.Controller;
 
-import java.util.Collection;
 import java.util.List;
 
 @Bean
 @Mapping("/client")
 public class ClientController implements Controller {
 	public BeanGetter<ClientRegister> clientRegister;
+
 
 	@ToJson
 	@Mapping("/client-list")
@@ -61,5 +63,7 @@ public class ClientController implements Controller {
 	public Charm clientAddCharmId(@Par("charmId") Integer charmId){
 		return clientRegister.get().getClientAddCharmId(charmId);
 	}
+
+
 
 }

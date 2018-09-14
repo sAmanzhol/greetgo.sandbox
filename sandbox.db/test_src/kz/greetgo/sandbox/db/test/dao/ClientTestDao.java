@@ -8,6 +8,11 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 public interface ClientTestDao {
+
+	@Select("select * from charm")
+	String loadCharm();
+
+	@Insert("insert into charm (id, name, description, ) values (#{personId}, #{name}, #{value})")
 	@Select("select value from UserParams where personId = #{personId} and name = #{name}")
 	String loadParamValue(@Param("personId") String personId, @Param("name") UserParamName paramName);
 
