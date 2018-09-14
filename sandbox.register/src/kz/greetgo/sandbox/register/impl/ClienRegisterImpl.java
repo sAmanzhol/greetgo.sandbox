@@ -173,25 +173,9 @@ public class ClienRegisterImpl implements ClientRegister {
         }
     }
 
-    //@Override
-    public List<ClientRecord> filterClients(ClientFilter clientFilter) {
-
-        List<ClientRecord> filteredList =  new ArrayList<ClientRecord>();
-        if (clients != null) {
-            for (Client client : clients) {//""
-                if (client.name.contains(clientFilter.name) &&
-                  client.surname.contains(clientFilter.surname) &&
-                  client.patronymic.contains(clientFilter.patronymic)) {
-                    filteredList.add(convertClientToRecord(client));
-                }
-            }
-        }
-        return filteredList;
-    }
-
 
     @Override
-    public List<ClientRecord> filterClients(ClientFilter clientFilter, int offset, int limit) {
+    public List<ClientRecord> filterClients(ClientFilter clientFilter) {
         List<ClientRecord> filteredList =  new ArrayList<ClientRecord>();
         if (clients != null) {
             for (Client client : clients) {//""
@@ -203,12 +187,12 @@ public class ClienRegisterImpl implements ClientRegister {
             }
         }
 
-        if(filteredList.size() > limit && limit != 0){
-            if(offset == 0){
-                return filteredList.subList(offset, offset*limit+limit);
+        if(filteredList.size() > clientFilter.limit && clientFilter.limit != 0){
+            if(clientFilter.offset == 0){
+                return filteredList.subList(clientFilter.offset, clientFilter.offset * clientFilter.limit + clientFilter.limit);
             }
             else {
-                return filteredList.subList(offset*limit+1, offset+limit+1);
+                return filteredList.subList(clientFilter.offset * clientFilter.limit + 1, clientFilter.offset + clientFilter.limit + 1);
             }
         }
 

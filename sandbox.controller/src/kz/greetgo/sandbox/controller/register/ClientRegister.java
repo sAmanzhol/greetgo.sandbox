@@ -16,7 +16,7 @@ public interface ClientRegister {
     ClientDetail getClientDetailById(long id);
     ClientRecord saveClient(ClientToSave toSave);
     void deleteClient(long id);
-    List<ClientRecord> filterClients(ClientFilter clientFilter, int offset, int limit);
+    List<ClientRecord> filterClients(ClientFilter clientFilter);
 
 
 }

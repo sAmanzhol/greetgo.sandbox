@@ -65,9 +65,9 @@ public class ClientController implements Controller {
     @ToJson
     @PublicAccess
     @OnGet("/filter")//offset: number, limit: number
-    public List<ClientRecord> filter(@Json @Par("clientFilter") ClientFilter clientFilter, @Par("offset") int offset, @Par("limit") int limit) {
+    public List<ClientRecord> filter(@Json @Par("clientFilter") ClientFilter clientFilter) {
         // FIXME: 9/14/18 Сделать эту логику в методе лист!!!!
-        return clientRegisterBeanGetter.get().filterClients(clientFilter, offset, limit);
+        return clientRegisterBeanGetter.get().filterClients(clientFilter);
         //return null;
     }
 

@@ -24,10 +24,11 @@ export class ClientTableService {
       .then(body => body.map(r => ClientRecord.create(r)));
   }
 
-  async load() {
+  async load(clientFilter: ClientFilter) {
     try {
       this.loading = true;
-      this.list = await this.loadRecords();
+      await this.filter(clientFilter)//loadRecords();
+      // this.list = await this.filter(clientFilter)//loadRecords();
       this.loading = false;
 
       //return Promise.resolve(this.list);
@@ -45,9 +46,9 @@ export class ClientTableService {
     //this.deleteClientFromList(rec);
   }
 
-  deleteClientFromList(rec: ClientRecord) {
-    this.list.splice(this.list.indexOf(rec), 1);
-  }
+  // deleteClientFromList(rec: ClientRecord) {
+  //   this.list.splice(this.list.indexOf(rec), 1);
+  // }
 
   //addClientToList(rec: ClientRecord) {
   //debugger;
@@ -88,21 +89,30 @@ export class ClientTableService {
   //  // return null;
   // }
 
-  async filter(clientFilter: ClientFilter,  offset: number, limit: number){
-     let filteredPromise = await this.http.get("/client/filter",
-       {'clientFilter': JSON.stringify(clientFilter), 'offset' : offset, 'limit': limit})
+  async filter(clientFilter: ClientFilter){
+
+
+    try {
+      this.loading = true;
+      // await this.filter(clientFilter)//loadRecords();
+      this.list = await this.loadFilteredRecords(clientFilter)//loadRecords();
+      this.loading = false;
+
+      //return Promise.resolve(this.list);
+    } catch (e) {
+
+      this.loading = false;
+      console.error(e);
+
+    }
+  }
+
+  loadFilteredRecords(clientFilter: ClientFilter): Promise<ClientRecord[]> {
+     return this.http.get("/client/filter",
+      {'clientFilter': JSON.stringify(clientFilter)})
       .toPromise()
       .then(resp => resp.body as Array<any>)
       .then(body => body.map(r => ClientRecord.create(r)));
-
-   //debugger;
-    this.list = filteredPromise;//.splice(0, this.list.length);
-
-    // filteredPromise.then(function(filtered) {
-    // for (let a of filtered) {
-    //   this.list.push(a);
-    // }
-    // });
   }
 
 }
