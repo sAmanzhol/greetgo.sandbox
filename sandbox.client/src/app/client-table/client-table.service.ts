@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpService} from "../http.service";
 import {ClientRecord} from "../../model/ClientRecord";
-import {isBoolean} from "util";
 
 @Injectable({
   providedIn: 'root'
@@ -29,12 +28,14 @@ export class ClientTableService {
       this.list = await this.loadRecords();
       this.loading = false;
 
+      //return Promise.resolve(this.list);
     } catch (e) {
 
       this.loading = false;
       console.error(e);
 
     }
+
   }
 
   public deleteClient(rec: ClientRecord) {
@@ -44,12 +45,12 @@ export class ClientTableService {
 
   deleteClientFromList(rec: ClientRecord) {
     this.list.splice(this.list.indexOf(rec), 1);
-}
+  }
 
   addClientToList(rec: ClientRecord) {
     //debugger;
     let isFound: boolean = false;
-    this.list.forEach(function(clientRecord){
+    this.list.forEach(function (clientRecord) {
       //debugger;
       if (rec.clientId == clientRecord.clientId) {
         //debugger;
@@ -59,7 +60,7 @@ export class ClientTableService {
         //debugger;
       }
     });
-    if(!isFound)
+    if (!isFound)
       this.list.push(rec);
   }
 }

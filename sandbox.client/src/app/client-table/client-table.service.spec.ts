@@ -1,16 +1,17 @@
-import { TestBed, inject } from '@angular/core/testing';
+import {inject, TestBed} from '@angular/core/testing';
 
-import { ClientTableService } from './client-table.service';
+import {ClientTableService} from './client-table.service';
+
 +
 
-describe('TestService', () => {
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [TestService]
+  describe('ClientTableService', () => {
+    beforeEach(() => {
+      TestBed.configureTestingModule({
+        providers: [ClientTableService]
+      });
     });
-  });
 
-  it('should be created', inject([TestService], (service: TestService) => {
-    expect(service).toBeTruthy();
-  }));
-});
+    it('should be created', inject([ClientTableService], (service: ClientTableService) => {
+      expect(service).toBeTruthy();
+    }));
+  });

@@ -13,7 +13,13 @@ import {ClientTableComponent} from "./client-table/client-table.component";
 import {ClientDetailComponent} from "./client-detail/client-detail.component";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {
-  MatButtonModule, MatDatepickerModule, MatDialogModule, MatIconModule, MatInputModule, MatNativeDateModule,
+  MatButtonModule,
+  MatDatepickerModule,
+  MatDialogModule,
+  MatIconModule,
+  MatInputModule,
+  MatNativeDateModule,
+  MatPaginatorModule,
   MatSelectModule,
   MatTableModule
 } from "@angular/material";
@@ -47,6 +53,8 @@ import { EditComponent } from './edit/edit.component';
     MatSelectModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatPaginatorModule,
+
   ],
   entryComponents: [ClientDetailComponent],
   providers: [HttpService, LoginService, ClientListService],

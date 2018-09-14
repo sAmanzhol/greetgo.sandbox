@@ -1,8 +1,7 @@
-import {Component, Input, OnInit} from "@angular/core";
+import {Component, OnInit, ViewChild} from "@angular/core";
 import {ClientTableService} from "./client-table.service";
-import {MatDialog} from "@angular/material";
+import {MatDialog, MatPaginator, MatTableDataSource, PageEvent} from "@angular/material";
 import {ClientDetailComponent} from "../client-detail/client-detail.component";
-import {EditComponent} from "../edit/edit.component";
 import {ClientRecord} from "../../model/ClientRecord";
 
 @Component({
@@ -13,6 +12,27 @@ import {ClientRecord} from "../../model/ClientRecord";
 
 export class ClientTableComponent implements OnInit {
 
+  public clientRecordList: ClientRecord[] = [];
+  displayedColumns: string[] = ['fio', 'character', 'age', 'totalBalance', 'maxBalance', 'minBalance', 'actions'];
+  dataSource: any;
+
+
+  length = 100;
+  pageSize = 10;
+  pageSizeOptions: number[] = [1, 2, 5, 10, 25, 100];
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+
+  pageEvent: PageEvent;
+
+  setPageSizeOptions(setPageSizeOptionsInput: string) {
+    this.pageSizeOptions = setPageSizeOptionsInput.split(',').map(str => +str);
+  }
+
+
+  test(a) {
+    console.log(a);
+  }
 
   constructor(public clientTableService: ClientTableService, public dialog: MatDialog) {
   }
@@ -24,7 +44,7 @@ export class ClientTableComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed = ' + result);
       //debugger;
-      if(result) {
+      if (result) {
         this.clientTableService.addClientToList(result);
       }
     });
@@ -35,7 +55,17 @@ export class ClientTableComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.init();
     this.clientTableService.load();
+  }
+
+  async init() {
+
+    this.clientTableService.load();
+    this.clientRecordList = await this.clientTableService.loadRecords();
+    this.dataSource = await new MatTableDataSource<ClientRecord>(this.clientRecordList);
+    this.dataSource.paginator = this.paginator;
+    //this. = ClientToSave.create(this.clientDetail);
   }
 
 }
