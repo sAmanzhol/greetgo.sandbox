@@ -5,13 +5,13 @@ import {AppComponent} from './app.component';
 import {LoginComponent} from './login/login.component';
 import {HttpService} from "./http.service";
 import {HttpClientModule} from "@angular/common/http";
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {ClientListComponent} from './client-list/client-list.component';
 
 import {AppRoutingModule} from './app-routing.module';
 
 import {ClientService} from "./service/client.service";
-import {DataTableModule, DialogModule, InputTextModule} from "primeng/primeng";
+import {DataTableModule, DialogModule, InputTextModule, MessageModule} from "primeng/primeng";
 import {TableModule} from "primeng/table";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {ButtonModule} from 'primeng/components/button/button';
@@ -38,7 +38,9 @@ import {CalendarModule} from 'primeng/components/calendar/calendar';
     InputTextModule,
     DropdownModule,
     RadioButtonModule,
-    CalendarModule
+    CalendarModule,
+    ReactiveFormsModule,
+    MessageModule
   ],
   providers: [HttpService, ClientService],
   bootstrap: [AppComponent]

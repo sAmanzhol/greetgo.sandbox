@@ -1,22 +1,11 @@
 {
   "clientRecord": [
     {
-      "id": 1,
-      "lastName": "Самойлов",
-      "name": "Игорь",
-      "fatherName": "Юрьевич",
-      "character": "спокойный",
-      "age": 35,
-      "totalBalance": 222,
-      "maxBalance": 54,
-      "minBalance": 12
-    },
-    {
       "id": 2,
       "lastName": "Ким",
       "name": "Елена",
       "fatherName": "Владимировна",
-      "character": "бдительный",
+      "character": "активный",
       "age": 25,
       "totalBalance": 200,
       "maxBalance": 52,
@@ -38,42 +27,33 @@
       "lastName": "Ли",
       "name": "Алексей",
       "fatherName": "Евгеньевич",
-      "character": "грозный",
+      "character": "активный",
       "age": 32,
       "totalBalance": 126,
       "maxBalance": 100,
       "minBalance": 6
+    },
+    {
+      "lastName": "f",
+      "name": "f",
+      "fatherName": "f",
+      "character": "артистичный",
+      "age": 20,
+      "totalBalance": 20,
+      "maxBalance": 20,
+      "minBalance": 20,
+      "id": 5
     }
   ],
   "clientDetails": [
-    {
-      "id": 1,
-      "lastName": "Самойлов",
-      "name": "Игорь",
-      "fatherName": "Юрьевич",
-      "gender": "Мужской",
-      "birthDate": "02/25/1983",
-      "character": "спокойный",
-      "factStreet": "Сейфуллина",
-      "factNo": 159,
-      "factFlat": 4,
-      "regStreet": "Шашкина",
-      "regNo": 14,
-      "regFlat": 5,
-      "homePhoneNumber": "298-65-41",
-      "workPhoneNumber": "222-22-22",
-      "mobileNumber1": "87075268899",
-      "mobileNumber2": "",
-      "mobileNumber3": ""
-    },
     {
       "id": 2,
       "lastName": "Ким",
       "name": "Елена",
       "fatherName": "Владимировна",
       "gender": "Женский",
-      "birthDate": "11/12/1993",
-      "character": "бдительный",
+      "birthDate": "11/11/1977",
+      "character": "активный",
       "factStreet": "Шемякина",
       "factNo": 236,
       "factFlat": 1,
@@ -83,7 +63,7 @@
       "homePhoneNumber": "298-65-41",
       "workPhoneNumber": "222-22-22",
       "mobileNumber1": "87075268899",
-      "mobileNumber2": "",
+      "mobileNumber2": "s",
       "mobileNumber3": ""
     },
     {
@@ -92,7 +72,7 @@
       "name": "Никита",
       "fatherName": "Олегович",
       "gender": "Мужской",
-      "birthDate": "19/06/1973",
+      "birthDate": "06/06/1973",
       "character": "веселый",
       "factStreet": "Хмельницкого",
       "factNo": 12,
@@ -112,8 +92,8 @@
       "name": "Алексей",
       "fatherName": "Евгеньевич",
       "gender": "Мужской",
-      "birthDate": "25/02/1986",
-      "character": "грозный",
+      "birthDate": "02/02/1986",
+      "character": "активный",
       "factStreet": "Сейфуллиа",
       "factNo": 159,
       "factFlat": 4,
@@ -125,6 +105,24 @@
       "mobileNumber1": "87075268899",
       "mobileNumber2": "",
       "mobileNumber3": ""
+    },
+    {
+      "lastName": "f",
+      "name": "f",
+      "fatherName": "f",
+      "gender": "Мужской",
+      "birthDate": "2018-09-12T18:00:00.000Z",
+      "character": "артистичный",
+      "factStreet": "f",
+      "factNo": "4",
+      "factFlat": "4",
+      "regStreet": "k",
+      "regNo": "4",
+      "regFlat": "4",
+      "homePhoneNumber": "444",
+      "workPhoneNumber": "444",
+      "mobileNumber1": "444",
+      "id": 5
     }
   ]
 }
