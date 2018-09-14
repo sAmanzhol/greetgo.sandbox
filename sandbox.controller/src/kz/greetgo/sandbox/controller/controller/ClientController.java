@@ -63,7 +63,7 @@ public class ClientController implements Controller {
 
     @ToJson
     @PublicAccess
-    @OnDelete("/filter")
+    @OnGet("/filter")
     public List<ClientRecord> filter(@Par("clientFilter")ClientFilter clientFilter){
         return clientRegisterBeanGetter.get().filterClients(clientFilter);
         //return null;
