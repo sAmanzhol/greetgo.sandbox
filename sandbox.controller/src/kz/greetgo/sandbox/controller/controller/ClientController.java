@@ -64,7 +64,7 @@ public class ClientController implements Controller {
     @ToJson
     @PublicAccess
     @OnGet("/filter")
-    public List<ClientRecord> filter(@Par("clientFilter")ClientFilter clientFilter){
+    public List<ClientRecord> filter(@Json @Par("clientFilter")ClientFilter clientFilter){
         return clientRegisterBeanGetter.get().filterClients(clientFilter);
         //return null;
     }

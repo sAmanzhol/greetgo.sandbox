@@ -171,7 +171,7 @@ public class ClienRegisterImpl implements ClientRegister {
 
         List<ClientRecord> filteredList =  new ArrayList<ClientRecord>();
         if (clients != null) {
-            for (Client client : clients) {
+            for (Client client : clients) {//""
                 if (client.name.contains(clientFilter.name) &&
                   client.surname.contains(clientFilter.surname) &&
                   client.patronymic.contains(clientFilter.patronymic)) {

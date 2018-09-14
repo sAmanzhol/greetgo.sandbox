@@ -88,15 +88,15 @@ export class ClientTableService {
   //  // return null;
   // }
 
-  filter(clientFilter: ClientFilter){
-    let filteredPromise = this.http.get("/client/filter", {'clientFilter': JSON.stringify(clientFilter)})
+  async filter(clientFilter: ClientFilter){
+     let filteredPromise = await this.http.get("/client/filter", {'clientFilter': JSON.stringify(clientFilter)})
       .toPromise()
       .then(resp => resp.body as Array<any>)
       .then(body => body.map(r => ClientRecord.create(r)));
 
    //debugger;
-    // this.list.splice(0, this.list.length);
-    //
+    this.list = filteredPromise;//.splice(0, this.list.length);
+
     // filteredPromise.then(function(filtered) {
     // for (let a of filtered) {
     //   this.list.push(a);

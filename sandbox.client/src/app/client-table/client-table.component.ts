@@ -15,14 +15,13 @@ export class ClientTableComponent implements OnInit {
 
   public clientRecordList: ClientRecord[] = [];
   displayedColumns: string[] = ['fio', 'character', 'age', 'totalBalance', 'maxBalance', 'minBalance', 'actions'];
-  dataSource: any;
-
+  dataSource: any;// =  new MatTableDataSource<ClientRecord>(this.clientRecordList);
 
   length = 100;
   pageSize = 10;
   pageSizeOptions: number[] = [1, 2, 5, 10, 25, 100];
 
-  public clientFilter: ClientFilter = new ClientFilter();
+  public clientFilter: ClientFilter = new ClientFilter("","","");
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -53,8 +52,9 @@ export class ClientTableComponent implements OnInit {
     });
   }
 
-  delete(rec: ClientRecord) {
-    this.clientTableService.deleteClient(rec);
+  async delete(rec: ClientRecord) {
+    await this.clientTableService.deleteClient(rec);
+    //this.dataSource =  new MatTableDataSource<ClientRecord>(this.clientRecordList);
   }
 
   filtering() {
