@@ -42,29 +42,29 @@ export class ClientTableService {
 
   public deleteClient(rec: ClientRecord) {
     this.http.delete("/client/delete", {'id': rec.clientId}).subscribe(res => console.log(res));
-    this.deleteClientFromList(rec);
+    //this.deleteClientFromList(rec);
   }
 
   deleteClientFromList(rec: ClientRecord) {
     this.list.splice(this.list.indexOf(rec), 1);
   }
 
-  addClientToList(rec: ClientRecord) {
-    //debugger;
-    let isFound: boolean = false;
-    this.list.forEach(function (clientRecord) {
-      //debugger;
-      if (rec.clientId == clientRecord.clientId) {
-        //debugger;
-        clientRecord = clientRecord.update(rec);
-        isFound = true;
-        //break;
-        //debugger;
-      }
-    });
-    if (!isFound)
-      this.list.push(rec);
-  }
+  //addClientToList(rec: ClientRecord) {
+  //debugger;
+  // let isFound: boolean = false;
+  // this.list.forEach(function (clientRecord) {
+  //   //debugger;
+  //   if (rec.clientId == clientRecord.clientId) {
+  //     //debugger;
+  //     clientRecord = clientRecord.update(rec);
+  //     isFound = true;
+  //     //break;
+  //     //debugger;
+  //   }
+  // });
+  // if (!isFound)
+  //   this.list.push(rec);
+// }
 
   //  async filter(clientFilter: ClientFilter) {
   //    try {
@@ -88,8 +88,9 @@ export class ClientTableService {
   //  // return null;
   // }
 
-  async filter(clientFilter: ClientFilter){
-     let filteredPromise = await this.http.get("/client/filter", {'clientFilter': JSON.stringify(clientFilter)})
+  async filter(clientFilter: ClientFilter,  offset: number, limit: number){
+     let filteredPromise = await this.http.get("/client/filter",
+       {'clientFilter': JSON.stringify(clientFilter), 'offset' : offset, 'limit': limit})
       .toPromise()
       .then(resp => resp.body as Array<any>)
       .then(body => body.map(r => ClientRecord.create(r)));

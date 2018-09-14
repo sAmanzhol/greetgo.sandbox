@@ -24,6 +24,9 @@ public class ClienRegisterImpl implements ClientRegister {
     List<PhoneDetail> phoneDetails = null;
 
 
+    {
+        createClients();
+    }
     public void createClients() {
 
         clients = new ArrayList<>();
@@ -71,13 +74,17 @@ public class ClienRegisterImpl implements ClientRegister {
         clients.add(new Client(2, "Ajs", "Gvlv", "osoos", male, birthdayDate, agreeablenessCharacter, 7, 100, 0, 5, Address.empty(), new Address("Mamyr-4", "311", 38), phones));
         clients.add(new Client(3, "Vsis", "Akkdd", "llsls", female, birthdayDate, extraversionCharacter, 75, 100, 8, 5545, Address.empty(), new Address("Mamyr-4", "311", 38), phones));
         clients.add(new Client(4, "Tllxlx", "Bodd", "lslslsl", male, birthdayDate, neuroticismCharacter, 1, 100, 825, 574, Address.empty(), new Address("Mamyr-4", "311", 38), phones));
+        clients.add(new Client(5, "Tllxl", "Bodd", "lslslsl", male, birthdayDate, neuroticismCharacter, 1, 100, 825, 574, Address.empty(), new Address("Mamyr-4", "311", 38), phones));
+        clients.add(new Client(6, "Tllx", "Bodd", "lslslsl", male, birthdayDate, neuroticismCharacter, 1, 100, 825, 574, Address.empty(), new Address("Mamyr-4", "311", 38), phones));
+        clients.add(new Client(7, "Tll", "Bodd", "lslslsl", male, birthdayDate, neuroticismCharacter, 1, 100, 825, 574, Address.empty(), new Address("Mamyr-4", "311", 38), phones));
+        clients.add(new Client(8, "Tlx", "Bodd", "lslslsl", male, birthdayDate, neuroticismCharacter, 1, 100, 825, 574, Address.empty(), new Address("Mamyr-4", "311", 38), phones));
 
     }
 
     @Override
     public List<ClientRecord> getClientList() {
         clientRecords = new ArrayList<>();
-        createClients();
+        //createClients();
         if (clients != null) {
             for (Client client : clients) {
                 //ClientRecord tempClientRecord = createRecordFromClient(client);
@@ -166,7 +173,7 @@ public class ClienRegisterImpl implements ClientRegister {
         }
     }
 
-    @Override
+    //@Override
     public List<ClientRecord> filterClients(ClientFilter clientFilter) {
 
         List<ClientRecord> filteredList =  new ArrayList<ClientRecord>();
@@ -179,6 +186,33 @@ public class ClienRegisterImpl implements ClientRegister {
                 }
             }
         }
+        return filteredList;
+    }
+
+
+    @Override
+    public List<ClientRecord> filterClients(ClientFilter clientFilter, int offset, int limit) {
+        List<ClientRecord> filteredList =  new ArrayList<ClientRecord>();
+        if (clients != null) {
+            for (Client client : clients) {//""
+                if (client.name.contains(clientFilter.name) &&
+                  client.surname.contains(clientFilter.surname) &&
+                  client.patronymic.contains(clientFilter.patronymic)) {
+                    filteredList.add(convertClientToRecord(client));
+                }
+            }
+        }
+
+        if(filteredList.size() > limit && limit != 0){
+            if(offset == 0){
+                return filteredList.subList(offset, offset*limit+limit);
+            }
+            else {
+                return filteredList.subList(offset*limit+1, offset+limit+1);
+            }
+        }
+
+
         return filteredList;
     }
 }
