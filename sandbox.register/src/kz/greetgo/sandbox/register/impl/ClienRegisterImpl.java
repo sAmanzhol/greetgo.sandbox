@@ -81,13 +81,13 @@ public class ClienRegisterImpl implements ClientRegister {
         if (clients != null) {
             for (Client client : clients) {
                 //ClientRecord tempClientRecord = createRecordFromClient(client);
-                clientRecords.add(createRecordFromClient(client));
+                clientRecords.add(convertClientToRecord(client));
             }
         }
         return clientRecords;
     }
 
-    public ClientRecord createRecordFromClient(Client client){
+    public ClientRecord convertClientToRecord(Client client){
         ClientRecord clientRecord = new ClientRecord();
         clientRecord.fio = client.surname + " " + client.name + " " + client.patronymic;
         clientRecord.age = client.age;
@@ -99,7 +99,7 @@ public class ClienRegisterImpl implements ClientRegister {
         //clientRecord.phones = client.phones;
         return clientRecord;
     }
-    public Client createClientFromToSave(ClientToSave toSave){
+    public Client convertToSaveToClient(ClientToSave toSave){
         Client client = new Client();
         if(toSave.clientID > 0) {
             client.id = toSave.clientID;
@@ -141,13 +141,13 @@ public class ClienRegisterImpl implements ClientRegister {
         if (clients != null) {
             for (Client client : clients) {
                 if (client.id == toSave.clientID) {
-                    client = createClientFromToSave(toSave);
-                    return  createRecordFromClient(client);
+                    client = convertToSaveToClient(toSave);
+                    return  convertClientToRecord(client);
                 }
             }
-            Client newClient = createClientFromToSave(toSave);
+            Client newClient = convertToSaveToClient(toSave);
             clients.add(newClient);
-            return createRecordFromClient(newClient);
+            return convertClientToRecord(newClient);
         }
         return clientRecord;
     }
@@ -164,5 +164,21 @@ public class ClienRegisterImpl implements ClientRegister {
                 }
             }
         }
+    }
+
+    @Override
+    public List<ClientRecord> filterClients(ClientFilter clientFilter) {
+
+        List<ClientRecord> filteredList =  new ArrayList<ClientRecord>();
+        if (clients != null) {
+            for (Client client : clients) {
+                if (client.name.contains(clientFilter.name) &&
+                  client.surname.contains(clientFilter.surname) &&
+                  client.patronymic.contains(clientFilter.patronymic)) {
+                    filteredList.add(convertClientToRecord(client));
+                }
+            }
+        }
+        return filteredList;
     }
 }

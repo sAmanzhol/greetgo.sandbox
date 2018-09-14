@@ -3,6 +3,7 @@ import {ClientTableService} from "./client-table.service";
 import {MatDialog, MatPaginator, MatTableDataSource, PageEvent} from "@angular/material";
 import {ClientDetailComponent} from "../client-detail/client-detail.component";
 import {ClientRecord} from "../../model/ClientRecord";
+import {ClientFilter} from "../../model/ClientFilter";
 
 @Component({
   selector: 'app-test',
@@ -20,6 +21,8 @@ export class ClientTableComponent implements OnInit {
   length = 100;
   pageSize = 10;
   pageSizeOptions: number[] = [1, 2, 5, 10, 25, 100];
+
+  public clientFilter: ClientFilter = new ClientFilter();
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -52,6 +55,11 @@ export class ClientTableComponent implements OnInit {
 
   delete(rec: ClientRecord) {
     this.clientTableService.deleteClient(rec);
+  }
+
+  filtering() {
+   this.clientTableService.filter(this.clientFilter);
+    // this.clientTableService.
   }
 
   ngOnInit() {

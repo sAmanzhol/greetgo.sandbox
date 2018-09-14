@@ -1,6 +1,7 @@
 package kz.greetgo.sandbox.controller.register;
 
 import kz.greetgo.sandbox.controller.model.ClientDetail;
+import kz.greetgo.sandbox.controller.model.ClientFilter;
 import kz.greetgo.sandbox.controller.model.ClientRecord;
 import kz.greetgo.sandbox.controller.model.ClientToSave;
 
@@ -15,5 +16,7 @@ public interface ClientRegister {
     ClientDetail getClientDetailById(long id);
     ClientRecord saveClient(ClientToSave toSave);
     void deleteClient(long id);
+    List<ClientRecord> filterClients(ClientFilter clientFilter);
+
 
 }

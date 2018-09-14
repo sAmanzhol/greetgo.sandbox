@@ -10,6 +10,7 @@ import kz.greetgo.mvc.annotations.on_methods.OnDelete;
 import kz.greetgo.mvc.annotations.on_methods.OnGet;
 import kz.greetgo.mvc.annotations.on_methods.OnPost;
 import kz.greetgo.sandbox.controller.model.ClientDetail;
+import kz.greetgo.sandbox.controller.model.ClientFilter;
 import kz.greetgo.sandbox.controller.model.ClientRecord;
 import kz.greetgo.sandbox.controller.model.ClientToSave;
 import kz.greetgo.sandbox.controller.register.ClientRegister;
@@ -59,5 +60,14 @@ public class ClientController implements Controller {
         clientRegisterBeanGetter.get().deleteClient(id);
         //return null;
     }
+
+    @ToJson
+    @PublicAccess
+    @OnDelete("/filter")
+    public List<ClientRecord> filter(@Par("clientFilter")ClientFilter clientFilter){
+        return clientRegisterBeanGetter.get().filterClients(clientFilter);
+        //return null;
+    }
+
 
 }

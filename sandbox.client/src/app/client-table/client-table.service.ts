@@ -1,6 +1,8 @@
 import {Injectable} from '@angular/core';
 import {HttpService} from "../http.service";
 import {ClientRecord} from "../../model/ClientRecord";
+import {ClientFilter} from "../../model/ClientFilter";
+import {ClientToSave} from "../../model/ClientToSave";
 
 @Injectable({
   providedIn: 'root'
@@ -63,4 +65,34 @@ export class ClientTableService {
     if (!isFound)
       this.list.push(rec);
   }
+
+  //  async filter(clientFilter: ClientFilter) {
+  //    try {
+  //      this.loading = true;
+  //      this.list = await this.loadFilteredRecords(clientFilter);
+  //      this.loading = false;
+  //
+  //      //return Promise.resolve(this.list);
+  //    } catch (e) {
+  //
+  //      this.loading = false;
+  //      console.error(e);
+  //
+  //    }
+  // }
+  // loadFilteredRecords(clientFilter: ClientFilter): Promise<ClientRecord[]> {
+  //   return this.http.get("/client/filter", {'clientFilter': JSON.stringify(clientFilter)})
+  //     .toPromise()
+  //     .then(resp => resp.body as Array<any>)
+  //     .then(body => body.map(r => ClientRecord.create(r)));
+  //  // return null;
+  // }
+
+  filter(clientFilter: ClientFilter){
+    let a = this.http.get("/client/filter", {'clientFilter': JSON.stringify(clientFilter)})
+      .toPromise()
+      .then(resp => resp.body as Array<any>)
+      .then(body => body.map(r => ClientRecord.create(r)));
+  }
+
 }
