@@ -22,45 +22,29 @@
       <td>{{data.minBalance}}</td>
       <td>
         <p-button [disabled]="data!=selectedClient" class="edit-btn" (click)="edit(data.id)" label="..."></p-button>
-        <p-button [disabled]="data!=selectedClient" class="delete-btn" (click)="deleteClient(data.id)"
-                  label="-"></p-button>
+        <p-button [disabled]="data!=selectedClient" class="delete-btn" (click)="deleteClient(data.id)" label="-"></p-button>
       </td>
     </tr>
   </ng-template>
 </p-table>
 
-
-<!--TEST-->
-<div>
-  <h2>Hello {{name}}</h2>
-</div>
-<form [formGroup]="radioTest">
-  <input type="radio" name="gender" value='Male' formControlName="gender" [(ngModel)]='gender'>Male
-  <input type="radio" name='gender' value='Female' formControlName="gender" [(ngModel)]='gender'>Female
-  <button type="button" [disabled]="radioTest.controls['gender'].invalid">Gender Button</button>
-</form>
-<pre>{{radioTest.value | json}}</pre>
-<pre>{{radioTest.valid}}</pre>
-<pre>{{gender}}</pre>
-
-
 <p-dialog [modal]="true" [(visible)]="display" [width]="800" [responsive]="true" (onHide)="closed()">
   <p-header style="font-weight: bold;">
     {{header}}
   </p-header>
-  <form *ngIf="clientDetail" [formGroup]="userform">
+
+  <form *ngIf="clientDetail" [formGroup]="clientform">
     <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
       <div class="ui-grid-row">
         <div class="ui-grid-col-2">
           Фамилия *:
         </div>
         <div class="ui-grid-col-6">
-          <input pInputText type="text" formControlName="lastname" name="lastName" [(ngModel)]="clientDetail.lastName"
-                 (input)="valueChanged = true"/>
+          <input type="text" pInputText [pKeyFilter]="symbols" placeholder="Введите фамилию" formControlName="lastname"
+            name="lastName" [(ngModel)]="clientDetail.lastName" />
         </div>
         <div class="ui-grid-col-4">
-          <p-message severity="error" text="Введите фамилию"
-                     *ngIf="!userform.controls['lastname'].valid"></p-message>
+          <p-message severity="error" text="Введите фамилию" *ngIf="!clientform.controls['lastName'].valid"></p-message>
         </div>
       </div>
 
@@ -69,12 +53,11 @@
           Имя *:
         </div>
         <div class="ui-grid-col-6">
-          <input pInputText type="text" formControlName="name" name="name" [(ngModel)]="clientDetail.name"
-                 (input)="valueChanged = true"/>
+          <input pInputText type="text" [pKeyFilter]="symbols" placeholder="Введите имя" formControlName="name" name="name"
+            [(ngModel)]="clientDetail.name" />
         </div>
         <div class="ui-grid-col-4">
-          <p-message severity="error" text="Введите имя"
-                     *ngIf="!userform.controls['name'].valid"></p-message>
+          <p-message severity="error" text="Введите имя" *ngIf="!clientform.controls['name'].valid"></p-message>
         </div>
       </div>
 
@@ -83,8 +66,8 @@
           Отчество:
         </div>
         <div class="ui-grid-col-6">
-          <input pInputText type="text" formControlName="fatherName" name="fatherName"
-                 [(ngModel)]="clientDetail.fatherName" (input)="valueChanged = true"/>
+          <input pInputText type="text" [pKeyFilter]="symbols" placeholder="Введите отчество" formControlName="fatherName"
+            name="fatherName" [(ngModel)]="clientDetail.fatherName" />
         </div>
       </div>
 
@@ -93,16 +76,13 @@
           Пол *:
         </div>
         <div class="ui-grid-col-6">
-          <p-radioButton type="radio" class="ui-g-12" name="gender" value="Мужской" label="Мужской"
-                         formControlName="gender"
-                         [(ngModel)]="clientDetail.gender" (input)="valueChanged = true"></p-radioButton>
-          <p-radioButton type="radio" class="ui-g-12" name="gender" value="Женский" label="Женский"
-                         formControlName="gender"
-                         [(ngModel)]="clientDetail.gender" (input)="valueChanged = true"></p-radioButton>
+          <p-radioButton type="radio" class="ui-g-12" name="gender" value="Мужской" label="Мужской" formControlName="gender"
+            [(ngModel)]="clientDetail.gender"></p-radioButton>
+          <p-radioButton type="radio" class="ui-g-12" name="gender" value="Женский" label="Женский" formControlName="gender"
+            [(ngModel)]="clientDetail.gender"></p-radioButton>
         </div>
         <div class="ui-grid-col-4">
-          <p-message severity="error" text="Выберите пол"
-                     *ngIf="!userform.controls['gender'].valid"></p-message>
+          <p-message severity="error" text="Выберите пол" *ngIf="!clientform.controls['gender'].valid"></p-message>
         </div>
       </div>
 
@@ -112,11 +92,10 @@
         </div>
         <div class="ui-grid-col-6">
           <p-calendar [monthNavigator]="true" [yearNavigator]="true" yearRange="1900:2030" formControlName="bithDate"
-                      name="birthDate" [(ngModel)]="clientDetail.birthDate" (input)="valueChanged = true"></p-calendar>
+            name="birthDate" [(ngModel)]="clientDetail.birthDate"></p-calendar>
         </div>
         <div class="ui-grid-col-4">
-          <p-message severity="error" text="Введите дату рождения"
-                     *ngIf="!userform.controls['bithDate'].valid"></p-message>
+          <p-message severity="error" text="Введите дату рождения" *ngIf="!clientform.controls['bithDate'].valid"></p-message>
         </div>
       </div>
 
@@ -126,14 +105,11 @@
           Характер *:
         </div>
         <div class="ui-grid-col-6">
-          <p-dropdown [options]="characters" [(ngModel)]="clientDetail.character" name="character"
-                      (input)="valueChanged = true"
-                      formControlName="character"
-                      placeholder="Выберите характер"></p-dropdown>
+          <p-dropdown [options]="characters" [(ngModel)]="clientDetail.character" name="character" formControlName="character"
+            placeholder="Выберите характер"></p-dropdown>
         </div>
         <div class="ui-grid-col-4">
-          <p-message severity="error" text="character is required"
-                     *ngIf="!userform.controls['character'].valid"></p-message>
+          <p-message severity="error" text="Выберите характер" *ngIf="!clientform.controls['character'].valid"></p-message>
         </div>
       </div>
 
@@ -146,8 +122,8 @@
             Улица:
           </div>
           <div class="ui-grid-col-6">
-            <input pInputText type="text" formControlName="factStreet" name="factStreet"
-                   [(ngModel)]="clientDetail.factStreet" (input)="valueChanged = true"/>
+            <input type="text" pInputText [pKeyFilter]="symbols" placeholder="Введите улицу" formControlName="factStreet"
+              name="factStreet" [(ngModel)]="clientDetail.factStreet" />
           </div>
         </div>
 
@@ -157,8 +133,8 @@
             Дом:
           </div>
           <div class="ui-grid-col-6">
-            <input pInputText type="text" formControlName="factNo" name="factNo" [(ngModel)]="clientDetail.factNo"
-                   (input)="valueChanged = true"/>
+            <input pInputText type="text" pKeyFilter="int" placeholder="Введите номер дома" formControlName="factNo"
+              name="factNo" [(ngModel)]="clientDetail.factNo" />
           </div>
         </div>
 
@@ -168,8 +144,8 @@
             Квартира:
           </div>
           <div class="ui-grid-col-6">
-            <input pInputText type="text" formControlName="factFlat" name="factFlat" [(ngModel)]="clientDetail.factFlat"
-                   (input)="valueChanged = true"/>
+            <input pInputText type="text" pKeyFilter="int" placeholder="Введите номер квартиры" formControlName="factFlat"
+              name="factFlat" [(ngModel)]="clientDetail.factFlat" />
           </div>
         </div>
       </div>
@@ -183,12 +159,11 @@
             Улица *:
           </div>
           <div class="ui-grid-col-6">
-            <input pInputText type="text" formControlName="regStreet" name="regStreet"
-                   [(ngModel)]="clientDetail.regStreet" (input)="valueChanged = true"/>
+            <input type="text" pInputText [pKeyFilter]="symbols" placeholder="Введите улицу" formControlName="regStreet"
+              name="regStreet" [(ngModel)]="clientDetail.regStreet" />
           </div>
           <div class="ui-grid-col-4">
-            <p-message severity="error" text="Введите улицу"
-                       *ngIf="!userform.controls['regStreet'].valid"></p-message>
+            <p-message severity="error" text="Введите улицу" *ngIf="!clientform.controls['regStreet'].valid"></p-message>
           </div>
         </div>
 
@@ -198,12 +173,11 @@
             Дом *:
           </div>
           <div class="ui-grid-col-6">
-            <input pInputText type="text" formControlName="regNo" name="regNo" [(ngModel)]="clientDetail.regNo"
-                   (input)="valueChanged = true"/>
+            <input pInputText type="text" pKeyFilter="int" placeholder="Введите номер дома" formControlName="regNo"
+              name="regNo" [(ngModel)]="clientDetail.regNo" />
           </div>
           <div class="ui-grid-col-4">
-            <p-message severity="error" text="Введите номер дома"
-                       *ngIf="!userform.controls['regNo'].valid"></p-message>
+            <p-message severity="error" text="Введите номер дома" *ngIf="!clientform.controls['regNo'].valid"></p-message>
           </div>
         </div>
 
@@ -213,12 +187,11 @@
             Квартира *:
           </div>
           <div class="ui-grid-col-6">
-            <input pInputText type="text" formControlName="regFlat" name="regFlat" [(ngModel)]="clientDetail.regFlat"
-                   (input)="valueChanged = true"/>
+            <input pInputText type="text" pKeyFilter="int" placeholder="Введите номер квартиры" formControlName="regFlat"
+              name="regFlat" [(ngModel)]="clientDetail.regFlat" />
           </div>
           <div class="ui-grid-col-4">
-            <p-message severity="error" text="Введите номер квартиры"
-                       *ngIf="!userform.controls['regFlat'].valid"></p-message>
+            <p-message severity="error" text="Введите номер квартиры" *ngIf="!clientform.controls['regFlat'].valid"></p-message>
           </div>
         </div>
       </div>
@@ -232,8 +205,8 @@
             Домашний:
           </div>
           <div class="ui-grid-col-6">
-            <input pInputText type="text" formControlName="homePhoneNumber" name="homePhoneNumber"
-                   [(ngModel)]="clientDetail.homePhoneNumber" (input)="valueChanged = true"/>
+            <p-inputMask mask="+7-(272)-999-99-99" placeholder="+7-(272)-xxx-xx-xx" formControlName="homePhoneNumber"
+              name="homePhoneNumber" [(ngModel)]="clientDetail.homePhoneNumber"></p-inputMask>
           </div>
         </div>
 
@@ -242,8 +215,8 @@
             Рабочий:
           </div>
           <div class="ui-grid-col-6">
-            <input pInputText type="text" formControlName="workPhoneNumber" name="workPhoneNumber"
-                   [(ngModel)]="clientDetail.workPhoneNumber" (input)="valueChanged = true"/>
+            <p-inputMask mask="+7-(272)-999-99-99" placeholder="+7-(272)-xxx-xx-xx" formControlName="workPhoneNumber"
+              name="workPhoneNumber" [(ngModel)]="clientDetail.workPhoneNumber"></p-inputMask>
           </div>
         </div>
 
@@ -252,12 +225,11 @@
             Мобильный1 *:
           </div>
           <div class="ui-grid-col-6">
-            <input pInputText type="text" formControlName="mobileNumber1" name="mobileNumber1"
-                   [(ngModel)]="clientDetail.mobileNumber1" (input)="valueChanged = true"/>
+            <p-inputMask mask="+7-(799)-999-99-99" placeholder="+7-(7xx)-xxx-xx-xx" formControlName="mobileNumber1"
+              name="mobileNumber1" [(ngModel)]="clientDetail.mobileNumber1"></p-inputMask>
           </div>
           <div class="ui-grid-col-4">
-            <p-message severity="error" text="Введите номер квартиры"
-                       *ngIf="!userform.controls['mobileNumber1'].valid"></p-message>
+            <p-message severity="error" text="Введите номер телефона" *ngIf="!clientform.controls['mobileNumber1'].valid"></p-message>
           </div>
         </div>
 
@@ -266,8 +238,8 @@
             Мобильный2:
           </div>
           <div class="ui-grid-col-6">
-            <input pInputText type="text" formControlName="mobileNumber2" name="mobileNumber2"
-                   [(ngModel)]="clientDetail.mobileNumber2" (input)="valueChanged = true"/>
+            <p-inputMask mask="+7-(799)-999-99-99" placeholder="+7-(7xx)-xxx-xx-xx" formControlName="mobileNumber2"
+              name="mobileNumber2" [(ngModel)]="clientDetail.mobileNumber2"></p-inputMask>
           </div>
         </div>
 
@@ -277,8 +249,8 @@
             Мобильный3:
           </div>
           <div class="ui-grid-col-6">
-            <input pInputText type="text" formControlName="mobileNumber3" name="mobileNumber3"
-                   [(ngModel)]="clientDetail.mobileNumber3" (input)="valueChanged = true"/>
+            <p-inputMask mask="+7-(799)-999-99-99" placeholder="+7-(7xx)-xxx-xx-xx" formControlName="mobileNumber3"
+              name="mobileNumber3" [(ngModel)]="clientDetail.mobileNumber3"></p-inputMask>
           </div>
         </div>
       </div>
@@ -290,8 +262,8 @@
     <div class="ui-grid-row">
       <div class="ui-grid-col-2"></div>
       <div class="ui-grid-col-6">
-        <p-button type="submit" label="Сохранить" [disabled]="!(userform.valid&&valueChanged)" (onClick)="saveClient1()"
-                  icon="pi pi-check"></p-button>
+        <p-button type="submit" label="Сохранить" [disabled]="!(clientform.valid&&clientform.dirty)" (onClick)="saveClient1()"
+          icon="pi pi-check"></p-button>
         <p-button label="Отмена" (onClick)="cancel()"></p-button>
       </div>
       <div class="ui-grid-col-4"></div>
