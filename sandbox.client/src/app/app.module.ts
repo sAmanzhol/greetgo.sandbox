@@ -20,6 +20,8 @@ import { RadioButtonModule } from 'primeng/components/radiobutton/radiobutton';
 import { CalendarModule } from 'primeng/components/calendar/calendar';
 import { InputMaskModule } from 'primeng/inputmask';
 import { KeyFilterModule } from 'primeng/keyfilter';
+import { TooltipModule } from 'primeng/tooltip';
+import { PaginatorModule } from 'primeng/paginator';
 
 @NgModule({
   declarations: [
@@ -44,7 +46,9 @@ import { KeyFilterModule } from 'primeng/keyfilter';
     ReactiveFormsModule,
     MessageModule,
     InputMaskModule,
-    KeyFilterModule
+    KeyFilterModule,
+    TooltipModule,
+    PaginatorModule
   ],
   providers: [HttpService, ClientService],
   bootstrap: [AppComponent]

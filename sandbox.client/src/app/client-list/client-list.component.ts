@@ -51,7 +51,8 @@ export class ClientListComponent implements OnInit {
   characters: SelectItem[];
   header: string;
   symbols: RegExp = /^[a-zA-Z а-яА-Я]+$/;
-
+  currentYear = Date.now();
+  // cols: any[];
   clientform: FormGroup;
 
   constructor(private _service: ClientService, private fb: FormBuilder) {
@@ -69,6 +70,14 @@ export class ClientListComponent implements OnInit {
   }
 
   ngOnInit() {
+    // this.cols = [
+    //   // { field: 'lastName' + 'name' + 'fatherName', header: 'ФИО' },
+    //   { field: 'character', header: 'Характер' },
+    //   { field: 'age', header: 'Возраст' },
+    //   { field: 'totalBalance', header: 'Общий остаток счетов' },
+    //   { field: 'maxBalance', header: 'Максимальный остаток' },
+    //   { field: 'minBalance', header: 'Минимальный остаток' }
+    // ];
     this.getClientRecords();
     this.setValidators();
   }
@@ -94,10 +103,6 @@ export class ClientListComponent implements OnInit {
       'mobileNumber3': new FormControl('')
     });
   }
-
-  // onChange() {
-  //   this.userform.valueChanges.subscribe(() => console.log('changed') /*this.valueChanged = true*/);
-  // }
 
   getClientRecords(): void {
     this._service.getClientRecords().subscribe((content) => {
@@ -130,35 +135,36 @@ export class ClientListComponent implements OnInit {
   }
 
   cancel() {
+    if (this.clientform.dirty) {
+      alert('Закрыть без сохранения?');
+    } else {
+      this.close();
+    }
+  }
+
+  close() {
     this.display = false;
   }
 
-  // transformDate(date): string {
-  //   var y = this.date.getFullYear();
-  //   return ;
-  // }
+  setClientRecord() {
+    this.selectedClient.lastName = this.clientDetail.lastName;
+    this.selectedClient.name = this.clientDetail.name;
+    this.selectedClient.fatherName = this.clientDetail.fatherName;
+    this.selectedClient.character = this.clientDetail.character;
+    this.selectedClient.age = (new Date()).getFullYear() - (+this.clientDetail.birthDate.slice(6));
+  }
 
   saveClient1() {
     if (this.EDITEMODE) {
-      this.selectedClient.character = this.clientDetail.character;
-      this.selectedClient.lastName = this.clientDetail.lastName;
-      this.selectedClient.name = this.clientDetail.name;
-      this.selectedClient.fatherName = this.clientDetail.fatherName;
-      // this.selectedClient.age = 2018 - (+this.clientDetail.birthDate.slice(6));
-
-      // console.log(this.clientDetail.birthDate + ' selected: ' + this.transformDate(this.birthDate));
+      this.setClientRecord();
 
       this._service.updateClientDetail(this.clientDetail)
         .subscribe(() =>
           this._service.updateClientRecord(this.selectedClient)
-            .subscribe(() => this.cancel())
+            .subscribe(() => this.close())
         );
     } else {
-      this.selectedClient.lastName = this.clientDetail.lastName;
-      this.selectedClient.name = this.clientDetail.name;
-      this.selectedClient.fatherName = this.clientDetail.fatherName;
-      this.selectedClient.character = this.clientDetail.character;
-      this.selectedClient.age = 20;
+      this.setClientRecord();
       this.selectedClient.totalBalance = 0.0;
       this.selectedClient.maxBalance = 0.0;
       this.selectedClient.minBalance = 0.0;
@@ -168,13 +174,11 @@ export class ClientListComponent implements OnInit {
           this._service.addClientRecord(this.selectedClient)
             .subscribe((c) => {
               this.clients.push(c);
-              this.cancel();
+              this.close();
             }
             )
         );
     }
-    this.cancel();
-
   }
 
   deleteClient(id: number) {
@@ -182,11 +186,14 @@ export class ClientListComponent implements OnInit {
     this._service.deleteClientDetails(id)
       .subscribe(() =>
         this._service.deleteClientRecord(id)
-          .subscribe(() => this.cancel())
-      );
+          .subscribe());
   }
 
-  closed() {
+  onSubmit() {
+    if (this.clientform.valid) {
+      console.log("Form Submitted!");
+      this.clientform.reset();
+    }
   }
 
 }
