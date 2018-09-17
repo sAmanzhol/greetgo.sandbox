@@ -66,8 +66,9 @@ public class ClienRegisterImpl implements ClientRegister {
     Date birthdayDate = new Date();
 
     try {
-      birthdayDate = new SimpleDateFormat("dd/MM/yyyy").parse("20/12/1998");
-    }catch (ParseException e) {
+      birthdayDate = new SimpleDateFormat("dd/MM/yyyy")
+        .parse("20/12/1998");
+    } catch (ParseException e) {
       e.printStackTrace();
     }
     clients.add(new Client(1, "Sultanova", "Madina", "Mahammadnova", female, birthdayDate, opennesCharacter, 20, 1000, 475, 5000, Address.empty(), new Address("Mamyr-4", "311", 38), phones));
@@ -178,68 +179,74 @@ public class ClienRegisterImpl implements ClientRegister {
 
 
   @Override
-  public List<ClientRecord> filterClients(ClientFilter clientFilter) {
+  public ClientRecordListWrapper filterClients(ClientFilter clientFilter) {
     List<ClientRecord> filteredList = new ArrayList<ClientRecord>();
+    int count = 0;
     if (clients != null) {
       for (Client client : clients) {
-        if (client.name.contains(clientFilter.name) &&
-          client.surname.contains(clientFilter.surname) &&
-          client.patronymic.contains(clientFilter.patronymic)) {
+        if (client.name.toUpperCase().contains(clientFilter.name.toUpperCase()) &&
+          client.surname.toUpperCase().contains(clientFilter.surname.toUpperCase()) &&
+          client.patronymic.toUpperCase().contains(clientFilter.patronymic.toUpperCase())) {
           filteredList.add(convertClientToRecord(client));
+          count++;
         }
       }
     }
 
     if(filteredList.size() > clientFilter.limit && clientFilter.limit != 0) {
       if(clientFilter.offset == 0) {
-        filteredList = filteredList.subList(clientFilter.offset, clientFilter.offset * clientFilter.limit + clientFilter.limit);
+        filteredList = filteredList.subList(0, clientFilter.limit);
+      } else if(clientFilter.offset * clientFilter.limit + clientFilter.limit > filteredList.size()) {
+        filteredList = filteredList.subList(clientFilter.offset * clientFilter.limit, filteredList.size());
       } else {
-        filteredList = filteredList.subList(clientFilter.offset * clientFilter.limit + 1, clientFilter.offset + clientFilter.limit + 1);
+        filteredList = filteredList.subList(clientFilter.offset * clientFilter.limit, clientFilter.offset * clientFilter.limit + clientFilter.limit);
       }
     }
-    if (clientFilter.columnName == "") {
-      return filteredList;
+    if("".equals(clientFilter.columnName)) {
+      return new ClientRecordListWrapper(filteredList, count);
     } else {
       switch (clientFilter.columnName) {
         case "tot":
           if (clientFilter.isAsc) {
-            return filteredList.stream()
+            filteredList = filteredList.stream()
               .sorted(Comparator.comparing(clientRecord -> clientRecord.totalBalance))
               .collect(Collectors.toList());
+            return new ClientRecordListWrapper(filteredList, count);
           } else {
             filteredList = filteredList.stream()
               .sorted(Comparator.comparing(clientRecord -> clientRecord.totalBalance))
               .collect(Collectors.toList());
             Collections.reverse(filteredList);
-            return filteredList;
+            return new ClientRecordListWrapper(filteredList, count);
           }
         case "min":
-          if (clientFilter.isAsc) {
-            return filteredList.stream()
+          if(clientFilter.isAsc) {
+            filteredList = filteredList.stream()
               .sorted(Comparator.comparing(clientRecord -> clientRecord.minBalance))
               .collect(Collectors.toList());
+            return new ClientRecordListWrapper(filteredList, count);
           } else {
             filteredList = filteredList.stream()
               .sorted(Comparator.comparing(clientRecord -> clientRecord.minBalance))
               .collect(Collectors.toList());
             Collections.reverse(filteredList);
-            return filteredList;
+            return new ClientRecordListWrapper(filteredList, count);
           }
         case "max":
           if (clientFilter.isAsc) {
-            return filteredList.stream()
+            filteredList = filteredList.stream()
               .sorted(Comparator.comparing(clientRecord -> clientRecord.maxBalance))
               .collect(Collectors.toList());
+            return new ClientRecordListWrapper(filteredList, count);
           } else {
             filteredList = filteredList.stream()
               .sorted(Comparator.comparing(clientRecord -> clientRecord.maxBalance))
               .collect(Collectors.toList());
             Collections.reverse(filteredList);
-            return filteredList;
+            return new ClientRecordListWrapper(filteredList, count);
           }
       }
     }
-    return filteredList;
+    return new ClientRecordListWrapper(filteredList, count);
   }
-
 }

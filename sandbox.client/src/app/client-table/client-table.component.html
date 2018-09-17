@@ -17,7 +17,7 @@
     <input matInput [(ngModel)]="clientFilter.patronymic">
   </mat-form-field>
   <button mat-icon-button>
-    <mat-icon aria-label="Remove icon-button" (click)="test(null)">search</mat-icon>
+    <mat-icon aria-label="Remove icon-button" (click)="filtering()">search</mat-icon>
   </button>
   <div class="mat-elevation-z8">
     <table mat-table [dataSource]="clientTableService.list">
@@ -63,7 +63,7 @@
     <mat-paginator [length]="length"
                    [pageSize]="pageSize"
                    [pageSizeOptions]="pageSizeOptions"
-                   (page)="test($event)">
+                   (page)="startFiltering($event)">
     </mat-paginator>
   </div>
 </div>

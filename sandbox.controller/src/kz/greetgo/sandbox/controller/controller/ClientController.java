@@ -9,15 +9,10 @@ import kz.greetgo.mvc.annotations.on_methods.ControllerPrefix;
 import kz.greetgo.mvc.annotations.on_methods.OnDelete;
 import kz.greetgo.mvc.annotations.on_methods.OnGet;
 import kz.greetgo.mvc.annotations.on_methods.OnPost;
-import kz.greetgo.sandbox.controller.model.ClientDetail;
-import kz.greetgo.sandbox.controller.model.ClientFilter;
-import kz.greetgo.sandbox.controller.model.ClientRecord;
-import kz.greetgo.sandbox.controller.model.ClientToSave;
+import kz.greetgo.sandbox.controller.model.*;
 import kz.greetgo.sandbox.controller.register.ClientRegister;
 import kz.greetgo.sandbox.controller.security.PublicAccess;
 import kz.greetgo.sandbox.controller.util.Controller;
-
-import java.util.List;
 
 /**
  * Created by msultanova on 9/4/18.
@@ -26,51 +21,36 @@ import java.util.List;
 @ControllerPrefix("/client")
 public class ClientController implements Controller {
 
-    public BeanGetter<ClientRegister> clientRegisterBeanGetter;
+  public BeanGetter<ClientRegister> clientRegisterBeanGetter;
 
-    @ToJson
-    @PublicAccess
-    @OnGet("/list")
-    public List<ClientRecord> list() {
-        // FIXME: 9/14/18 Принимать объект фильтр!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        return clientRegisterBeanGetter.get().getClientList();
-    }
+  @ToJson
+  @PublicAccess
+  @OnGet("/list")
+  public ClientRecordListWrapper list(@Json @Par("clientFilter") ClientFilter clientFilter){
+    return clientRegisterBeanGetter.get().filterClients(clientFilter);
+  }
 
-    @ToJson
-    @PublicAccess
-    @OnGet("/detail")
-    public ClientDetail getDetail(@Par("id") Long id){
-        return clientRegisterBeanGetter.get().getClientDetailById(id);
-        //return null;
-    }
+  @ToJson
+  @PublicAccess
+  @OnGet("/detail")
+  public ClientDetail getDetail(@Par("id") Long id){
+    return clientRegisterBeanGetter.get().getClientDetailById(id);
+  }
 
 
-    @ToJson
-    @PublicAccess
-    @OnPost("/save")
-    public ClientRecord save(@Json @Par("toSave") ClientToSave toSave){
-        return clientRegisterBeanGetter.get().saveClient(toSave);
-        //return null;
-    }
+  @ToJson
+  @PublicAccess
+  @OnPost("/save")
+  public ClientRecord save(@Json @Par("toSave") ClientToSave toSave){
+    return clientRegisterBeanGetter.get().saveClient(toSave);
+  }
 
-    //delete
-    @ToJson
-    @PublicAccess
-    @OnDelete("/delete")
-    public void delete(@Par("id") Long id){
-        clientRegisterBeanGetter.get().deleteClient(id);
-        //return null;
-    }
-
-    @ToJson
-    @PublicAccess
-    @OnGet("/filter")//offset: number, limit: number
-    public List<ClientRecord> filter(@Json @Par("clientFilter") ClientFilter clientFilter) {
-        // FIXME: 9/14/18 Сделать эту логику в методе лист!!!!
-        return clientRegisterBeanGetter.get().filterClients(clientFilter);
-        //return null;
-    }
-
+  @ToJson
+  @PublicAccess
+  @OnDelete("/delete")
+  public void delete(@Par("id") Long id){
+    clientRegisterBeanGetter.get().deleteClient(id);
+  }
 
 }
 
