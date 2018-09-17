@@ -1,13 +1,14 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { ClientService } from "../service/client.service";
-import { SelectItem } from "primeng/api";
-import { Validators, FormControl, FormGroup, FormBuilder, PatternValidator } from "@angular/forms";
+import {Component, Input, OnInit} from '@angular/core';
+import {ClientService} from "../service/client.service";
+import {ConfirmationService, SelectItem} from "primeng/api";
+import {Validators, FormControl, FormGroup, FormBuilder} from "@angular/forms";
 
 export class ClientDetail {
   id: number;
   lastName: string;
   name: string;
   fatherName: string;
+  fullName: string;
   gender: string;
   birthDate: string;
   character: string;
@@ -29,6 +30,7 @@ export class ClientRecord {
   lastName: string;
   name: string;
   fatherName: string;
+  fullName: string;
   character: string;
   age: number;
   totalBalance: number;
@@ -39,7 +41,8 @@ export class ClientRecord {
 @Component({
   selector: 'app-client-list',
   templateUrl: './client-list.component.html',
-  styleUrls: ['./client-list.component.css']
+  styleUrls: ['./client-list.component.css'],
+  providers: [ConfirmationService]
 })
 export class ClientListComponent implements OnInit {
   clients: ClientRecord[];
@@ -51,33 +54,38 @@ export class ClientListComponent implements OnInit {
   characters: SelectItem[];
   header: string;
   symbols: RegExp = /^[a-zA-Z а-яА-Я]+$/;
-  currentYear = Date.now();
-  // cols: any[];
+  cols: any[];
+  nameCols: any[];
   clientform: FormGroup;
 
-  constructor(private _service: ClientService, private fb: FormBuilder) {
+  constructor(private _service: ClientService, private fb: FormBuilder, private confirmationService: ConfirmationService) {
     this.characters = [
-      { label: 'спокойный', value: 'спокойный' },
-      { label: 'активный', value: 'активный' },
-      { label: 'аккуратный', value: 'аккуратный' },
-      { label: 'артистичный', value: 'артистичный' },
-      { label: 'бдительный', value: 'бдительный' },
-      { label: 'безобидный', value: 'безобидный' },
-      { label: 'веселый', value: 'веселый' },
-      { label: 'грозный', value: 'грозный' }
+      {label: 'спокойный', value: 'спокойный'},
+      {label: 'активный', value: 'активный'},
+      {label: 'аккуратный', value: 'аккуратный'},
+      {label: 'артистичный', value: 'артистичный'},
+      {label: 'бдительный', value: 'бдительный'},
+      {label: 'безобидный', value: 'безобидный'},
+      {label: 'веселый', value: 'веселый'},
+      {label: 'грозный', value: 'грозный'}
     ];
 
   }
 
   ngOnInit() {
-    // this.cols = [
-    //   // { field: 'lastName' + 'name' + 'fatherName', header: 'ФИО' },
-    //   { field: 'character', header: 'Характер' },
-    //   { field: 'age', header: 'Возраст' },
-    //   { field: 'totalBalance', header: 'Общий остаток счетов' },
-    //   { field: 'maxBalance', header: 'Максимальный остаток' },
-    //   { field: 'minBalance', header: 'Минимальный остаток' }
-    // ];
+    this.cols = [
+      {field: 'fullName', header: 'ФИО'},
+      {field: 'character', header: 'Характер'},
+      {field: 'age', header: 'Возраст'},
+      {field: 'totalBalance', header: 'Общий остаток счетов'},
+      {field: 'maxBalance', header: 'Максимальный остаток'},
+      {field: 'minBalance', header: 'Минимальный остаток'}
+    ];
+    this.nameCols = [
+      {field: 'lastName'},
+      {field: 'name'},
+      {field: 'fatherName'}
+    ];
     this.getClientRecords();
     this.setValidators();
   }
@@ -123,7 +131,6 @@ export class ClientListComponent implements OnInit {
       console.log(content)
     });
     this.display = true;
-
   }
 
   add() {
@@ -150,6 +157,8 @@ export class ClientListComponent implements OnInit {
     this.selectedClient.lastName = this.clientDetail.lastName;
     this.selectedClient.name = this.clientDetail.name;
     this.selectedClient.fatherName = this.clientDetail.fatherName;
+    this.clientDetail.fullName = this.clientDetail.lastName + ' ' + this.clientDetail.name + ' ' + this.clientDetail.fatherName;
+    this.selectedClient.fullName = this.clientDetail.fullName;
     this.selectedClient.character = this.clientDetail.character;
     this.selectedClient.age = (new Date()).getFullYear() - (+this.clientDetail.birthDate.slice(6));
   }
@@ -173,12 +182,26 @@ export class ClientListComponent implements OnInit {
         .subscribe(() =>
           this._service.addClientRecord(this.selectedClient)
             .subscribe((c) => {
-              this.clients.push(c);
-              this.close();
-            }
+                this.clients.push(c);
+                this.close();
+              }
             )
         );
     }
+  }
+
+  confirm(id: number) {
+    this.confirmationService.confirm({
+      message: 'Удалить клиент ' + this.selectedClient.fullName + '?',
+      header: 'Удаление',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.deleteClient(id);
+      },
+      reject: () => {
+      }
+    });
+
   }
 
   deleteClient(id: number) {
