@@ -16,8 +16,8 @@
     <mat-label>Отчество</mat-label>
     <input matInput [(ngModel)]="clientFilter.patronymic">
   </mat-form-field>
-  <button mat-icon-button (click)="test(pageEvent)">
-    <mat-icon aria-label="Remove icon-button">search</mat-icon>
+  <button mat-icon-button>
+    <mat-icon aria-label="Remove icon-button" (click)="test(null)">search</mat-icon>
   </button>
   <div class="mat-elevation-z8">
     <table mat-table [dataSource]="clientTableService.list">
@@ -34,15 +34,16 @@
         <td mat-cell *matCellDef="let element"> {{element.age}}</td>
       </ng-container>
       <ng-container matColumnDef="totalBalance">
-        <th mat-header-cell *matHeaderCellDef> Общий остаток счетов</th>
+        <!-- mat-sort-header-->
+        <th mat-header-cell *matHeaderCellDef (click)="sorting('tot')"> Общий остаток счетов</th>
         <td mat-cell *matCellDef="let element"> {{element.totalBalance}}</td>
       </ng-container>
       <ng-container matColumnDef="maxBalance">
-        <th mat-header-cell *matHeaderCellDef> Максимальный остаток</th>
+        <th mat-header-cell *matHeaderCellDef (click)="sorting('max')"> Максимальный остаток</th>
         <td mat-cell *matCellDef="let element"> {{element.maxBalance}}</td>
       </ng-container>
       <ng-container matColumnDef="minBalance">
-        <th mat-header-cell *matHeaderCellDef> Минимальный остаток</th>
+        <th mat-header-cell *matHeaderCellDef (click)="sorting('min')"> Минимальный остаток</th>
         <td mat-cell *matCellDef="let element"> {{element.minBalance}}</td>
       </ng-container>
       <ng-container matColumnDef="actions">
@@ -65,5 +66,4 @@
                    (page)="test($event)">
     </mat-paginator>
   </div>
-{{test1()}}
 </div>

@@ -41,8 +41,8 @@ export class ClientTableService {
 
   }
 
-  public deleteClient(rec: ClientRecord) {
-    this.http.delete("/client/delete", {'id': rec.clientId}).subscribe(res => console.log(res));
+  async deleteClient(rec: ClientRecord) {
+    await this.http.delete("/client/delete", {'id': rec.clientId}).subscribe(res => console.log(res));
     //this.deleteClientFromList(rec);
   }
 

@@ -1,6 +1,6 @@
-import {ChangeDetectorRef, Component, OnInit, ViewChild} from "@angular/core";
+import {Component, OnInit, ViewChild} from "@angular/core";
 import {ClientTableService} from "./client-table.service";
-import {MatDialog, MatPaginator, MatTableDataSource, PageEvent} from "@angular/material";
+import {MatDialog, MatPaginator, PageEvent} from "@angular/material";
 import {ClientDetailComponent} from "../client-detail/client-detail.component";
 import {ClientRecord} from "../../model/ClientRecord";
 import {ClientFilter} from "../../model/ClientFilter";
@@ -21,8 +21,9 @@ export class ClientTableComponent implements OnInit {
   pageSize = 5;
   pageSizeOptions: number[] = [1, 2, 5, 10, 25, 100];
   pageInd = 0;
+  prevSortBy: string;
 
-  public clientFilter: ClientFilter = new ClientFilter("","","", this.pageInd, this.pageSize);
+  public clientFilter: ClientFilter = new ClientFilter("", "", "", this.pageInd, this.pageSize, "", false);
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -48,6 +49,24 @@ export class ClientTableComponent implements OnInit {
     this.filtering();
   }
 
+  sorting(sortBy: string) {
+    console.log("sortBy: ", sortBy);
+    this.clientFilter.columnName = sortBy;
+    if (this.clientFilter.isAsc) {
+      this.clientFilter.isAsc = false;
+    } else {
+      this.clientFilter.isAsc = true;
+    }
+    if (this.prevSortBy != sortBy) {
+      this.prevSortBy = sortBy;
+      this.clientFilter.isAsc = true;
+    }
+    console.log("isAsc: ", this.clientFilter.isAsc);
+    console.log("columnName: ", this.clientFilter.columnName);
+    this.filtering();
+
+  }
+
   constructor(public clientTableService: ClientTableService, public dialog: MatDialog) {
   }
 
@@ -60,20 +79,21 @@ export class ClientTableComponent implements OnInit {
       //debugger;
       if (result) {
         //this.clientTableService.addClientToList(result);
-        this.clientTableService.filter(this.clientFilter);
+        //this.clientTableService.filter(this.clientFilter);
+        this.filtering();
       }
     });
   }
 
   async delete(rec: ClientRecord) {
     await this.clientTableService.deleteClient(rec);
-    this.clientTableService.filter(this.clientFilter);
+    this.filtering();
     //this.list = this.filtering();
   }
 
   filtering() {
-    //FIXME Добавить offset and pageSize in Filter object
-   this.clientTableService.filter(this.clientFilter);
+    this.clientTableService.filter(this.clientFilter);
+    console.log("this.clientFilter", this.clientFilter)
     // this.clientTableService.
   }
 
@@ -82,15 +102,17 @@ export class ClientTableComponent implements OnInit {
     //this.clientTableService.load(this.clientFilter);
   }
 
-  async init() {
-    this.clientTableService.load(this.clientFilter);
-    //this.clientRecordList = await this.clientTableService.loadRecords();
+
+  init() {
+    //this.clientTableService.load(this.clientFilter);
+    //
+    // this.clientRecordList = await this.clientTableService.loadRecords();
     // this.dataSource = await new MatTableDataSource<ClientRecord>(this.clientRecordList);
     // this.dataSource.paginator = this.paginator;
-    this.clientTableService.filter(this.clientFilter);
+    this.filtering();
   }
 
-  test1(){
+  test1() {
     console.log(this.clientTableService.list);
   }
 
