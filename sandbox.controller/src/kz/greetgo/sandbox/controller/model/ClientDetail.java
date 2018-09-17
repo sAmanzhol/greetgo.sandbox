@@ -8,7 +8,6 @@ public class ClientDetail {
   public String surname;
   public String name;
   public String patronymic;
-  public int age;
   public Gender gender;
   public List<Gender> genders;
   public Date birthDay;
@@ -25,7 +24,7 @@ public class ClientDetail {
   }
 
   public static ClientDetail forSave(List<Gender> genders, List<Character> characters, List<PhoneDetail> phoneDetailList) {
-    return new ClientDetail("", "", "", 0, new Gender(), genders, null,
+    return new ClientDetail("", "", "", new Gender(), genders, null,
       new Character(), characters, Address.empty(), Address.empty(), new ArrayList<>(), phoneDetailList, -1);
   }
 
@@ -33,7 +32,6 @@ public class ClientDetail {
     this.surname = clientDetail.surname;
     this.name = clientDetail.name;
     this.patronymic = clientDetail.patronymic;
-    this.age = clientDetail.age;
     this.gender = clientDetail.gender;
     this.birthDay = clientDetail.birthDay;
     this.character = clientDetail.character;
@@ -44,13 +42,12 @@ public class ClientDetail {
     return this;
   }
 
-  public ClientDetail(String surname, String name, String patronymic, int age, Gender gender, List<Gender> genders, Date birthDay,
+  public ClientDetail(String surname, String name, String patronymic, Gender gender, List<Gender> genders, Date birthDay,
                       Character character, List<Character> characters, Address actualAddress, Address registrationAddress,
                       List<Phone> phones, List<PhoneDetail> phoneDetailList, long clientId) {
     this.surname = surname;
     this.name = name;
     this.patronymic = patronymic;
-    this.age = age;
     this.gender = gender;
     this.genders = genders;
     this.birthDay = birthDay;

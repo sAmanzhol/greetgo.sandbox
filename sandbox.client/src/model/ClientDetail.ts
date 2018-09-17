@@ -9,7 +9,6 @@ export class ClientDetail {
   public surname: string;
   public name: string;
   public patronymic: string;
-  public age: number/*int*/;
   public gender: Gender;
   public genders: Gender[];
   public birthDay: Date;
@@ -67,9 +66,6 @@ export class ClientDetail {
     }
     if (a.phoneDetailList) {
       this.phoneDetailList = a.phoneDetailList;
-    }
-    if (a.age) {
-      this.age = a.age;
     }
   }
 }

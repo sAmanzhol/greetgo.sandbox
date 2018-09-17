@@ -7,6 +7,9 @@ import kz.greetgo.sandbox.controller.register.ClientRegister;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -68,17 +71,17 @@ public class ClientRegisterImpl implements ClientRegister {
     } catch (ParseException e) {
       e.printStackTrace();
     }
-    clients.add(new Client(1, "Sultanova", "Madina", "Mahammadnova", female, birthdayDate, opennesCharacter, 20, 1000, 475, 5000, Address.empty(), new Address("Mamyr-4", "311", "8"), phones));
-    clients.add(new Client(2, "Kas", "Gvlv", "osoos", male, birthdayDate, agreeablenessCharacter, 7, 100, 0, 1425, Address.empty(), new Address("Mamyr-4", "311", "85"), phones));
-    clients.add(new Client(3, "Vsis", "Akkdd", "llsls", female, birthdayDate, extraversionCharacter, 75, 10, 8, 5545, Address.empty(), new Address("Mamyr-4", "311", "21"), phones));
-    clients.add(new Client(4, "ASlx", "Bodd", "lslslsl", male, birthdayDate, neuroticismCharacter, 1, 40, 12, 5478, Address.empty(), new Address("Mamyr-4", "311", "73"), phones));
-    clients.add(new Client(5, "KJJlxl", "KJJlxl", "lslslsl", male, birthdayDate, neuroticismCharacter, 1, 100, 74, 6574, Address.empty(), new Address("Mamyr-4", "311", "31"), phones));
-    clients.add(new Client(6, "Cwqwd", "AXC", "lslslsl", male, birthdayDate, neuroticismCharacter, 1, 10, 475, 96, Address.empty(), new Address("Mamyr-4", "311", "25"), phones));
-    clients.add(new Client(7, "Ruc", "Ruc", "lslslsl", male, birthdayDate, neuroticismCharacter, 1, 5, 252, 78, Address.empty(), new Address("Mamyr-4", "311", "82"), phones));
-    clients.add(new Client(8, "Mnid", "Mnid", "lslslsl", male, birthdayDate, neuroticismCharacter, 1, 250, 77, 68, Address.empty(), new Address("Mamyr-4", "311", "72"), phones));
-    clients.add(new Client(6, "Titr", "Titr", "lslslsl", male, birthdayDate, neuroticismCharacter, 1, 2370, 56, 15, Address.empty(), new Address("Mamyr-4", "311", "45"), phones));
-    clients.add(new Client(7, "Vif", "Vif", "lslslsl", male, birthdayDate, neuroticismCharacter, 1, 124, 74, 23, Address.empty(), new Address("Mamyr-4", "311", "11K"), phones));
-    clients.add(new Client(8, "Dan", "Dan", "lslslsl", male, birthdayDate, neuroticismCharacter, 1, 7, 825, 57, Address.empty(), new Address("Mamyr-4", "311", "9B"), phones));
+    clients.add(new Client(1, "Sultanova", "Madina", "Mahammadnova", female, birthdayDate, opennesCharacter, 1000, 475, 5000, Address.empty(), new Address("Mamyr-4", "311", "8"), phones));
+    clients.add(new Client(2, "Kas", "Gvlv", "osoos", male, birthdayDate, agreeablenessCharacter, 100, 0, 1425, Address.empty(), new Address("Mamyr-4", "311", "85"), phones));
+    clients.add(new Client(3, "Vsis", "Akkdd", "llsls", female, birthdayDate, extraversionCharacter, 10, 8, 5545, Address.empty(), new Address("Mamyr-4", "311", "21"), phones));
+    clients.add(new Client(4, "ASlx", "Bodd", "lslslsl", male, birthdayDate, neuroticismCharacter, 40, 12, 5478, Address.empty(), new Address("Mamyr-4", "311", "73"), phones));
+    clients.add(new Client(5, "KJJlxl", "KJJlxl", "lslslsl", male, birthdayDate, neuroticismCharacter, 100, 74, 6574, Address.empty(), new Address("Mamyr-4", "311", "31"), phones));
+    clients.add(new Client(6, "Cwqwd", "AXC", "lslslsl", male, birthdayDate, neuroticismCharacter, 10, 475, 96, Address.empty(), new Address("Mamyr-4", "311", "25"), phones));
+    clients.add(new Client(7, "Ruc", "Ruc", "lslslsl", male, birthdayDate, neuroticismCharacter, 5, 252, 78, Address.empty(), new Address("Mamyr-4", "311", "82"), phones));
+    clients.add(new Client(8, "Mnid", "Mnid", "lslslsl", male, birthdayDate, neuroticismCharacter, 250, 77, 68, Address.empty(), new Address("Mamyr-4", "311", "72"), phones));
+    clients.add(new Client(6, "Titr", "Titr", "lslslsl", male, birthdayDate, neuroticismCharacter, 2370, 56, 15, Address.empty(), new Address("Mamyr-4", "311", "45"), phones));
+    clients.add(new Client(7, "Vif", "Vif", "lslslsl", male, birthdayDate, neuroticismCharacter, 124, 74, 23, Address.empty(), new Address("Mamyr-4", "311", "11K"), phones));
+    clients.add(new Client(8, "Dan", "Dan", "lslslsl", male, birthdayDate, neuroticismCharacter, 7, 825, 57, Address.empty(), new Address("Mamyr-4", "311", "9B"), phones));
 
   }
 
@@ -96,13 +99,20 @@ public class ClientRegisterImpl implements ClientRegister {
   public ClientRecord convertClientToRecord(Client client) {
     ClientRecord clientRecord = new ClientRecord();
     clientRecord.fio = client.surname + " " + client.name + " " + client.patronymic;
-    clientRecord.age = client.age;
+    LocalDate currentDate = LocalDate.now();
+    LocalDate birthDate = client.birthDay.toInstant()
+      .atZone(ZoneId.systemDefault())
+      .toLocalDate();
+    if ((birthDate != null) && (currentDate != null)) {
+      clientRecord.age = Period.between(birthDate, currentDate).getYears();
+    } else {
+      clientRecord.age = 0;
+    }
     clientRecord.totalBalance = client.totalBalance;
     clientRecord.minBalance = client.minBalance;
     clientRecord.maxBalance = client.maxBalance;
     clientRecord.character = client.character;
     clientRecord.clientId = client.id;
-    //clientRecord.phones = client.phones;
     return clientRecord;
   }
 
@@ -121,7 +131,6 @@ public class ClientRegisterImpl implements ClientRegister {
       client.patronymic = "";
     }
     client.actualAddress = toSave.actualAddress;
-    client.age = toSave.age;
     client.birthDay = toSave.birthDay;
     client.gender = toSave.gender;
     client.character = toSave.character;
@@ -137,8 +146,7 @@ public class ClientRegisterImpl implements ClientRegister {
     if (clients != null) {
       for (Client client : clients) {
         if (client.id == id) {
-          clientDetail = clientDetail.initalize(new ClientDetail(client.surname, client.name, client.patronymic, client.age, client.gender, genders, client.birthDay, client.character, characters, client.actualAddress, client.registrationAddress, client.phones, phoneDetails, client.id));
-          //new ClientDetail(client.surname, client.name, client.patronymic, client.gender, genders, client.birthDay,  client.character, characters, client.actualAddress, client.registrationAddress, client.phones, client.id);
+          clientDetail = clientDetail.initalize(new ClientDetail(client.surname, client.name, client.patronymic, client.gender, genders, client.birthDay, client.character, characters, client.actualAddress, client.registrationAddress, client.phones, phoneDetails, client.id));
         }
       }
     }
@@ -170,7 +178,6 @@ public class ClientRegisterImpl implements ClientRegister {
         if (client.id == id) {
           clients.remove(client);
           break;
-          //return createRecordFromClient(client);
         }
       }
     }

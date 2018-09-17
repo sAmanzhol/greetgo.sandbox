@@ -9,7 +9,6 @@ export class ClientToSave {
   public surname: string;
   public name: string;
   public patronymic: string;
-  public age: number/*int*/;
   public gender: Gender = new Gender();
   public birthDay: Date;
   public character: Character = new Character();
@@ -34,17 +33,14 @@ export class ClientToSave {
     if (a.name) {
       this.name = a.name;
     }
-    if (a.age) {
-      this.age = a.age;
+    if (a.birthDay) {
+      this.birthDay = a.birthDay;
     }
     if (a.patronymic) {
       this.patronymic = a.patronymic;
     }
     if (a.gender) {
       this.gender = a.gender;
-    }
-    if (a.birthDay) {
-      this.birthDay = a.birthDay;
     }
     if (a.character) {
       this.character = a.character;
