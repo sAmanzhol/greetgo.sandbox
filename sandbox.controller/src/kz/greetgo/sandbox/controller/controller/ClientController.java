@@ -6,10 +6,7 @@ import kz.greetgo.mvc.annotations.Json;
 import kz.greetgo.mvc.annotations.Mapping;
 import kz.greetgo.mvc.annotations.Par;
 import kz.greetgo.mvc.annotations.ToJson;
-import kz.greetgo.sandbox.controller.model.model.Charm;
-import kz.greetgo.sandbox.controller.model.model.ClientDetails;
-import kz.greetgo.sandbox.controller.model.model.ClientFilter;
-import kz.greetgo.sandbox.controller.model.model.ClientRecord;
+import kz.greetgo.sandbox.controller.model.model.*;
 import kz.greetgo.sandbox.controller.register.ClientRegister;
 import kz.greetgo.sandbox.controller.util.Controller;
 
@@ -35,33 +32,33 @@ public class ClientController implements Controller {
 	}
 
 	@ToJson
-	@Mapping("/client-charm")
-	public List<Charm> clientCharm() {
-		return clientRegister.get().clientCharm();
+	@Mapping("/get-charm")
+	public List<Charm> getCharm() {
+		return clientRegister.get().getCharm();
 	}
 
 	@ToJson
-	@Mapping("/client-details-save")
-	public ClientRecord clientDetailsSave(@Par("clientToSave") @Json ClientDetails clientDetails) {
-		return clientRegister.get().clientDetailsSave(clientDetails);
+	@Mapping("/save-client")
+	public ClientRecord saveClient(@Par("clientToSave") @Json ClientToSave clientToSave) {
+		return clientRegister.get().saveClient(clientToSave);
 	}
 
 	@ToJson
-	@Mapping("/client-details-delete")
-	public ClientDetails clientDetailsDelete(@Par("clientMark") Integer clientMarkId) {
-		return clientRegister.get().clientDetailsDelete(clientMarkId);
+	@Mapping("/delete-client")
+	public void deleteClient(@Par("clientMark") Integer clientMarkId) {
+		clientRegister.get().deleteClient(clientMarkId);
 	}
 
 	@ToJson
-	@Mapping("/client-details-set")
-	public ClientDetails clientDetailsSet(@Par("clientMark") Integer clientMarkId) {
-		return clientRegister.get().clientDetailsSet(clientMarkId);
+	@Mapping("/get-client-details")
+	public ClientDetails getClientDetails(@Par("clientMark") Integer clientMarkId) {
+		return clientRegister.get().getClientDetails(clientMarkId);
 	}
 
 	@ToJson
-	@Mapping("/client-add-charm-id")
-	public Charm clientAddCharmId(@Par("charmId") Integer charmId){
-		return clientRegister.get().getClientAddCharmId(charmId);
+	@Mapping("/get-charm-by-id")
+	public Charm getCharmById(@Par("charmId") Integer charmId){
+		return clientRegister.get().getCharmById(charmId);
 	}
 
 

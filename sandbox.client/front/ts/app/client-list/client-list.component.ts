@@ -94,7 +94,7 @@ export class ClientListComponent implements OnInit {
     var self = this;
 
     let id = self.clientOnSelect.id;
-    this.http.get('/client/client-details-delete', {clientMark: self.clientOnSelect.id}).subscribe(data => {
+    this.http.get('/client/delete-client', {clientMark: self.clientOnSelect.id}).subscribe(data => {
       for (let i = 0; i < self.clientRecord.length; i++) {
         if (self.clientRecord[i].id == id) {
           self.clientRecord.splice(i, 1)

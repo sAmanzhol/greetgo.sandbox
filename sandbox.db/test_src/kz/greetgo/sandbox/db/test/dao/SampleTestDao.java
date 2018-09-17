@@ -16,10 +16,9 @@ public interface SampleTestDao {
 	@Delete("delete from sample_person")
 	void deleteAll();
 
-
 	@Select("select * from sample_person where id = #{id}")
 	SamplePerson getSamplePersonById(@Param("id") String id);
 
 	@Insert("insert into sample_person(id, name, gender) values(#{id}, #{name}, #{gender})")
-	void createSamplePerson(@Param("id") String id, @Param("name") String name, @Param("gender") GenderType gender);
+	void createSamplePerson(@Param("id") String id,@Param("name") String name, GenderType gender);
 }
