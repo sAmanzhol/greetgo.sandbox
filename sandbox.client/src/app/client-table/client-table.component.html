@@ -1,9 +1,4 @@
 <div>
-  <br>
-  <button mat-icon-button (click)="openDialog(-1)">
-    <mat-icon aria-label="Remove icon-button">add</mat-icon>
-  </button>
-  <br>
   <mat-form-field appearance="legacy">
     <mat-label>Имя</mat-label>
     <input matInput [(ngModel)]="clientFilter.name">
@@ -17,7 +12,14 @@
     <input matInput [(ngModel)]="clientFilter.patronymic">
   </mat-form-field>
   <button mat-icon-button>
+    <mat-icon aria-label="Remove icon-button" (click)="clear()">clear</mat-icon>
+  </button>
+  <button mat-icon-button>
     <mat-icon aria-label="Remove icon-button" (click)="filtering()">search</mat-icon>
+  </button>
+  <button mat-icon-button (click)="openDialog(-1)">
+    <mat-icon aria-label="Remove icon-button">add</mat-icon>
+    Добавить нового клиента
   </button>
   <div class="mat-elevation-z8">
     <table mat-table [dataSource]="clientTableService.list">

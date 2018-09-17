@@ -6,7 +6,7 @@ import {ClientRecord} from "../../model/ClientRecord";
 import {ClientFilter} from "../../model/ClientFilter";
 
 @Component({
-  selector: 'app-test',
+  selector: 'app-client-table',
   templateUrl: './client-table.component.html',
   styleUrls: ['./client-table.component.css']
 })
@@ -34,7 +34,7 @@ export class ClientTableComponent implements OnInit {
 
   async pagination(a) {
     console.log(a);
-    if(a) {
+    if (a) {
       this.clientFilter.offset = await a.pageIndex;
       this.clientFilter.limit = await a.pageSize;
       console.log("limit: ", this.clientFilter.limit);
@@ -46,7 +46,7 @@ export class ClientTableComponent implements OnInit {
   sorting(sortBy: string) {
     console.log("sortBy: ", sortBy);
     this.clientFilter.columnName = sortBy;
-    if(this.clientFilter.isAsc) {
+    if (this.clientFilter.isAsc) {
       this.clientFilter.isAsc = false;
     } else {
       this.clientFilter.isAsc = true;
@@ -84,6 +84,11 @@ export class ClientTableComponent implements OnInit {
   async filtering() {
     await this.clientTableService.filter(this.clientFilter);
     this.length = this.clientTableService.clientWrapper.count;
+  }
+
+  async clear() {
+    this.clientFilter = new ClientFilter("", "", "", this.clientFilter.offset, this.clientFilter.limit, "", false);
+    this.filtering();
   }
 
   ngOnInit() {

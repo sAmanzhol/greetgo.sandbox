@@ -72,16 +72,20 @@ public class ClientRegisterImpl implements ClientRegister {
       e.printStackTrace();
     }
     clients.add(new Client(1, "Sultanova", "Madina", "Mahammadnova", female, birthdayDate, opennesCharacter, 1000, 475, 5000, Address.empty(), new Address("Mamyr-4", "311", "8"), phones));
-    clients.add(new Client(2, "Kas", "Gvlv", "osoos", male, birthdayDate, agreeablenessCharacter, 100, 0, 1425, Address.empty(), new Address("Mamyr-4", "311", "85"), phones));
-    clients.add(new Client(3, "Vsis", "Akkdd", "llsls", female, birthdayDate, extraversionCharacter, 10, 8, 5545, Address.empty(), new Address("Mamyr-4", "311", "21"), phones));
-    clients.add(new Client(4, "ASlx", "Bodd", "lslslsl", male, birthdayDate, neuroticismCharacter, 40, 12, 5478, Address.empty(), new Address("Mamyr-4", "311", "73"), phones));
-    clients.add(new Client(5, "KJJlxl", "KJJlxl", "lslslsl", male, birthdayDate, neuroticismCharacter, 100, 74, 6574, Address.empty(), new Address("Mamyr-4", "311", "31"), phones));
-    clients.add(new Client(6, "Cwqwd", "AXC", "lslslsl", male, birthdayDate, neuroticismCharacter, 10, 475, 96, Address.empty(), new Address("Mamyr-4", "311", "25"), phones));
-    clients.add(new Client(7, "Ruc", "Ruc", "lslslsl", male, birthdayDate, neuroticismCharacter, 5, 252, 78, Address.empty(), new Address("Mamyr-4", "311", "82"), phones));
-    clients.add(new Client(8, "Mnid", "Mnid", "lslslsl", male, birthdayDate, neuroticismCharacter, 250, 77, 68, Address.empty(), new Address("Mamyr-4", "311", "72"), phones));
-    clients.add(new Client(6, "Titr", "Titr", "lslslsl", male, birthdayDate, neuroticismCharacter, 2370, 56, 15, Address.empty(), new Address("Mamyr-4", "311", "45"), phones));
-    clients.add(new Client(7, "Vif", "Vif", "lslslsl", male, birthdayDate, neuroticismCharacter, 124, 74, 23, Address.empty(), new Address("Mamyr-4", "311", "11K"), phones));
-    clients.add(new Client(8, "Dan", "Dan", "lslslsl", male, birthdayDate, neuroticismCharacter, 7, 825, 57, Address.empty(), new Address("Mamyr-4", "311", "9B"), phones));
+    clients.add(new Client(2, "Asan", "Arman", "Kairatuly", male, birthdayDate, agreeablenessCharacter, 100, 0, 1425, Address.empty(), new Address("Mamyr-4", "311", "85"), phones));
+    clients.add(new Client(3, "Kuyan", "Kirill", "Kirillovich", female, birthdayDate, extraversionCharacter, 10, 8, 5545, Address.empty(), new Address("Mamyr-4", "311", "21"), phones));
+    clients.add(new Client(4, "Adam", "Vova", "Rei", male, birthdayDate, neuroticismCharacter, 40, 12, 5478, Address.empty(), new Address("Mamyr-4", "311", "73"), phones));
+    clients.add(new Client(5, "Malikaidar", "Symbat", "Isaevna", male, birthdayDate, neuroticismCharacter, 100, 74, 6574, Address.empty(), new Address("Mamyr-4", "311", "31"), phones));
+    clients.add(new Client(6, "Umirbekiva", "Madina", "MAliyasovna", male, birthdayDate, neuroticismCharacter, 10, 475, 96, Address.empty(), new Address("Mamyr-4", "311", "25"), phones));
+    clients.add(new Client(7, "Carrey", "Jim", "Nim", male, birthdayDate, neuroticismCharacter, 5, 252, 78, Address.empty(), new Address("Mamyr-4", "311", "82"), phones));
+    clients.add(new Client(8, "Tsay", "Roman", "Romanovich", male, birthdayDate, neuroticismCharacter, 250, 77, 68, Address.empty(), new Address("Pravda", "311", "72"), phones));
+    clients.add(new Client(6, "Sau", "Tut", "Tutovich", male, birthdayDate, neuroticismCharacter, 2370, 56, 15, Address.empty(), new Address("Mamyr-4", "311", "45"), phones));
+    clients.add(new Client(7, "Kiqu", "Erik", "", male, birthdayDate, neuroticismCharacter, 124, 74, 23, Address.empty(), new Address("Shalyapina", "311", "11K"), phones));
+    clients.add(new Client(8, "Dan", "Lan", "Balan", male, birthdayDate, neuroticismCharacter, 7, 825, 57, Address.empty(), new Address("Abai", "311", "9B"), phones));
+    clients.add(new Client(9, "Kiaus", "Simona", "", male, birthdayDate, neuroticismCharacter, 8, 546, 17, Address.empty(), new Address("Mamyr-4", "311", "9B"), phones));
+    clients.add(new Client(10, "Albu", "Andrea", "Gias", male, birthdayDate, neuroticismCharacter, 999, 90, 87, Address.empty(), new Address("Mamyr-1", "311", "9B"), phones));
+    clients.add(new Client(11, "Dun", "Era", "", male, birthdayDate, neuroticismCharacter, 201, 851, 63, Address.empty(), new Address("mkr-4", "311", "9B"), phones));
+    clients.add(new Client(12, "Luka", "Lukas", "Riu", male, birthdayDate, neuroticismCharacter, 9, 14, 45, Address.empty(), new Address("Mamyr-4", "311", "9B"), phones));
 
   }
 
