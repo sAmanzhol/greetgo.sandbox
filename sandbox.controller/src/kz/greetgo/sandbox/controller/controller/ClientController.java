@@ -14,9 +14,6 @@ import kz.greetgo.sandbox.controller.register.ClientRegister;
 import kz.greetgo.sandbox.controller.security.PublicAccess;
 import kz.greetgo.sandbox.controller.util.Controller;
 
-/**
- * Created by msultanova on 9/4/18.
- */
 @Bean
 @ControllerPrefix("/client")
 public class ClientController implements Controller {
@@ -26,14 +23,14 @@ public class ClientController implements Controller {
   @ToJson
   @PublicAccess
   @OnGet("/list")
-  public ClientRecordListWrapper list(@Json @Par("clientFilter") ClientFilter clientFilter){
+  public ClientRecordListWrapper list(@Json @Par("clientFilter") ClientFilter clientFilter) {
     return clientRegisterBeanGetter.get().filterClients(clientFilter);
   }
 
   @ToJson
   @PublicAccess
   @OnGet("/detail")
-  public ClientDetail getDetail(@Par("id") Long id){
+  public ClientDetail getDetail(@Par("id") Long id) {
     return clientRegisterBeanGetter.get().getClientDetailById(id);
   }
 
@@ -41,14 +38,14 @@ public class ClientController implements Controller {
   @ToJson
   @PublicAccess
   @OnPost("/save")
-  public ClientRecord save(@Json @Par("toSave") ClientToSave toSave){
+  public ClientRecord save(@Json @Par("toSave") ClientToSave toSave) {
     return clientRegisterBeanGetter.get().saveClient(toSave);
   }
 
   @ToJson
   @PublicAccess
   @OnDelete("/delete")
-  public void delete(@Par("id") Long id){
+  public void delete(@Par("id") Long id) {
     clientRegisterBeanGetter.get().deleteClient(id);
   }
 

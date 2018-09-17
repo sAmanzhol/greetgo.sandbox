@@ -10,11 +10,8 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
-/**
- * Created by msultanova on 9/4/18.
- */
 @Bean
-public class ClienRegisterImpl implements ClientRegister {
+public class ClientRegisterImpl implements ClientRegister {
 
   List<Client> clients = null;
   List<ClientRecord> clientRecords = null;
@@ -88,10 +85,8 @@ public class ClienRegisterImpl implements ClientRegister {
   @Override
   public List<ClientRecord> getClientList() {
     clientRecords = new ArrayList<>();
-    //createClients();
     if (clients != null) {
       for (Client client : clients) {
-        //ClientRecord tempClientRecord = createRecordFromClient(client);
         clientRecords.add(convertClientToRecord(client));
       }
     }

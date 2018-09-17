@@ -1,9 +1,6 @@
-import {CharacterType} from "./CharacterType";
 import {Character} from "./Character";
-/**
- * Created by msultanova on 9/4/18.
- */
-export class ClientRecord{
+
+export class ClientRecord {
   public fio: string;
   public character: Character;
   public age: number/*int*/;
@@ -17,7 +14,8 @@ export class ClientRecord{
     ret.assign(a);
     return ret;
   }
-  public update(a:ClientRecord): ClientRecord{
+
+  public update(a: ClientRecord): ClientRecord {
     this.age = a.age;
     this.fio = a.fio;
     this.character = a.character;
@@ -27,6 +25,7 @@ export class ClientRecord{
     this.clientId = a.clientId;
     return this;
   }
+
   assign(a: any) {
     this.age = a.age;
     this.fio = a.fio;

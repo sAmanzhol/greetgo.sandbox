@@ -9,9 +9,9 @@ export class ClientRecordListWrapper {
     ret.assign(a);
     return ret;
   }
+
   assign(a: any) {
     this.records = a.records;
     this.count = a.count;
   }
-
 }

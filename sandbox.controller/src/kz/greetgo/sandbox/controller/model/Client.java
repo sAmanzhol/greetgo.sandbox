@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created by msultanova on 9/6/18.
- */
 public class Client {
     public long id;
     public String surname;

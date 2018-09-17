@@ -4,9 +4,6 @@ import {Gender} from "./Gender";
 import {Character} from "./Character";
 import {PhoneDetail} from "./PhoneDetail";
 
-/**
- * Created by msultanova on 9/5/18.
- */
 export class ClientDetail {
 
   public surname: string;
@@ -30,22 +27,6 @@ export class ClientDetail {
     ret.assign(a);
     return ret;
   }
-
-
-  // constructor(genders: Gender[], characters: Character[], phones: Phone[], clientId: number) {
-  //   this.surname = surname;
-  //   this.name = name;
-  //   this.patronymic = patronymic;
-  //   this.gender = gender;
-  //   this.genders = genders;
-  //   this.birthDay = birthDay;
-  //   this.character = character;
-  //   this.characters = characters;
-  //   this.actualAddress = actualAddress;
-  //   this.registrationAddress = registrationAddress;
-  //   this.phones = phones;
-  //   this.clientId = clientId;
-  // }
 
   assign(a: any) {
     if (a.surname) {
