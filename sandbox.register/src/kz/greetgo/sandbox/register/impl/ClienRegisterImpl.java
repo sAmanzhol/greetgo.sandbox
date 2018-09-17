@@ -71,17 +71,17 @@ public class ClienRegisterImpl implements ClientRegister {
     } catch (ParseException e) {
       e.printStackTrace();
     }
-    clients.add(new Client(1, "Sultanova", "Madina", "Mahammadnova", female, birthdayDate, opennesCharacter, 20, 1000, 475, 5000, Address.empty(), new Address("Mamyr-4", "311", 38), phones));
-    clients.add(new Client(2, "Kas", "Gvlv", "osoos", male, birthdayDate, agreeablenessCharacter, 7, 100, 0, 1425, Address.empty(), new Address("Mamyr-4", "311", 38), phones));
-    clients.add(new Client(3, "Vsis", "Akkdd", "llsls", female, birthdayDate, extraversionCharacter, 75, 10, 8, 5545, Address.empty(), new Address("Mamyr-4", "311", 38), phones));
-    clients.add(new Client(4, "ASlx", "Bodd", "lslslsl", male, birthdayDate, neuroticismCharacter, 1, 40, 12, 5478, Address.empty(), new Address("Mamyr-4", "311", 38), phones));
-    clients.add(new Client(5, "KJJlxl", "KJJlxl", "lslslsl", male, birthdayDate, neuroticismCharacter, 1, 100, 74, 6574, Address.empty(), new Address("Mamyr-4", "311", 38), phones));
-    clients.add(new Client(6, "Cwqwd", "AXC", "lslslsl", male, birthdayDate, neuroticismCharacter, 1, 10, 475, 96, Address.empty(), new Address("Mamyr-4", "311", 38), phones));
-    clients.add(new Client(7, "Ruc", "Ruc", "lslslsl", male, birthdayDate, neuroticismCharacter, 1, 5, 252, 78, Address.empty(), new Address("Mamyr-4", "311", 38), phones));
-    clients.add(new Client(8, "Mnid", "Mnid", "lslslsl", male, birthdayDate, neuroticismCharacter, 1, 250, 77, 68, Address.empty(), new Address("Mamyr-4", "311", 38), phones));
-    clients.add(new Client(6, "Titr", "Titr", "lslslsl", male, birthdayDate, neuroticismCharacter, 1, 2370, 56, 15, Address.empty(), new Address("Mamyr-4", "311", 38), phones));
-    clients.add(new Client(7, "Vif", "Vif", "lslslsl", male, birthdayDate, neuroticismCharacter, 1, 124, 74, 23, Address.empty(), new Address("Mamyr-4", "311", 38), phones));
-    clients.add(new Client(8, "Dan", "Dan", "lslslsl", male, birthdayDate, neuroticismCharacter, 1, 7, 825, 57, Address.empty(), new Address("Mamyr-4", "311", 38), phones));
+    clients.add(new Client(1, "Sultanova", "Madina", "Mahammadnova", female, birthdayDate, opennesCharacter, 20, 1000, 475, 5000, Address.empty(), new Address("Mamyr-4", "311", "8"), phones));
+    clients.add(new Client(2, "Kas", "Gvlv", "osoos", male, birthdayDate, agreeablenessCharacter, 7, 100, 0, 1425, Address.empty(), new Address("Mamyr-4", "311", "85"), phones));
+    clients.add(new Client(3, "Vsis", "Akkdd", "llsls", female, birthdayDate, extraversionCharacter, 75, 10, 8, 5545, Address.empty(), new Address("Mamyr-4", "311", "21"), phones));
+    clients.add(new Client(4, "ASlx", "Bodd", "lslslsl", male, birthdayDate, neuroticismCharacter, 1, 40, 12, 5478, Address.empty(), new Address("Mamyr-4", "311", "73"), phones));
+    clients.add(new Client(5, "KJJlxl", "KJJlxl", "lslslsl", male, birthdayDate, neuroticismCharacter, 1, 100, 74, 6574, Address.empty(), new Address("Mamyr-4", "311", "31"), phones));
+    clients.add(new Client(6, "Cwqwd", "AXC", "lslslsl", male, birthdayDate, neuroticismCharacter, 1, 10, 475, 96, Address.empty(), new Address("Mamyr-4", "311", "25"), phones));
+    clients.add(new Client(7, "Ruc", "Ruc", "lslslsl", male, birthdayDate, neuroticismCharacter, 1, 5, 252, 78, Address.empty(), new Address("Mamyr-4", "311", "82"), phones));
+    clients.add(new Client(8, "Mnid", "Mnid", "lslslsl", male, birthdayDate, neuroticismCharacter, 1, 250, 77, 68, Address.empty(), new Address("Mamyr-4", "311", "72"), phones));
+    clients.add(new Client(6, "Titr", "Titr", "lslslsl", male, birthdayDate, neuroticismCharacter, 1, 2370, 56, 15, Address.empty(), new Address("Mamyr-4", "311", "45"), phones));
+    clients.add(new Client(7, "Vif", "Vif", "lslslsl", male, birthdayDate, neuroticismCharacter, 1, 124, 74, 23, Address.empty(), new Address("Mamyr-4", "311", "11K"), phones));
+    clients.add(new Client(8, "Dan", "Dan", "lslslsl", male, birthdayDate, neuroticismCharacter, 1, 7, 825, 57, Address.empty(), new Address("Mamyr-4", "311", "9B"), phones));
 
   }
 
@@ -197,16 +197,16 @@ public class ClienRegisterImpl implements ClientRegister {
       }
     }
 
-    if(filteredList.size() > clientFilter.limit && clientFilter.limit != 0) {
-      if(clientFilter.offset == 0) {
+    if (filteredList.size() > clientFilter.limit && clientFilter.limit != 0) {
+      if (clientFilter.offset == 0) {
         filteredList = filteredList.subList(0, clientFilter.limit);
-      } else if(clientFilter.offset * clientFilter.limit + clientFilter.limit > filteredList.size()) {
+      } else if (clientFilter.offset * clientFilter.limit + clientFilter.limit > filteredList.size()) {
         filteredList = filteredList.subList(clientFilter.offset * clientFilter.limit, filteredList.size());
       } else {
         filteredList = filteredList.subList(clientFilter.offset * clientFilter.limit, clientFilter.offset * clientFilter.limit + clientFilter.limit);
       }
     }
-    if("".equals(clientFilter.columnName)) {
+    if ("".equals(clientFilter.columnName)) {
       return new ClientRecordListWrapper(filteredList, count);
     } else {
       switch (clientFilter.columnName) {
@@ -224,7 +224,7 @@ public class ClienRegisterImpl implements ClientRegister {
             return new ClientRecordListWrapper(filteredList, count);
           }
         case "min":
-          if(clientFilter.isAsc) {
+          if (clientFilter.isAsc) {
             filteredList = filteredList.stream()
               .sorted(Comparator.comparing(clientRecord -> clientRecord.minBalance))
               .collect(Collectors.toList());

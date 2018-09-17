@@ -104,7 +104,6 @@
     </mat-form-field>
   </div>
   <div>
-    <p>Добавить телефон</p>
     <mat-form-field>
       <mat-select [(value)]="phone.detail.type">
         <mat-option *ngFor="let s of clientDetailService.clientDetail.phoneDetailList" value="{{s.type}}">
@@ -114,11 +113,11 @@
       <mat-label></mat-label>
     </mat-form-field>
     <mat-form-field appearance="legacy">
-      <mat-label>Новый номер</mat-label>
+      <mat-label></mat-label>
       <input matInput [(ngModel)]="phone.number">
     </mat-form-field>
     <br>
-    <button mat-icon-button (click)="savePhone()">
+    <button mat-icon-button (click)="savePhone()">Добавить новый номер
       <mat-icon aria-label="Remove icon-button">add</mat-icon>
     </button>
   </div>
@@ -128,5 +127,4 @@
 <mat-dialog-actions align="end">
   <button mat-button (click)="saveClient()">Сохранить</button>
   <button mat-button mat-dialog-close>Выйти</button>
-  <!--<button mat-button [mat-dialog-close]="true" cdkFocusInitial>Install</button>-->
 </mat-dialog-actions>
