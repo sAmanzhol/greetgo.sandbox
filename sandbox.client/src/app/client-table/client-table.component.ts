@@ -32,7 +32,7 @@ export class ClientTableComponent implements OnInit {
     this.pageSizeOptions = setPageSizeOptionsInput.split(',').map(str => +str);
   }
 
-  async startFiltering(a) {
+  async pagination(a) {
     console.log(a);
     if(a) {
       this.clientFilter.offset = await a.pageIndex;
@@ -70,7 +70,6 @@ export class ClientTableComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed = ' + result);
-      //debugger;
       if (result) {
         this.filtering();
       }

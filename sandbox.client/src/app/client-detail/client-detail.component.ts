@@ -31,9 +31,7 @@ export class ClientDetailComponent implements OnInit {
     this.clientToSave = ClientToSave.create(this.clientDetail);
   }
   async saveClient() {
-    //debugger;
     let a = await this.clientDetailService.saveClient(this.clientToSave);
-    //debugger;
     this.dialogRef.close(a);
   }
   public savePhone(){

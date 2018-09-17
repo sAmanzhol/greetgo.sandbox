@@ -113,14 +113,18 @@ public class ClienRegisterImpl implements ClientRegister {
 
   public Client convertToSaveToClient(ClientToSave toSave) {
     Client client = new Client();
-    if(toSave.clientID > 0) {
+    if (toSave.clientID > 0) {
       client.id = toSave.clientID;
     } else {
       client.id = clients.get(clients.size() - 1).id + 1;
     }
     client.name = toSave.name;
     client.surname = toSave.surname;
-    client.patronymic = toSave.patronymic;
+    if (toSave.patronymic != null) {
+      client.patronymic = toSave.patronymic;
+    } else {
+      client.patronymic = "";
+    }
     client.actualAddress = toSave.actualAddress;
     client.age = toSave.age;
     client.birthDay = toSave.birthDay;

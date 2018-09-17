@@ -1,16 +1,16 @@
 <h2 mat-dialog-title>Редактирование</h2>
 <mat-dialog-content class="mat-typography">
-
+  <p>Заполните все обязательные поля(*), иначе ничего не сохранится!</p>
   <p>
     <mat-form-field>
       <mat-label>Фамилия</mat-label>
-      <input matInput [(ngModel)]="clientToSave.surname">
+      <input matInput required [(ngModel)]="clientToSave.surname">
     </mat-form-field>
   </p>
   <p>
     <mat-form-field appearance="legacy">
       <mat-label>Имя</mat-label>
-      <input matInput [(ngModel)]="clientToSave.name">
+      <input matInput required [(ngModel)]="clientToSave.name">
     </mat-form-field>
   </p>
 
@@ -25,7 +25,7 @@
 
 
     <mat-form-field>
-      <mat-select [(value)]="clientToSave.gender.type">
+      <mat-select [(value)]="clientToSave.gender.type" required>
         <mat-option *ngFor="let r of clientDetailService.clientDetail.genders" value="{{r.type}}">
           {{r.typeRuss}}
         </mat-option>
@@ -36,8 +36,7 @@
 
   <p>
     <mat-form-field class="example-full-width">
-      <input matInput [matDatepickerFilter]="myFilter" [matDatepicker]="picker" placeholder="Дата рождения"
-             [(ngModel)]="clientToSave.birthDay">
+      <input matInput [matDatepicker]="picker" placeholder="Дата рождения" [(ngModel)]="clientToSave.birthDay" required>
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
@@ -46,8 +45,7 @@
 
   <p *ngIf="clientDetailService.clientDetail.character != null">Характер:
     <mat-form-field>
-      <mat-select [(value)]="clientToSave.character.type">
-        <!--required>-->
+      <mat-select [(value)]="clientToSave.character.type" required>
         <mat-option *ngFor="let r of clientDetailService.clientDetail.characters" value="{{r.type}}">
           {{r.typeRuss}}
         </mat-option>
@@ -74,27 +72,27 @@
     </mat-form-field>
   </div>
 
-  <p>Адрес регистрации</p>
-    <mat-form-field appearance="legacy">
-      <mat-label>Улица</mat-label>
-      <input matInput [(ngModel)]="clientToSave.registrationAddress.street">
-    </mat-form-field>
+  <p>Адрес регистрации* </p>
+  <mat-form-field appearance="legacy">
+    <mat-label>Улица</mat-label>
+    <input matInput required [(ngModel)]="clientToSave.registrationAddress.street">
+  </mat-form-field>
 
-    <mat-form-field appearance="legacy">
-      <mat-label>Дом</mat-label>
-      <input matInput [(ngModel)]="clientToSave.registrationAddress.house">
-    </mat-form-field>
-    <br>
-    <mat-form-field appearance="legacy">
-      <mat-label>Квартира</mat-label>
-      <input matInput [(ngModel)]="clientToSave.registrationAddress.apartment">
-    </mat-form-field>
+  <mat-form-field appearance="legacy">
+    <mat-label>Дом</mat-label>
+    <input matInput [(ngModel)]="clientToSave.registrationAddress.house">
+  </mat-form-field>
+  <br>
+  <mat-form-field appearance="legacy">
+    <mat-label>Квартира</mat-label>
+    <input matInput [(ngModel)]="clientToSave.registrationAddress.apartment">
+  </mat-form-field>
 
-  <p>Телефоны</p>
+  <p>Телефоны* </p>
   <div *ngFor="let r of clientToSave.phones">
 
     <mat-form-field>
-      <mat-select [(value)]="r.detail.type">
+      <mat-select [(value)]="r.detail.type" required>
         <mat-option *ngFor="let s of clientDetailService.clientDetail.phoneDetailList" value="{{s.type}}">
           {{s.typeRuss}}
         </mat-option>
@@ -102,7 +100,7 @@
       <mat-label></mat-label>
     </mat-form-field>
     <mat-form-field appearance="legacy">
-      <input matInput [(ngModel)]="r.number">
+      <input matInput required [(ngModel)]="r.number" required>
     </mat-form-field>
   </div>
   <div>
@@ -115,20 +113,20 @@
       </mat-select>
       <mat-label></mat-label>
     </mat-form-field>
-  <mat-form-field appearance="legacy">
-    <mat-label>Новый номер</mat-label>
-    <input matInput [(ngModel)]="phone.number">
-  </mat-form-field>
-  <br>
-  <button mat-icon-button (click)="savePhone()">
-    <mat-icon aria-label="Remove icon-button">add</mat-icon>
-  </button>
+    <mat-form-field appearance="legacy">
+      <mat-label>Новый номер</mat-label>
+      <input matInput [(ngModel)]="phone.number">
+    </mat-form-field>
+    <br>
+    <button mat-icon-button (click)="savePhone()">
+      <mat-icon aria-label="Remove icon-button">add</mat-icon>
+    </button>
   </div>
 
 
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-  <button mat-button  (click)="saveClient()" >Сохранить</button>
-  <button mat-button mat-dialog-close >Выйти</button>
+  <button mat-button (click)="saveClient()">Сохранить</button>
+  <button mat-button mat-dialog-close>Выйти</button>
   <!--<button mat-button [mat-dialog-close]="true" cdkFocusInitial>Install</button>-->
 </mat-dialog-actions>

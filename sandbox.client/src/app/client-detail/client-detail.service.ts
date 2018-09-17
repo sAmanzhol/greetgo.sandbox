@@ -17,7 +17,6 @@ export class ClientDetailService {
   public clientDetail: ClientDetail = new ClientDetail();
 
   loadClientDetailRecord(id: number): Promise<ClientDetail> {
-    //debugger;
     return this.http.get("/client/detail", {'id': id}) // {params: HttpParams})
       .toPromise()
       .then(resp => resp.body as any)
@@ -35,7 +34,6 @@ export class ClientDetailService {
     }
   }
     saveClient(ToSave: ClientToSave){
-    //debugger;
       let s = JSON.stringify(ToSave);
       //debugger;
      return this.http.post("/client/save", {'toSave': s}) // {params: HttpParams})
