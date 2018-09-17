@@ -167,6 +167,18 @@
       "maxBalance": 0,
       "minBalance": 0,
       "id": 15
+    },
+    {
+      "lastName": "rt",
+      "name": "de",
+      "fatherName": "ef",
+      "fullName": "rt de ef",
+      "character": "аккуратный",
+      "age": -204,
+      "totalBalance": 0,
+      "maxBalance": 0,
+      "minBalance": 0,
+      "id": 16
     }
   ],
   "clientDetails": [
@@ -429,6 +441,20 @@
       "mobileNumber1": "+7-(799)-999-99-99",
       "fullName": "Аманов Игорь Л",
       "id": 15
+    },
+    {
+      "lastName": "rt",
+      "name": "de",
+      "fatherName": "ef",
+      "gender": "Мужской",
+      "birthDate": "22/22/2222",
+      "character": "аккуратный",
+      "regStreet": "hj",
+      "regNo": "1",
+      "regFlat": "1",
+      "mobileNumber1": "+7-(774)-444-44-44",
+      "fullName": "rt de ef",
+      "id": 16
     }
   ]
 }

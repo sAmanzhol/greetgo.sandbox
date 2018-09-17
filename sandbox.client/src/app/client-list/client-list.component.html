@@ -1,6 +1,6 @@
 <p-button label="Добавить + " class="add-btn" (onClick)="add()"></p-button>
-<p-table #dt [value]="clients" [columns]="cols" selectionMode="single" [paginator]="true" [rows]="5"
-         [totalRecords]="14">
+<p-table #dt [value]="clients" [columns]="cols" selectionMode="single" [paginator]="true" [rows]="10"
+         [totalRecords]="totalRecords" [lazy]="true" (onLazyLoad)="loadCarsLazy($event)" [loading]="loading">
   <ng-template pTemplate="header" let-columns>
     <tr>
       <th *ngFor="let col of nameCols" [ngSwitch]="col.field" colspan="2">

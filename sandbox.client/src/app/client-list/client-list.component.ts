@@ -1,7 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {ClientService} from "../service/client.service";
-import {ConfirmationService, SelectItem} from "primeng/api";
+import {ConfirmationService, LazyLoadEvent, SelectItem} from "primeng/api";
 import {Validators, FormControl, FormGroup, FormBuilder} from "@angular/forms";
+import {FilterParams} from "../../model/FilterParams";
 
 export class ClientDetail {
   id: number;
@@ -46,6 +47,7 @@ export class ClientRecord {
 })
 export class ClientListComponent implements OnInit {
   clients: ClientRecord[];
+  datasource: ClientRecord[];
   @Input() clientDetail: ClientDetail;
   display: boolean = false;
   EDITEMODE: boolean = false;
@@ -57,6 +59,9 @@ export class ClientListComponent implements OnInit {
   cols: any[];
   nameCols: any[];
   clientform: FormGroup;
+  totalRecords: number;
+  loading: boolean;
+  private filterParams: FilterParams = new FilterParams();
 
   constructor(private _service: ClientService, private fb: FormBuilder, private confirmationService: ConfirmationService) {
     this.characters = [
@@ -69,7 +74,6 @@ export class ClientListComponent implements OnInit {
       {label: 'веселый', value: 'веселый'},
       {label: 'грозный', value: 'грозный'}
     ];
-
   }
 
   ngOnInit() {
@@ -88,6 +92,17 @@ export class ClientListComponent implements OnInit {
     ];
     this.getClientRecords();
     this.setValidators();
+    this.loading = true;
+  }
+
+  loadCarsLazy(event: LazyLoadEvent) {
+    this.loading = true;
+    setTimeout(() => {
+      if (this.datasource) {
+        this.clients = this.datasource.slice(event.first, (event.first + event.rows));
+        this.loading = false;
+      }
+    }, 1000);
   }
 
   setValidators() {
@@ -104,7 +119,7 @@ export class ClientListComponent implements OnInit {
       'regStreet': new FormControl('', Validators.required),
       'regNo': new FormControl('', Validators.required),
       'regFlat': new FormControl('', Validators.required),
-      'homePhoneNumber': new FormControl('656'),
+      'homePhoneNumber': new FormControl(''),
       'workPhoneNumber': new FormControl(''),
       'mobileNumber1': new FormControl('', Validators.required),
       'mobileNumber2': new FormControl(''),
@@ -113,8 +128,14 @@ export class ClientListComponent implements OnInit {
   }
 
   getClientRecords(): void {
-    this._service.getClientRecords().subscribe((content) => {
-      this.clients = content;
+
+    this.filterParams.sortBy='asdas';
+
+    this._service.getClientRecords(this.filterParams).subscribe((content) => {
+
+      console.log(content)
+      this.datasource = content;
+      this.totalRecords = this.datasource.length;
     });
   }
 

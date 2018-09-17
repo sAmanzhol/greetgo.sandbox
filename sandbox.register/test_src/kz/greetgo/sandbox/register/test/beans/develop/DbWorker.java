@@ -130,6 +130,9 @@ public class DbWorker {
 
   public static Connection getPostgresAdminConnection() throws Exception {
     Class.forName("org.postgresql.Driver");
+    System.out.println(pgAdminUrl() + " " + pgAdminUserid() + " " +pgAdminPassword());
     return DriverManager.getConnection(pgAdminUrl(), pgAdminUserid(), pgAdminPassword());
   }
+
+
 }
