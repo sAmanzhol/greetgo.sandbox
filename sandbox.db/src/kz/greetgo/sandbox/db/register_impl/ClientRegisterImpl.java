@@ -54,10 +54,5 @@ public class ClientRegisterImpl implements ClientRegister {
 		return null;
 	}
 
-	@Override
-	public Integer cacl(int i, int b) {
-
-		return i + b;
-	}
 
 }

@@ -7,9 +7,7 @@ import kz.greetgo.sandbox.db.test.dao.SampleTestDao;
 import kz.greetgo.sandbox.db.test.util.ParentTestNg;
 import kz.greetgo.util.RND;
 import org.testng.annotations.Test;
-
 import java.util.List;
-
 import static org.fest.assertions.api.Assertions.assertThat;
 
 

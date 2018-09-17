@@ -1,37 +1,41 @@
 package kz.greetgo.sandbox.db.register_impl;
 
-import kz.greetgo.depinject.core.BeanGetter;
-import kz.greetgo.sandbox.controller.register.ClientRegister;
-import kz.greetgo.sandbox.db.test.dao.ClientTestDao;
 import kz.greetgo.sandbox.db.test.util.ParentTestNg;
+import org.hamcrest.core.Is;
+import org.junit.Assert;
 import org.testng.annotations.Test;
 
-import static org.fest.assertions.api.Assertions.assertThat;
+import static org.testng.Assert.*;
 
 public class ClientRegisterImplTest extends ParentTestNg {
 
-	public BeanGetter<ClientRegister> clientRegister;
-	public BeanGetter<ClientTestDao> clientTestDao;
+    @Test
+    public void testGetClientList() {
+    }
 
-	@Test
-	public void calculator(){
-		int a=5,b=6;
-		int c =clientRegister.get().cacl(a,b);
+    @Test
+    public void testGetClientTotalRecord() {
+    }
 
-		assertThat(c).isEqualTo(a+b);
-	}
+    @Test
+    public void testClientCharm() {
+    }
 
-	@Test
-	public void testClientCharm() {
+    @Test
+    public void testClientDetailsSave() {
+    }
 
-		String accountName = clientTestDao.get().loadCharm();
+    @Test
+    public void testClientDetailsSet() {
+    }
 
-		//TODO insert db count
+    @Test
+    public void testClientDetailsDelete() {
+    }
+
+    @Test
+    public void testGetClientAddCharmId() {
+    }
 
 
-		// TODO: 9/14/18 call register method
-
-		// TODO: 9/14/18 check test result
-		assertThat(true);
-	}
 }

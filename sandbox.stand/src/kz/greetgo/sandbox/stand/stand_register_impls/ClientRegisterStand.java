@@ -148,10 +148,6 @@ public class ClientRegisterStand implements ClientRegister {
 		return charm;
 	}
 
-	@Override
-	public Integer cacl(int i, int b) {
-		return i+b;
-	}
 
 
 	public List<ClientRecord> filterInner(ClientFilter clientFilter) {
