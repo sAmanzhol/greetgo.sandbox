@@ -122,11 +122,25 @@ public class ClientRegisterImpl implements ClientRegister {
 
   public Client convertToSaveToClient(ClientToSave toSave) {
     Client client = new Client();
-    if (toSave.clientID > 0) {
-      client.id = toSave.clientID;
+    client.id = clients.get(clients.size() - 1).id + 1;
+
+    client.name = toSave.name;
+    client.surname = toSave.surname;
+    if (toSave.patronymic != null) {
+      client.patronymic = toSave.patronymic;
     } else {
-      client.id = clients.get(clients.size() - 1).id + 1;
+      client.patronymic = "";
     }
+    client.actualAddress = toSave.actualAddress;
+    client.birthDay = toSave.birthDay;
+    client.gender = toSave.gender;
+    client.character = toSave.character;
+    client.phones = toSave.phones;
+    client.registrationAddress = toSave.registrationAddress;
+    return client;
+  }
+
+  public Client updateClientFromToSave(ClientToSave toSave, Client client) {
     client.name = toSave.name;
     client.surname = toSave.surname;
     if (toSave.patronymic != null) {
@@ -163,7 +177,7 @@ public class ClientRegisterImpl implements ClientRegister {
     if (clients != null) {
       for (Client client : clients) {
         if (client.id == toSave.clientID) {
-          client = convertToSaveToClient(toSave);
+          client = updateClientFromToSave(toSave, client);
           return convertClientToRecord(client);
         }
       }

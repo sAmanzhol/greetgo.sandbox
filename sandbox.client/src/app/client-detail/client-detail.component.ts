@@ -34,7 +34,7 @@ export class ClientDetailComponent implements OnInit {
   }
 
   async saveClient() {
-    if (this.phone.number != "") {
+    if (this.phone.number != null || this.phone.detail != null) {
       await this.savePhone();
     }
     let a = await this.clientDetailService.saveClient(this.clientToSave);
@@ -42,7 +42,10 @@ export class ClientDetailComponent implements OnInit {
   }
 
   public savePhone() {
-    this.clientToSave.phones.push(this.phone);
+    this.clientToSave.phones.push({
+      detail: {type: this.phone.detail.type, typeRuss: ""},
+      number: this.phone.number
+    });//this.phone
     this.phone = new Phone();
   }
 
