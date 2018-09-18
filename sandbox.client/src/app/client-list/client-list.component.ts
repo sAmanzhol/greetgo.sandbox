@@ -12,6 +12,7 @@ export class ClientListComponent implements OnInit {
   constructor(public login: LoginService, public listService: ClientListService) {}
 
   ngOnInit() {
+    // test
     this.listService.load();
   }
 
