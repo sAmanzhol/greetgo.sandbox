@@ -62,6 +62,7 @@ export class ClientEditFormComponent implements OnInit {
     var self = this;
     let clientToSave: ClientToSave = new ClientToSave();
     clientToSave.assign(self.clientDetails);
+    console.log(clientToSave);
     this.http.get('/client/save-client', {clientToSave: JSON.stringify(clientToSave)}).subscribe(data => {
       self.onChangedClientRecord.emit(data.json());
       self.closeForm();

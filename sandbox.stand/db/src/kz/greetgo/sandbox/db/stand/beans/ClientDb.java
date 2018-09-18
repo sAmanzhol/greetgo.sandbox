@@ -23,7 +23,7 @@ public class ClientDb implements HasAfterInject {
             c.lastname = RND.str(8);
             c.patronymic = RND.str(8);
             c.character = RndCharacter();
-            c.dateOfBirth = RndDateOfBirth();
+            c.dateOfBirth = new Date();
             c.totalAccountBalance = RND.plusInt(1000);
             c.maximumBalance = RND.plusInt(1000);
             c.minimumBalance = RND.plusInt(1000);
@@ -43,7 +43,7 @@ public class ClientDb implements HasAfterInject {
             c.lastname = RND.str(8);
             c.patronymic = RND.str(8);
             c.character = RndCharacter();
-            c.dateOfBirth = RndDateOfBirth();
+            c.dateOfBirth = new Date();
             c.totalAccountBalance = RND.plusInt(1000);
             c.maximumBalance = RND.plusInt(1000);
             c.minimumBalance = RND.plusInt(1000);

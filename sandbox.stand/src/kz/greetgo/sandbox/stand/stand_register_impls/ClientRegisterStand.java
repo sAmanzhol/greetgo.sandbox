@@ -290,8 +290,8 @@ public class ClientRegisterStand implements ClientRegister {
 
 		public int compare(ClientRecord obj1, ClientRecord obj2) {
 
-			String str1 = obj1.dateOfBirth;
-			String str2 = obj2.dateOfBirth;
+			Date str1 = obj1.dateOfBirth;
+			Date str2 = obj2.dateOfBirth;
 			if (sort)
 				return str1.compareTo(str2);
 			else {

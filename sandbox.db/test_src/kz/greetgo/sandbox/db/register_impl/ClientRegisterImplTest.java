@@ -9,6 +9,7 @@ import kz.greetgo.util.RND;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
@@ -27,9 +28,12 @@ public class ClientRegisterImplTest extends ParentTestNg {
 	@BeforeMethod
 	public void setUp() {
 
+		clientTestDao.get().deleteAllClientAccountTransaction();
+		clientTestDao.get().deleteAllClientAccount();
 		clientTestDao.get().deleteAllClientAddr();
 		clientTestDao.get().deleteAllClientPhone();
 		clientTestDao.get().deleteAllClient();
+		clientTestDao.get().deleteAllTransactionType();
 		clientTestDao.get().deleteAllCharm();
 
 		clientTestDao.get();
@@ -135,18 +139,77 @@ public class ClientRegisterImplTest extends ParentTestNg {
 	}
 
 	@Test
+	public void testSaveClient() {
+		ClientPhone clientPhone = new ClientPhone();
+		clientPhone.number = "8797546546";
+		clientPhone.type = PhoneType.MOBILE;
+		ClientAddr clientAddr = new ClientAddr();
+		clientAddr.street = "dadassa";
+		clientAddr.house = "dadassa";
+		clientAddr.flat = "dadassa";
+		clientAddr.type=AddrType.REG;
+
+		int Tid = RND.plusInt(546);
+		String Tcode = RND.str(10);
+		String Tname = RND.str(10);
+
+		int CAid = RND.plusInt(564);
+		int CAclient = client.id;
+		float CAmoney = RND.plusInt(456);
+		String CAnumber =RND.str(10);
+		Timestamp CAregistered_at = new Timestamp(RND.plusInt(532));
+
+		int CATid = RND.plusInt(546);
+		int CATaccount = CAid;
+		float CATmoney = RND.plusInt(1000);
+		Timestamp CATfinished_at = new Timestamp(RND.plusInt(532));
+		int CATtype = Tid;
+
+
+		clientTestDao.get().insertCharm(charm.id, charm.name, charm.description, charm.energy, charm.actually);
+		clientTestDao.get().insertClient(client.id, client.firstname, client.lastname, client.patronymic, client.gender, client.birthDate, client.charm);
+		clientTestDao.get().insertClientPhone(client.id, clientPhone.number, PhoneType.MOBILE);
+		clientTestDao.get().insertClientAddr(client.id, AddrType.FACT, clientAddr.street, clientAddr.house, clientAddr.flat);
+		clientTestDao.get().insertTransaction_type(Tid,Tcode,Tname);
+		clientTestDao.get().insertClientAccount(CAid,CAclient,CAmoney,CAnumber,CAregistered_at);
+		clientTestDao.get().insertClientAccountTransaction(CATid,CATaccount,CATmoney,CATfinished_at,CATtype);
+
+		ClientToSave clientDetails = new ClientToSave();
+		clientDetails.id = client.id;
+		clientDetails.firstname =client.firstname;
+		clientDetails.lastname =client.lastname;
+		clientDetails.patronymic =client.patronymic;
+		clientDetails.gender =client.gender;
+		clientDetails.dateOfBirth =client.birthDate;
+		clientDetails.characterId =charm.id;
+		clientDetails.addressOfRegistration.street = clientAddr.street;
+		clientDetails.addressOfRegistration.house= clientAddr.house;
+		clientDetails.addressOfRegistration.flat = clientAddr.flat;
+		clientDetails.addressOfRegistration.type = AddrType.REG;
+		clientDetails.addressOfResidence.street = clientAddr.street;
+		clientDetails.addressOfResidence.house= clientAddr.house;
+		clientDetails.addressOfResidence.flat = clientAddr.flat;
+		clientDetails.addressOfResidence.type = AddrType.REG;
+		clientDetails.phone.add(clientPhone);
+
+		//
+		//
+		ClientRecord clientRecord = clientRegister.get().saveClient(clientDetails);
+		System.err.println(clientRecord);
+		//
+		//
+
+
+
+	}
+
+	@Test
 	public void testGetClientList() {
 
 	}
 
 	@Test
 	public void testGetClientTotalRecord() {
-
-	}
-
-	@Test
-	public void testSaveClient() {
-
 
 	}
 }

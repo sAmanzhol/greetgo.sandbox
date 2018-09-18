@@ -1,13 +1,15 @@
 package kz.greetgo.sandbox.controller.model.model;
 
 
+import java.util.Date;
+
 public class ClientRecord {
     public int id;
     public String firstname;
     public String lastname;
     public String patronymic;
     public String characterName;
-    public String dateOfBirth;
+    public Date dateOfBirth;
     public int totalAccountBalance;
     public int maximumBalance;
     public int minimumBalance;
@@ -17,9 +19,25 @@ public class ClientRecord {
         this.lastname="";
         this.patronymic="";
         this.characterName=new Charm().name;
-        this.dateOfBirth="2018-10-22";
+        this.dateOfBirth=new Date();
         this.totalAccountBalance=0;
         this.maximumBalance=0;
         this.minimumBalance=0;
+    }
+
+    @Override
+    public String toString() {
+
+        return "ClientRecord{" +
+          "id=" + id +
+          ", firstname='" + firstname + '\'' +
+          ", lastname='" + lastname + '\'' +
+          ", patronymic='" + patronymic + '\'' +
+          ", characterName='" + characterName + '\'' +
+          ", dateOfBirth=" + dateOfBirth +
+          ", totalAccountBalance=" + totalAccountBalance +
+          ", maximumBalance=" + maximumBalance +
+          ", minimumBalance=" + minimumBalance +
+          '}';
     }
 }

@@ -60,13 +60,54 @@ public class ClientRegisterImpl implements ClientRegister {
 
 	@Override
 	public ClientRecord saveClient(ClientToSave clientDetails) {
+/*
+		public Integer id;
+		public String firstname;
+		public String lastname;
+		public String patronymic;
+		public GenderType gender;
+		public String dateOfBirth;
+		public int characterId;
+		public ClientAddr addressOfResidence;
+		public ClientAddr addressOfRegistration;
+		public List<ClientPhone> phone=new ArrayList<>();*/
+
+		Integer id = clientDao.get().idClientById(clientDetails.id);
+
+		ClientRecord clientRecord = new ClientRecord();
+		Client client = new Client();
 
 
-		return null;
+		if (id == null) {
+			clientDao.get().insertClient(clientDetails.id, clientDetails.firstname, clientDetails.lastname, clientDetails.patronymic, clientDetails.gender, clientDetails.dateOfBirth, clientDetails.characterId);
+			clientDao.get().insertClientAddr(clientDetails.id, clientDetails.addressOfRegistration.type, clientDetails.addressOfRegistration.street, clientDetails.addressOfRegistration.house, clientDetails.addressOfRegistration.flat);
+			clientDao.get().insertClientAddr(clientDetails.id, clientDetails.addressOfResidence.type, clientDetails.addressOfResidence.street, clientDetails.addressOfResidence.house, clientDetails.addressOfResidence.flat);
+			for (ClientPhone clientPhone : clientDetails.phone) {
+				clientDao.get().insertClientPhone(clientDetails.id, clientPhone.number, clientPhone.type);
+			}
+
+		}
+		clientDao.get().updateClient(clientDetails.id, clientDetails.firstname, clientDetails.lastname, clientDetails.patronymic, clientDetails.gender, clientDetails.dateOfBirth, clientDetails.characterId);
+		for (ClientPhone clientPhone : clientDetails.phone) {
+			clientDao.get().updateClientPhone(clientDetails.id, clientPhone.number, clientPhone.type);
+		}
+		clientDao.get().updateClientAddr(clientDetails.id, clientDetails.addressOfRegistration.type, clientDetails.addressOfRegistration.street, clientDetails.addressOfRegistration.house, clientDetails.addressOfRegistration.flat);
+		clientDao.get().updateClientAddr(clientDetails.id, clientDetails.addressOfResidence.type, clientDetails.addressOfResidence.street, clientDetails.addressOfResidence.house, clientDetails.addressOfResidence.flat);
+
+		client = clientDao.get().selectClientById(clientDetails.id);
+		clientRecord.id = client.id;
+		clientRecord.firstname = client.firstname;
+		clientRecord.lastname = client.lastname;
+		clientRecord.patronymic = client.patronymic;
+		clientRecord.dateOfBirth = client.birthDate;
+		clientRecord.characterName = clientDao.get().nameCharmById(clientDetails.characterId);
+
+		return clientRecord;
 	}
 
 	@Override
 	public List<ClientRecord> getClientList(ClientFilter clientFilter) {
+
 
 		return null;
 	}
