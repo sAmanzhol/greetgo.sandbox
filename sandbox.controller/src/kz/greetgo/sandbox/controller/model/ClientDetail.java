@@ -17,7 +17,7 @@ public class ClientDetail {
   public Address registrationAddress;
   public List<Phone> phones;
   public List<PhoneDetail> phoneDetailList;
-  public long clientId;
+  public int clientId;
 
 
   public ClientDetail() {
@@ -44,7 +44,7 @@ public class ClientDetail {
 
   public ClientDetail(String surname, String name, String patronymic, Gender gender, List<Gender> genders, Date birthDay,
                       Character character, List<Character> characters, Address actualAddress, Address registrationAddress,
-                      List<Phone> phones, List<PhoneDetail> phoneDetailList, long clientId) {
+                      List<Phone> phones, List<PhoneDetail> phoneDetailList, int clientId) {
     this.surname = surname;
     this.name = name;
     this.patronymic = patronymic;

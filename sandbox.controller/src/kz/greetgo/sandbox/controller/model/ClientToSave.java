@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 public class ClientToSave {
-  public long clientID;
+  public int clientID;
   public String surname;
   public String name;
   public String patronymic;

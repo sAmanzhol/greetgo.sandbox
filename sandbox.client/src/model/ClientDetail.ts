@@ -18,7 +18,7 @@ export class ClientDetail {
   public registrationAddress: Address = new Address();
   public phones: Phone[];
   public phoneDetailList: PhoneDetail[];
-  public clientId: number/*long*/;
+  public clientId: number/*int*/;
 
 
   public static create(a: any): ClientDetail {

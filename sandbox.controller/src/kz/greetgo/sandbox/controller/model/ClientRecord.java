@@ -7,12 +7,12 @@ public class ClientRecord {
   public int totalBalance;
   public int minBalance;
   public int maxBalance;
-  public long clientId;
+  public int clientId;
 
   public ClientRecord() {
   }
 
-  public ClientRecord(String fio, Character character, int age, int totalBalance, int minBalance, int maxBalance, long clientId) {
+  public ClientRecord(String fio, Character character, int age, int totalBalance, int minBalance, int maxBalance, int clientId) {
     this.fio = fio;
     this.character = character;
     this.age = age;

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+  <changeSet author="madina" id="create-table-client">
+    <sql endDelimiter=";;"><![CDATA[
+      create table client (
+        id serial not null,
+        surname varchar(50) not null,
+        name varchar(50) not null,
+        patronymic varchar(50),
+        gender varchar(10) not null,
+        birth_date date not null,
+        charm integer references charm(id),
+        primary key(id)
+      )
+    ]]></sql>
+  </changeSet>
+
+  <changeSet author="madina" id="create-table-charm">
+    <sql endDelimiter=";;"><![CDATA[
+      create table charm (
+        id serial not null,
+        name (50) not null,
+        description varchar(500),
+        energy float not null,
+        primary key(id)
+      )
+    ]]></sql>
+  </changeSet>
+
+  <changeSet author="madina" id="create-table-client_addr">
+    <sql endDelimiter=";;"><![CDATA[
+      create table client_addr (
+        client integer references client(id),
+        type varchar(10) not null,
+        street varchar(50),
+        house varchar(20),
+        flat varchar(20),
+        primary key(client, type)
+      )
+    ]]></sql>
+  </changeSet>
+
+  <changeSet author="madina" id="create-table-client_phone">
+    <sql endDelimiter=";;"><![CDATA[
+      create table client_phone (
+        client integer references client(id),
+        number varchar(20) not null,
+        type varchar(10) not null,
+        primary key(client, number)
+      )
+    ]]></sql>
+  </changeSet>
+
+  <changeSet author="madina" id="create-table-client_account">
+    <sql endDelimiter=";;"><![CDATA[
+      create table client_account (
+        id integer not null,
+        client integer references client(id),
+        money float not null,
+        registered_at registered_at not null,
+        primary key(id)
+      )
+    ]]></sql>
+  </changeSet>
+
+  <changeSet author="madina" id="create-table-client_account_transaction">
+    <sql endDelimiter=";;"><![CDATA[
+      create table client_account_transaction (
+        id int not null,
+        account integer references client_account(id),
+        money float not null,
+        finished_at date not null,
+        type integer references transaction_type(id),
+        primary key(id)
+      )
+    ]]></sql>
+  </changeSet>
+
+  <changeSet author="madina" id="create-table-transaction_type">
+    <sql endDelimiter=";;"><![CDATA[
+      create table transaction_type (
+        id integer not null,
+        code varchar(50) not null,
+        name varchar(50) not null,
+        primary key(id)
+      )
+    ]]></sql>
+  </changeSet>
+
+</databaseChangeLog>

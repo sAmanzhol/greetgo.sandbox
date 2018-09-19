@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 public class Client {
-  public long id;
+  public int id;
   public String surname;
   public String name;
   public String patronymic;
@@ -22,7 +22,9 @@ public class Client {
   public Client() {
   }
 
-  public Client(long id, String surname, String name, String patronymic, Gender gender, Date birthDay, Character character, int totalBalance, int minBalance, int maxBalance, Address actualAddress, Address registrationAddress, List<Phone> phones) {
+  public Client(int id, String surname, String name, String patronymic, Gender gender, Date birthDay, Character character,
+                int totalBalance, int minBalance, int maxBalance, Address actualAddress, Address registrationAddress,
+                List<Phone> phones) {
     this.id = id;
     this.surname = surname;
     this.name = name;

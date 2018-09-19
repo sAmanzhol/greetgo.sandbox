@@ -5,7 +5,7 @@ import {Phone} from "./Phone";
 import {ClientDetail} from "./ClientDetail";
 
 export class ClientToSave {
-  public clientID: number/*long*/;
+  public clientID: number/*int*/;
   public surname: string;
   public name: string;
   public patronymic: string;

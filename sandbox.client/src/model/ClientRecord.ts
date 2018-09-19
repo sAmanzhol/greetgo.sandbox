@@ -7,7 +7,7 @@ export class ClientRecord {
   public totalBalance: number/*int*/;
   public minBalance: number/*int*/;
   public maxBalance: number/*int*/;
-  public clientId: number/*long*/;
+  public clientId: number/*int*/;
 
   public static create(a: any): ClientRecord {
     const ret = new ClientRecord();
