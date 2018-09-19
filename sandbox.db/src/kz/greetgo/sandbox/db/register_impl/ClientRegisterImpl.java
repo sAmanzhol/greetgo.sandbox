@@ -1,5 +1,6 @@
 package kz.greetgo.sandbox.db.register_impl;
 
+import kz.greetgo.db.Jdbc;
 import kz.greetgo.depinject.core.Bean;
 import kz.greetgo.depinject.core.BeanGetter;
 import kz.greetgo.sandbox.controller.model.model.*;
@@ -12,6 +13,8 @@ import java.util.List;
 public class ClientRegisterImpl implements ClientRegister {
 
 	public BeanGetter<ClientDao> clientDao;
+
+	public BeanGetter<Jdbc> jdbc;
 
 	@Override
 	public List<Charm> getCharm() {
@@ -108,15 +111,20 @@ public class ClientRegisterImpl implements ClientRegister {
 	@Override
 	public List<ClientRecord> getClientList(ClientFilter clientFilter) {
 
+		jdbc.get().execute(new ClientJdbc(clientFilter,true));
+		if (clientFilter.sort){}
 
+//			clientDao.get().selectCLientListByFilter(clientFilter.firstname, clientFilter.lastname, clientFilter.patronymic, clientFilter.orderBy, "asc", clientFilter.recordSize, clientFilter.page * clientFilter.recordSize);
 		return null;
 	}
 
 	@Override
 	public Integer getClientTotalRecord(ClientFilter clientFilter) {
+		clientFilter.recordTotal= jdbc.get().execute(new ClientJdbc(clientFilter,false));
+		return clientFilter.recordTotal;
 
-		return null;
 	}
 
 
+	private class RecordAsd {}
 }

@@ -50,6 +50,7 @@ public class MyReportViewHtml implements MyReportView {
 			inData.generatedBy="Abu Nazar";
 			inData.generatedAt = new Date();
 			myReportViewHtml.generate(inData);
+
 		}
 
 	}

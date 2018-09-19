@@ -126,7 +126,12 @@ public interface ClientDao {
 	public int recordSize;
 	public int recordTotal;*/
 
-//	@Select("select * from client where firstname like #{firstname} or lastname like #{lastname} or patronymic like #{patronymic} order by #{order} desc limit #{limit} offset #{offset}")
+	@Select("select count(*) from client where firstname like #{firstname} or lastname like #{lastname} or patronymic like #{patronymic}")
+	Integer selectTotalRecordClient(@Param("firstname") String firstname,
+																	@Param("lastname") String lastname,
+																	@Param("patronymic") String patronymic
+
+	);
 
 
 }

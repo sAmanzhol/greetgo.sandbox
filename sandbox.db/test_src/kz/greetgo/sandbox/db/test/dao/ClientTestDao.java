@@ -1,9 +1,6 @@
 package kz.greetgo.sandbox.db.test.dao;
 
-import kz.greetgo.sandbox.controller.model.model.AddrType;
-import kz.greetgo.sandbox.controller.model.model.Charm;
-import kz.greetgo.sandbox.controller.model.model.GenderType;
-import kz.greetgo.sandbox.controller.model.model.PhoneType;
+import kz.greetgo.sandbox.controller.model.model.*;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
@@ -11,9 +8,11 @@ import org.apache.ibatis.annotations.Select;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 
 
 public interface ClientTestDao {
+
 
 	@Insert("insert into charm (id, name, description, energy, actually) values (#{id}, #{name}, #{description}, #{energy}, #{actually})")
 	void insertCharm(@Param("id") int id,
@@ -103,6 +102,23 @@ public interface ClientTestDao {
 
 	@Select("select * from charm where id = #{id}")
 	Charm selectCharmById(@Param("id") int id);
+
+	@Select("select * from client where firstname like #{firstname} or lastname like #{lastname}  or patronymic like #{patronymic} order by ${order} ${sort} limit ${recordSize} offset ${offset}")
+	List<Client> selectCLientListByFilter(@Param("firstname") String firstname,
+																@Param("lastname") String lastname,
+																@Param("patronymic") String patronymic,
+																@Param("order") String order,
+																	@Param("sort") String sort,
+																	@Param("recordSize") int recordSize,
+																	@Param("offset") int offset
+	);
+
+	@Select("select id from client where firstname like #{firstname} or lastname like #{lastname} or patronymic like #{patronymic}")
+	List<Integer> selectCLientListByFilterCount(@Param("firstname") String firstname,
+																				@Param("lastname") String lastname,
+																				@Param("patronymic") String patronymic
+
+	);
 
 
 

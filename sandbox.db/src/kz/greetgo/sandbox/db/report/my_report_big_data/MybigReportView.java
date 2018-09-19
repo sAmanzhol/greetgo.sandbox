@@ -1,6 +1,6 @@
 package kz.greetgo.sandbox.db.report.my_report_big_data;
 
-public interface MybigReport {
+public interface MybigReportView {
 
 	void start( MyReportHeadData headData);
 
