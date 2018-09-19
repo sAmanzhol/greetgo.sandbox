@@ -5,10 +5,12 @@ import kz.greetgo.depinject.core.BeanGetter;
 import kz.greetgo.sandbox.controller.model.UserCan;
 import kz.greetgo.sandbox.register.beans.all.IdGenerator;
 import kz.greetgo.sandbox.register.test.dao.AuthTestDao;
+import kz.greetgo.sandbox.register.test.dao.ClientTestDao;
 import kz.greetgo.security.password.PasswordEncoder;
 import org.apache.log4j.Logger;
 
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -18,14 +20,22 @@ public class DbLoader {
 
 
   public BeanGetter<AuthTestDao> authTestDao;
+  public BeanGetter<ClientTestDao> clientTestDao;
   public BeanGetter<IdGenerator> idGenerator;
   public BeanGetter<PasswordEncoder> passwordEncoder;
 
   public void loadTestData() throws Exception {
 
     loadPersons();
+    loadClients();
 
     logger.info("FINISH");
+  }
+
+  @SuppressWarnings("SpellCheckingInspection")
+  private void loadClients() throws ParseException {
+    load_charm_list();
+    load_client_list();
   }
 
   @SuppressWarnings("SpellCheckingInspection")
@@ -68,5 +78,49 @@ public class DbLoader {
       authTestDao.get().upsert(can.name());
       authTestDao.get().personCan(username, can.name());
     }
+  }
+
+  private Timestamp formateBirthDate(String birthDateStr) throws ParseException {
+    SimpleDateFormat sdf = new SimpleDateFormat("dd.mm.yyyy");
+    Date birthDate = sdf.parse(birthDateStr);
+    return new Timestamp(birthDate.getTime());
+  }
+
+  private void load_charm_list () {
+    //load charm list
+    clientTestDao.get().insertCharm(1, "sociable");
+    clientTestDao.get().insertCharm(2, "polite");
+    clientTestDao.get().insertCharm(3, "quiet");
+    clientTestDao.get().insertCharm(4, "aggressive");
+    clientTestDao.get().insertCharm(5, "ambitious");
+    clientTestDao.get().insertCharm(6, "intelligent");
+    clientTestDao.get().insertCharm(7, "honest");
+    clientTestDao.get().insertCharm(8, "daring");
+    clientTestDao.get().insertCharm(9, "reliable");
+    clientTestDao.get().insertCharm(10, "artistic");
+    clientTestDao.get().insertCharm(11, "patient");
+    clientTestDao.get().insertCharm(12, "sensitive");
+  }
+
+
+  private void load_client_list () throws ParseException {
+    //load client list
+    //insert into client (id, surname, name, gender, birth_date, charm)
+    clientTestDao.get().insertClient(1, "Kim", "Igor", "MALE", formateBirthDate("11.12.1993"), 2);
+    clientTestDao.get().insertClient(2, "Ivanov", "Alexey", "MALE", formateBirthDate("11.03.1995"), 1);
+    clientTestDao.get().insertClient(3, "Coi", "Vika", "FEMALE", formateBirthDate("11.02.1992"), 5);
+    clientTestDao.get().insertClient(4, "Li", "Andrey", "MALE", formateBirthDate("10.12.1995"), 12);
+    clientTestDao.get().insertClient(5, "Mihailova", "Nadezhda", "FEMALE", formateBirthDate("01.10.1955"), 9);
+    clientTestDao.get().insertClient(6, "Nikulin", "Yuriy", "MALE", formateBirthDate("19.07.1997"), 5);
+    clientTestDao.get().insertClient(7, "Ahmetov", "Ahmet", "MALE", formateBirthDate("05.09.1982"), 3);
+    clientTestDao.get().insertClient(8, "Igoreva", "Natazha", "FEMALE", formateBirthDate("17.04.1986"), 5);
+    clientTestDao.get().insertClient(9, "Nikitin", "Alex", "MALE", formateBirthDate("06.08.1991"), 2);
+    clientTestDao.get().insertClient(10, "Medvedeva", "Tanya", "FEMALE", formateBirthDate("11.01.1994"), 4);
+    clientTestDao.get().insertClient(11, "Iureva", "Viktoria", "FEMALE", formateBirthDate("18.06.1998"), 8);
+    clientTestDao.get().insertClient(12, "Li", "Dmitriy", "MALE", formateBirthDate("25.08.1994"), 1);
+    clientTestDao.get().insertClient(13, "Kim", "Kristina", "FEMALE", formateBirthDate("16.04.1990"), 10);
+    clientTestDao.get().insertClient(14, "Romanov", "Sasha", "MALE", formateBirthDate("17.03.1997"), 11);
+    clientTestDao.get().insertClient(15, "Romanova", "Kim", "FEMALE", formateBirthDate("11.12.1991"), 2);
+
   }
 }

@@ -36,5 +36,4 @@ public class ClientController implements Controller {
   public List<ClientRecord> getList(@ParamsTo FilterParams params) {
     return clientRegister.get().getClients(params);
   }
-
 }
