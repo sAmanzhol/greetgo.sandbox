@@ -1,7 +1,9 @@
 package kz.greetgo.sandbox.register.test.dao;
 
+import kz.greetgo.sandbox.controller.model.ClientDetail;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 public interface ClientTestDao {
@@ -34,4 +36,7 @@ public interface ClientTestDao {
 
   @Update("update client set actual = 0")
   void deleteAllClients();
+
+  @Select("select * from client where id=#{id}")
+  ClientDetail selectClientById(@Param("id") int id);
 }

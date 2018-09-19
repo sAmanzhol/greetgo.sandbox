@@ -10,7 +10,7 @@ public interface ClientDao {
     @Select("select * from client where id=#{id}")
     ClientRecord selectClientById(@Param("id") int id);
 
-    @Update("update client set ${fieldName} = #{fieldValue} where id = #{id}")
+    @Update("update Person set ${fieldName} = #{fieldValue} where id = #{id}")
     void updateClientField(@Param("id") int id,
                            @Param("fieldName") String fieldName,
                            @Param("fieldValue") Object fieldValue);
