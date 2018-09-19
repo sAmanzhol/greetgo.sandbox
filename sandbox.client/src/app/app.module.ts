@@ -1,5 +1,7 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {NgxMaskModule} from 'ngx-mask'
 
 import {AppComponent} from './app.component';
 import {LoginComponent} from './login/login.component';
@@ -10,6 +12,8 @@ import {FormsModule} from "@angular/forms";
 import {ClientListComponent} from './client-list/client-list.component';
 import {ClientListService} from "./client-list/client-list.service";
 import { AboutComponent } from './about/about.component';
+import { ClientsComponent } from './clients/clients.component';
+import { ClientInfoComponent } from './modals/client-info/client-info.component';
 
 @NgModule({
   declarations: [
@@ -17,9 +21,11 @@ import { AboutComponent } from './about/about.component';
     LoginComponent,
     ClientListComponent,
     AboutComponent,
+    ClientsComponent,
+    ClientInfoComponent,
   ],
   imports: [
-    BrowserModule, HttpClientModule, FormsModule,
+    BrowserModule, HttpClientModule, FormsModule, NgbModule, NgxMaskModule.forRoot()
   ],
   providers: [HttpService, LoginService, ClientListService],
   bootstrap: [AppComponent]

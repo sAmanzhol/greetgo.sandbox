@@ -1,0 +1,17 @@
+.button-search {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.clients-table td.cell {
+  text-align: start;
+  vertical-align: middle;
+}
+
+.clients-table .sort-arrow {
+  line-height: 0.4;
+}
+
+.clients-table .sort-arrow:hover {
+  cursor: pointer;
+}

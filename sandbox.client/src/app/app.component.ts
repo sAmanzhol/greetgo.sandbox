@@ -8,6 +8,14 @@ import {LoginService} from "./login/login.service";
 })
 export class AppComponent {
   title = 'sandbox';
+  data = {};
+  isModalOpened = false;
 
   constructor(public login: LoginService) {}
+
+  openModal(data) {
+    this.data = data;
+    console.log(data["type"], data["clientId"]);
+    this.isModalOpened = true;
+  }
 }

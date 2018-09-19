@@ -1,0 +1,9 @@
+@media (min-width: 576px) {
+  .client-info-dialog {
+    min-width: 700px;
+  }
+
+  .client-info-input {
+    width: 48%;
+  }
+}
