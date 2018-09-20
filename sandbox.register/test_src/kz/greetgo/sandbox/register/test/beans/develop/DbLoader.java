@@ -35,7 +35,7 @@ public class DbLoader {
   @SuppressWarnings("SpellCheckingInspection")
   private void loadClients() throws ParseException {
     load_charm_list();
-    load_client_list();
+//    load_client_list();
   }
 
   @SuppressWarnings("SpellCheckingInspection")

@@ -5,7 +5,6 @@ import kz.greetgo.sandbox.controller.model.*;
 import kz.greetgo.sandbox.register.test.dao.ClientTestDao;
 import kz.greetgo.sandbox.register.test.util.ParentTestNg;
 import kz.greetgo.util.RND;
-import org.apache.ibatis.exceptions.PersistenceException;
 import org.testng.annotations.Test;
 
 import java.util.List;
@@ -157,21 +156,6 @@ public class ClientRegisterImplTest extends ParentTestNg {
     }
 
     @Test
-    public void editClient_test() {
-        deleteAllClients();
-
-        ClientRecord record = init(RND.plusInt(1000000), "Ivanov", "Ivan");
-
-        clientRegister.get().updateClientField(record.id, "name", "Alex");
-        client = clientRegister.get().getClient(record.id);
-
-        assertThat(client).isNotNull();
-        assertThat(client.surname).isEqualTo(record.surname);
-        assertThat(client.name).isNotEqualTo(record.name);
-        assertThat(client.id).isEqualTo(record.id);
-    }
-
-    @Test
     public void deleteClient_test() {
         deleteAllClients();
 
@@ -203,20 +187,50 @@ public class ClientRegisterImplTest extends ParentTestNg {
     @Test
     public void addClient_test() {
         deleteAllClients();
+        //init data
 
-//        ClientRecord record = init(RND.plusInt(1000000), "Ivanov", "Ury");
+        ClientDetail cd = new ClientDetail(0, "Ivanov", "Petr", "MALE", java.sql.Date.valueOf("1993-01-31"), 1, 5, "RegStreet",
+                "RegHouse", "regFlat", "8-777-555-55-55");
 
-//            clientRegister.get().addClient(record.id, record.surname, record.name, 1);
+        //call testing method
+        clientRegister.get().editClient(cd);
+
+        //get from test dao
+
+        ClientDetail cdTest = clientTestDao.get().selectClientByName("Petr");
+        System.out.println(cdTest.mobileNumber1);
+
+        //test
+        assertThat(cdTest).isNotNull();
+        assertThat(Objects.equals(cdTest.surname, cd.surname));
+        assertThat(Objects.equals(cdTest.name, cd.name));
+        assertThat(Objects.equals(cdTest.mobileNumber1, cd.mobileNumber1));
+    }
+
+    @Test
+    public void editClient_test() {
+//        deleteAllClients();
+//
+//        //init data
+//        ClientDetail cd = new ClientDetail(0, "Ivanov", "Vasy", "MALE", java.sql.Date.valueOf("1993-01-31"), 1, 5, "RegStreet",
+//                "RegHouse", "regFlat", "8-777-555-55-55");
+////
+////        //call testing method
+//        clientRegister.get().editClient(cd);
+//
+//        //get from test dao
+        ClientDetail cdTest = clientTestDao.get().selectClientByName("Vasy");
+//        System.out.println(cdTest.id);
+//
+        cdTest.name = "Nada";
+        clientRegister.get().editClient(cdTest);
+
+        ClientDetail cdTest1 = clientTestDao.get().selectClientByID(cdTest.id);
 
 
-
-
-//        assertThat(client).isNotNull();
-//        assertThat(Objects.equals(client.surname, record.surname));
-//        System.out.println(client.surname + " " + record.surname);
-//        assertThat(Objects.equals(client.name, record.name));
-//        System.out.println(client.name + " " + record.name);
-//        assertThat(Objects.equals(client.id, record.id));
+        //test
+        assertThat(cdTest).isNotNull();
+        assertThat(cdTest.id).isEqualTo(cdTest1.id);
     }
 
     private void deleteAllClients() {
