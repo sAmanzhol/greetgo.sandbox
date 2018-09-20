@@ -1,10 +1,10 @@
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" #modal id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="client-info-dialog modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" *ngIf="data['type']=='add'">Добавить нового клиента</h5>
         <h5 class="modal-title" *ngIf="data['type']=='edit'">Редактирование клиента</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button #closeButton type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -32,9 +32,9 @@
             </select>
 
             <select id="character" name="character" class="form-control client-info-input" [(ngModel)]="client['character']" #character="ngModel" [ngClass]="{'is-invalid': (form.submitted || character.dirty) && character.errors}" required>
-              <option value="" selected>Выберите характер...</option>
+              <option value="">Выберите характер...</option>
 
-              <option value="c.id" *ngFor="let c of characters">{{c.value}}</option>
+              <option value={{c.value}} *ngFor="let c of characters">{{c.value}}</option>
             </select>
           </div>
 

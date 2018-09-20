@@ -14,14 +14,16 @@ export class ClientsComponent implements OnInit {
   type = "";
   query = "";
 
-  constructor(public Service: ClientsService) { }
+  constructor(public Service: ClientsService) {
+  }
 
   ngOnInit() {
     this.Service.load("default", "asc", "");
   }
 
-  openModal(type, clientId="") {
+  openModal(type, clientId = "") {
     this.data = {
+      "open": true,
       "type": type,
       "clientId": clientId
     };
@@ -38,5 +40,9 @@ export class ClientsComponent implements OnInit {
   search(query) {
     this.query = query;
     this.Service.load(this.target, this.type, this.query);
+  }
+
+  delete(id) {
+    this.Service.delete(id);
   }
 }

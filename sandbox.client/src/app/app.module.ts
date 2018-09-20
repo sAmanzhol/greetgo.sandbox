@@ -2,6 +2,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {NgxMaskModule} from 'ngx-mask'
+import * as $ from 'jquery';
 
 import {AppComponent} from './app.component';
 import {LoginComponent} from './login/login.component';

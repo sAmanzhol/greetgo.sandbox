@@ -8,5 +8,5 @@
 
   <app-clients *ngIf="login.canViewUsers" (modal)="openModal($event)"></app-clients>
 
-  <app-client-info *ngIf="isModalOpened" [data]="data"></app-client-info>
+  <app-client-info *ngIf="isModalOpened" (modal)="openModal($event)" [data]="data"></app-client-info>
 </div>

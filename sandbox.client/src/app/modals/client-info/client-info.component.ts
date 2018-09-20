@@ -1,4 +1,7 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild} from '@angular/core';
+import {ClientDisplay} from "../../../model/ClientDisplay";
+import {ClientInfoService} from "../../modals/client-info/client-info.service";
+import {ClientsService} from "../../clients/clients.service";
 
 @Component({
   selector: 'app-client-info',
@@ -7,65 +10,91 @@ import {Component, Input, OnInit} from '@angular/core';
 })
 export class ClientInfoComponent implements OnInit {
   @Input() data: {};
+  @Output() modal = new EventEmitter();
   characters = [];
-  client = {};
+  client = new ClientDisplay();
 
-  constructor() { }
+  public loading: boolean = false;
+
+  @ViewChild('closeButton') closeButton: ElementRef;
+
+  constructor(public Service: ClientInfoService, public ClientsService: ClientsService) { }
 
   ngOnInit() {
-    this.characters = [
-      {
-        "id": 1,
-        "value": "Nice1"
-      },
-      {
-        "id": 2,
-        "value": "Nice2"
-      },
-      {
-        "id": 3,
-        "value": "Nice3"
-      },
-      {
-        "id": 4,
-        "value": "Nice4"
-      },
-      {
-        "id": 5,
-        "value": "Nice5"
-      },
-      {
-        "id": 6,
-        "value": "Nice6"
-      },
-      {
-        "id": 7,
-        "value": "Nice7"
-      }
-    ]
-    this.client = {
-      "id": '',
-      "surname": '',
-      "name": '',
-      "patronymic": '',
-      "birthDate": '',
-      "gender": '',
-      "character": '',
-      "streetRegistration": '',
-      "houseRegistration": '',
-      "apartmentRegistration": '',
-      "streetResidence": '',
-      "houseResidence": '',
-      "apartmentResidence": '',
-      "phoneHome": '',
-      "phoneWork": '',
-      // "phoneExtra3": '',
-      // "phoneExtra4": '',
-      // "phoneExtra5": '',
-    };
+    if (this.data["type"] == "edit") {
+      this.getClient(this.data["clientId"]);
+    }
+
+    this.getCharacters();
+  }
+
+  ngOnChanges() {
+    if (this.data["type"] == "edit") {
+      this.getClient(this.data["clientId"]);
+    } else {
+      this.client = new ClientDisplay();
+    }
   }
 
   onSubmit() {
-    console.log("kek");
+    console.log(this.client);
+
+    this.crupdate(this.client);
+  }
+
+  closeModal() {
+    this.data = {
+      "open": false,
+      "type": "",
+      "clientId": ""
+    };
+
+    this.closeButton.nativeElement.click();
+    this.modal.emit(this.data);
+    // Maybe will be needed to rewrite this realization!
+  }
+
+  async getClient(id) {
+    try {
+      this.loading = true;
+      this.client = await this.Service.getClient(id);
+      this.loading = false;
+
+      return this.client
+    } catch (e) {
+
+      this.loading = false;
+      console.error(e);
+    }
+  }
+
+  async getCharacters() {
+    try {
+      this.loading = true;
+      this.characters = await this.Service.getCharacters();
+      this.loading = false;
+
+      return this.client
+    } catch (e) {
+
+      this.loading = false;
+      console.error(e);
+    }
+  }
+
+  async crupdate(clientDisplay) {
+    try {
+      this.loading = true;
+      this.client = await this.Service.crupdateClient(clientDisplay);
+      this.loading = false;
+      console.log(this.client);
+
+      this.closeModal();
+      this.ClientsService.load("default", "asc", "");
+    } catch (e) {
+
+      this.loading = false;
+      console.error(e);
+    }
   }
 }
