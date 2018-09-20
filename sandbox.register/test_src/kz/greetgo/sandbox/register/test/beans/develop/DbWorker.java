@@ -21,6 +21,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashSet;
 
+import static kz.greetgo.conf.sys_params.SysParams.pgAdminPassword;
+import static kz.greetgo.conf.sys_params.SysParams.pgAdminUrl;
+import static kz.greetgo.conf.sys_params.SysParams.pgAdminUserid;
+import static kz.greetgo.sandbox.register.test.util.DbUrlUtils.changeUrlDbName;
+
 @Bean
 public class DbWorker {
   final Logger logger = Logger.getLogger(getClass());
@@ -114,8 +119,10 @@ public class DbWorker {
     File file = allPostgresConfigFactory.get().storageFileFor(DbConfig.class);
     try (PrintStream out = new PrintStream(file, "UTF-8")) {
 
-      out.println("url=" + DbUrlUtils.changeUrlDbName(SysParams.pgAdminUrl(), System.getProperty("user.name") + "_sandbox"));
-      out.println("username=" + System.getProperty("user.name") + "_sandbox");
+      String name = "sandbox";
+
+      out.println("url=" + changeUrlDbName(pgAdminUrl(), System.getProperty("user.name") + "_" + name));
+      out.println("username=" + System.getProperty("user.name") + "_" + name);
       out.println("password=111");
 
     }
@@ -123,10 +130,9 @@ public class DbWorker {
 
   public static Connection getPostgresAdminConnection() throws Exception {
     Class.forName("org.postgresql.Driver");
-    return DriverManager.getConnection(
-      SysParams.pgAdminUrl(),
-      SysParams.pgAdminUserid(),
-      SysParams.pgAdminPassword()
-    );
+    System.out.println(pgAdminUrl() + " " + pgAdminUserid() + " " +pgAdminPassword());
+    return DriverManager.getConnection(pgAdminUrl(), pgAdminUserid(), pgAdminPassword());
   }
+
+
 }

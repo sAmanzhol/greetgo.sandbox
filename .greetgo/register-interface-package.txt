@@ -1,0 +1,1 @@
+sandbox.controller/src kz/greetgo/sandbox/controller/register

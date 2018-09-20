@@ -1,0 +1,12 @@
+.add-btn {
+  margin: 10px;
+}
+
+.edit-btn, .delete-btn {
+  margin-left: 30px;
+}
+
+.selected {
+  background-color: cadetblue !important;
+  color: white !important;
+}
