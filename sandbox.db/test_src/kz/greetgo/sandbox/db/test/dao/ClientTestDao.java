@@ -100,6 +100,8 @@ public interface ClientTestDao {
 	@Select("select id from client where id =#{id}")
 	Integer selectClientFromId(@Param("id") int id);
 
+
+
 	@Select("select * from charm where id = #{id}")
 	Charm selectCharmById(@Param("id") int id);
 

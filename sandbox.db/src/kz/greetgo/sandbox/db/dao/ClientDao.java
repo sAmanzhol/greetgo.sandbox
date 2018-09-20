@@ -9,11 +9,14 @@ import java.util.List;
 public interface ClientDao {
 
 
+	@Select("select * from charm ")
+	List<Charm> listCharm();
+
+	@Select("select id from charm where id = #{id}")
+	Integer idCharmById(@Param("id") int id);
+
 	@Delete("delete from client where id = #{id}")
 	void deleteClientById(@Param("id") int id);
-
-	@Select("select * from charm order by energy asc")
-	List<Charm> listCharm();
 
 	@Select("select * from client where id = #{id}")
 	Client selectClientById(@Param("id") int id);
@@ -22,17 +25,14 @@ public interface ClientDao {
 	String nameCharmById(@Param("id") int id);
 
 	@Select("select id from client where id = #{id}")
-	Integer idClientById(@Param("id") int id);
+	Integer getClientId(@Param("id") int id);
 
-	@Select("select type, street, house, flat from client_addr where client = #{id} and type =#{type}")
+	@Select("select * from client_addr where client = #{id} and type =#{type}")
 	ClientAddr selectClientAddrById(@Param("id") int id,
 																	@Param("type") AddrType type);
 
-	@Select("select type, number from client_phone where client = #{id}")
+	@Select("select * from client_phone where client = #{id}")
 	List<ClientPhone> selectClientPhoneById(@Param("id") int id);
-
-	@Select("select id from charm where id = #{id}")
-	Integer idCharmById(@Param("id") int id);
 
 	@Select("select * from charm where id = #{id}")
 	Charm selectCharmById(@Param("id") int id);
@@ -65,54 +65,34 @@ public interface ClientDao {
 	);
 
 	@Insert("insert into client (id, firstname, lastname, patronymic, gender, birth_date, charm) values " +
-		"(#{id}, #{firstname}, #{lastname}, #{patronymic}, #{gender}, #{birth_date}, #{charm})")
-	void insertClient(@Param("id") int id,
-										@Param("firstname") String firstname,
-										@Param("lastname") String lastname,
-										@Param("patronymic") String patronymic,
-										@Param("gender") GenderType gender,
-										@Param("birth_date") Date birth_date,
-										@Param("charm") int charm
+		"(#{client.id}, #{client.firstname}, #{client.lastname}, #{client.patronymic}, #{client.gender}, #{client.dateOfBirth}, #{client.characterId})")
+	void insertClient(@Param("id") ClientToSave client
 	);
 
-	@Insert("insert into client_phone (client, number, type) values (#{client}, #{number}, #{type}) ")
-	void insertClientPhone(@Param("client") int client,
-												 @Param("number") String number,
-												 @Param("type") PhoneType type
-	);
-
-
-	@Insert("insert into client_addr (client, type, street, house, flat) values (#{client}, #{type}, #{street}, #{house}, #{flat}) ")
-	void insertClientAddr(@Param("client") int client,
-												@Param("type") AddrType type,
-												@Param("street") String street,
-												@Param("house") String house,
-												@Param("flat") String flat
-	);
-
-	@Update("update client set firstname = #{firstname},lastname= #{lastname}, patronymic = #{patronymic}, gender= #{gender}, birth_date = #{birthDate},charm = #{charm} where id = #{id}")
-	void updateClient(@Param("id") int id,
-										@Param("firstname") String firstname,
-										@Param("lastname") String lastname,
-										@Param("patronymic") String patronymic,
-										@Param("gender") GenderType gender,
-										@Param("birthDate") Date birthDate,
-										@Param("charm") int charm
+	@Insert("insert into client_phone (client, number, type) values (#{client}, #{clientPhone.number}, #{clientPhone.type}) ")
+	void insertClientPhone(@Param("clientPhone") ClientPhone clientPhone,
+												 @Param("client") Integer client
 
 	);
 
-	@Update("update client_phone set number = #{number}, type =#{type} where client = #{client}")
-	void updateClientPhone(@Param("client") int client,
-												 @Param("number") String number,
-												 @Param("type") PhoneType type
+	@Insert("insert into client_addr (client, type, street, house, flat) values (#{client}, #{clientAddr.type}, #{clientAddr.street}, #{clientAddr.house}, #{clientAddr.flat}) ")
+	void insertClientAddr(@Param("clientAddr") ClientAddr clientAddr,
+												@Param("client") Integer client
 	);
 
-	@Update("update client_addr set type =#{type}, street = #{street}, house= #{house}, flat = #{flat} where client = #{client}")
-	void updateClientAddr(@Param("client") int client,
-												@Param("type") AddrType type,
-												@Param("street") String street,
-												@Param("house") String house,
-												@Param("flat") String flat
+	@Update("update client set firstname = #{clientToSave.firstname}, lastname= #{clientToSave.lastname}, patronymic = #{clientToSave.patronymic}, gender= #{clientToSave.gender}, birth_date = #{clientToSave.dateOfBirth}, charm = #{clientToSave.characterId} where id = #{clientToSave.id}")
+	void updateClient(@Param("clientToSave") ClientToSave clientToSave
+	);
+
+
+	@Update("update client_phone set number = #{clientPhone.number}, type =#{clientPhone.type} where client = #{client}")
+	void updateClientPhone(@Param("clientPhone") ClientPhone clientPhone,
+												 @Param("client") int client
+	);
+
+	@Update("update client_addr set street = #{clientAddr.street}, house= #{clientAddr.house}, flat = #{clientAddr.flat} where client = #{client} and type =#{clientAddr.type} ")
+	void updateClientAddr(@Param("client") Integer client,
+												@Param("clientAddr") ClientAddr clientAddr
 
 	);
 
@@ -134,10 +114,12 @@ public interface ClientDao {
 	);
 
 	@Select("select avg(money) from client_account where client= #{id} group by client")
-	Integer selectTotalAccountBalance(@Param("id") int id );
+	Integer selectTotalAccountBalance(@Param("id") int id);
+
 	@Select("select max(money) from client_account where client= #{id} group by client")
-	Integer selectMaximumBalance(@Param("id") int id );
+	Integer selectMaximumBalance(@Param("id") int id);
+
 	@Select("select min(money) from client_account where client= #{id} group by client")
-	Integer selectMinimumBalance(@Param("id") int id );
+	Integer selectMinimumBalance(@Param("id") int id);
 
 }

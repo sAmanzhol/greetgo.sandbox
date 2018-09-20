@@ -17,4 +17,20 @@ public class ClientToSave {
 		public ClientAddr addressOfRegistration = new ClientAddr();
 		public List<ClientPhone> phone=new ArrayList<>();
 
+	@Override
+	public String toString() {
+
+		return "ClientToSave{" +
+			"id=" + id +
+			", firstname='" + firstname + '\'' +
+			", lastname='" + lastname + '\'' +
+			", patronymic='" + patronymic + '\'' +
+			", gender=" + gender +
+			", dateOfBirth=" + dateOfBirth +
+			", characterId=" + characterId +
+			", addressOfResidence=" + addressOfResidence +
+			", addressOfRegistration=" + addressOfRegistration +
+			", phone=" + phone +
+			'}';
 	}
+}

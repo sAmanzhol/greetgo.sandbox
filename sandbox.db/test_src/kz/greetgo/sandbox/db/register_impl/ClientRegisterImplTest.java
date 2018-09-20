@@ -21,21 +21,9 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     public BeanGetter<ClientRegister> clientRegister;
 
-    public Charm charm;
 
-    public Client client;
 
-    public ClientAddr clientAddr;
-
-    public ClientPhone clientPhone;
-
-    public ClientAccount clientAccount;
-
-    public ClientAccountTransaction clientAccountTransaction;
-
-    public TransactionType transactionType;
-
-    private Client addClient() {
+    private Client addClient(Charm charm) {
 
         Client client = new Client();
         client.id = RND.plusInt(1000);
@@ -77,7 +65,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
         return clientPhone;
     }
 
-    private ClientAccount addClientAccount() {
+    private ClientAccount addClientAccount(Client client) {
 
         ClientAccount clientAccount = new ClientAccount();
         clientAccount.id = RND.plusInt(10000);
@@ -99,7 +87,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
         return transactionType;
     }
 
-    private ClientAccountTransaction addClientAccountTransaction() {
+    private ClientAccountTransaction addClientAccountTransaction(ClientAccount clientAccount,TransactionType transactionType) {
 
         ClientAccountTransaction clientAccountTransaction = new ClientAccountTransaction();
         clientAccountTransaction.id = RND.plusInt(546);
@@ -135,6 +123,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     @Test
     public void testGetCharm() {
+        Charm charm = new Charm();
 
         for (int i = 0; i < 5; i++) {
             charm = addCharm();
@@ -177,10 +166,12 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     @Test
     public void testDeleteClient() {
+        Charm charm= new Charm();
+        Client client = new Client();
 
         for (int i = 0; i < 5; i++) {
             charm = addCharm();
-            client = addClient();
+            client = addClient(charm);
             clientTestDao.get().insertCharm(i, charm.name, charm.description, charm.energy, charm.actually);
             clientTestDao.get().insertClient(i, client.firstname, client.lastname, client.patronymic, client.gender, client.birthDate, i);
         }
@@ -202,8 +193,12 @@ public class ClientRegisterImplTest extends ParentTestNg {
     @Test
     public void testGetClientDetails() {
 
+        Charm charm = new Charm();
+        Client client=new Client();
+        ClientAddr clientAddr = new ClientAddr();
+        ClientPhone clientPhone = new ClientPhone();
         charm = addCharm();
-        client = addClient();
+        client = addClient(charm);
         clientPhone = addClientPhone();
         clientAddr = addClientAddr();
         clientTestDao.get().insertCharm(charm.id, charm.name, charm.description, charm.energy, charm.actually);
@@ -226,13 +221,20 @@ public class ClientRegisterImplTest extends ParentTestNg {
     @Test
     public void testSaveClient() {
 
+        Charm charm = new Charm();
+        Client client=new Client();
+        ClientAddr clientAddr = new ClientAddr();
+        ClientPhone clientPhone = new ClientPhone();
+        ClientAccountTransaction clientAccountTransaction= new ClientAccountTransaction();
+        TransactionType transactionType = new TransactionType();
+        ClientAccount clientAccount = new ClientAccount();
         charm = addCharm();
-        client = addClient();
+        client = addClient(charm);
         clientPhone = addClientPhone();
         clientAddr = addClientAddr();
         transactionType = addTransactionType();
-        clientAccount = addClientAccount();
-        clientAccountTransaction = addClientAccountTransaction();
+        clientAccount = addClientAccount(client);
+        clientAccountTransaction = addClientAccountTransaction(clientAccount,transactionType);
 
         clientTestDao.get().insertCharm(charm.id, charm.name, charm.description, charm.energy, charm.actually);
         clientTestDao.get().insertClient(client.id, client.firstname, client.lastname, client.patronymic, client.gender, client.birthDate, client.charm);
@@ -274,11 +276,13 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     @Test
     public void testGetClientList() {
-
+        Charm charm = new Charm();
+        Client client=new Client();
+        ClientAccount clientAccount = new ClientAccount();
         for (int i = 0; i < 20; i++) {
             charm = addCharm();
-            client = addClient();
-            clientAccount = addClientAccount();
+            client = addClient(charm);
+            clientAccount = addClientAccount(client);
             clientTestDao.get().insertCharm(charm.id, charm.name, charm.description, charm.energy, charm.actually);
             clientTestDao.get().insertClient(client.id, client.firstname, client.lastname, client.patronymic, client.gender, client.birthDate, client.charm);
             clientTestDao.get().insertClientAccount(clientAccount.id, clientAccount.client, clientAccount.money, clientAccount.number, clientAccount.registeredAt);
@@ -302,10 +306,13 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     @Test
     public void testGetClientTotalRecord() {
+        Charm charm = new Charm();
+        Client client=new Client();
+        ClientAccount clientAccount = new ClientAccount();
         for (int i = 0; i < 20; i++) {
             charm = addCharm();
-            client = addClient();
-            clientAccount = addClientAccount();
+            client = addClient(charm);
+            clientAccount = addClientAccount(client);
             clientTestDao.get().insertCharm(charm.id, charm.name, charm.description, charm.energy, charm.actually);
             clientTestDao.get().insertClient(client.id, client.firstname, client.lastname, client.patronymic, client.gender, client.birthDate, client.charm);
             clientTestDao.get().insertClientAccount(clientAccount.id, clientAccount.client, clientAccount.money, clientAccount.number, clientAccount.registeredAt);

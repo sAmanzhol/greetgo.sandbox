@@ -15,4 +15,16 @@ public class Charm {
         this.energy=0;
         this.description="";
     }
+
+    @Override
+    public String toString() {
+
+        return "Charm{" +
+          "id=" + id +
+          ", name='" + name + '\'' +
+          ", description='" + description + '\'' +
+          ", energy=" + energy +
+          ", actually=" + actually +
+          '}';
+    }
 }
