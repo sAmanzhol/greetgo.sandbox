@@ -1,8 +1,11 @@
 package kz.greetgo.sandbox.register.impl;
 
+import kz.greetgo.db.Jdbc;
 import kz.greetgo.depinject.core.Bean;
+import kz.greetgo.depinject.core.BeanGetter;
 import kz.greetgo.sandbox.controller.model.*;
 import kz.greetgo.sandbox.controller.model.Character;
+import kz.greetgo.sandbox.controller.model.db.ClientDb;
 import kz.greetgo.sandbox.controller.register.ClientRegister;
 
 import java.text.ParseException;
@@ -10,11 +13,15 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Bean
 public class ClientRegisterImpl implements ClientRegister {
+  {
+    createClients();
+  }
 
   List<Client> clients = null;
   List<ClientRecord> clientRecords = null;
@@ -23,9 +30,40 @@ public class ClientRegisterImpl implements ClientRegister {
   List<PhoneDetail> phoneDetails = null;
 
 
-  {
-    createClients();
-  }
+  public BeanGetter<Jdbc> jdbc;
+
+//  class A {
+//    public int asd = 0;
+//  }
+//
+//
+//  public void test() {
+//    A a = new A();
+//    List<>
+//    String sql = "select 1 as asd where 1=? and true = ?";
+//
+//    if ("".equals("")) {
+//      sql += " and surname = ?";
+//    }
+//      ///
+//    jdbc.get().execute(con -> {
+//      try (PreparedStatement ps = con.prepareStatement(sql)) {
+//        ps.setObject(1, 1);
+//        ps.setBoolean(2, false);
+//        try (ResultSet rs = ps.executeQuery()) {
+//          while (rs.next()) {
+//            a.asd = rs.getInt("asd");
+//          }
+//        }
+//      }
+//      return null;
+//    });
+//    ///
+//
+//    System.out.println(a.asd);
+//
+//  }
+
 
   public void createClients() {
 
@@ -200,77 +238,155 @@ public class ClientRegisterImpl implements ClientRegister {
       }
     }
   }
+//  String sql = "select 1 as asd where 1=? and true = ?";
+//
+//    if ("".equals("")) {
+//      sql += " and surname = ?";
+//    }
+//      ///
+//    jdbc.get().execute(con -> {
+//      try (PreparedStatement ps = con.prepareStatement(sql)) {
+//        ps.setObject(1, 1);
+//        ps.setBoolean(2, false);
+//        try (ResultSet rs = ps.executeQuery()) {
+//          while (rs.next()) {
+//            a.asd = rs.getInt("asd");
+//          }
+//        }
+//      }
+//      return null;
+//    });
 
+
+//  create table asd (
+//    id   serial,
+//    name varchar(200)
+//
+//);
+//
+//
+//  select *
+//  from asd;
+//
+//
+//  with asd as (
+//    insert into asd (name) values ('Madina')
+//  returning id
+//)
+//
+//  select *
+//  from asd;
+//
+//  insert into charm (name, description, energy) values ('aa', 'aaa', 1);
+//
+//  insert into client (surname, name, patronymic, gender, birth_date, charm)
+//  values ('MM', 'M', 'MMM', 'MALE', '2001-04-10', 1);
+//
+//  insert into client_account values (1, 1, 14000.0, '1234123412341234', null);
+//
+//  insert into transaction_type (code, name) values ('code', 'name');
+//
+//  insert into client_account_transaction (account, money, finished_at, type) values (1, 500.0, null, 1);
+//
+//  select
+//  c.name,
+//  c.surname,
+//  a.money,
+//  tt.name,
+//  t.money
+//  from client as c
+//  inner join client_account as a
+//  on c.id = a.client
+//  inner join client_account_transaction as t
+//  on a.id = t.account
+//  inner join transaction_type as tt
+//  on t.type = tt.id;
+//
+
+  private List<ClientDb> getClientsFromDb() {
+    List<ClientDb> clientDbList = new ArrayList<>();
+    String sql = "select ";
+
+
+    return clientDbList;
+  }
 
   @Override
   public ClientRecordListWrapper filterClients(ClientFilter clientFilter) {
     List<ClientRecord> filteredList = new ArrayList<ClientRecord>();
     int count = 0;
-    if (clients != null) {
-      for (Client client : clients) {
-        if (client.name.toUpperCase().contains(clientFilter.name.toUpperCase()) &&
-          client.surname.toUpperCase().contains(clientFilter.surname.toUpperCase()) &&
-          client.patronymic.toUpperCase().contains(clientFilter.patronymic.toUpperCase())) {
-          filteredList.add(convertClientToRecord(client));
-          count++;
-        }
-      }
-    }
 
-    if (filteredList.size() > clientFilter.limit && clientFilter.limit != 0) {
-      if (clientFilter.offset == 0) {
-        filteredList = filteredList.subList(0, clientFilter.limit);
-      } else if (clientFilter.offset * clientFilter.limit + clientFilter.limit > filteredList.size()) {
-        filteredList = filteredList.subList(clientFilter.offset * clientFilter.limit, filteredList.size());
-      } else {
-        filteredList = filteredList.subList(clientFilter.offset * clientFilter.limit, clientFilter.offset * clientFilter.limit + clientFilter.limit);
-      }
-    }
-    if ("".equals(clientFilter.columnName)) {
-      return new ClientRecordListWrapper(filteredList, count);
-    } else {
-      switch (clientFilter.columnName) {
-        case "tot":
-          if (clientFilter.isAsc) {
-            filteredList = filteredList.stream()
-              .sorted(Comparator.comparing(clientRecord -> clientRecord.totalBalance))
-              .collect(Collectors.toList());
-            return new ClientRecordListWrapper(filteredList, count);
-          } else {
-            filteredList = filteredList.stream()
-              .sorted(Comparator.comparing(clientRecord -> clientRecord.totalBalance))
-              .collect(Collectors.toList());
-            Collections.reverse(filteredList);
-            return new ClientRecordListWrapper(filteredList, count);
-          }
-        case "min":
-          if (clientFilter.isAsc) {
-            filteredList = filteredList.stream()
-              .sorted(Comparator.comparing(clientRecord -> clientRecord.minBalance))
-              .collect(Collectors.toList());
-            return new ClientRecordListWrapper(filteredList, count);
-          } else {
-            filteredList = filteredList.stream()
-              .sorted(Comparator.comparing(clientRecord -> clientRecord.minBalance))
-              .collect(Collectors.toList());
-            Collections.reverse(filteredList);
-            return new ClientRecordListWrapper(filteredList, count);
-          }
-        case "max":
-          if (clientFilter.isAsc) {
-            filteredList = filteredList.stream()
-              .sorted(Comparator.comparing(clientRecord -> clientRecord.maxBalance))
-              .collect(Collectors.toList());
-            return new ClientRecordListWrapper(filteredList, count);
-          } else {
-            filteredList = filteredList.stream()
-              .sorted(Comparator.comparing(clientRecord -> clientRecord.maxBalance))
-              .collect(Collectors.toList());
-            Collections.reverse(filteredList);
-            return new ClientRecordListWrapper(filteredList, count);
-          }
-      }
-    }
+    List<ClientDb> clients = this.getClientsFromDb();
+
+
     return new ClientRecordListWrapper(filteredList, count);
+//    List<ClientRecord> filteredList = new ArrayList<ClientRecord>();
+//    int count = 0;
+//    if (clients != null) {
+//      for (Client client : clients) {
+//        if (client.name.toUpperCase().contains(clientFilter.name.toUpperCase()) &&
+//          client.surname.toUpperCase().contains(clientFilter.surname.toUpperCase()) &&
+//          client.patronymic.toUpperCase().contains(clientFilter.patronymic.toUpperCase())) {
+//          filteredList.add(convertClientToRecord(client));
+//          count++;
+//        }
+//      }
+//    }
+//
+//    if (filteredList.size() > clientFilter.limit && clientFilter.limit != 0) {
+//      if (clientFilter.offset == 0) {
+//        filteredList = filteredList.subList(0, clientFilter.limit);
+//      } else if (clientFilter.offset * clientFilter.limit + clientFilter.limit > filteredList.size()) {
+//        filteredList = filteredList.subList(clientFilter.offset * clientFilter.limit, filteredList.size());
+//      } else {
+//        filteredList = filteredList.subList(clientFilter.offset * clientFilter.limit, clientFilter.offset * clientFilter.limit + clientFilter.limit);
+//      }
+//    }
+//    if ("".equals(clientFilter.columnName)) {
+//      return new ClientRecordListWrapper(filteredList, count);
+//    } else {
+//      switch (clientFilter.columnName) {
+//        case "tot":
+//          if (clientFilter.isAsc) {
+//            filteredList = filteredList.stream()
+//              .sorted(Comparator.comparing(clientRecord -> clientRecord.totalBalance))
+//              .collect(Collectors.toList());
+//            return new ClientRecordListWrapper(filteredList, count);
+//          } else {
+//            filteredList = filteredList.stream()
+//              .sorted(Comparator.comparing(clientRecord -> clientRecord.totalBalance))
+//              .collect(Collectors.toList());
+//            Collections.reverse(filteredList);
+//            return new ClientRecordListWrapper(filteredList, count);
+//          }
+//        case "min":
+//          if (clientFilter.isAsc) {
+//            filteredList = filteredList.stream()
+//              .sorted(Comparator.comparing(clientRecord -> clientRecord.minBalance))
+//              .collect(Collectors.toList());
+//            return new ClientRecordListWrapper(filteredList, count);
+//          } else {
+//            filteredList = filteredList.stream()
+//              .sorted(Comparator.comparing(clientRecord -> clientRecord.minBalance))
+//              .collect(Collectors.toList());
+//            Collections.reverse(filteredList);
+//            return new ClientRecordListWrapper(filteredList, count);
+//          }
+//        case "max":
+//          if (clientFilter.isAsc) {
+//            filteredList = filteredList.stream()
+//              .sorted(Comparator.comparing(clientRecord -> clientRecord.maxBalance))
+//              .collect(Collectors.toList());
+//            return new ClientRecordListWrapper(filteredList, count);
+//          } else {
+//            filteredList = filteredList.stream()
+//              .sorted(Comparator.comparing(clientRecord -> clientRecord.maxBalance))
+//              .collect(Collectors.toList());
+//            Collections.reverse(filteredList);
+//            return new ClientRecordListWrapper(filteredList, count);
+//          }
+//      }
+//    }
+//    return new ClientRecordListWrapper(filteredList, count);
   }
 }

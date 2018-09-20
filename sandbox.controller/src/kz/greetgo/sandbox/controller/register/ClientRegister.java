@@ -15,5 +15,7 @@ public interface ClientRegister {
     void deleteClient(long id);
     ClientRecordListWrapper filterClients(ClientFilter clientFilter);
 
+//    void test();
+
 
 }

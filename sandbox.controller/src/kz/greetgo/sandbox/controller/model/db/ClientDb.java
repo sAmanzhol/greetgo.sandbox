@@ -6,11 +6,12 @@ import java.util.Date;
 
 public class ClientDb {
 
-  String id;
-  String surname;
-  String patronymic;
-  GenderType gender;
-  Date birthDate;
-  int charm;
+  public String id;
+  public String surname;
+  public String name;
+  public String patronymic;
+  public GenderType gender;
+  public Date birthDate;
+  public int charm;
 
 }

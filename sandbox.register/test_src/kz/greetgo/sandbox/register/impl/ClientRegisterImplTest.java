@@ -4,65 +4,20 @@ import kz.greetgo.depinject.core.BeanGetter;
 import kz.greetgo.sandbox.controller.model.*;
 import kz.greetgo.sandbox.controller.register.ClientRegister;
 import kz.greetgo.sandbox.register.test.dao.ClientTestDao;
-import kz.greetgo.sandbox.register.test.util.RandomEntity;
+import kz.greetgo.sandbox.register.test.util.ParentTestNg;
+import kz.greetgo.sandbox.register.test.util.test_utils.RandomEntity;
 import kz.greetgo.util.RND;
 import org.testng.annotations.Test;
 
-import java.util.ArrayList;
-
 import static org.fest.assertions.api.Assertions.assertThat;
 
-public class ClientRegisterImplTest {
+public class ClientRegisterImplTest extends ParentTestNg {
   public BeanGetter<ClientRegister> clientRegister;
   public BeanGetter<ClientTestDao> clientTestDao;
-  public BeanGetter<RandomEntity> rndObject;
-
-  @Test
-  public void testClientList() {
-
-    Client client = rndObject.get().client();
-    int id = clientTestDao.get().insertClient(client);
-    //
-    //
-    ArrayList<ClientRecord> clientRecordList = (ArrayList<ClientRecord>) clientRegister.get().getClientList();
-    //
-    //
-    assertThat(clientRecordList).isNotNull();
-    assertThat(clientRecordList).hasSize(2);
-  }
+  public BeanGetter<RandomEntity> randomEntity;
 
 
-  @Test
-  public void testClintDetail_absent() {
-    //
-    //
-    ClientDetail clientDetail = clientRegister.get().getClientDetailById(RND.plusInt(12));
-    //
-    //
-    assertThat(clientDetail).isNull();
-  }
-
-
-  @Test
-  public void testDeleteClient() {
-
-    Client client = rndObject.get().client();
-    int id = clientTestDao.get().insertClient(client);
-    //
-    //
-    clientRegister.get().deleteClient(id);
-    //
-    //
-//    client = clientTestDao.get().;
-
-
-
-//??????? для каждого параметра создать отдельный метод в дао,
-// но каждый тогда не понятно что будет возвр
-// ащать если метод правильно отработал
-    assertThat(client).isNull();
-  }
-
+  //filterClients
   @Test(expectedExceptions = NullPointerException.class)/////кажется так писать не обязательно, если в конце assertThat
   public void testFilter_NullFilter() {
     //
@@ -70,19 +25,24 @@ public class ClientRegisterImplTest {
     ClientRecordListWrapper clientRecordListWrapper = clientRegister.get().filterClients(null);
     //
     //
-    //assertThat(clientRecordListWrapper).isNull();// ошибка не в том, что отправляется, а в том, что принимается
   }
-  //    clientRegister.get().saveClient()
+
+
+//  @Test
+//  public void testName() {
+//    clientRegister.get().test();
+//  }
 
   @Test
-  public void testFilter_getWrapper_emptyFilter() {
+  public void testFilter_filter_emptyFilter() {
 
 
-    Client client = rndObject.get().client();
+    RandomEntity randomEntity = this.randomEntity.get();
+
+    Client client = randomEntity.client();
     int id = clientTestDao.get().insertClient(client);
 
-
-    Client client2 = rndObject.get().client();
+    Client client2 = this.randomEntity.get().client();
     int id2 = clientTestDao.get().insertClient(client2);
 
     ClientFilter clientFilter = new ClientFilter();
@@ -97,7 +57,7 @@ public class ClientRegisterImplTest {
   }
 
   @Test
-  public void testFilter_getWrapper_columnNameFilter() {
+  public void testFilter_filter_columnNameFilter() {
 
     ClientFilter clientFilter = new ClientFilter();
     clientFilter.columnName = RND.str(4);
@@ -106,24 +66,60 @@ public class ClientRegisterImplTest {
     ClientRecordListWrapper clientRecordListWrapper = clientRegister.get().filterClients(clientFilter);
     //
     //
-    assertThat(clientRecordListWrapper.records).isNull();
     assertThat(clientRecordListWrapper.records).hasSize(0);
   }
 
   @Test
-  public void testFilter_getWrapper_limitFilter() {
+  public void testFilter_filter_limit() {
 
     ClientFilter clientFilter = new ClientFilter();
-    clientFilter.limit = 0;
+    clientFilter.limit = 1;
+    Client client = randomEntity.get().client();
+    int id = clientTestDao.get().insertClient(client);
+    Client client2 = randomEntity.get().client();
+    int id2 = clientTestDao.get().insertClient(client);
     //
     //
     ClientRecordListWrapper clientRecordListWrapper = clientRegister.get().filterClients(clientFilter);
     //
     //
-    assertThat(clientRecordListWrapper.records).isNull();
-    assertThat(clientRecordListWrapper.records).hasSize(0);
+    assertThat(clientRecordListWrapper.records).isNotNull();
+    assertThat(clientRecordListWrapper.records).hasSize(1);
   }
 
+
+  //getClientDetailById
+  @Test
+  public void testClintDetail_absent() {
+    //
+    //
+    ClientDetail clientDetail = clientRegister.get().getClientDetailById(RND.plusInt(12));
+    //
+    //
+    assertThat(clientDetail).isNull();
+  }
+
+
+  @Test//deleteClient
+  public void testDeleteClient() {
+
+    Client client = randomEntity.get().client();
+    int id = clientTestDao.get().insertClient(client);
+    //
+    //
+    clientRegister.get().deleteClient(id);
+    //
+    //
+//    client = clientTestDao.get().;
+
+
+//??????? для каждого параметра создать отдельный метод в дао,
+// но каждый тогда не понятно что будет возвр
+// ащать если метод правильно отработал
+    assertThat(client).isNull();
+  }
+
+  //saveClient
   @Test
   public void testSaveClient_emptyToSave() {
 
