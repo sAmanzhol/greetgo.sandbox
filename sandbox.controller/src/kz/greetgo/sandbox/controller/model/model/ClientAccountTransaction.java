@@ -6,6 +6,6 @@ public class ClientAccountTransaction {
 	public int id;
 	public int account;
 	public float money;
-	public Timestamp finished_at;
+	public Timestamp finishedAt;
 	public int type;
 }

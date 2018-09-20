@@ -7,5 +7,5 @@ public class ClientAccount {
 	public int client;
 	public float money;
 	public String number;
-	public Timestamp registered_at;
+	public Timestamp registeredAt;
 }

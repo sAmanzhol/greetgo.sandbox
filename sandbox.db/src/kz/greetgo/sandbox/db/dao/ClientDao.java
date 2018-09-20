@@ -12,7 +12,7 @@ public interface ClientDao {
 	@Delete("delete from client where id = #{id}")
 	void deleteClientById(@Param("id") int id);
 
-	@Select("select * from charm")
+	@Select("select * from charm order by energy asc")
 	List<Charm> listCharm();
 
 	@Select("select * from client where id = #{id}")
@@ -133,5 +133,11 @@ public interface ClientDao {
 
 	);
 
+	@Select("select avg(money) from client_account where client= #{id} group by client")
+	Integer selectTotalAccountBalance(@Param("id") int id );
+	@Select("select max(money) from client_account where client= #{id} group by client")
+	Integer selectMaximumBalance(@Param("id") int id );
+	@Select("select min(money) from client_account where client= #{id} group by client")
+	Integer selectMinimumBalance(@Param("id") int id );
 
 }
