@@ -145,6 +145,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
             return true;
     }
 
+    // TODO: asset 9/21/18 Protestiru vse list ne tolko poslednuyu i order obyazatelen a to test ne stabilnyi
     @Test
     public void testGetCharm() {
 
@@ -156,6 +157,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
         }
         //
         //
+        // TODO: asset 9/21/18 vse Charm actualny bolu kerek
         List<Charm> listCharm = clientRegister.get().getCharm();
         //
         //
@@ -169,6 +171,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     }
 
+    // TODO: asset 9/21/18 Ne polny test
     @Test
     public void testGetCharmById() {
 
@@ -196,6 +199,8 @@ public class ClientRegisterImplTest extends ParentTestNg {
         assertThat(clientTestDao1.get().selectCharmById(ch.id).id).isEqualTo(charm3.id);
     }
 
+
+    // TODO: asset 9/21/18 Mozhno tolko sozdat Client-ta, po moemu mneniu drugie znacheni ne nuzhny
     @Test
     public void testDeleteClient() {
 
@@ -219,6 +224,9 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     }
 
+
+    // TODO: asset 9/21/18 Ne polnyi test drugye attributy tozhe dolzhny zapolnatsya
+    // TODO: asset 9/21/18
     @Test
     public void testGetClientDetails() {
 
@@ -246,6 +254,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     }
 
+    // TODO: asset 9/21/18 Ne obyazatelno zapolnyat vse dannye, luche protestirovat vse attributy tipa vse korrectno sokhranilas ili net
     @Test
     public void testSaveClientEdit() {
 
@@ -307,6 +316,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
 			assertThat(clientRecord.id).isEqualTo(clientToSave.id);
 
     }
+
     @Test
     public void testSaveClientSave() {
 
@@ -357,6 +367,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     }
 
+    // TODO: asset 9/21/18 Drugye attributy tozhe dolzhno proveryatsya record-a
     @Test
     public void testGetClientList() {
 
@@ -394,6 +405,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     }
 
+    // TODO: asset 9/21/18 Mozhesh dlya kazhdogy clienta generit neskolko account-ov
     @Test
     public void testGetClientListByFilter() {
 
@@ -503,6 +515,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
         clientFilter.firstname = "";
         clientFilter.lastname = "";
         clientFilter.patronymic = "";
+        // TODO: asset 9/21/18 mozhesh ubrat ordering po id
         clientFilter.orderBy = "id";
         clientFilter.recordSize = 2;
         clientFilter.page = 0;

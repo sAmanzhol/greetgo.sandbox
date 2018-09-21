@@ -55,11 +55,15 @@ public class ClientJdbcListRecord implements ConnectionCallback<List<ClientRecor
     private StringBuilder generateSql( ) {
 
         StringBuilder sb = new StringBuilder();
+        // TODO: asset 9/21/18 Nado chutok podpravit
             sb.append("select client.id as id, client.firstname as firstname , client.lastname as lastname, client.patronymic as patronymic, charm.name as character, client.birth_date as dateOfBirth,\n" +
                     "       max(client_account.money) as maximumBalance , avg(client_account.money) as totalAccountBalance, min(client_account.money) as minimumBalance");
             sb.append(" from client left join charm on client.charm =charm.id left join client_account on client.id = client_account.client ");
             sb.append(" where client.charm = charm.id and");
+
+        // TODO: asset 9/21/18 Filter, Order, sort dolzhny tolko po neobkhodimosti vypolnyatsya
             sb.append("  client.firstname like '" + clientFilter.firstname + "%'");
+
             if (!clientFilter.lastname.equals(""))
                 sb.append(" and client.lastname like '" + clientFilter.patronymic + "%'");
             if (!clientFilter.patronymic.equals(""))

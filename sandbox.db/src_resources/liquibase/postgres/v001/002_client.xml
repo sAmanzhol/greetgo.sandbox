@@ -3,6 +3,8 @@
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
 
+  <!--TODO Vse enum-y kotorye v tablice dolzhno byt not null-->
+  <!--TODO po convencie nazyvanye tablicy i attributa dolzhno chere _ razdelyatsya k pimeru ads_asd-->
   <changeSet author="anazar" id="002_client-005">
     <sql endDelimiter=";;"><![CDATA[
       create table charm (
@@ -16,6 +18,8 @@
       )
     ]]></sql>
   </changeSet>
+
+  <!--TODO Po convensie my dogovarivalis attributy nazyvat cherez asd_asd i tablicy asd_ads-->
   <changeSet author="anazar" id="002_client-001">
     <sql endDelimiter=";;"><![CDATA[
       create table client (
@@ -45,6 +49,8 @@
       )
     ]]></sql>
   </changeSet>
+
+  <!--TODO Tam dolzhno byt dve primary key-->
   <changeSet author="anazar" id="002_client-003">
     <sql endDelimiter=";;"><![CDATA[
       create table client_phone (
@@ -56,6 +62,7 @@
       )
     ]]></sql>
   </changeSet>
+
   <changeSet author="anazar" id="002_client-004">
     <sql endDelimiter=";;"><![CDATA[
       create table client_account (

@@ -22,7 +22,7 @@ public class ClientRegisterImpl implements ClientRegister {
 
 	@Override
 	public List<Charm> getCharm() {
-
+		// TODO: asset 9/21/18 Tolko actualnye dannye
 		return clientDao.get().listCharm();
 	}
 
@@ -39,8 +39,10 @@ public class ClientRegisterImpl implements ClientRegister {
 			return null;
 		}
 		Charm charm = new Charm();
+
 		Integer id = clientDao.get().idCharmById(charmId);
 		if (id != null) {
+			// TODO: asset 9/21/18 Davai pomenyaem na getCharmById() tak budet pravilnee, I idCharmById lishny
 			return clientDao.get().selectCharmById(charmId);
 		}
 		if (id == null) {
@@ -58,9 +60,11 @@ public class ClientRegisterImpl implements ClientRegister {
 	public ClientDetails getClientDetails(Integer clientMarkId) {
 
 		ClientDetails clientDetails = new ClientDetails();
+		// TODO: asset 9/21/18 Davai poprobuyem select client details
 		Client client = clientDao.get().selectClientById(clientMarkId);
 		clientDetails.addressOfResidence = clientDao.get().selectClientAddrById(clientMarkId, AddrType.FACT);
 		clientDetails.addressOfRegistration = clientDao.get().selectClientAddrById(clientMarkId, AddrType.REG);
+		// TODO: asset 9/21/18 U listta est method addAll
 		for (ClientPhone clientPhone : clientDao.get().selectClientPhoneById(clientMarkId)) {
 			clientDetails.phone.add(clientPhone);
 		}
@@ -88,6 +92,7 @@ public class ClientRegisterImpl implements ClientRegister {
 				clientDao.get().updateClientPhone(clientPhone, clientToSave.id);
 			}
 			clientAddr = clientToSave.addressOfResidence;
+			// TODO: asset 9/21/18 U Potgres est insert ili update method
 			clientDao.get().updateClientAddr(clientToSave.id, clientAddr);
 			clientAddr = clientToSave.addressOfRegistration;
 			clientDao.get().updateClientAddr(clientToSave.id, clientAddr);
@@ -109,6 +114,7 @@ public class ClientRegisterImpl implements ClientRegister {
 
 		}
 
+		// TODO: asset 9/21/18 Postaraisya sdelat v odnom zaprose
 		client = clientDao.get().selectClientById(clientToSave.id);
 		clientRecord.id = client.id;
 		clientRecord.firstname = client.firstname;
