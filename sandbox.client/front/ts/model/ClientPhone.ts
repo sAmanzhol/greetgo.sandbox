@@ -1,6 +1,7 @@
 import {PhoneType} from "./PhoneType";
 
 export class ClientPhone {
+  public client:number;
   public type:PhoneType;
   public number:string;
   public name:string;

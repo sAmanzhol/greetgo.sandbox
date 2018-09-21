@@ -2,10 +2,7 @@ package kz.greetgo.sandbox.stand.stand_register_impls;
 
 import kz.greetgo.depinject.core.Bean;
 import kz.greetgo.depinject.core.BeanGetter;
-import kz.greetgo.sandbox.controller.model.model.Charm;
-import kz.greetgo.sandbox.controller.model.model.ClientDetails;
-import kz.greetgo.sandbox.controller.model.model.ClientFilter;
-import kz.greetgo.sandbox.controller.model.model.ClientRecord;
+import kz.greetgo.sandbox.controller.model.model.*;
 import kz.greetgo.sandbox.controller.register.ClientRegister;
 import kz.greetgo.sandbox.db.stand.beans.ClientDb;
 import kz.greetgo.sandbox.db.stand.model.ClientDot;
@@ -20,7 +17,7 @@ public class ClientRegisterStand implements ClientRegister {
 
 
 	@Override
-	public Collection<Charm> clientCharm() {
+	public List<Charm> getCharm() {
 		List<Charm> list = new ArrayList<>();
 		for (Charm c : cdb.get().charm) {
 			if (c.actually)
@@ -32,7 +29,7 @@ public class ClientRegisterStand implements ClientRegister {
 
 
 	@Override
-	public ClientRecord clientDetailsSave(ClientDetails clientDetails) {
+	public ClientRecord saveClient(ClientToSave clientDetails) {
 		ClientRecord clientRecord = new ClientRecord();
 
 		String key = RND.str(10);
@@ -100,7 +97,7 @@ public class ClientRegisterStand implements ClientRegister {
 	}
 
 	@Override
-	public ClientDetails clientDetailsSet(Integer clientMarkId) {
+	public ClientDetails getClientDetails(Integer clientMarkId) {
 		ClientDetails clientDetails = new ClientDetails();
 		for (Map.Entry<String, ClientDot> item : cdb.get().client.entrySet()) {
 			if (clientMarkId == item.getValue().id) {
@@ -110,7 +107,7 @@ public class ClientRegisterStand implements ClientRegister {
 				clientDetails.patronymic = item.getValue().patronymic;
 				clientDetails.gender = item.getValue().gender;
 				clientDetails.characterId = item.getValue().character.id;
-				clientDetails.dateOfBirth = item.getValue().dateOfBirth;
+//				clientDetails.dateOfBirth = item.getValue().dateOfBirth;
 				clientDetails.addressOfRegistration = item.getValue().addressOfRegistration;
 				clientDetails.addressOfResidence = item.getValue().addressOfResidence;
 				clientDetails.phone = item.getValue().phone;
@@ -120,7 +117,7 @@ public class ClientRegisterStand implements ClientRegister {
 	}
 
 	@Override
-	public ClientDetails clientDetailsDelete(Integer clientMarkId) {
+	public void deleteClient(Integer clientMarkId) {
 		String key = "";
 		for (Map.Entry<String, ClientDot> item : cdb.get().client.entrySet()) {
 			if (item.getValue().id == clientMarkId) {
@@ -128,11 +125,10 @@ public class ClientRegisterStand implements ClientRegister {
 			}
 		}
 		cdb.get().client.remove(key);
-		return null;
 	}
 
 	@Override
-	public Charm getClientAddCharmId(Integer charmId) {
+	public Charm getCharmById(Integer charmId) {
 		if (charmId == null) {
 			return null;
 		}
@@ -147,6 +143,7 @@ public class ClientRegisterStand implements ClientRegister {
 		charm.actually = false;
 		return charm;
 	}
+
 
 
 	public List<ClientRecord> filterInner(ClientFilter clientFilter) {
@@ -216,12 +213,12 @@ public class ClientRegisterStand implements ClientRegister {
 	}
 
 	@Override
-	public Collection<ClientRecord> getClientList(ClientFilter clientFilter) {
+	public List<ClientRecord> getClientList(ClientFilter clientFilter) {
 		return cicleClientRecord(filterInner(clientFilter), clientFilter);
 	}
 
 
-	public Collection<ClientRecord> cicleClientRecord(Collection<ClientRecord> listClientRecord, ClientFilter clientFilter) {
+	public List<ClientRecord> cicleClientRecord(Collection<ClientRecord> listClientRecord, ClientFilter clientFilter) {
 		List<ClientRecord> list = new ArrayList<>();
 		int i = 0;
 		clientFilter.pageTotal = (int) Math.floor(clientFilter.recordTotal / clientFilter.recordSize);
@@ -293,8 +290,8 @@ public class ClientRegisterStand implements ClientRegister {
 
 		public int compare(ClientRecord obj1, ClientRecord obj2) {
 
-			String str1 = obj1.dateOfBirth;
-			String str2 = obj2.dateOfBirth;
+			Date str1 = obj1.dateOfBirth;
+			Date str2 = obj2.dateOfBirth;
 			if (sort)
 				return str1.compareTo(str2);
 			else {

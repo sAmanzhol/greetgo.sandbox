@@ -1,6 +1,8 @@
 import {AddrType} from "./AddrType";
 
 export class ClientAddr {
+
+    public client:number;
     public type: AddrType;
     public street: string;
     public house: string;

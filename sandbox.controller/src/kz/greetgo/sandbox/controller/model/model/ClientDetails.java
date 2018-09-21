@@ -1,8 +1,8 @@
 package kz.greetgo.sandbox.controller.model.model;
 
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ClientDetails {
@@ -11,11 +11,31 @@ public class ClientDetails {
     public String lastname;
     public String patronymic;
     public GenderType gender;
-    public String dateOfBirth;
+
+    public Date dateOfBirth;
+//    public String dateOfBirth;
     public int characterId;
     public ClientAddr addressOfResidence;
     public ClientAddr addressOfRegistration;
     public List<ClientPhone> phone=new ArrayList<>();
+
+    @Override
+    public String toString() {
+
+        return "ClientDetails{" +
+          "id=" + id +
+          ", firstname='" + firstname + '\'' +
+          ", lastname='" + lastname + '\'' +
+          ", patronymic='" + patronymic + '\'' +
+          ", gender=" + gender +
+          ", dateOfBirth=" + dateOfBirth +
+          ", characterId=" + characterId +
+          ", addressOfResidence=" + addressOfResidence +
+          ", addressOfRegistration=" + addressOfRegistration +
+          ", phone=" + phone +
+          '}';
+    }
+
 
 //    public ClientDetails() {
 //        this.firstname = "";

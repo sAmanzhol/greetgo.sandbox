@@ -18,10 +18,9 @@ import {ClientToSave} from "../../model/ClientToSave";
   styles: [require('./client-edit-form.component.css')],
 })
 export class ClientEditFormComponent implements OnInit {
-  constructor(private http: HttpService) {
-  }
-
+  constructor(private http: HttpService) {}
   ngOnInit() {
+    this.isOpen=false;
   }
 
   @Output() onChangedClientRecord = new EventEmitter<ClientRecord>();
@@ -31,11 +30,12 @@ export class ClientEditFormComponent implements OnInit {
   charm: Charm[] = [];
   phoneType: PhoneType[] = [PhoneType.HOME, PhoneType.WORK, PhoneType.MOBILE, PhoneType.EMBEDDED];
   titleName: string;
+  isOpen:boolean=false;
 
 
   getCharm() {
     var self = this;
-    this.http.get('/client/client-charm').subscribe(data => {
+    this.http.get('/client/get-charm').subscribe(data => {
       self.charm = data.json();
     })
   }
@@ -62,14 +62,15 @@ export class ClientEditFormComponent implements OnInit {
     var self = this;
     let clientToSave: ClientToSave = new ClientToSave();
     clientToSave.assign(self.clientDetails);
-    this.http.get('/client/client-details-save', {clientToSave: JSON.stringify(clientToSave)}).subscribe(data => {
+    console.log(clientToSave);
+    this.http.get('/client/save-client', {clientToSave: JSON.stringify(clientToSave)}).subscribe(data => {
       self.onChangedClientRecord.emit(data.json());
       self.closeForm();
     })
   }
 
   closeForm() {
-    $("#id01").hide()
+    this.isOpen=false;
   }
 
   getCharmById() {
@@ -82,7 +83,7 @@ export class ClientEditFormComponent implements OnInit {
       }
     }
     if (!isFind) {
-      this.http.get('/client/client-add-charm-id', {charmId: self.clientDetails.characterId}).subscribe(data => {
+      this.http.get('/client/get-charm-by-id', {charmId: self.clientDetails.characterId}).subscribe(data => {
 
         self.charm.push(Charm.copy(data.json()))
 
@@ -93,14 +94,15 @@ export class ClientEditFormComponent implements OnInit {
 
 
   showAddFormOrEditForm(clientId) {
-    $("#id01").show();
+
     var self = this;
+    self.isOpen=true;
     self.titleName = "Добавить";
     this.clientDetails = new ClientDetails();
     self.getCharm();
     if (clientId) {
       self.titleName = "Редактировать";
-      this.http.get('/client/client-details-set', {clientMark: clientId}).subscribe(data => {
+      this.http.get('/client/get-client-details', {clientMark: clientId}).subscribe(data => {
           self.clientDetails = ClientDetails.copy(data.json());
           self.getCharmById();
         }

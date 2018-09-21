@@ -2,24 +2,21 @@ package kz.greetgo.sandbox.controller.register;
 
 import kz.greetgo.sandbox.controller.model.model.*;
 
-
-import java.util.Collection;
+import java.util.List;
 
 public interface ClientRegister {
 
-
-
-    Collection<ClientRecord> getClientList(ClientFilter clientFilter);
+    List<ClientRecord> getClientList(ClientFilter clientFilter);
 
     Integer getClientTotalRecord(ClientFilter clientFilter);
 
-    Collection<Charm> clientCharm();
+    List<Charm> getCharm();
 
-    ClientRecord clientDetailsSave(ClientDetails clientDetails);
+    ClientRecord saveClient(ClientToSave clientDetails);
 
-    ClientDetails clientDetailsSet(Integer clientMarkId);
+    ClientDetails getClientDetails(Integer clientId);
 
-    ClientDetails clientDetailsDelete(Integer clientMarkId);
+    void deleteClient(Integer clientId);
 
-	  Charm getClientAddCharmId(Integer charmId);
+    Charm getCharmById(Integer charmId);
 }
