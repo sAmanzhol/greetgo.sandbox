@@ -62,13 +62,15 @@ public class ClientJdbcListRecord implements ConnectionCallback<List<ClientRecor
             sb.append(" where client.charm = charm.id and");
 
         // TODO: asset 9/21/18 Filter, Order, sort dolzhny tolko po neobkhodimosti vypolnyatsya
+                if (!clientFilter.firstname.equals(""))
             sb.append("  client.firstname like '" + clientFilter.firstname + "%'");
 
             if (!clientFilter.lastname.equals(""))
                 sb.append(" and client.lastname like '" + clientFilter.patronymic + "%'");
-            if (!clientFilter.patronymic.equals(""))
+
                 sb.append(" and client.patronymic like '" + clientFilter.lastname + "%'");
             sb.append(" group by client.id, charm.name ");
+
             sb.append(" order by " + clientFilter.orderBy);
             if (clientFilter.sort)
                 sb.append(" asc");
