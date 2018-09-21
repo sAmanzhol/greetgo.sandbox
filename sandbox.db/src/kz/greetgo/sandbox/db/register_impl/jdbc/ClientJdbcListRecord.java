@@ -29,10 +29,6 @@ public class ClientJdbcListRecord implements ConnectionCallback<List<ClientRecor
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
 
-                    /*select client.id as id, client.firstname as firstname , client.lastname as lastname,
-                    client.patronymic as patronymic, charm.name as character, client.birth_date as dateOfBirth,\n" +
-                    "       max(client_account.money) as maximumBalance , avg(client_account.money) as totalAccountBalance,
-                     min(client_account.money) as minimumBalance*/
                     ClientRecord clientRecord = new ClientRecord();
                     clientRecord.id=rs.getInt("id");
                     clientRecord.firstname= rs.getString("firstname");
@@ -61,7 +57,7 @@ public class ClientJdbcListRecord implements ConnectionCallback<List<ClientRecor
         StringBuilder sb = new StringBuilder();
             sb.append("select client.id as id, client.firstname as firstname , client.lastname as lastname, client.patronymic as patronymic, charm.name as character, client.birth_date as dateOfBirth,\n" +
                     "       max(client_account.money) as maximumBalance , avg(client_account.money) as totalAccountBalance, min(client_account.money) as minimumBalance");
-            sb.append(" from charm, client full outer join client_account on client.id = client_account.client");
+            sb.append(" from client left join charm on client.charm =charm.id left join client_account on client.id = client_account.client ");
             sb.append(" where client.charm = charm.id and");
             sb.append("  client.firstname like '" + clientFilter.firstname + "%'");
             if (!clientFilter.lastname.equals(""))
@@ -78,11 +74,6 @@ public class ClientJdbcListRecord implements ConnectionCallback<List<ClientRecor
             sb.append(" offset " +(clientFilter.recordSize*clientFilter.page));
 
         return sb;
-    }
-
-
-    private void appendSelect(StringBuilder sb) {
-        sb.append("select	*");
     }
 
 }

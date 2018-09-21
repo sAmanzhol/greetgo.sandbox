@@ -27,7 +27,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
     private Client addClient(Charm charm) {
 
         Client client = new Client();
-        client.id = RND.plusInt(1000);
+        client.id = RND.plusInt(10000);
         client.firstname = RND.str(10);
         client.lastname = RND.str(10);
         client.patronymic = RND.str(10);
@@ -347,7 +347,6 @@ public class ClientRegisterImplTest extends ParentTestNg {
         //
         //
         ClientRecord clientRecord = clientRegister.get().saveClient(clientToSave);
-        System.err.println("CLIENTRECORD:"+clientRecord);
         //
         //
 

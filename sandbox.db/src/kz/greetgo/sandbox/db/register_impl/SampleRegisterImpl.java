@@ -7,9 +7,7 @@ import kz.greetgo.sandbox.db.register_impl.model.SamplePerson;
 
 public class SampleRegisterImpl {
 
-
 	public void savePerson(SamplePerson person) {
-	//logic save()
 	}
 
 }

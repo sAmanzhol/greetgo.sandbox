@@ -60,8 +60,4 @@ public class ClientJdbc implements ConnectionCallback<Integer> {
     }
 
 
-    private void appendSelect(StringBuilder sb) {
-        sb.append("select	*");
-    }
-
 }

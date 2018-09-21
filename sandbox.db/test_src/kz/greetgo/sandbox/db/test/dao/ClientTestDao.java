@@ -6,8 +6,6 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
-import java.util.List;
-
 public interface ClientTestDao {
 
 	@Delete("delete from client")
@@ -30,9 +28,6 @@ public interface ClientTestDao {
 
 	@Delete("delete from charm")
 	void deleteAllCharm();
-
-	@Delete("delete from client where id = #{id}")
-	void deleteClientFromId(@Param("id") int id);
 
 
 	@Insert("insert into charm (id, name, description, energy, actually) values (#{charm.id}, #{charm.name}, #{charm.description}, #{charm.energy}, #{charm.actually})")
@@ -71,10 +66,6 @@ public interface ClientTestDao {
 
 
 
-
-	@Select("select id from client where id =#{id}")
-	Integer selectClientFromId(@Param("id") int id);
-
 	@Select("select * from client where id =#{id}")
 	Client getClientById(@Param("id") int id);
 
@@ -84,21 +75,4 @@ public interface ClientTestDao {
 	@Select("select * from charm where id = #{id}")
 	Charm selectCharmById(@Param("id") int id);
 
-	@Select("select * from client where firstname like #{firstname} or lastname like #{lastname}  or patronymic like #{patronymic} order by ${order} ${sort} " +
-		"limit ${recordSize} offset ${offset}")
-	List<Client> selectCLientListByFilter(@Param("firstname") String firstname,
-																				@Param("lastname") String lastname,
-																				@Param("patronymic") String patronymic,
-																				@Param("order") String order,
-																				@Param("sort") String sort,
-																				@Param("recordSize") int recordSize,
-																				@Param("offset") int offset
-	);
-
-	@Select("select id from client where firstname like #{firstname} or lastname like #{lastname} or patronymic like #{patronymic}")
-	List<Integer> selectCLientListByFilterCount(@Param("firstname") String firstname,
-																							@Param("lastname") String lastname,
-																							@Param("patronymic") String patronymic
-
-	);
 }
