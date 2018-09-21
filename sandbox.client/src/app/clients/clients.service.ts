@@ -9,15 +9,19 @@ import {ClientDisplay} from "../../model/ClientDisplay";
 export class ClientsService {
 
   public list: ClientRecord[] = [];
-  public deletedClient: ClientDisplay = new ClientDisplay();
-
-  public loading: boolean = false;
+  public count: number = 0;
 
   constructor(private http: HttpService) {
   }
 
-  loadRecords(target = "default", type = "asc", query = ""): Promise<ClientRecord[]> {
-    return this.http.get("/client/list", {target: target, type: type, query: query})
+  getCount(filter): Promise<number> {
+    return this.http.get("/client/count", {filter: JSON.stringify(filter)})
+      .toPromise()
+      .then(resp => resp.body as number)
+  }
+
+  loadRecords(filter): Promise<ClientRecord[]> {
+    return this.http.get("/client/list", {filter: JSON.stringify(filter)})
       .toPromise()
       .then(resp => resp.body as Array<any>)
       .then(body => body.map(r => ClientRecord.create(r)));
@@ -29,31 +33,20 @@ export class ClientsService {
       .then(resp => resp.body as ClientDisplay);
   }
 
-  async load(target, type, query) {
+  async load(filter) {
     try {
-      this.loading = true;
-      this.list = await this.loadRecords(target, type, query);
-      this.loading = false;
-
+      this.count = await this.getCount(filter);
+      this.list = await this.loadRecords(filter);
     } catch (e) {
-
-      this.loading = false;
       console.error(e);
     }
   }
 
-  async delete(id) {
+  async delete(id, filter) {
     try {
-      this.loading = true;
-      this.deletedClient = await this.deleteClient(id);
-      console.log(this.deletedClient);
-      this.loading = false;
-
-      this.load("default", "asc", "");
-
+      await this.deleteClient(id);
+      this.load(filter);
     } catch (e) {
-
-      this.loading = false;
       console.error(e);
     }
   }

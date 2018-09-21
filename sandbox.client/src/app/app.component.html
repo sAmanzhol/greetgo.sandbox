@@ -6,7 +6,5 @@
   <!--<app-about *ngIf="login.canViewAbout"></app-about>-->
   <!--<app-client-list *ngIf="login.canViewUsers"></app-client-list>-->
 
-  <app-clients *ngIf="login.canViewUsers" (modal)="openModal($event)"></app-clients>
-
-  <app-client-info *ngIf="isModalOpened" (modal)="openModal($event)" [data]="data"></app-client-info>
+  <app-clients *ngIf="login.canViewUsers"></app-clients>
 </div>

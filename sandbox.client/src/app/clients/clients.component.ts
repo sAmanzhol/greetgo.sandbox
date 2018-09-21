@@ -1,5 +1,6 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ClientsService} from "./clients.service";
+import {ClientToFilter} from "../../model/ClientToFilter";
 
 @Component({
   selector: 'app-clients',
@@ -7,42 +8,53 @@ import {ClientsService} from "./clients.service";
   styleUrls: ['./clients.component.css']
 })
 export class ClientsComponent implements OnInit {
-
-  @Output() modal = new EventEmitter();
-  data = {};
-  target = "";
-  type = "";
-  query = "";
+  modalData = {};
+  filter = ClientToFilter.createDefault();
 
   constructor(public Service: ClientsService) {
   }
 
   ngOnInit() {
-    this.Service.load("default", "asc", "");
+    this.modalData = {
+      "open": false,
+      "type": "",
+      "clientId": null
+    };
+
+    this.loadPage();
   }
 
-  openModal(type, clientId = "") {
-    this.data = {
+  loadPage() {
+    this.Service.load(this.filter);
+  }
+
+  openModal(type, clientId) {
+    this.modalData = {
       "open": true,
       "type": type,
       "clientId": clientId
     };
+  }
 
-    this.modal.emit(this.data);
+
+  closeModal(data) {
+    this.modalData = data;
   }
 
   sort(target, type) {
-    this.target = target;
-    this.type = type;
-    this.Service.load(this.target, this.type, this.query);
+    this.filter.target = target;
+    this.filter.type = type;
+
+    this.loadPage();
   }
 
   search(query) {
-    this.query = query;
-    this.Service.load(this.target, this.type, this.query);
+    this.filter.query = query;
+
+    this.loadPage();
   }
 
-  delete(id) {
-    this.Service.delete(id);
+  delete(id, filter = this.filter) {
+    this.Service.delete(id, filter);
   }
 }

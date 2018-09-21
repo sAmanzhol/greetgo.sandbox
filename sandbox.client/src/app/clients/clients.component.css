@@ -8,6 +8,11 @@
   vertical-align: middle;
 }
 
+.clients-table th {
+  vertical-align: middle;
+  padding: 0.5rem;
+}
+
 .clients-table .sort-arrow {
   line-height: 0.4;
 }

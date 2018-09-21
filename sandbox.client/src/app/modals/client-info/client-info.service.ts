@@ -8,15 +8,11 @@ import {CharacterRecord} from "../../../model/CharacterRecord";
 })
 export class ClientInfoService {
 
-  public client: ClientDisplay = null;
-
-  public loading: boolean = false;
-
   constructor(private http: HttpService) {
   }
 
-  crupdateClient(clientDisplay): Promise<ClientDisplay> {
-    return this.http.post("/client/" + clientDisplay.id, {clientDisplay: JSON.stringify(clientDisplay)})
+  crupdateClient(clientToSave): Promise<ClientDisplay> {
+    return this.http.post("/client/" + clientToSave.id, {clientToSave: JSON.stringify(clientToSave)})
       .toPromise()
       .then(resp => resp.body as ClientDisplay)
   }

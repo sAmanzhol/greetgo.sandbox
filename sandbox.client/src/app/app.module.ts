@@ -2,7 +2,6 @@ import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {NgxMaskModule} from 'ngx-mask'
-import * as $ from 'jquery';
 
 import {AppComponent} from './app.component';
 import {LoginComponent} from './login/login.component';
@@ -12,9 +11,9 @@ import {LoginService} from "./login/login.service";
 import {FormsModule} from "@angular/forms";
 import {ClientListComponent} from './client-list/client-list.component';
 import {ClientListService} from "./client-list/client-list.service";
-import { AboutComponent } from './about/about.component';
-import { ClientsComponent } from './clients/clients.component';
-import { ClientInfoComponent } from './modals/client-info/client-info.component';
+import {AboutComponent} from './about/about.component';
+import {ClientsComponent} from './clients/clients.component';
+import {ClientInfoComponent} from './modals/client-info/client-info.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +22,7 @@ import { ClientInfoComponent } from './modals/client-info/client-info.component'
     ClientListComponent,
     AboutComponent,
     ClientsComponent,
-    ClientInfoComponent,
+    ClientInfoComponent
   ],
   imports: [
     BrowserModule, HttpClientModule, FormsModule, NgbModule, NgxMaskModule.forRoot()
@@ -31,4 +30,5 @@ import { ClientInfoComponent } from './modals/client-info/client-info.component'
   providers: [HttpService, LoginService, ClientListService],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule {
+}
