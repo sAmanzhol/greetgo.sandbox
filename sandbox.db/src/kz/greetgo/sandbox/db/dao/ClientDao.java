@@ -3,6 +3,7 @@ package kz.greetgo.sandbox.db.dao;
 import kz.greetgo.sandbox.controller.model.model.*;
 import org.apache.ibatis.annotations.*;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
@@ -65,9 +66,14 @@ public interface ClientDao {
 	);
 
 	@Insert("insert into client (id, firstname, lastname, patronymic, gender, birth_date, charm) values " +
-		"(#{client.id}, #{client.firstname}, #{client.lastname}, #{client.patronymic}, #{client.gender}, #{client.dateOfBirth}, #{client.characterId})")
-	void insertClient(@Param("id") ClientToSave client
+		"(#{clientToSave.id}, #{clientToSave.firstname}, #{clientToSave.lastname}, #{clientToSave.patronymic}, #{clientToSave.gender}, #{clientToSave.dateOfBirth}, #{clientToSave.characterId}) ")
+	 void insertClient(@Param("clientToSave") ClientToSave clientToSave
+
 	);
+
+	@Select("select max(id) from client")
+	Integer getmaxClientId();
+
 
 	@Insert("insert into client_phone (client, number, type) values (#{client}, #{clientPhone.number}, #{clientPhone.type}) ")
 	void insertClientPhone(@Param("clientPhone") ClientPhone clientPhone,
@@ -79,6 +85,16 @@ public interface ClientDao {
 	void insertClientAddr(@Param("clientAddr") ClientAddr clientAddr,
 												@Param("client") Integer client
 	);
+
+	/*public int id;
+	public int client;
+	public float money;
+	public String number;
+	public Timestamp registeredAt;*/
+	@Insert("insert into client_account(client, registered_at) values (#{client}, #{registeredAt}) ")
+	void insertClientAccount(@Param("client") Integer client,
+													 @Param("registeredAt")Timestamp timestamp);
+
 
 	@Update("update client set firstname = #{clientToSave.firstname}, lastname= #{clientToSave.lastname}, patronymic = #{clientToSave.patronymic}, gender= #{clientToSave.gender}, birth_date = #{clientToSave.dateOfBirth}, charm = #{clientToSave.characterId} where id = #{clientToSave.id}")
 	void updateClient(@Param("clientToSave") ClientToSave clientToSave

@@ -1,7 +1,7 @@
 package kz.greetgo.sandbox.controller.model.model;
 
 public class ClientAddr {
-    public int client;
+    public Integer client;
     public AddrType type;
     public String street;
 

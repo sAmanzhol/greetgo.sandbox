@@ -9,6 +9,7 @@ import kz.greetgo.sandbox.db.dao.ClientDao;
 import kz.greetgo.sandbox.db.register_impl.jdbc.ClientJdbc;
 import kz.greetgo.sandbox.db.register_impl.jdbc.ClientJdbcListRecord;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,21 +78,11 @@ public class ClientRegisterImpl implements ClientRegister {
 	@Override
 	public ClientRecord saveClient(ClientToSave clientToSave) {
 
-		Integer id = clientDao.get().getClientId(clientToSave.id);
 		ClientAddr clientAddr;
 		ClientRecord clientRecord = new ClientRecord();
 		Client client = new Client();
-		if (id == null) {
-			clientDao.get().insertClient(clientToSave);
-			clientDao.get().insertClientAddr(clientToSave.addressOfResidence, clientToSave.id);
-			clientDao.get().insertClientAddr(clientToSave.addressOfRegistration, clientToSave.id);
-			for (ClientPhone clientPhone : clientToSave.phone) {
-				clientDao.get().insertClientPhone(clientPhone, clientToSave.id);
-			}
 
-		}
-
-		if (id != null) {
+		if (clientToSave.id != null) {
 			clientDao.get().updateClient(clientToSave);
 			for (ClientPhone clientPhone : clientToSave.phone) {
 				clientDao.get().updateClientPhone(clientPhone, clientToSave.id);
@@ -100,17 +91,41 @@ public class ClientRegisterImpl implements ClientRegister {
 			clientDao.get().updateClientAddr(clientToSave.id, clientAddr);
 			clientAddr = clientToSave.addressOfRegistration;
 			clientDao.get().updateClientAddr(clientToSave.id, clientAddr);
+
+
 		}
+		if (clientToSave.id == null) {
+			Integer maxes = clientDao.get().getmaxClientId();
+			if(maxes ==null)
+				maxes=0;
+			clientToSave.id = (int) ((Math.random()+1)*maxes);
+			clientDao.get().insertClient(clientToSave);
+			clientDao.get().insertClientAddr(clientToSave.addressOfResidence, clientToSave.id);
+			clientDao.get().insertClientAddr(clientToSave.addressOfRegistration, clientToSave.id);
+			clientDao.get().insertClientAccount(clientToSave.id,new Timestamp(2));
+			for (ClientPhone clientPhone : clientToSave.phone) {
+				clientDao.get().insertClientPhone(clientPhone, clientToSave.id);
+			}
+
+		}
+
 		client = clientDao.get().selectClientById(clientToSave.id);
 		clientRecord.id = client.id;
 		clientRecord.firstname = client.firstname;
 		clientRecord.lastname = client.lastname;
 		clientRecord.patronymic = client.patronymic;
 		clientRecord.dateOfBirth = client.birthDate;
-		clientRecord.characterName = clientDao.get().nameCharmById(clientToSave.characterId);
+		clientRecord.characterName=clientDao.get().nameCharmById(client.charm);
 		clientRecord.totalAccountBalance = clientDao.get().selectTotalAccountBalance(clientToSave.id);
+		if(clientRecord.totalAccountBalance==null)
+			clientRecord.totalAccountBalance=0;
 		clientRecord.maximumBalance = clientDao.get().selectMaximumBalance(clientToSave.id);
+		if(clientRecord.maximumBalance==null)
+			clientRecord.maximumBalance=0;
 		clientRecord.minimumBalance = clientDao.get().selectMinimumBalance(clientToSave.id);
+		if(clientRecord.minimumBalance==null)
+			clientRecord.minimumBalance=0;
+
 
 		System.err.println("ClientRecordsss:" + clientRecord);
 		return clientRecord;

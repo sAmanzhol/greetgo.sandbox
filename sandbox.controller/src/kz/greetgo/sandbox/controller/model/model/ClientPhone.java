@@ -3,7 +3,7 @@ package kz.greetgo.sandbox.controller.model.model;
 
 
 public class ClientPhone {
-    public int client;
+    public Integer client;
     public PhoneType type;
     public String number;
 

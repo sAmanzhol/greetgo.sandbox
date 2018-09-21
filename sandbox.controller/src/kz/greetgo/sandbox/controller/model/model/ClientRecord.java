@@ -10,9 +10,9 @@ public class ClientRecord {
     public String patronymic;
     public String characterName;
     public Date dateOfBirth;
-    public int totalAccountBalance;
-    public int maximumBalance;
-    public int minimumBalance;
+    public Integer totalAccountBalance;
+    public Integer maximumBalance;
+    public Integer minimumBalance;
 
     public ClientRecord(){
         this.firstname="";
