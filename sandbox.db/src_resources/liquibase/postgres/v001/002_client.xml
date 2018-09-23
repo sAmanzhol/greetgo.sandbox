@@ -3,10 +3,8 @@
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
 
-  <!--TODO Vse enum-y kotorye v tablice dolzhno byt not null-->
-  <!--TODO po convencie nazyvanye tablicy i attributa dolzhno chere _ razdelyatsya k pimeru ads_asd-->
-  <changeSet author="anazar" id="002_client-005">
-    <sql endDelimiter=";;"><![CDATA[
+    <changeSet author="anazar" id="002_client-005">
+        <sql endDelimiter=";;"><![CDATA[
       create table charm (
       id serial not null,
       name varchar(255),
@@ -14,30 +12,28 @@
       energy real,
       actually boolean,
       primary key(id)
-
       )
     ]]></sql>
-  </changeSet>
+    </changeSet>
 
-  <!--TODO Po convensie my dogovarivalis attributy nazyvat cherez asd_asd i tablicy asd_ads-->
-  <changeSet author="anazar" id="002_client-001">
-    <sql endDelimiter=";;"><![CDATA[
+    <changeSet author="anazar" id="002_client-001">
+        <sql endDelimiter=";;"><![CDATA[
       create table client (
         id serial not null,
         firstname varchar(50) not null,
         lastname varchar(255) not null,
         patronymic varchar(255),
-        gender varchar(255),
+        gender varchar(255) not null,
         birth_date date,
         charm int,
         primary key(id),
         foreign key(charm) references charm(id)
       )
     ]]></sql>
-  </changeSet>
+    </changeSet>
 
-  <changeSet author="anazar" id="002_client-002">
-    <sql endDelimiter=";;"><![CDATA[
+    <changeSet author="anazar" id="002_client-002">
+        <sql endDelimiter=";;"><![CDATA[
       create table client_addr (
         client int not null,
          type varchar(255) not null,
@@ -48,23 +44,22 @@
          foreign key(client) references client(id)
       )
     ]]></sql>
-  </changeSet>
+    </changeSet>
 
-  <!--TODO Tam dolzhno byt dve primary key-->
-  <changeSet author="anazar" id="002_client-003">
-    <sql endDelimiter=";;"><![CDATA[
+    <changeSet author="anazar" id="002_client-003">
+        <sql endDelimiter=";;"><![CDATA[
       create table client_phone (
          client int not null,
          number varchar(255) not null,
-         type varchar(255),
-         primary key(number),
+         type varchar(255) not null,
+         primary key(client, number),
          foreign key(client) references client(id)
       )
     ]]></sql>
-  </changeSet>
+    </changeSet>
 
-  <changeSet author="anazar" id="002_client-004">
-    <sql endDelimiter=";;"><![CDATA[
+    <changeSet author="anazar" id="002_client-004">
+        <sql endDelimiter=";;"><![CDATA[
       create table client_account (
         id serial not null primary key,
         client int,
@@ -74,9 +69,9 @@
         foreign key(client) references client(id)
       )
     ]]></sql>
-  </changeSet>
-  <changeSet author="anazar" id="002_client-007">
-    <sql endDelimiter=";;"><![CDATA[
+    </changeSet>
+    <changeSet author="anazar" id="002_client-007">
+        <sql endDelimiter=";;"><![CDATA[
       create table transaction_type (
       id serial not null,
       code varchar(255),
@@ -84,10 +79,10 @@
       primary key(id)
       )
     ]]></sql>
-  </changeSet>
+    </changeSet>
 
-  <changeSet author="anazar" id="002_client-006">
-    <sql endDelimiter=";;"><![CDATA[
+    <changeSet author="anazar" id="002_client-006">
+        <sql endDelimiter=";;"><![CDATA[
       create table client_account_transaction (
       id serial not null,
       account int,
@@ -100,7 +95,7 @@
 
       )
     ]]></sql>
-  </changeSet>
+    </changeSet>
 
 
 </databaseChangeLog>
