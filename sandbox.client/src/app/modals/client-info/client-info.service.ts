@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpService} from "../../http.service";
 import {ClientDisplay} from "../../../model/ClientDisplay";
 import {CharacterRecord} from "../../../model/CharacterRecord";
+import {PhoneRecord} from "../../../model/PhoneRecord";
 
 @Injectable({
   providedIn: 'root'
@@ -27,5 +28,11 @@ export class ClientInfoService {
     return this.http.get("/character/list")
       .toPromise()
       .then(resp => resp.body as CharacterRecord[])
+  }
+
+  getPhoneTypes(): Promise<PhoneRecord[]> {
+    return this.http.get("/phone/list")
+      .toPromise()
+      .then(resp => resp.body as PhoneRecord[])
   }
 }

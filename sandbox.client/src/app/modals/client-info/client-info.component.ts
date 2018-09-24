@@ -4,6 +4,7 @@ import {ClientsService} from "../../clients/clients.service";
 import {ClientToFilter} from "../../../model/ClientToFilter";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {ClientToSave} from "../../../model/ClientToSave";
+import {PhoneDisplay} from "../../../model/PhoneDisplay";
 
 @Component({
   selector: 'app-client-info',
@@ -16,6 +17,7 @@ export class ClientInfoComponent implements OnInit {
 
   closeResult: string;
   characters = [];
+  phones = [];
   client = new ClientToSave();
   filter = ClientToFilter.createDefault();
 
@@ -26,6 +28,7 @@ export class ClientInfoComponent implements OnInit {
 
   ngOnInit() {
     this.getCharacters();
+    this.getPhoneTypes();
   }
 
   ngOnChanges() {
@@ -44,6 +47,18 @@ export class ClientInfoComponent implements OnInit {
 
   onSubmit() {
     this.crupdate(this.client);
+  }
+
+  addPhone() {
+    this.client["numbers"].push(new PhoneDisplay());
+  }
+
+  changePhoneType(phone, type) {
+    phone.type = type;
+  }
+
+  deletePhone(index) {
+    this.client["numbers"].splice(index, 1)
   }
 
   closeModal() {
@@ -68,6 +83,14 @@ export class ClientInfoComponent implements OnInit {
   async getCharacters() {
     try {
       this.characters = await this.Service.getCharacters();
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  async getPhoneTypes() {
+    try {
+      this.phones = await this.Service.getPhoneTypes();
     } catch (e) {
       console.error(e);
     }

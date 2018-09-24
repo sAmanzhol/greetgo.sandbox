@@ -1,3 +1,5 @@
+import {PhoneDisplay} from "./PhoneDisplay";
+
 export class ClientDisplay {
   public id: string;
   public surname: string;
@@ -12,11 +14,8 @@ export class ClientDisplay {
   public streetResidence: string;
   public houseResidence: string;
   public apartmentResidence: string;
-  public phoneHome: string;
-  public phoneWork: string;
-  public phoneExtra3: string;
-  public phoneExtra4: string;
-  public phoneExtra5: string;
+
+  public numbers: PhoneDisplay[];
 
   public static of(a: any): ClientDisplay {
     const ret = new ClientDisplay();
@@ -38,11 +37,7 @@ export class ClientDisplay {
     this.streetResidence = "";
     this.houseResidence = "";
     this.apartmentResidence = "";
-    this.phoneHome = "";
-    this.phoneWork = "";
-    this.phoneExtra3 = "";
-    this.phoneExtra4 = "";
-    this.phoneExtra5 = "";
+    this.numbers = [];
   }
 
   assign(a: any) {
@@ -59,10 +54,6 @@ export class ClientDisplay {
     this.streetResidence = a.streetResidence;
     this.houseResidence = a.houseResidence;
     this.apartmentResidence = a.apartmentResidence;
-    this.phoneHome = a.phoneHome;
-    this.phoneWork = a.phoneWork;
-    this.phoneExtra3 = a.phoneExtra3;
-    this.phoneExtra4 = a.phoneExtra4;
-    this.phoneExtra5 = a.phoneExtra5;
+    this.numbers = (a.numbers instanceof Array) ? a.numbers.map(c => c) : [];
   }
 }

@@ -43,20 +43,19 @@ public class ClientRegisterImpl implements ClientRegister {
     new ClientRecord("11", "Никонов Лев Викторович", "Безответственный", "22", "434", "546758", "54")
   ));
 
-  private static List<ClientDisplay> listDetails = new ArrayList<>(Arrays.asList(
-    new ClientDisplay("1", "Колобова", "Розалия", "Наумовна", "2000-08-30", "female", "1", "Ломоносова", "11", "9", "", "", "", "+7(747)-341-54-28", "", "", "", ""),
-    new ClientDisplay("2", "Панова", "Алира", "Иосифовна", "2000-08-30", "female", "2", "Пр.абылай Хана", "74", "140", "", "", "", "+7(727)-273-76-55", "", "", "", ""),
-    new ClientDisplay("3", "Крюков", "Игнатий", "Улебович", "2000-08-30", "male", "3", "Ломоносова", "11", "9", "", "", "", "+7(747)-341-54-28", "", "", "", ""),
-    new ClientDisplay("4", "Киселёв", "Юлиан", "Романович", "2000-08-30", "male", "4", "Ломоносова", "11", "9", "", "", "", "+7(747)-341-54-28", "", "", "", ""),
-    new ClientDisplay("5", "Исаева", "Ирина", "Сергеевна", "2000-08-30", "female", "5", "Ломоносова", "11", "9", "", "", "", "+7(747)-341-54-28", "", "", "", ""),
-    new ClientDisplay("6", "Большаков", "Мечеслав", "Куприянович", "2000-08-30", "male", "6", "Ломоносова", "11", "9", "", "", "", "+7(747)-341-54-28", "", "", "", ""),
-    new ClientDisplay("7", "Корнилов", "Захар", "Федосеевич", "2000-08-30", "male", "7", "Ломоносова", "11", "9", "", "", "", "+7(747)-341-54-28", "", "", "", ""),
-    new ClientDisplay("8", "Лихачёв", "Исак", "Кириллович", "2000-08-30", "male", "8", "Ломоносова", "11", "9", "", "", "", "+7(747)-341-54-28", "", "", "", ""),
-    new ClientDisplay("9", "Фёдорова", "Эмбер", "Руслановна", "2000-08-30", "female", "9", "Ломоносова", "11", "9", "", "", "", "+7(747)-341-54-28", "", "", "", ""),
-    new ClientDisplay("10", "Баранова", "Габриэлла", "Романовна", "2000-08-30", "female", "10", "Ломоносова", "11", "9", "", "", "", "+7(747)-341-54-28", "", "", "", ""),
-    new ClientDisplay("11", "Никонов", "Лев", "Викторович", "2000-08-30", "male", "11", "Ломоносова", "11", "9", "", "", "", "+7(747)-341-54-28", "", "", "", "")
+  private static List<ClientDisplay> listDetails = new ArrayList<ClientDisplay>(Arrays.asList(
+    new ClientDisplay("1", "Колобова", "Розалия", "Наумовна", "2000-08-30", "female", "1", "Ломоносова", "11", "9", "", "", "", new ArrayList<>(Arrays.asList(new PhoneDisplay("1", "Home", "77077077777"), new PhoneDisplay("2", "Work", "77877077777"), new PhoneDisplay("3", "Mobile", "77007077777")))),
+    new ClientDisplay("2", "Панова", "Алира", "Иосифовна", "2000-08-30", "female", "2", "Пр.абылай Хана", "74", "140", "", "", "", new ArrayList<>(Arrays.asList(new PhoneDisplay("Home", "1", "77077077777")))),
+    new ClientDisplay("3", "Крюков", "Игнатий", "Улебович", "2000-08-30", "male", "3", "Ломоносова", "11", "9", "", "", "", new ArrayList<>(Arrays.asList(new PhoneDisplay("1", "Home", "87077077777")))),
+    new ClientDisplay("4", "Киселёв", "Юлиан", "Романович", "2000-08-30", "male", "4", "Ломоносова", "11", "9", "", "", "", new ArrayList<>(Arrays.asList(new PhoneDisplay("1", "Home", "87077077777")))),
+    new ClientDisplay("5", "Исаева", "Ирина", "Сергеевна", "2000-08-30", "female", "5", "Ломоносова", "11", "9", "", "", "", new ArrayList<>(Arrays.asList(new PhoneDisplay("1", "Home", "87077077777")))),
+    new ClientDisplay("6", "Большаков", "Мечеслав", "Куприянович", "2000-08-30", "male", "6", "Ломоносова", "11", "9", "", "", "", new ArrayList<>(Arrays.asList(new PhoneDisplay("1", "Home", "87077077777")))),
+    new ClientDisplay("7", "Корнилов", "Захар", "Федосеевич", "2000-08-30", "male", "7", "Ломоносова", "11", "9", "", "", "", new ArrayList<>(Arrays.asList(new PhoneDisplay("1", "Home", "87077077777")))),
+    new ClientDisplay("8", "Лихачёв", "Исак", "Кириллович", "2000-08-30", "male", "8", "Ломоносова", "11", "9", "", "", "", new ArrayList<>(Arrays.asList(new PhoneDisplay("1", "Home", "87077077777")))),
+    new ClientDisplay("9", "Фёдорова", "Эмбер", "Руслановна", "2000-08-30", "female", "9", "Ломоносова", "11", "9", "", "", "", new ArrayList<>(Arrays.asList(new PhoneDisplay("1", "Home", "87077077777")))),
+    new ClientDisplay("10", "Баранова", "Габриэлла", "Романовна", "2000-08-30", "female", "10", "Ломоносова", "11", "9", "", "", "", new ArrayList<>(Arrays.asList(new PhoneDisplay("1", "Home", "87077077777")))),
+    new ClientDisplay("11", "Никонов", "Лев", "Викторович", "2000-08-30", "male", "11", "Ломоносова", "11", "9", "", "", "", new ArrayList<>(Arrays.asList(new PhoneDisplay("1", "Home", "87077077777"))))
   ));
-
 
   @Override
   public List<ClientRecord> list(ClientToFilter filter) {
@@ -77,9 +76,8 @@ public class ClientRegisterImpl implements ClientRegister {
 
   @Override
   public ClientDisplay crupdate(String id, ClientToSave clientToSave) {
-    System.out.println(clientToSave);
 
-    ClientDisplay clientDisplay = new ClientDisplay(clientToSave.id, clientToSave.surname, clientToSave.name, clientToSave.patronymic, clientToSave.birthDate, clientToSave.gender, clientToSave.character, clientToSave.streetRegistration, clientToSave.houseRegistration, clientToSave.apartmentRegistration, clientToSave.streetResidence, clientToSave.houseResidence, clientToSave.apartmentResidence, clientToSave.phoneHome, clientToSave.phoneWork, clientToSave.phoneExtra3, clientToSave.phoneExtra4, clientToSave.phoneExtra5);
+    ClientDisplay clientDisplay = new ClientDisplay(clientToSave.id, clientToSave.surname, clientToSave.name, clientToSave.patronymic, clientToSave.birthDate, clientToSave.gender, clientToSave.character, clientToSave.streetRegistration, clientToSave.houseRegistration, clientToSave.apartmentRegistration, clientToSave.streetResidence, clientToSave.houseResidence, clientToSave.apartmentResidence, clientToSave.numbers);
 
     if ("".equals(id)) {
       String newId = Integer.parseInt(list.get(list.size() - 1).id) + 1 + "";
@@ -97,7 +95,7 @@ public class ClientRegisterImpl implements ClientRegister {
         .get();
 
       list.add(new ClientRecord(
-        newId, clientDisplay.surname + " " + clientDisplay.name + clientDisplay.patronymic, character.value, "" + age, "0", "1000", "0"
+        newId, clientDisplay.surname + " " + clientDisplay.name + " " + clientDisplay.patronymic, character.value, "" + age, "0", "1000", "0"
       ));
 
       return clientDisplay;
@@ -108,7 +106,6 @@ public class ClientRegisterImpl implements ClientRegister {
         .get();
 
       int indexToUpdate = listDetails.indexOf(clientToUpdate);
-      System.out.println(indexToUpdate);
 
       listDetails.set(indexToUpdate, clientDisplay);
 
@@ -122,7 +119,6 @@ public class ClientRegisterImpl implements ClientRegister {
         .get();
 
       int indexRecordToUpdate = list.indexOf(clientRecordToUpdate);
-      System.out.println(indexRecordToUpdate);
 
       CharacterRecord character = listCharacters.stream()
         .filter(ch -> ch.id.equals(clientDisplay.character))
@@ -130,7 +126,7 @@ public class ClientRegisterImpl implements ClientRegister {
         .get();
 
       list.set(indexRecordToUpdate, new ClientRecord(
-        clientRecordToUpdate.id, clientDisplay.surname + " " + clientDisplay.name + clientDisplay.patronymic, character.value, "" + age, "0", "1000", "0"
+        clientRecordToUpdate.id, clientDisplay.surname + " " + clientDisplay.name + " " + clientDisplay.patronymic, character.value, "" + age, "0", "1000", "0"
       ));
 
       return clientDisplay;

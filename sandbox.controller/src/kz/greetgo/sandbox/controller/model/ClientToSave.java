@@ -1,5 +1,8 @@
 package kz.greetgo.sandbox.controller.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ClientToSave {
   public String id;
   public String surname;
@@ -14,16 +17,13 @@ public class ClientToSave {
   public String streetResidence;
   public String houseResidence;
   public String apartmentResidence;
-  public String phoneHome;
-  public String phoneWork;
-  public String phoneExtra3;
-  public String phoneExtra4;
-  public String phoneExtra5;
+
+  public List<PhoneDisplay> numbers = new ArrayList<>();
 
   public ClientToSave() {
   }
 
-  public ClientToSave(String id, String surname, String name, String patronymic, String birthDate, String gender, String streetRegistration, String houseRegistration, String apartmentRegistration, String streetResidence, String houseResidence, String apartmentResidence, String phoneHome, String phoneWork, String phoneExtra3, String phoneExtra4, String phoneExtra5) {
+  public ClientToSave(String id, String surname, String name, String patronymic, String birthDate, String gender, String streetRegistration, String houseRegistration, String apartmentRegistration, String streetResidence, String houseResidence, String apartmentResidence, List<PhoneDisplay> numbers) {
     this.id = id;
     this.surname = surname;
     this.name = name;
@@ -37,10 +37,6 @@ public class ClientToSave {
     this.streetResidence = streetResidence;
     this.houseResidence = houseResidence;
     this.apartmentResidence = apartmentResidence;
-    this.phoneHome = phoneHome;
-    this.phoneWork = phoneWork;
-    this.phoneExtra3 = phoneExtra3;
-    this.phoneExtra4 = phoneExtra4;
-    this.phoneExtra5 = phoneExtra5;
+    this.numbers = numbers;
   }
 }

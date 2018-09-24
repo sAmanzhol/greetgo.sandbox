@@ -19,6 +19,7 @@ public class CharacterRegisterImpl implements CharacterRegister {
     new CharacterRecord("6", "Целеустремлённый"),
     new CharacterRecord("7", "Мизантроп"),
     new CharacterRecord("8", "Строгий"),
+    new CharacterRecord("8", "Строгий"),
     new CharacterRecord("9", "Гениальный"),
     new CharacterRecord("10", "Харизматичный"),
     new CharacterRecord("11", "Безответственный")

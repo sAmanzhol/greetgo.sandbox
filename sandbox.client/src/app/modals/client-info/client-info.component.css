@@ -1,3 +1,7 @@
+.type-button, .delete-button {
+  border-radius: 0px;
+}
+
 @media (min-width: 576px) {
   .client-info-input {
     width: 48%;
