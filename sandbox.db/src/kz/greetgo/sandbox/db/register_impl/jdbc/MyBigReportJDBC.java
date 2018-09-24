@@ -1,9 +1,12 @@
-package kz.greetgo.sandbox.db.report.my_report_big_data;
+package kz.greetgo.sandbox.db.register_impl.jdbc;
 
 import kz.greetgo.db.ConnectionCallback;
+import kz.greetgo.sandbox.controller.report.model.MyReportRow;
+import kz.greetgo.sandbox.controller.report.my_big_report.MybigReportView;
 
 import java.sql.*;
 import java.util.Date;
+
 
 public class MyBigReportJDBC implements ConnectionCallback<Void> {
 
@@ -39,13 +42,13 @@ public class MyBigReportJDBC implements ConnectionCallback<Void> {
 	private StringBuilder generateSql() {
 	StringBuilder sb = new StringBuilder();
 	appendSelect(sb);
-	sb.append("from ....");
-	sb.append("where ...");
+	sb.append("from client");
+	sb.append("order by firstname");
 	return sb;
 	}
 
 	private void appendSelect(StringBuilder sb) {
-		sb.append("select	... as  col1 ... as col2 ... as col3");
+		sb.append("select	id as col1, firstname as col2, lastname as col3 ");
 
 	}
 
@@ -54,7 +57,6 @@ public class MyBigReportJDBC implements ConnectionCallback<Void> {
 		ret.col1 = rs.getString("col1");
 		ret.col2 = rs.getString("col2");
 		ret.col3 = rs.getString("col3");
-
 		return  null;
 	}
 }

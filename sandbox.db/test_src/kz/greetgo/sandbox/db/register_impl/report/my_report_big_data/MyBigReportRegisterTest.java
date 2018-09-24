@@ -1,20 +1,25 @@
-package kz.greetgo.sandbox.db.report.my_report_big_data;
+package kz.greetgo.sandbox.db.register_impl.report.my_report_big_data;
 
 import kz.greetgo.depinject.core.BeanGetter;
+import kz.greetgo.sandbox.controller.register.MyBigReportRegister;
+import kz.greetgo.sandbox.controller.report.model.MyReportFootData;
+import kz.greetgo.sandbox.controller.report.model.MyReportHeadData;
+import kz.greetgo.sandbox.controller.report.model.MyReportRow;
+import kz.greetgo.sandbox.controller.report.my_big_report.MybigReportView;
+import kz.greetgo.sandbox.db.test.util.ParentTestNg;
 import org.testng.annotations.Test;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 
-public class MyBigReportRegisterTest {
+public class MyBigReportRegisterTest extends ParentTestNg {
 
 	public BeanGetter<MyBigReportRegister> myBigReportRegisterBeanGetter;
 
-	private static class TestView implements MybigReportView{
+	private static class TestView implements MybigReportView {
 
 		public MyReportHeadData headData = null;
 
@@ -43,10 +48,11 @@ public class MyBigReportRegisterTest {
 	@Test
 	public void testGenReport() throws Exception {
 		//insert into db test data
+
+
 		String userid ="asd";
-		SimpleDateFormat sdf = new SimpleDateFormat("asd");
-		Date from=sdf.parse("dsa");
-		Date to=sdf.parse("asd");
+		Date from = new Date();
+		Date to = new Date();
 		TestView testView = new TestView();
 
 		myBigReportRegisterBeanGetter.get().genReport(userid, from, to, testView);

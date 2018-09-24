@@ -1,5 +1,8 @@
-package kz.greetgo.sandbox.db.report.my_report;
+package kz.greetgo.sandbox.db.register_impl.report.my_report;
 
+import kz.greetgo.sandbox.controller.report.my_report.MyReportInData;
+import kz.greetgo.sandbox.controller.report.my_report.MyReportRegister;
+import kz.greetgo.sandbox.controller.report.my_report.MyReportView;
 import org.testng.annotations.Test;
 
 import static org.fest.assertions.api.Assertions.assertThat;

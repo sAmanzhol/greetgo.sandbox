@@ -1,4 +1,4 @@
-package kz.greetgo.sandbox.db.report.my_report;
+package kz.greetgo.sandbox.controller.report.my_report;
 
 public interface MyReportView {
 
