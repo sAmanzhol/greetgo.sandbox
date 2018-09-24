@@ -5,10 +5,14 @@ import kz.greetgo.depinject.core.Bean;
 import kz.greetgo.depinject.core.BeanGetter;
 import kz.greetgo.sandbox.controller.model.*;
 import kz.greetgo.sandbox.controller.model.Character;
+import kz.greetgo.sandbox.controller.model.db.ClientDb;
+import kz.greetgo.sandbox.controller.model.db.ClientPhoneDb;
 import kz.greetgo.sandbox.controller.register.ClientRegister;
+import kz.greetgo.sandbox.register.dao.ClientDao;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -29,7 +33,8 @@ public class ClientRegisterImpl implements ClientRegister {
   List<Character> characters = null;
   List<Gender> genders = null;
   List<PhoneDetail> phoneDetails = null;
-  int count;
+  public BeanGetter<ClientDao> clientDao;
+  int count = 0;
 
 
   public BeanGetter<Jdbc> jdbc;
@@ -199,19 +204,98 @@ public class ClientRegisterImpl implements ClientRegister {
 
   @Override
   public ClientDetail getClientDetailById(int id) {
+//
+//    ClientDetail clientDetail = ClientDetail.forSave(genders, characters, phoneDetails);
+//
+//
+//    if (clients != null) {
+//      for (Client client : clients) {
+//        if (client.id == id) {
+//          clientDetail = clientDetail.initalize(new ClientDetail(client.surname, client.name, client.patronymic, client.gender, genders, client.birthDay, client.character, characters, client.actualAddress, client.registrationAddress, client.phones, phoneDetails, client.id));
+//        }
+//      }
+//    }
+//    return clientDetail;
 
-    ClientDetail clientDetail = ClientDetail.forSave(genders, characters, phoneDetails);
 
+    if (id == 0 || id == -1) {
+      return ClientDetail.forSave(genders, characters, phoneDetails);
+    } else {
+      ClientDb client = clientDao.get().getClientDb(id);
+      List<String> charactersString = clientDao.get().getCharacters();
+      List<String> gendersString = clientDao.get().getGenders();
+      String charm = clientDao.get().getCharm(client.id);
+      Address regAddress = clientDao.get().getAddress(client.id, "REG");
+      Address factAddress = clientDao.get().getAddress(client.id, "FACT");
+      List<ClientPhoneDb> phoneList = clientDao.get().phoneList(client.id);
+      List<String> phoneD = clientDao.get().getPhoneD();
 
-    if (clients != null) {
-      for (Client client : clients) {
-        if (client.id == id) {
-          clientDetail = clientDetail.initalize(new ClientDetail(client.surname, client.name, client.patronymic, client.gender, genders, client.birthDay, client.character, characters, client.actualAddress, client.registrationAddress, client.phones, phoneDetails, client.id));
+      List<Character> characters = new ArrayList<>();
+      for (String t : charactersString) {
+        characters.add(new Character(CharacterType.AGREEABLENESS, t));
+      }
+
+      List<Gender> genders = new ArrayList<>();
+      for (String t : gendersString) {
+        for (GenderType tt : GenderType.values()) {
+          if (tt.name().equalsIgnoreCase(t)) {
+            genders.add(new Gender(GenderType.FEMALE, t));
+            break;
+          }
         }
       }
+
+      CharacterType type = CharacterType.AGREEABLENESS;
+      for (CharacterType t : CharacterType.values()) {
+        if (t.name().equalsIgnoreCase(charm)) {
+          type = t;
+        }
+      }
+      List<Phone> phones = new ArrayList<>();
+      List<PhoneDetail> phoneDetails = new ArrayList<>();
+
+      for (int i = 0; i < phoneD.size(); i++) {
+        for (PhoneType t : PhoneType.values()) {
+          if (t.name().equalsIgnoreCase(phoneD.get(i))) {
+            PhoneDetail phoneDetail = new PhoneDetail(t, phoneD.get(i));
+            phoneDetails.add(phoneDetail);
+            break;
+          }
+        }
+      }
+
+      for (int i = 0; i < phoneList.size(); i++) {
+        for (PhoneDetail t : phoneDetails) {
+          if (t.type == phoneList.get(i).type) {
+
+            Phone phone = new Phone(t, phoneList.get(i).number);
+            phones.add(phone);
+            break;
+          }
+        }
+      }
+
+//      DateFormat srcDf = new SimpleDateFormat("dd/MM/yyyy");
+//      Date birthDate = srcDf.format(client.birthDate);
+
+//      Date birthdayDate = new Date();
+//
+//    try {
+//      birthdayDate = new SimpleDateFormat("dd/MM/yyyy")
+//        .parse("20/12/1998");
+//    } catch (ParseException e) {
+//      e.printStackTrace();
+//    }
+
+      ClientDetail clientDetail = new ClientDetail(client.surname, client.name, client.patronymic,
+        new Gender(client.gender, client.gender.toString()), genders, client.birthDate, new Character(type, charm),
+        characters, factAddress, regAddress, phones, phoneDetails, client.id);
+
+      return clientDetail;
     }
-    return clientDetail;
+    //return null;
   }
+
 
   @Override
   public ClientRecord saveClient(ClientToSave toSave) {

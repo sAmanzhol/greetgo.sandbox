@@ -6,7 +6,7 @@ import java.util.Date;
 
 public class ClientDb {
 
-  public String id;
+  public int id;
   public String surname;
   public String name;
   public String patronymic;

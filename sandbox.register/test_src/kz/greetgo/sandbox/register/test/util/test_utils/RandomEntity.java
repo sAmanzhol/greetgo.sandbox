@@ -1,8 +1,8 @@
 package kz.greetgo.sandbox.register.test.util.test_utils;
 
 import kz.greetgo.depinject.core.Bean;
-import kz.greetgo.sandbox.controller.model.Character;
 import kz.greetgo.sandbox.controller.model.*;
+import kz.greetgo.sandbox.controller.model.Character;
 import kz.greetgo.sandbox.controller.model.db.*;
 import kz.greetgo.util.RND;
 
@@ -14,31 +14,29 @@ import java.util.Date;
 @Bean
 public class RandomEntity {
 
-  public Client client() {
-    Client client = new Client();
-    client.name = RND.str(10);
-    client.surname = RND.str(10);
-    client.patronymic = RND.str(10);
-    client.birthDay = new Date();
-    client.gender = new Gender(GenderType.FEMALE, "");
-    client.character = new Character(CharacterType.AGREEABLENESS, "");
-    return client;
-  }
+//  public Client client() {
+//    Client client = new Client();
+//    client.name = RND.str(10);
+//    client.surname = RND.str(10);
+//    client.patronymic = RND.str(10);
+//    client.birthDay = new Date();
+//    client.gender = new Gender(GenderType.FEMALE, "");
+//    client.character = new Character(CharacterType.AGREEABLENESS, "");
+//    return client;
+//  }
 
   public ClientDb clientDb() {
     ClientDb client = new ClientDb();
     client.name = RND.str(10);
     client.surname = RND.str(10);
     client.patronymic = RND.str(10);
-    Date birthdayDate = new Date();
-
+    client.birthDate = new Date();
     try {
-      birthdayDate = new SimpleDateFormat("dd/MM/yyyy")
+      client.birthDate = new SimpleDateFormat("dd/MM/yyyy")
         .parse("20/12/1998");
     } catch (ParseException e) {
       e.printStackTrace();
     }
-    client.birthDate = birthdayDate;
     return client;
   }
 
@@ -56,6 +54,12 @@ public class RandomEntity {
     clientDb.patronymic = RND.str(4);
     clientDb.surname = RND.str(4);
     clientDb.birthDate = new Date();
+    try {
+      clientDb.birthDate = new SimpleDateFormat("dd/MM/yyyy")
+        .parse("20/12/1998");
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
     clientDb.gender = GenderType.MALE;
     clientDb.charm = charmId;
 
@@ -141,5 +145,35 @@ public class RandomEntity {
     clientFilter.offset = 0;
     clientFilter.isAsc = true;
     return clientFilter;
+  }
+
+  //  public int clientID;
+//  public String surname;
+//  public String name;
+//  public String patronymic;
+//  public Gender gender;
+//  public Date birthDay;
+//  public Character character;
+//  public Address actualAddress;
+//  public Address registrationAddress;
+//  public List<Phone> phones = new ArrayList<>();
+  public ClientToSave clientToSave() {
+    ClientToSave toSave = new ClientToSave();
+    toSave.surname = RND.str(6);
+    toSave.name = RND.str(5);
+    toSave.patronymic = RND.str(6);
+    toSave.actualAddress = new Address(RND.str(2), RND.str(3), RND.str(4));
+    toSave.registrationAddress = new Address(RND.str(2), RND.str(3), RND.str(4));
+    toSave.birthDay = new Date();
+    try {
+      toSave.birthDay = new SimpleDateFormat("dd/MM/yyyy")
+        .parse("20/12/1998");
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
+    toSave.character = new Character(CharacterType.AGREEABLENESS, "auuh");
+    toSave.gender = new Gender(GenderType.FEMALE, "female");
+    toSave.phones.add(new Phone(new PhoneDetail(PhoneType.HOME, "home"), "87576843483"));
+    return toSave;
   }
 }

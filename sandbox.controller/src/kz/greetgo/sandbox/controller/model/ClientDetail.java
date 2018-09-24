@@ -59,4 +59,5 @@ public class ClientDetail {
     this.phoneDetailList = phoneDetailList;
     this.clientId = clientId;
   }
+
 }

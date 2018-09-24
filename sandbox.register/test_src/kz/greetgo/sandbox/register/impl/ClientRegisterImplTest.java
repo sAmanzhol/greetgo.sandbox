@@ -7,7 +7,6 @@ import kz.greetgo.sandbox.controller.register.ClientRegister;
 import kz.greetgo.sandbox.register.test.dao.ClientTestDao;
 import kz.greetgo.sandbox.register.test.util.ParentTestNg;
 import kz.greetgo.sandbox.register.test.util.test_utils.RandomEntity;
-import kz.greetgo.util.RND;
 import org.testng.annotations.Test;
 
 import static org.fest.assertions.api.Assertions.assertThat;
@@ -241,24 +240,42 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
 
   @Test
-  public void testClintDetail_absent() {
+  public void testClintDetail_existID() {
+
+    CharmDb charm = this.randomEntity.get().charmDb();
+    int charmId = clientTestDao.get().insertCharm(charm);
+
+    ClientDb clientDb = this.randomEntity.get().clientDb(charmId);
+    int clientId = clientTestDao.get().insertClientDb(clientDb);
+
     //
     //
-    ClientDetail clientDetail = clientRegister.get().getClientDetailById(RND.plusInt(12));
+    ClientDetail clientDetail = clientRegister.get().getClientDetailById(clientId);
     //
     //
-    assertThat(clientDetail).isNull();
+    System.out.println(clientDetail.clientId + "\n" + clientDetail.name + "\n" + clientDetail.birthDay);
+    assertThat(clientDetail).isNotNull();
+  }
+
+  @Test
+  public void testClintDetail_absentId() {
+    //
+    //
+    ClientDetail clientDetail = clientRegister.get().getClientDetailById(0);
+    //
+    //
+    assertThat(clientDetail).isNotNull();
   }
 
 
-  @Test//deleteClient
+  @Test
   public void testDeleteClient() {
 
-    Client client = randomEntity.get().client();
-    int id = clientTestDao.get().insertClient(client);
+//    Client client = randomEntity.get().client();
+//    int id = clientTestDao.get().insertClient(client);
     //
     //
-    clientRegister.get().deleteClient(id);
+//    clientRegister.get().deleteClient(id);
     //
     //
 //    client = clientTestDao.get().;
@@ -267,7 +284,36 @@ public class ClientRegisterImplTest extends ParentTestNg {
 //??????? для каждого параметра создать отдельный метод в дао,
 // но каждый тогда не понятно что будет возвр
 // ащать если метод правильно отработал
-    assertThat(client).isNull();
+//    assertThat(client).isNull();
+  }
+
+
+
+//  public int clientID;
+//  public String surname;
+//  public String name;
+//  public String patronymic;
+//  public Gender gender;
+//  public Date birthDay;
+//  public Character character;
+//  public Address actualAddress;
+//  public Address registrationAddress;
+//  public List<Phone> phones = new ArrayList<>();
+  @Test
+  public void save() {
+    ClientToSave toSave = this.randomEntity.get().clientToSave();
+
+
+//INSERT INTO client (id, surname, name, patronymic, gender, birth_date, charm)
+//VALUES (36, 'BBBBBB', 'bb', 'jask', 'FEMALE', '2001-04-10', 1)
+//ON CONFLICT (id) DO UPDATE SET
+//  surname = EXCLUDED.surname,
+//  name = EXCLUDED.name,
+//  patronymic = EXCLUDED.patronymic,
+//  gender = EXCLUDED.gender,
+//  birth_date = EXCLUDED.birth_date,
+//  charm = EXCLUDED.charm;
+
   }
 
   //saveClient

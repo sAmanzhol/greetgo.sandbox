@@ -1,5 +1,5 @@
 export class Address {
   public street: string;
   public house: string;
-  public apartment: string;
+  public flat: string;
 }
