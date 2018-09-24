@@ -1,0 +1,127 @@
+<ng-template #modal id="modal" let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" *ngIf="inModalData['type']=='add'">Добавить нового клиента</h5>
+    <h5 class="modal-title" *ngIf="inModalData['type']=='edit'">Редактирование клиента</h5>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <form (ngSubmit)="form.form.valid && onSubmit()" #form="ngForm" novalidate>
+    <div class="modal-body container">
+      <legend class="my-2 font-weight-bold">Персональная информация</legend>
+      <hr class="mt-0">
+
+      <div class="form-group d-flex justify-content-between">
+        <input type="text" id="surname" name="surname" placeholder="Фамилия*" class="form-control client-info-input"
+               [(ngModel)]="client['surname']" #surname="ngModel"
+               [ngClass]="{'is-invalid': (form.submitted || surname.dirty) && surname.errors}" required>
+        <input type="text" id="name" name="name" placeholder="Имя*" class="form-control client-info-input"
+               [(ngModel)]="client['name']" #name="ngModel"
+               [ngClass]="{'is-invalid': (form.submitted || name.dirty) && name.errors}" required>
+      </div>
+
+      <div class="form-group d-flex justify-content-between">
+        <input type="text" id="patronymic" name="patronymic" placeholder="Отчество"
+               class="form-control client-info-input" [(ngModel)]="client['patronymic']" #patronymic="ngModel"
+               [ngClass]="{'is-invalid': (form.submitted || patronymic.dirty) && patronymic.errors}">
+        <input type="text" id="birthDate" name="birthDate" placeholder="Дата рождения" onfocus="(this.type='date')"
+               class="form-control client-info-input" [(ngModel)]="client['birthDate']" #birthDate="ngModel"
+               [ngClass]="{'is-invalid': (form.submitted || birthDate.dirty) && birthDate.errors}" required>
+      </div>
+
+      <div class="form-group d-flex justify-content-between">
+        <select id="gender" name="gender" class="form-control client-info-input" [(ngModel)]="client['gender']"
+                #gender="ngModel" [ngClass]="{'is-invalid': (form.submitted || gender.dirty) && gender.errors}"
+                required>
+          <option value="" selected>Выберите пол...</option>
+          <option value="female">Женский</option>
+          <option value="male">Мужской</option>
+        </select>
+
+        <select id="character" name="character" class="form-control client-info-input" [(ngModel)]="client['character']"
+                #character="ngModel" [ngClass]="{'is-invalid': (form.submitted || character.dirty) && character.errors}"
+                required>
+          <option value="" selected>Выберите характер...</option>
+
+          <option value={{c.id}} *ngFor="let c of characters">{{c.value}}</option>
+        </select>
+      </div>
+
+
+      <legend class="mt-3 mb-2 font-weight-bold">Адресная информация</legend>
+      <hr class="mt-0">
+
+      <label class="w-100 text-left mb-2">Адрес регистрации</label>
+      <div class="form-group d-flex justify-content-between">
+        <input type="text" id="streetRegistration" name="streetRegistration" placeholder="Улица*"
+               class="form-control client-info-input" [(ngModel)]="client['streetRegistration']"
+               #streetRegistration="ngModel"
+               [ngClass]="{'is-invalid': (form.submitted || streetRegistration.dirty) && streetRegistration.errors}"
+               required>
+        <input type="text" id="houseRegistration" name="houseRegistration" placeholder="Дом*"
+               class="form-control client-info-input" [(ngModel)]="client['houseRegistration']"
+               #houseRegistration="ngModel"
+               [ngClass]="{'is-invalid': (form.submitted || houseRegistration.dirty) && houseRegistration.errors}"
+               required>
+      </div>
+
+      <div class="form-group d-flex justify-content-between">
+        <input type="number" id="apartmentRegistration" name="apartmentRegistration" placeholder="Квартира*"
+               class="form-control client-info-input" [(ngModel)]="client['apartmentRegistration']"
+               #apartmentRegistration="ngModel"
+               [ngClass]="{'is-invalid': (form.submitted || apartmentRegistration.dirty) && apartmentRegistration.errors}"
+               required>
+      </div>
+
+      <label class="w-100 text-left mb-2">Адрес проживания (фактический)</label>
+      <div class="form-group d-flex justify-content-between">
+        <input type="text" id="streetResidence" name="streetResidence" placeholder="Улица"
+               class="form-control client-info-input" [(ngModel)]="client['streetResidence']" #streetResidence="ngModel"
+               [ngClass]="{'is-invalid': (form.submitted || streetResidence.dirty) && streetResidence.errors}">
+        <input type="text" id="houseResidence" name="houseResidence" placeholder="Дом"
+               class="form-control client-info-input" [(ngModel)]="client['houseResidence']" #houseResidence="ngModel"
+               [ngClass]="{'is-invalid': (form.submitted || houseResidence.dirty) && houseResidence.errors}">
+      </div>
+
+      <div class="form-group d-flex justify-content-between">
+        <input type="number" id="apartmentResidence" name="apartmentResidence" placeholder="Квартира"
+               class="form-control client-info-input" [(ngModel)]="client['apartmentResidence']"
+               #apartmentResidence="ngModel"
+               [ngClass]="{'is-invalid': (form.submitted || apartmentResidence.dirty) && apartmentResidence.errors}">
+      </div>
+
+
+      <legend class="mt-3 mb-2 font-weight-bold">Контактные данные</legend>
+      <hr class="mt-0">
+
+      <div class="form-group d-flex justify-content-between flex-wrap">
+        <div *ngFor="let p of client['numbers']; let first = first; let index = index" class="input-group client-info-input mb-2">
+          <span ngbDropdown>
+            <button type="button" class="type-button btn rounded-left" id="dropdownBasic1" ngbDropdownToggle>{{p.type}}</button>
+            <ul ngbDropdownMenu aria-labelledby="dropdownBasic1">
+              <li *ngFor="let t of phones" value={{t.id}} class="dropdown-item" (click)="changePhoneType(p, t.type)">{{t.type}}</li>
+            </ul>
+          </span>
+
+          <input type="text" name=`phone{{index}}` placeholder="Введите номер" mask="0(000)-000-00-00" class="form-control" [(ngModel)]="p.value" [ngClass]="{'is-invalid': (form.submitted) && !p.value}" required>
+
+          <span *ngIf="!first" class="input-group-btn">
+            <button class="delete-button btn btn-danger rounded-right" type="button" (click)="deletePhone(index)"><span><i class="fas fa-minus"></i></span></button>
+          </span>
+        </div>
+      </div>
+
+      <button type="button" class="btn btn-success btn-sm" (click)="addPhone()">Add Phone</button>
+    </div>
+
+    <div class="modal-footer" *ngIf="inModalData['type']=='add'">
+      <button type="submit" class="btn btn-primary">Добавить</button>
+    </div>
+
+    <div class="modal-footer" *ngIf="inModalData['type']=='edit'">
+      <button type="button" class="btn btn-secondary" (click)="modal.close('Cancel click')">Отменить</button>
+      <button type="submit" class="btn btn-primary">Изменить</button>
+    </div>
+  </form>
+</ng-template>

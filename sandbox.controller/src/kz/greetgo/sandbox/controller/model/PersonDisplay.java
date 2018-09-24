@@ -2,7 +2,6 @@ package kz.greetgo.sandbox.controller.model;
 
 import java.util.ArrayList;
 import java.util.List;
-import kz.greetgo.sandbox.controller.model.UserCan;
 
 public class PersonDisplay {
   public String fio;

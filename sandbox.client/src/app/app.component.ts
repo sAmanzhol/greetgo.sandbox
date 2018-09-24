@@ -9,5 +9,6 @@ import {LoginService} from "./login/login.service";
 export class AppComponent {
   title = 'sandbox';
 
-  constructor(public login: LoginService) {}
+  constructor(public login: LoginService) {
+  }
 }

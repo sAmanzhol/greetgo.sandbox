@@ -3,6 +3,8 @@
     Добро пожаловать на {{ title }}!
   </h1>
   <app-login></app-login>
-  <app-about *ngIf="login.canViewAbout"></app-about>
-  <app-client-list *ngIf="login.canViewUsers"></app-client-list>
+  <!--<app-about *ngIf="login.canViewAbout"></app-about>-->
+  <!--<app-client-list *ngIf="login.canViewUsers"></app-client-list>-->
+
+  <app-clients *ngIf="login.canViewUsers"></app-clients>
 </div>
