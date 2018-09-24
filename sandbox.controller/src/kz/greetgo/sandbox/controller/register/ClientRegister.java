@@ -12,9 +12,12 @@ public interface ClientRegister {
 
   int count(ClientToFilter filter);
 
+  // FIXME: 9/24/18 Должен возвращать ClientRecord. Переименуй метод в save
   ClientDisplay crupdate(String id, ClientToSave clientDisplay);
 
+  // FIXME: 9/24/18 Название метода должно бытьdetails
   ClientDisplay get(String id);
 
+  // FIXME: 9/24/18 Не должен возвращать ничего
   ClientDisplay delete(String id);
 }

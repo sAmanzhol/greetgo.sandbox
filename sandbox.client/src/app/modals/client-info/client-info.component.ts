@@ -12,6 +12,9 @@ import {PhoneDisplay} from "../../../model/PhoneDisplay";
   styleUrls: ['./client-info.component.css']
 })
 export class ClientInfoComponent implements OnInit {
+  // fixme .07. Из списка на форму редактирования должен передоваться только ИД клиента.
+  // fixme 1.07.1. ... а если осуществляется добавление клиента, то передаём null.
+
   @Input() inModalData: {};
   @Output() outModalData = new EventEmitter();
 
