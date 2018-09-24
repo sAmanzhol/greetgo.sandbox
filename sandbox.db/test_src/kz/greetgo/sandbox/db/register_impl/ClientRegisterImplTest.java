@@ -3,6 +3,7 @@ package kz.greetgo.sandbox.db.register_impl;
 import kz.greetgo.depinject.core.BeanGetter;
 import kz.greetgo.sandbox.controller.model.model.*;
 import kz.greetgo.sandbox.controller.register.ClientRegister;
+import kz.greetgo.sandbox.db.model.ClientAccount;
 import kz.greetgo.sandbox.db.test.dao.ClientTestDao;
 import kz.greetgo.sandbox.db.test.util.ParentTestNg;
 import kz.greetgo.util.RND;
@@ -26,6 +27,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     private Client addClient(Charm charm) {
 
+
         Client client = new Client();
         client.id = RND.plusInt(10000);
         client.firstname = RND.str(10);
@@ -33,9 +35,25 @@ public class ClientRegisterImplTest extends ParentTestNg {
         client.patronymic = RND.str(10);
         client.gender = GenderType.MALE;
         client.birthDate = new Date();
-        client.charm = charm.id;
+        if (charm != null)
+            client.charm = charm.id;
         return client;
     }
+
+    private Client addClientKnowValue(int i, Charm charm) {
+
+        Client client = new Client();
+        client.id = i;
+        client.firstname = String.valueOf(i);
+        client.lastname = String.valueOf(i);
+        client.patronymic = String.valueOf(i);
+        client.gender = GenderType.MALE;
+        client.birthDate = new Date();
+        if (charm != null)
+            client.charm = charm.id;
+        return client;
+    }
+
 
     private Charm addCharm() {
 
@@ -43,7 +61,18 @@ public class ClientRegisterImplTest extends ParentTestNg {
         charm.id = RND.plusInt(1000);
         charm.name = RND.str(10);
         charm.description = RND.str(10);
-        charm.energy = RND.plusInt(100);
+        charm.energy = RND.plusInt(1000);
+        charm.actually = rndBoolean();
+        return charm;
+    }
+
+    private Charm addCharmKnowValue(int i) {
+
+        Charm charm = new Charm();
+        charm.id = i;
+        charm.name = String.valueOf(i);
+        charm.description = String.valueOf(i);
+        charm.energy = RND.plusInt(1505);
         charm.actually = rndBoolean();
         return charm;
     }
@@ -73,7 +102,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
         ClientAccount clientAccount = new ClientAccount();
         clientAccount.id = RND.plusInt(10000);
         clientAccount.client = client.id;
-        clientAccount.money = RND.plusInt(456);
+        clientAccount.money = 1000;
         clientAccount.number = RND.str(10);
         clientAccount.registeredAt = new Timestamp(RND.plusInt(532));
         return clientAccount;
@@ -103,13 +132,15 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     private List<Integer> addDatasDao(int sizeForCycle) {
 
+
         Charm charm;
         Client client;
         ClientAccount clientAccount;
+
         List<Integer> id = new ArrayList<>();
         for (int i = 0; i < sizeForCycle; i++) {
-            charm = addCharm();
-            client = addClient(charm);
+            charm = addCharmKnowValue(i);
+            client = addClientKnowValue(i,charm);
             id.add(client.id);
             clientAccount = addClientAccount(client);
             clientTestDao1.get().insertCharm(charm);
@@ -145,144 +176,187 @@ public class ClientRegisterImplTest extends ParentTestNg {
             return true;
     }
 
-    // TODO: asset 9/21/18 Protestiru vse list ne tolko poslednuyu i order obyazatelen a to test ne stabilnyi
+
     @Test
     public void testGetCharm() {
-
-        Charm charm = new Charm();
-
+        Charm charm;
+        int count = 0;
         for (int i = 0; i < 5; i++) {
-            charm = addCharm();
+            charm = addCharmKnowValue(i);
+            if (charm.actually)
+                count++;
             clientTestDao1.get().insertCharm(charm);
         }
+
         //
         //
-        // TODO: asset 9/21/18 vse Charm actualny bolu kerek
         List<Charm> listCharm = clientRegister.get().getCharm();
         //
         //
+
         System.err.println(listCharm);
-        assertThat(listCharm).hasSize(5);
-        assertThat(listCharm.get(4).id).isEqualTo(charm.id);
-        assertThat(listCharm.get(4).name).isEqualTo(charm.name);
-        assertThat(listCharm.get(4).description).isEqualTo(charm.description);
-        assertThat(listCharm.get(4).energy).isEqualTo(charm.energy);
-        assertThat(listCharm.get(4).actually).isEqualTo(charm.actually);
+        assertThat(listCharm.size()).isEqualTo(count);
+        for (int i = 0; i < count; i++) {
+            int id = listCharm.get(i).id;
+            assertThat(listCharm.get(i).id).isEqualTo(clientTestDao1.get().selectCharmById(id).id);
+            assertThat(listCharm.get(i).name).isEqualTo(clientTestDao1.get().selectCharmById(id).name);
+            assertThat(listCharm.get(i).description).isEqualTo(clientTestDao1.get().selectCharmById(id).description);
+            assertThat(listCharm.get(i).energy).isEqualTo(clientTestDao1.get().selectCharmById(id).energy);
+            assertThat(listCharm.get(i).actually).isEqualTo(clientTestDao1.get().selectCharmById(id).actually);
+        }
 
     }
 
-    // TODO: asset 9/21/18 Ne polny test
+
     @Test
     public void testGetCharmById() {
+        Charm ch;
+        ch = addCharm();
+        int id = ch.id;
+        clientTestDao1.get().insertCharm(ch);
 
-        Charm ch = new Charm();
-        for (int i = 0; i < 5; i++) {
-            ch = addCharm();
+        ch = addCharm();
+        int id1 = ch.id;
+        Integer idNull = null;
+        int count = 0;
+
+
+        for (int i = 1; i < 5; i++) {
+            ch = addCharmKnowValue(i);
+            if (ch.actually)
+                count++;
             clientTestDao1.get().insertCharm(ch);
         }
-        Integer id = 1000;
-        Integer id1 = 0;
-        Integer id2 = null;
-
 //
 //
         Charm charm = clientRegister.get().getCharmById(id);
         Charm charm1 = clientRegister.get().getCharmById(id1);
-        Charm charm2 = clientRegister.get().getCharmById(id2);
-        Charm charm3 = clientRegister.get().getCharmById(ch.id);
+        Charm charmNull = clientRegister.get().getCharmById(idNull);
+        List<Charm> charms = clientRegister.get().getCharm();
 //
 //
 
-        assertThat(charm.id).isEqualTo(1000);
-        assertThat(charm1.id).isEqualTo(0);
-        assertThat(charm2).isNull();
-        assertThat(clientTestDao1.get().selectCharmById(ch.id).id).isEqualTo(charm3.id);
+        assertThat(charm.id).isEqualTo(id);
+        assertThat(charm1.id).isEqualTo(id1);
+        assertThat(charmNull).isEqualTo(null);
+        for (int i = 0; i < count; i++) {
+            int charmId = charms.get(i).id;
+            assertThat(charms.get(i).name).isEqualTo(clientTestDao1.get().selectCharmById(charmId).name);
+            assertThat(charms.get(i).energy).isEqualTo(clientTestDao1.get().selectCharmById(charmId).energy);
+
+        }
+
     }
 
 
-    // TODO: asset 9/21/18 Mozhno tolko sozdat Client-ta, po moemu mneniu drugie znacheni ne nuzhny
     @Test
     public void testDeleteClient() {
 
-        Charm charm = new Charm();
         Client client = new Client();
+        List<Integer> listId = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
-            charm = addCharm();
-            client = addClient(charm);
-            clientTestDao1.get().insertCharm(charm);
-            clientTestDao1.get().insertClient(client);
+            client = addClientKnowValue(i, null);
+            listId.add(client.id);
+            clientTestDao1.get().insertClientWithoutCharm(client);
         }
+        int clientIdDeleted = 2;
+        listId.remove(2);
+        int clientIdDeleted1 = 3;
+        listId.remove(2);
 
 //
 //
-        clientRegister.get().deleteClient(client.id);
+        clientRegister.get().deleteClient(clientIdDeleted);
+        clientRegister.get().deleteClient(clientIdDeleted1);
 
 //
 //
-        Integer clientOfDeleted = clientTestDao1.get().getClientId(client.id);
-        assertThat(clientOfDeleted).isNull();
 
+        System.err.println(listId);
+        int count = clientTestDao1.get().getClientCount();
+        assertThat(count).isEqualTo(3);
+        assertThat(clientTestDao1.get().getClientId(clientIdDeleted)).isNull();
+        assertThat(clientTestDao1.get().getClientId(clientIdDeleted1)).isNull();
+        for (int i = 0; i < count; i++) {
+            Client cl = clientTestDao1.get().getClientById(listId.get(i));
+            assertThat(cl.id).isEqualTo(listId.get(i));
+            assertThat(cl.firstname).isEqualTo(String.valueOf(listId.get(i)));
+            assertThat(cl.lastname).isEqualTo(String.valueOf(listId.get(i)));
+
+        }
     }
 
 
-    // TODO: asset 9/21/18 Ne polnyi test drugye attributy tozhe dolzhny zapolnatsya
-    // TODO: asset 9/21/18
     @Test
     public void testGetClientDetails() {
-
         Charm charm = new Charm();
         Client client = new Client();
         ClientAddr clientAddr = new ClientAddr();
         ClientPhone clientPhone = new ClientPhone();
-        charm = addCharm();
-        client = addClient(charm);
-        clientPhone = addClientPhone(client);
-        clientAddr = addClientAddr(client);
-        clientTestDao1.get().insertCharm(charm);
-        clientTestDao1.get().insertClient(client);
-        clientTestDao1.get().insertClientPhone(clientPhone);
-        clientTestDao1.get().insertClientAddr(clientAddr);
-        clientAddr.type = AddrType.FACT;
-        clientTestDao1.get().insertClientAddr(clientAddr);
-
+        for (int i = 1; i < 3; i++) {
+            charm = addCharmKnowValue(i);
+            client = addClientKnowValue(i, charm);
+            clientPhone = addClientPhone(client);
+            clientAddr = addClientAddr(client);
+            clientTestDao1.get().insertCharm(charm);
+            clientTestDao1.get().insertClient(client);
+            clientTestDao1.get().insertClientPhone(clientPhone);
+            clientPhone.type = PhoneType.HOME;
+            clientPhone.number = "9999999";
+            clientTestDao1.get().insertClientPhone(clientPhone);
+            clientTestDao1.get().insertClientAddr(clientAddr);
+            clientAddr.type = AddrType.FACT;
+            clientTestDao1.get().insertClientAddr(clientAddr);
+        }
 //
 //
-        ClientDetails clientDetails = clientRegister.get().getClientDetails(client.id);
+        ClientDetails clientDetails = clientRegister.get().getClientDetails(2);
+        System.err.println("clientDETAILS:" + clientDetails);
 //
 //
-        assertThat(client.id).isEqualTo(clientDetails.id);
+        assertThat(clientDetails.id).isEqualTo(2);
+        assertThat(clientDetails.firstname).isEqualTo("2");
+        assertThat(clientDetails.lastname).isEqualTo("2");
+        assertThat(clientDetails.patronymic).isEqualTo(client.patronymic);
+        assertThat(clientDetails.characterId).isEqualTo(charm.id);
+        assertThat(clientDetails.gender).isEqualTo(client.gender);
+        assertThat(clientDetails.addressOfResidence.street).isEqualTo(clientAddr.street);
+        assertThat(clientDetails.addressOfResidence.house).isEqualTo(clientAddr.house);
+        assertThat(clientDetails.addressOfResidence.flat).isEqualTo(clientAddr.flat);
+        assertThat(clientDetails.addressOfRegistration.street).isEqualTo(clientAddr.street);
+        assertThat(clientDetails.addressOfRegistration.house).isEqualTo(clientAddr.house);
+        assertThat(clientDetails.addressOfRegistration.flat).isEqualTo(clientAddr.flat);
+        assertThat(clientDetails.phone.get(1).number).isEqualTo(clientPhone.number);
 
     }
 
-    // TODO: asset 9/21/18 Ne obyazatelno zapolnyat vse dannye, luche protestirovat vse attributy tipa vse korrectno sokhranilas ili net
     @Test
     public void testSaveClientEdit() {
-
-        Charm charm;
-        Client client;
-        ClientAddr clientAddr;
-        ClientPhone clientPhone;
+        Charm charm = new Charm();
+        Client client = new Client();
+        ClientAddr clientAddr = new ClientAddr();
+        ClientPhone clientPhone = new ClientPhone();
         ClientAccountTransaction clientAccountTransaction;
         TransactionType transactionType;
-        ClientAccount clientAccount;
-        charm = addCharm();
-        client = addClient(charm);
-        clientPhone = addClientPhone(client);
-        clientAddr = addClientAddr(client);
-        transactionType = addTransactionType();
-        clientAccount = addClientAccount(client);
-        clientAccountTransaction = addClientAccountTransaction(clientAccount, transactionType);
-
-        clientTestDao1.get().insertCharm(charm);
-        clientTestDao1.get().insertClient(client);
-        clientTestDao1.get().insertClientPhone(clientPhone);
-        clientTestDao1.get().insertClientAddr(clientAddr);
-        clientAddr.type = AddrType.FACT;
-        clientTestDao1.get().insertClientAddr(clientAddr);
-        clientTestDao1.get().insertTransaction_type(transactionType);
-        clientTestDao1.get().insertClientAccount(clientAccount);
-        clientTestDao1.get().insertClientAccountTransaction(clientAccountTransaction);
-
+        ClientAccount clientAccount = new ClientAccount();
+        for (int i = 1; i < 3; i++) {
+            charm = addCharm();
+            client = addClient(charm);
+            clientPhone = addClientPhone(client);
+            clientAddr = addClientAddr(client);
+            transactionType = addTransactionType();
+            clientAccount = addClientAccount(client);
+            clientAccountTransaction = addClientAccountTransaction(clientAccount, transactionType);
+            clientTestDao1.get().insertCharm(charm);
+            clientTestDao1.get().insertClient(client);
+            clientTestDao1.get().insertClientPhone(clientPhone);
+            clientTestDao1.get().insertClientAddr(clientAddr);
+            clientAddr.type = AddrType.FACT;
+            clientTestDao1.get().insertClientAddr(clientAddr);
+            clientTestDao1.get().insertTransaction_type(transactionType);
+            clientTestDao1.get().insertClientAccount(clientAccount);
+            clientTestDao1.get().insertClientAccountTransaction(clientAccountTransaction);
+        }
         ClientToSave clientToSave = new ClientToSave();
         clientToSave.id = client.id;
         clientToSave.firstname = client.firstname;
@@ -302,6 +376,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
         clientToSave.addressOfResidence.flat = clientAddr.flat;
         clientToSave.addressOfResidence.type = AddrType.FACT;
         clientToSave.phone.add(clientPhone);
+        System.err.println("clientToSAVE:" + clientToSave);
 
         //
         //
@@ -309,11 +384,15 @@ public class ClientRegisterImplTest extends ParentTestNg {
         System.err.println(clientRecord);
         //
         //
-
-
-			assertThat(clientRecord).isNotNull();
-			assertThat(clientRecord.firstname).isEqualTo(clientToSave.firstname);
-			assertThat(clientRecord.id).isEqualTo(clientToSave.id);
+        assertThat(clientRecord).isNotNull();
+        assertThat(clientRecord.id).isEqualTo(clientToSave.id);
+        assertThat(clientRecord.firstname).isEqualTo(clientToSave.firstname);
+        assertThat(clientRecord.lastname).isEqualTo(clientToSave.lastname);
+        assertThat(clientRecord.patronymic).isEqualTo(clientToSave.patronymic);
+        assertThat(clientRecord.characterName).isEqualTo(charm.name);
+        assertThat(clientRecord.maximumBalance).isEqualTo((int) clientAccount.money);
+        assertThat(clientRecord.minimumBalance).isEqualTo((int) clientAccount.money);
+        assertThat(clientRecord.totalAccountBalance).isEqualTo((int) clientAccount.money);
 
     }
 
@@ -349,10 +428,10 @@ public class ClientRegisterImplTest extends ParentTestNg {
         clientToSave.addressOfResidence.house = clientAddr.house;
         clientToSave.addressOfResidence.flat = clientAddr.flat;
         clientToSave.addressOfResidence.type = AddrType.FACT;
-        clientPhone.client=null;
+        clientPhone.client = null;
         clientToSave.phone.add(clientPhone);
         Integer id = clientToSave.id;
-        System.err.println("CLIENTTOSAVE:"+clientToSave);
+        System.err.println("CLIENTTOSAVE:" + clientToSave);
 
         //
         //
@@ -361,28 +440,42 @@ public class ClientRegisterImplTest extends ParentTestNg {
         //
 
 
-        assertThat(clientRecord.firstname).isEqualTo(clientToSave.firstname);
+        assertThat(clientRecord).isNotNull();
         assertThat(clientRecord.id).isNotEqualTo(id);
         assertThat(clientTestDao1.get().getClientById(clientRecord.id).id).isEqualTo(clientRecord.id);
-
+        assertThat(clientRecord.firstname).isEqualTo(clientToSave.firstname);
+        assertThat(clientRecord.lastname).isEqualTo(clientToSave.lastname);
+        assertThat(clientRecord.patronymic).isEqualTo(clientToSave.patronymic);
+        assertThat(clientRecord.characterName).isEqualTo(charm.name);
+        assertThat(clientRecord.maximumBalance).isEqualTo(0);
+        assertThat(clientRecord.minimumBalance).isEqualTo(0);
+        assertThat(clientRecord.totalAccountBalance).isEqualTo(0);
     }
 
-    // TODO: asset 9/21/18 Drugye attributy tozhe dolzhno proveryatsya record-a
+
     @Test
     public void testGetClientList() {
 
         Charm charm;
         Client client;
-        ClientAccount clientAccount;
-        List<Integer> id;
-        id = addDatasDao(10);
-        Collections.sort(id);
+        ClientAccount clientAccount = new ClientAccount();
+        for (int i = 0; i < 10; i++) {
+            charm = addCharmKnowValue(i);
+            client = addClientKnowValue(i, charm);
+            clientAccount = addClientAccount(client);
+            clientTestDao1.get().insertCharm(charm);
+            clientTestDao1.get().insertClient(client);
+            clientTestDao1.get().insertClientAccount(clientAccount);
+            clientAccount.money = clientAccount.money + 50;
+            clientAccount.id = clientAccount.id + 50;
+            clientTestDao1.get().insertClientAccount(clientAccount);
+        }
 
         ClientFilter clientFilter = new ClientFilter();
         clientFilter.firstname = "";
         clientFilter.lastname = "";
         clientFilter.patronymic = "";
-        clientFilter.orderBy = "id";
+        clientFilter.orderBy = "firstname";
         clientFilter.recordSize = 20;
         clientFilter.page = 0;
         clientFilter.recordTotal = 100;
@@ -396,26 +489,33 @@ public class ClientRegisterImplTest extends ParentTestNg {
 //
 //
 
-
-        System.err.println(id);
         assertThat(clientRecords.size()).isEqualTo(10);
         for (int i = 0; i < 10; i++) {
-            assertThat(clientRecords.get(i).id).isEqualTo(id.get(i));
+            int idClientRecord = clientRecords.get(i).id;
+            client = clientTestDao1.get().getClientById(idClientRecord);
+            assertThat(clientRecords.get(i).characterName).isEqualTo(clientTestDao1.get().selectCharmById(idClientRecord).name);
+            assertThat(clientRecords.get(i).firstname).isEqualTo(client.firstname);
+            assertThat(clientRecords.get(i).lastname).isEqualTo(client.lastname);
+            assertThat(clientRecords.get(i).patronymic).isEqualTo(client.patronymic);
+            assertThat(clientRecords.get(i).id).isEqualTo(client.id);
+            assertThat(clientRecords.get(i).maximumBalance).isEqualTo((int) clientAccount.money);
+            assertThat(clientRecords.get(i).minimumBalance).isEqualTo((int) clientAccount.money - 50);
+            assertThat(clientRecords.get(i).totalAccountBalance).isEqualTo((int) clientAccount.money - 25);
         }
+
 
     }
 
-    // TODO: asset 9/21/18 Mozhesh dlya kazhdogy clienta generit neskolko account-ov
+
     @Test
     public void testGetClientListByFilter() {
-
         Charm charm;
         Client client = new Client();
-        ClientAccount clientAccount;
+        ClientAccount clientAccount = new ClientAccount();
         List<Integer> id = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
-            charm = addCharm();
-            client = addClient(charm);
+            charm = addCharmKnowValue(i);
+            client = addClientKnowValue(i, charm);
             if (i >= 8) {
                 id.add(client.id);
                 client.firstname = "Nazar";
@@ -427,18 +527,20 @@ public class ClientRegisterImplTest extends ParentTestNg {
             clientAccount.money = clientAccount.money + 50;
             clientAccount.id = clientAccount.id + 50;
             clientTestDao1.get().insertClientAccount(clientAccount);
+            clientAccount.money = clientAccount.money + 50;
+            clientAccount.id = clientAccount.id + 50;
+            clientTestDao1.get().insertClientAccount(clientAccount);
         }
         Collections.sort(id);
         ClientFilter clientFilter = new ClientFilter();
         clientFilter.firstname = client.firstname;
         clientFilter.lastname = "";
         clientFilter.patronymic = "";
-        clientFilter.orderBy = "id";
+        clientFilter.orderBy = "firstname";
         clientFilter.recordSize = 100;
         clientFilter.page = 0;
         clientFilter.recordTotal = 100;
         clientFilter.sort = true;
-
 //
 //
         ClientRecord clientRecord = new ClientRecord();
@@ -447,28 +549,42 @@ public class ClientRegisterImplTest extends ParentTestNg {
         System.err.println(clientRecords.size());
 //
 //
-
         assertThat(clientRecords.size()).isEqualTo(2);
         for (int i = 0; i < 2; i++) {
-            assertThat(clientRecords.get(i).id).isEqualTo(id.get(i));
+            int idClientRecord = clientRecords.get(i).id;
+            client = clientTestDao1.get().getClientById(idClientRecord);
+            assertThat(clientRecords.get(i).characterName).isEqualTo(clientTestDao1.get().selectCharmById(idClientRecord).name);
             assertThat(clientRecords.get(i).firstname).isEqualTo("Nazar");
+            assertThat(clientRecords.get(i).firstname).isEqualTo(client.firstname);
+            assertThat(clientRecords.get(i).lastname).isEqualTo(client.lastname);
+            assertThat(clientRecords.get(i).patronymic).isEqualTo(client.patronymic);
+            assertThat(clientRecords.get(i).id).isEqualTo(client.id);
+            assertThat(clientRecords.get(i).maximumBalance).isEqualTo((int) clientAccount.money);
+            assertThat(clientRecords.get(i).minimumBalance).isEqualTo((int) clientAccount.money - 100);
+            assertThat(clientRecords.get(i).totalAccountBalance).isEqualTo((int) clientAccount.money - 50);
         }
+
+
     }
+
 
     @Test
     public void testGetClientListSort() {
 
         Charm charm;
-        Client client = new Client();
-        ClientAccount clientAccount;
-        List<Integer> id= new ArrayList<>();
+        Client client;
+        ClientAccount clientAccount = new ClientAccount();
+        List<Integer> id = new ArrayList<>();
         for (int i = 0; i < 12; i++) {
-            charm = addCharm();
-            client = addClient(charm);
+            charm = addCharmKnowValue(i);
+            client = addClientKnowValue(i,charm);
             id.add(client.id);
             clientAccount = addClientAccount(client);
             clientTestDao1.get().insertCharm(charm);
             clientTestDao1.get().insertClient(client);
+            clientTestDao1.get().insertClientAccount(clientAccount);
+            clientAccount.money = clientAccount.money + 50;
+            clientAccount.id = clientAccount.id + 60;
             clientTestDao1.get().insertClientAccount(clientAccount);
             clientAccount.money = clientAccount.money + 50;
             clientAccount.id = clientAccount.id + 60;
@@ -479,7 +595,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
         clientFilter.firstname = "";
         clientFilter.lastname = "";
         clientFilter.patronymic = "";
-        clientFilter.orderBy = "id";
+        clientFilter.orderBy = "character";
         clientFilter.recordSize = 100;
         clientFilter.page = 0;
         clientFilter.recordTotal = 100;
@@ -493,30 +609,47 @@ public class ClientRegisterImplTest extends ParentTestNg {
         System.err.println(clientRecords.size());
 //
 //
-
         assertThat(clientRecords.size()).isEqualTo(12);
-        int k=11;
         for (int i = 0; i < 12; i++) {
-            assertThat(clientRecords.get(i).id).isEqualTo(id.get(k));
-            k--;
+            int idClientRecord = clientRecords.get(i).id;
+            client = clientTestDao1.get().getClientById(idClientRecord);
+            assertThat(clientRecords.get(i).characterName).isEqualTo(clientTestDao1.get().selectCharmById(idClientRecord).name);
+            assertThat(clientRecords.get(i).firstname).isEqualTo(client.firstname);
+            assertThat(clientRecords.get(i).lastname).isEqualTo(client.lastname);
+            assertThat(clientRecords.get(i).patronymic).isEqualTo(client.patronymic);
+            assertThat(clientRecords.get(i).id).isEqualTo(client.id);
+            assertThat(clientRecords.get(i).maximumBalance).isEqualTo((int) clientAccount.money);
+            assertThat(clientRecords.get(i).minimumBalance).isEqualTo((int) clientAccount.money - 100);
+            assertThat(clientRecords.get(i).totalAccountBalance).isEqualTo((int) clientAccount.money - 50);
         }
     }
+
 
     @Test
     public void testGetClientListRecordSize() {
 
         Charm charm;
         Client client = new Client();
-        ClientAccount clientAccount;
-        List<Integer> id;
-        id = addDatasDao(10);
-        Collections.sort(id);
+        ClientAccount clientAccount=new ClientAccount();
+        for (int i = 0; i < 10; i++) {
+            charm = addCharmKnowValue(i);
+            client = addClientKnowValue(i, charm);
+            clientAccount = addClientAccount(client);
+            clientTestDao1.get().insertCharm(charm);
+            clientTestDao1.get().insertClient(client);
+            clientTestDao1.get().insertClientAccount(clientAccount);
+            clientAccount.money = clientAccount.money + 50;
+            clientAccount.id = clientAccount.id + 50;
+            clientTestDao1.get().insertClientAccount(clientAccount);
+            clientAccount.money = clientAccount.money + 70;
+            clientAccount.id = clientAccount.id + 50;
+            clientTestDao1.get().insertClientAccount(clientAccount);
+        }
         ClientFilter clientFilter = new ClientFilter();
         clientFilter.firstname = "";
         clientFilter.lastname = "";
         clientFilter.patronymic = "";
-        // TODO: asset 9/21/18 mozhesh ubrat ordering po id
-        clientFilter.orderBy = "id";
+        clientFilter.orderBy = "character";
         clientFilter.recordSize = 2;
         clientFilter.page = 0;
         clientFilter.recordTotal = 100;
@@ -531,12 +664,21 @@ public class ClientRegisterImplTest extends ParentTestNg {
 //
 //
 
-        assertThat(clientRecords.size()).isEqualTo(2);
-        int k=9;
-        for (int i = 0; i < 2; i++) {
-            assertThat(clientRecords.get(i).id).isEqualTo(id.get(k));
-            k--;
+        assertThat(clientRecords.size()).isEqualTo(clientFilter.recordSize);
+
+        for (int i = 0; i < clientFilter.recordSize; i++) {
+            int idClientRecord = clientRecords.get(i).id;
+            client = clientTestDao1.get().getClientById(idClientRecord);
+            assertThat(clientRecords.get(i).characterName).isEqualTo(clientTestDao1.get().selectCharmById(idClientRecord).name);
+            assertThat(clientRecords.get(i).firstname).isEqualTo(client.firstname);
+            assertThat(clientRecords.get(i).lastname).isEqualTo(client.lastname);
+            assertThat(clientRecords.get(i).patronymic).isEqualTo(client.patronymic);
+            assertThat(clientRecords.get(i).id).isEqualTo(client.id);
+            assertThat(clientRecords.get(i).maximumBalance).isEqualTo((int) clientAccount.money);
+            assertThat(clientRecords.get(i).minimumBalance).isEqualTo((int) clientAccount.money - 120);
+            assertThat(clientRecords.get(i).totalAccountBalance).isEqualTo((int) clientAccount.money - 64);
         }
+
     }
 
     @Test

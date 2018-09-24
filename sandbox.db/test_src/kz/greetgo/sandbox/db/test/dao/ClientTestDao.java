@@ -1,6 +1,7 @@
 package kz.greetgo.sandbox.db.test.dao;
 
 import kz.greetgo.sandbox.controller.model.model.*;
+import kz.greetgo.sandbox.db.model.ClientAccount;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
@@ -42,6 +43,10 @@ public interface ClientTestDao {
 		"(#{client.id}, #{client.firstname}, #{client.lastname}, #{client.patronymic}, #{client.gender}, #{client.birthDate}, #{client.charm})")
 	void insertClient(@Param("client") Client client
 	);
+	@Insert("insert into client (id, firstname, lastname, patronymic, gender, birth_date) values " +
+			"(#{client.id}, #{client.firstname}, #{client.lastname}, #{client.patronymic}, #{client.gender}, #{client.birthDate})")
+	void insertClientWithoutCharm(@Param("client") Client client
+	);
 
 
 	@Insert("insert into client_account (id, client, money, number, registered_at) values (#{clientAccount.id}, #{clientAccount.client}, " +
@@ -69,10 +74,14 @@ public interface ClientTestDao {
 	@Select("select * from client where id =#{id}")
 	Client getClientById(@Param("id") int id);
 
-	@Select("select id from client where id =#{id}")
+	@Select("select id from client where id =#{id} order by firstname")
 	Integer getClientId(@Param("id") int id);
 
-	@Select("select * from charm where id = #{id}")
+	@Select("select count(id) from client")
+	Integer getClientCount();
+
+	@Select("select * from charm where id = #{id} order by energy asc")
 	Charm selectCharmById(@Param("id") int id);
+
 
 }

@@ -1,8 +1,7 @@
-package kz.greetgo.sandbox.controller.model.model;
+package kz.greetgo.sandbox.db.model;
 
 import java.sql.Timestamp;
 
-// TODO: asset 9/21/18 Nadao ubrat class kotorye ispolzuetsya v testovom classe cotorye voobshe ne nuzhny v controllere
 public class ClientAccount {
 	public int id;
 	public int client;
