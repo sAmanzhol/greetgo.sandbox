@@ -139,8 +139,8 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
         List<Integer> id = new ArrayList<>();
         for (int i = 0; i < sizeForCycle; i++) {
-            charm = addCharm();
-            client = addClient(charm);
+            charm = addCharmKnowValue(i);
+            client = addClientKnowValue(i,charm);
             id.add(client.id);
             clientAccount = addClientAccount(client);
             clientTestDao1.get().insertCharm(charm);
@@ -555,7 +555,6 @@ public class ClientRegisterImplTest extends ParentTestNg {
             client = clientTestDao1.get().getClientById(idClientRecord);
             assertThat(clientRecords.get(i).characterName).isEqualTo(clientTestDao1.get().selectCharmById(idClientRecord).name);
             assertThat(clientRecords.get(i).firstname).isEqualTo("Nazar");
-            assertThat(clientRecords.get(i).id).isEqualTo(id.get(i));
             assertThat(clientRecords.get(i).firstname).isEqualTo(client.firstname);
             assertThat(clientRecords.get(i).lastname).isEqualTo(client.lastname);
             assertThat(clientRecords.get(i).patronymic).isEqualTo(client.patronymic);
