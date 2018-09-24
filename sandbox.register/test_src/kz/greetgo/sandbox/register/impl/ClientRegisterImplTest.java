@@ -2,6 +2,7 @@ package kz.greetgo.sandbox.register.impl;
 
 import kz.greetgo.depinject.core.BeanGetter;
 import kz.greetgo.sandbox.controller.model.*;
+import kz.greetgo.sandbox.controller.model.db.*;
 import kz.greetgo.sandbox.controller.register.ClientRegister;
 import kz.greetgo.sandbox.register.test.dao.ClientTestDao;
 import kz.greetgo.sandbox.register.test.util.ParentTestNg;
@@ -33,51 +34,183 @@ public class ClientRegisterImplTest extends ParentTestNg {
 //    clientRegister.get().test();
 //  }
 
+  public void test() {
+
+
+    CharmDb charm = this.randomEntity.get().charmDb();
+    int charmId = clientTestDao.get().insertCharm(charm);
+
+    ClientDb clientDb = this.randomEntity.get().clientDb(charmId);
+    int clientId = clientTestDao.get().insertClientDb(clientDb);
+
+    ClientAccountDb clientAccountDb = this.randomEntity.get().clientAccountDb(clientId);
+    int clientAccount = clientTestDao.get().insertClientAccountDb(clientAccountDb);
+
+    TransactionTypeDb typeTDb = this.randomEntity.get().transactionTypeDb();
+    int tTypeId = clientTestDao.get().insertTransactionType(typeTDb);
+
+    ClientAccountTransactionDb accountTransactionDb = this.randomEntity.get().clientAccountTransactionDb(tTypeId, clientAccount);
+    int cAccountTDb = clientTestDao.get().insertClientAccountTransaction(accountTransactionDb);
+
+
+  }
+
   @Test
   public void testFilter_filter_emptyFilter() {
 
+//    CharmDb charm = this.randomEntity.get().charmDb();
+//    int charmId = clientTestDao.get().insertCharm(charm);
+//
+//    ClientDb clientDb = this.randomEntity.get().clientDb(charmId);
+//    int clientId = clientTestDao.get().insertClientDb(clientDb);
+//
+//    ClientAccountDb clientAccountDb = this.randomEntity.get().clientAccountDb(clientId);
+//    int clientAccount = clientTestDao.get().insertClientAccountDb(clientAccountDb);
+//
+//    TransactionTypeDb typeTDb = this.randomEntity.get().transactionTypeDb();
+//    int tTypeId = clientTestDao.get().insertTransactionType(typeTDb);
+//
+//    ClientAccountTransactionDb accountTransactionDb = this.randomEntity.get().clientAccountTransactionDb(tTypeId, clientAccount);
+//    int cAccountTDb = clientTestDao.get().insertClientAccountTransaction(accountTransactionDb);
 
-    RandomEntity randomEntity = this.randomEntity.get();
-
-    Client client = randomEntity.client();
-    int id = clientTestDao.get().insertClient(client);
-
-    Client client2 = this.randomEntity.get().client();
-    int id2 = clientTestDao.get().insertClient(client2);
-
-    ClientFilter clientFilter = new ClientFilter();
+    ClientFilter clientFilter = this.randomEntity.get().filterE();
     //
     //
     ClientRecordListWrapper clientRecordListWrapper = clientRegister.get().filterClients(clientFilter);
     //
     //
+    for (int i = 0; i < clientRecordListWrapper.records.size(); i++) {
+      System.out.println(clientRecordListWrapper.records.get(i).clientId);
+      System.out.println(clientRecordListWrapper.records.get(i).fio);
+
+    }
+
     assertThat(clientRecordListWrapper.records).isNotNull();
-    assertThat(clientRecordListWrapper.records).hasSize(2);
-    assertThat(clientRecordListWrapper.records).hasSize(clientRecordListWrapper.count);
+    assertThat(clientRecordListWrapper.records).hasSize(clientRecordListWrapper.records.size());
   }
 
   @Test
-  public void testFilter_filter_columnNameFilter() {
+  public void testFilter_filter_nameFilter() {
 
-    ClientFilter clientFilter = new ClientFilter();
-    clientFilter.columnName = RND.str(4);
+
+//    CharmDb charm = this.randomEntity.get().charmDb();
+//    int charmId = clientTestDao.get().insertCharm(charm);
+//
+//    ClientDb clientDb = this.randomEntity.get().clientDb(charmId, "Madina", 1);
+//    int clientId = clientTestDao.get().insertClientDb(clientDb);
+//
+//
+//    ClientAccountDb clientAccountDb = this.randomEntity.get().clientAccountDb(clientId);
+//    int clientAccount = clientTestDao.get().insertClientAccountDb(clientAccountDb);
+//
+//    TransactionTypeDb typeTDb = this.randomEntity.get().transactionTypeDb();
+//    int tTypeId = clientTestDao.get().insertTransactionType(typeTDb);
+//
+//    ClientAccountTransactionDb accountTransactionDb = this.randomEntity.get().clientAccountTransactionDb(tTypeId, clientAccount);
+//    int cAccountTDb = clientTestDao.get().insertClientAccountTransaction(accountTransactionDb);
+//    System.out.println(clientId + " NAme: " + clientDb.name);
+    ClientFilter clientFilter = this.randomEntity.get().filterE();
+    clientFilter.name = "Madina";
     //
     //
     ClientRecordListWrapper clientRecordListWrapper = clientRegister.get().filterClients(clientFilter);
     //
     //
-    assertThat(clientRecordListWrapper.records).hasSize(0);
+    for (int i = 0; i < clientRecordListWrapper.records.size(); i++) {
+      System.out.println(clientRecordListWrapper.records.get(i).clientId);
+      System.out.println(clientRecordListWrapper.records.get(i).fio);
+
+    }
+
+    assertThat(clientRecordListWrapper.records).hasSize(3);
+
   }
+
+  @Test
+  public void testFilter_filter_patronymicFilter() {
+
+
+//    CharmDb charm = this.randomEntity.get().charmDb();
+//    int charmId = clientTestDao.get().insertCharm(charm);
+//
+//    ClientDb clientDb = this.randomEntity.get().clientDb(charmId, "Abai", 3);
+//    int clientId = clientTestDao.get().insertClientDb(clientDb);
+//
+//
+//    ClientAccountDb clientAccountDb = this.randomEntity.get().clientAccountDb(clientId);
+//    int clientAccount = clientTestDao.get().insertClientAccountDb(clientAccountDb);
+//
+//    TransactionTypeDb typeTDb = this.randomEntity.get().transactionTypeDb();
+//    int tTypeId = clientTestDao.get().insertTransactionType(typeTDb);
+//
+//    ClientAccountTransactionDb accountTransactionDb = this.randomEntity.get().clientAccountTransactionDb(tTypeId, clientAccount);
+//    int cAccountTDb = clientTestDao.get().insertClientAccountTransaction(accountTransactionDb);
+//    System.out.println(clientId + " patronymic: " + clientDb.patronymic);
+
+
+    ClientFilter clientFilter = this.randomEntity.get().filterE();
+    clientFilter.patronymic = "Abai";
+    //
+    //
+    ClientRecordListWrapper clientRecordListWrapper = clientRegister.get().filterClients(clientFilter);
+    //
+    //
+    for (int i = 0; i < clientRecordListWrapper.records.size(); i++) {
+      System.out.println(clientRecordListWrapper.records.get(i).clientId);
+      System.out.println(clientRecordListWrapper.records.get(i).fio);
+
+    }
+
+    assertThat(clientRecordListWrapper.records).hasSize(1);
+
+  }
+
+
+  @Test
+  public void testFilter_filter_surnameFilter() {
+
+//
+//    CharmDb charm = this.randomEntity.get().charmDb();
+//    int charmId = clientTestDao.get().insertCharm(charm);
+//
+//    ClientDb clientDb = this.randomEntity.get().clientDb(charmId, "Asa", 2);
+//    int clientId = clientTestDao.get().insertClientDb(clientDb);
+//
+//
+//    ClientAccountDb clientAccountDb = this.randomEntity.get().clientAccountDb(clientId);
+//    int clientAccount = clientTestDao.get().insertClientAccountDb(clientAccountDb);
+//
+//    TransactionTypeDb typeTDb = this.randomEntity.get().transactionTypeDb();
+//    int tTypeId = clientTestDao.get().insertTransactionType(typeTDb);
+//
+//    ClientAccountTransactionDb accountTransactionDb = this.randomEntity.get().clientAccountTransactionDb(tTypeId, clientAccount);
+//    int cAccountTDb = clientTestDao.get().insertClientAccountTransaction(accountTransactionDb);
+//    System.out.println(clientId + " surname: " + clientDb.surname);
+
+    ClientFilter clientFilter = this.randomEntity.get().filterE();
+    clientFilter.surname = "Asa";
+    //
+    //
+    ClientRecordListWrapper clientRecordListWrapper = clientRegister.get().filterClients(clientFilter);
+    //
+    //
+    for (int i = 0; i < clientRecordListWrapper.records.size(); i++) {
+      System.out.println(clientRecordListWrapper.records.get(i).clientId);
+      System.out.println(clientRecordListWrapper.records.get(i).fio);
+
+    }
+
+    assertThat(clientRecordListWrapper.records).hasSize(1);
+
+  }
+
 
   @Test
   public void testFilter_filter_limit() {
 
-    ClientFilter clientFilter = new ClientFilter();
+    ClientFilter clientFilter = this.randomEntity.get().filterE();
     clientFilter.limit = 1;
-    Client client = randomEntity.get().client();
-    int id = clientTestDao.get().insertClient(client);
-    Client client2 = randomEntity.get().client();
-    int id2 = clientTestDao.get().insertClient(client);
+    clientFilter.name = "Madina";
     //
     //
     ClientRecordListWrapper clientRecordListWrapper = clientRegister.get().filterClients(clientFilter);
@@ -87,8 +220,26 @@ public class ClientRegisterImplTest extends ParentTestNg {
     assertThat(clientRecordListWrapper.records).hasSize(1);
   }
 
+  @Test
+  public void testFilter_filter_offset() {
 
-  //getClientDetailById
+    ClientFilter clientFilter = this.randomEntity.get().filterE();
+    clientFilter.offset = 2;
+    //
+    //
+    ClientRecordListWrapper clientRecordListWrapper = clientRegister.get().filterClients(clientFilter);
+    //
+    //
+    for (int i = 0; i < clientRecordListWrapper.records.size(); i++) {
+      System.out.println(clientRecordListWrapper.records.get(i).clientId);
+      System.out.println(clientRecordListWrapper.records.get(i).fio);
+
+    }
+    assertThat(clientRecordListWrapper.records).isNotNull();
+//    assertThat(clientRecordListWrapper.records).hasSize(1);
+  }
+
+
   @Test
   public void testClintDetail_absent() {
     //

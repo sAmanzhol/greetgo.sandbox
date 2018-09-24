@@ -7,7 +7,7 @@ public class ClientAccountTransactionDb {
   public int id;
   public int account;
   public float money;
-  public Timestamp finrshedAt;
+  public Timestamp finishedAt;
   public int type;
 
 }

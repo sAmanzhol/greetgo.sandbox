@@ -30,7 +30,7 @@ public class ClientController implements Controller {
   @ToJson
   @PublicAccess
   @OnGet("/detail")
-  public ClientDetail getDetail(@Par("id") Long id) {
+  public ClientDetail getDetail(@Par("id") int id) {
     return clientRegisterBeanGetter.get().getClientDetailById(id);
   }
 

@@ -10,7 +10,7 @@ import java.util.List;
 public interface ClientRegister {
 
     List<ClientRecord> getClientList();
-    ClientDetail getClientDetailById(long id);
+    ClientDetail getClientDetailById(int id);
     ClientRecord saveClient(ClientToSave toSave);
     void deleteClient(long id);
     ClientRecordListWrapper filterClients(ClientFilter clientFilter);

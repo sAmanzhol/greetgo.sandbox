@@ -5,9 +5,10 @@ import kz.greetgo.depinject.core.Bean;
 import kz.greetgo.depinject.core.BeanGetter;
 import kz.greetgo.sandbox.controller.model.*;
 import kz.greetgo.sandbox.controller.model.Character;
-import kz.greetgo.sandbox.controller.model.db.ClientDb;
 import kz.greetgo.sandbox.controller.register.ClientRegister;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -28,6 +29,7 @@ public class ClientRegisterImpl implements ClientRegister {
   List<Character> characters = null;
   List<Gender> genders = null;
   List<PhoneDetail> phoneDetails = null;
+  int count;
 
 
   public BeanGetter<Jdbc> jdbc;
@@ -196,8 +198,10 @@ public class ClientRegisterImpl implements ClientRegister {
   }
 
   @Override
-  public ClientDetail getClientDetailById(long id) {
+  public ClientDetail getClientDetailById(int id) {
+
     ClientDetail clientDetail = ClientDetail.forSave(genders, characters, phoneDetails);
+
 
     if (clients != null) {
       for (Client client : clients) {
@@ -238,88 +242,157 @@ public class ClientRegisterImpl implements ClientRegister {
       }
     }
   }
-//  String sql = "select 1 as asd where 1=? and true = ?";
-//
-//    if ("".equals("")) {
-//      sql += " and surname = ?";
-//    }
-//      ///
-//    jdbc.get().execute(con -> {
-//      try (PreparedStatement ps = con.prepareStatement(sql)) {
-//        ps.setObject(1, 1);
-//        ps.setBoolean(2, false);
-//        try (ResultSet rs = ps.executeQuery()) {
-//          while (rs.next()) {
-//            a.asd = rs.getInt("asd");
-//          }
-//        }
-//      }
-//      return null;
-//    });
 
 
-//  create table asd (
-//    id   serial,
-//    name varchar(200)
-//
-//);
-//
-//
-//  select *
-//  from asd;
-//
-//
-//  with asd as (
-//    insert into asd (name) values ('Madina')
-//  returning id
-//)
-//
-//  select *
-//  from asd;
-//
-//  insert into charm (name, description, energy) values ('aa', 'aaa', 1);
-//
-//  insert into client (surname, name, patronymic, gender, birth_date, charm)
-//  values ('MM', 'M', 'MMM', 'MALE', '2001-04-10', 1);
-//
-//  insert into client_account values (1, 1, 14000.0, '1234123412341234', null);
-//
-//  insert into transaction_type (code, name) values ('code', 'name');
-//
-//  insert into client_account_transaction (account, money, finished_at, type) values (1, 500.0, null, 1);
-//
-//  select
-//  c.name,
-//  c.surname,
-//  a.money,
-//  tt.name,
-//  t.money
-//  from client as c
-//  inner join client_account as a
-//  on c.id = a.client
-//  inner join client_account_transaction as t
-//  on a.id = t.account
-//  inner join transaction_type as tt
-//  on t.type = tt.id;
-//
+  private ClientRecordListWrapper getRecordsFromDb(ClientFilter clientFilter) {
 
-  private List<ClientDb> getClientsFromDb() {
-    List<ClientDb> clientDbList = new ArrayList<>();
-    String sql = "select ";
+    List<ClientRecord> recordList = new ArrayList<>();
+
+    //SQL sql = new SQL();
+    String sq = "select\n" +
+      "  x1.surname,\n" +
+      "  x1.name,\n" +
+      "  x1.patronymic,\n" +
+      "  x1.birth_date ,\n" +
+      "  x3.money,\n" +
+      "  x.min,\n" +
+      "  x.max,\n" +
+      "  x1.id,\n" +
+      "  count(x1.id)\n" +
+      "  over (\n" +
+      "    partition by 1 )\n" +
+      "from (\n" +
+      "       select\n" +
+      "         max(t.money),\n" +
+      "         min(t.money),\n" +
+      "         c.id\n" +
+      "       from client as c\n" +
+      "         inner join client_account as a\n" +
+      "           on c.id = a.client\n" +
+      "         inner join client_account_transaction as t\n" +
+      "           on a.id = t.account\n" +
+      "       group by c.id\n" +
+      "     ) x\n" +
+      "  join client x1 on x1.id = x.id\n" +
+      "  join charm x2 on x2.id = x1.charm\n" +
+      "  join client_account x3 on x1.id = x3.client\n" +
+      "where";
+
+    ////where x1.name = 'M'
+    ////      and x1.surname = 'MM'
+    ////      and x1.patronymic = 'MMM'
+    ////      and x1.id >= 0
+    ////order by x1.name asc
+    ////limit 1;
+
+    ArrayList<String> prepareStValue = new ArrayList<>();
+    if (!"".equals(clientFilter.name)) {
+      sq += " x1.name = ?\n";
+      prepareStValue.add(clientFilter.name);
+    }
+    if (!"".equals(clientFilter.surname)) {
+      if (prepareStValue.size() != 0) {
+        sq += " and";
+      }
+      sq += " x1.surname = ?\n";
+      prepareStValue.add(clientFilter.surname);
+    }
+    if (!"".equals(clientFilter.patronymic)) {
+      if (prepareStValue.size() != 0) {
+        sq += " and";
+      }
+      sq += " x1.patronymic = ?\n";
+      prepareStValue.add(clientFilter.patronymic);
+    }
+    if (clientFilter.offset >= 0) {
+      if (prepareStValue.size() != 0) {
+        sq += " and";
+      }
+      sq += " x1.id >= ";
+      sq = sq.concat(Integer.toString(clientFilter.offset) + "\n");
+//      prepareStValue.add(Integer.toString(clientFilter.offset));
+    }
+    if (!"".equals(clientFilter.columnName) && clientFilter.columnName != null) {
+      sq += "order by \n";
+
+      sq = sq.concat(clientFilter.columnName + " ");
+//      prepareStValue.add(clientFilter.columnName);
+      if (clientFilter.isAsc) {
+//        prepareStValue.add("asc");
+        sq = sq.concat("asc ");
+      } else {
+//        prepareStValue.add("desc");
+        sq = sq.concat("desc ");
+      }
+    }
+    if (clientFilter.limit >= 0) {
+      sq += "limit ";
+      sq = sq.concat(Integer.toString(clientFilter.limit) + ";");
+//      prepareStValue.add(Integer.toString(clientFilter.limit));
+    }
+    final String newSQL = sq;
+
+    System.out.println("newSQL: \n" + newSQL);
+    jdbc.get().execute(con -> {
+      try (PreparedStatement ps = con.prepareStatement(newSQL)) {
+//        prepareStValue.forEach(item -> {
+//          ps.setObject(prepareStValue.indexOf(item)+1, item);
+//        });
+        for (int i = 0; i < prepareStValue.size(); i++) {
+          ps.setObject(i + 1, prepareStValue.get(i));
+        }
+        try (ResultSet rs = ps.executeQuery()) {
+          while (rs.next()) {
+            ClientRecord clientRecord = new ClientRecord();
+            clientRecord.fio = rs.getString(1) + " "
+              + rs.getString(2) + " " + rs.getString(3);
+
+            Date d = rs.getDate(4);
+            System.out.println("Date is: " + d);
+
+//            LocalDate currentDate = LocalDate.now();
+//
+//            LocalDate birthDate = d.toInstant()
+//              .atZone(ZoneId.systemDefault())
+//              .toLocalDate();
+//            if ((birthDate != null) && (currentDate != null)) {
+//              clientRecord.age = Period.between(birthDate, currentDate).getYears();
+//            } else {
+//              clientRecord.age = 0;
+//            }
+
+//            LocalDate localDate = rs.getObject(4 , LocalDate.class));
+//            if ((localDate != null) && (currentDate != null)) {
+//              clientRecord.age = Period.between(localDate, currentDate).getYears();
+//            } else {
+//              clientRecord.age = 0;
+//            }
+
+            clientRecord.age = 0;
+            clientRecord.character = new Character(CharacterType.AGREEABLENESS, "агрессивгый");
+
+            clientRecord.totalBalance = (int) rs.getDouble(5);
+            clientRecord.minBalance = (int) rs.getFloat(6);
+            clientRecord.maxBalance = (int) rs.getFloat(7);
+            clientRecord.clientId = rs.getInt(8);
+            count = rs.getInt(9);
+            recordList.add(clientRecord);
+          }
+        }
+      }
+      return null;
+    });
 
 
-    return clientDbList;
+    return new ClientRecordListWrapper(recordList, count);
   }
+
 
   @Override
   public ClientRecordListWrapper filterClients(ClientFilter clientFilter) {
-    List<ClientRecord> filteredList = new ArrayList<ClientRecord>();
-    int count = 0;
 
-    List<ClientDb> clients = this.getClientsFromDb();
+    return this.getRecordsFromDb(clientFilter);
 
-
-    return new ClientRecordListWrapper(filteredList, count);
 //    List<ClientRecord> filteredList = new ArrayList<ClientRecord>();
 //    int count = 0;
 //    if (clients != null) {
