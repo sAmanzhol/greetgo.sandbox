@@ -3,11 +3,14 @@ package kz.greetgo.sandbox.controller.model;
 import java.util.ArrayList;
 import java.util.List;
 
+// FIXME: 9/24/18 ClientDetails
 public class ClientDisplay {
+  // FIXME: 9/24/18 id везде должен быть числовым
   public String id;
   public String surname;
   public String name;
   public String patronymic;
+  // FIXME: 9/24/18 birthDate должен быть Date
   public String birthDate;
   public String gender;
   public String character;

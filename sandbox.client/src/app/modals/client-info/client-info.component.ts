@@ -17,6 +17,7 @@ export class ClientInfoComponent implements OnInit {
 
   closeResult: string;
   characters = [];
+  // fixme название переменной вводит в заблуждение. на первый взгляд кажется, что это список номеров, а не их типы. То же самое для character
   phones = [];
   client = new ClientToSave();
   filter = ClientToFilter.createDefault();
@@ -73,6 +74,7 @@ export class ClientInfoComponent implements OnInit {
   }
 
   async getClient(id) {
+    //fixme Нужны ли везде эти трай кетчи?
     try {
       this.client = await this.Service.getClient(id);
     } catch (e) {

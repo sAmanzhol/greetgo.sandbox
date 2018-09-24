@@ -9,6 +9,7 @@ import {PhoneRecord} from "../../../model/PhoneRecord";
 })
 export class ClientInfoService {
 
+  //fixme на стороне сервера ты разделил на разные контролеры и регистры, а тут почему-то нет
   constructor(private http: HttpService) {
   }
 

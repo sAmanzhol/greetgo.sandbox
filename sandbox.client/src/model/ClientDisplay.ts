@@ -5,6 +5,8 @@ export class ClientDisplay {
   public surname: string;
   public name: string;
   public patronymic: string;
+
+  // fixme birthdate doljen byt' date
   public birthDate: string;
   public gender: string;
   public character: string;

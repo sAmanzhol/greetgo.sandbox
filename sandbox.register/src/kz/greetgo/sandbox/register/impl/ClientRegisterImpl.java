@@ -12,6 +12,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+// FIXME: 9/24/18 Избавься от варнингов в коде
+
 @Bean
 public class ClientRegisterImpl implements ClientRegister {
 
