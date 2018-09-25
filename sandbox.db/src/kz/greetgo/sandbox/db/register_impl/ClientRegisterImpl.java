@@ -71,23 +71,20 @@ public class ClientRegisterImpl implements ClientRegister {
 				maxes = 0;
 			clientToSave.id = maxes + 1;
 		}
-
 		List<ClientPhone> clientPhones = new ArrayList<>();
+		List<String> clientListPhoneNumber = clientDao.get().selectClientPhoneNumberById(clientToSave.id);
 
-		List<String> clientListPhoneNumber = clientDao.get().selectClientPhoneById(clientToSave.id);
 		clientDao.get().upsertClient(clientToSave);
 		clientDao.get().upsertClientAddr(clientToSave.addressOfResidence, clientToSave.id);
 		clientDao.get().upsertClientAddr(clientToSave.addressOfRegistration, clientToSave.id);
 
 		for (ClientPhone clientPhone : clientToSave.phone) {
 			if (clientListPhoneNumber.contains(clientPhone.number)) {
-				clientListPhoneNumber.remove(clientPhone.number);
-			}
+				clientListPhoneNumber.remove(clientPhone.number); }
 		}
 		for(String phoneNumber: clientListPhoneNumber){
-			clientDao.get().deleteClientPhone1(clientToSave.id, phoneNumber);
+			clientDao.get().deleteClientPhoneByIdandNumber(clientToSave.id, phoneNumber);
 		}
-
 		for (ClientPhone clientPhone1 : clientToSave.phone) {
 			clientDao.get().upsertClientPhone(clientPhone1,clientToSave.id);
 		}

@@ -26,7 +26,10 @@ public interface ClientDao {
                                     @Param("type") AddrType type);
 
     @Select("select number from client_phone where client = #{id}")
-    List<String> selectClientPhoneById(@Param("id") int id);
+    List<String> selectClientPhoneNumberById(@Param("id") int id);
+
+    @Select("select * from client_phone where client = #{id} order by type desc")
+    List<ClientPhone> selectClientPhoneById(@Param("id") int id);
 
     @Select("select * from charm where id = #{id}")
     Charm getCharmById(@Param("id") int id);
@@ -59,31 +62,31 @@ public interface ClientDao {
                           @Param("client") Integer client
     );
 
-	@Delete("delete from client_phone where client = #{id} and number = #{number} ")
-	void deleteClientPhone1(@Param("id")Integer id , @Param("number") String number );
+    @Delete("delete from client_phone where client = #{id} and number = #{number} ")
+    void deleteClientPhoneByIdandNumber(@Param("id") Integer id, @Param("number") String number);
 
 
-	@Select("select\n" +
-		"  c.id         as id,\n" +
-		"  c.firstname  as firstname,\n" +
-		"  c.lastname   as lastname,\n" +
-		"  c.patronymic as patronymic,\n" +
-		"  ch.name      as characterName,\n" +
-		"  c.birth_date as dateOfBirth,\n" +
-		"  ca.maximumBalance,\n" +
-		"  ca.minimumBalance,\n" +
-		"  ca.totalAccountBalance\n" +
-		"from client c left join charm ch on c.charm = ch.id\n" +
-		"  left join (select\n" +
-		"               client,\n" +
-		"               avg(money) as totalAccountBalance,\n" +
-		"               max(money) as maximumBalance,\n" +
-		"               min(money) as minimumBalance\n" +
-		"             from client_account ca\n" +
-		"             group by ca.client)\n" +
-		"            ca on c.id = ca.client\n" +
-		"where c.id = #{id}")
-	ClientRecord selectClientRecord(@Param("id") Integer id );
+    @Select("select\n" +
+            "  c.id         as id,\n" +
+            "  c.firstname  as firstname,\n" +
+            "  c.lastname   as lastname,\n" +
+            "  c.patronymic as patronymic,\n" +
+            "  ch.name      as characterName,\n" +
+            "  c.birth_date as dateOfBirth,\n" +
+            "  ca.maximumBalance,\n" +
+            "  ca.minimumBalance,\n" +
+            "  ca.totalAccountBalance\n" +
+            "from client c left join charm ch on c.charm = ch.id\n" +
+            "  left join (select\n" +
+            "               client,\n" +
+            "               avg(money) as totalAccountBalance,\n" +
+            "               max(money) as maximumBalance,\n" +
+            "               min(money) as minimumBalance\n" +
+            "             from client_account ca\n" +
+            "             group by ca.client)\n" +
+            "            ca on c.id = ca.client\n" +
+            "where c.id = #{id}")
+    ClientRecord selectClientRecord(@Param("id") Integer id);
 
 
     @Insert("insert into client_account(client, registered_at) values (#{client}, #{registeredAt}) " +
@@ -102,16 +105,16 @@ public interface ClientDao {
     Integer selectMinimumBalance(@Param("id") int id);
 
 
-	@Select("select id as id,\n" +
-		"  firstname as firstname,\n" +
-		"  lastname as lastname,\n" +
-		"  patronymic as patronymic,\n" +
-		"  gender as gender,\n" +
-		"  charm as characterId,\n" +
-		"  birth_date as dateOfBirth from client where id=#{id}")
-	ClientDetails selectClient(@Param("id") Integer id);
+    @Select("select id as id,\n" +
+            "  firstname as firstname,\n" +
+            "  lastname as lastname,\n" +
+            "  patronymic as patronymic,\n" +
+            "  gender as gender,\n" +
+            "  charm as characterId,\n" +
+            "  birth_date as dateOfBirth from client where id=#{id}")
+    ClientDetails selectClient(@Param("id") Integer id);
 
-	@Select("select * from client_phone where client = #{id}")
-	List<ClientPhone> listPhone(@Param("id") Integer id);
+    @Select("select * from client_phone where client = #{id}")
+    List<ClientPhone> listPhone(@Param("id") Integer id);
 
 }

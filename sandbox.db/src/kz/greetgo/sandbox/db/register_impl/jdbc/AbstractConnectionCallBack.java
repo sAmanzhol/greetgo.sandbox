@@ -3,31 +3,52 @@ package kz.greetgo.sandbox.db.register_impl.jdbc;
 import kz.greetgo.db.ConnectionCallback;
 import org.apache.ibatis.jdbc.SQL;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractConnectionCallBack<T,R> implements ConnectionCallback<R> {
-	protected List<Object> param = new ArrayList<>();
-	protected SQL sql = new SQL();
-	protected final void prepareSql() {
-		select();
-	}
+import static java.time.temporal.TemporalQueries.offset;
 
-	protected abstract void select();
+public abstract class AbstractConnectionCallBack<T, R> implements ConnectionCallback<T> {
+    protected List<Object> param = new ArrayList<>();
+    protected SQL sql = new SQL();
 
-	public void innerJoin(){}
-	public void leftJoin(){}
-	public void where(){}
-	public void groupBy(){}
-	public void orderBy(){}
-	public void limit(){}
-	public void offset(){}
-	public void addRow(T t){}
+    protected final void prepareSql() {
+        select();
+        innerJoin();
+        leftJoin();
+        where();
+        groupBy();
+        orderBcy();
+        limit();
+        offSet();
+        addRow();
+        getResult();
+    }
 
-	public R getResult(){return null;}
+    protected abstract R getResult();
 
-	public R doInConnection(kz.greetgo.db.ConnectionCallback connectionCallback) {
+    protected abstract void innerJoin();
 
-		return null;
-	}
+    protected abstract void offSet();
+
+    protected abstract void select();
+
+    protected abstract void leftJoin();
+
+    protected abstract void where();
+
+    protected abstract void orderBcy();
+
+    protected abstract void groupBy();
+
+    protected abstract void limit();
+
+    protected abstract void addRow();
+
+
+    @Override
+    public T doInConnection(Connection connection) {
+        return null;
+    }
 }
