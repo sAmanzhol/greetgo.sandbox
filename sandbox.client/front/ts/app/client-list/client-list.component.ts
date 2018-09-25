@@ -49,10 +49,6 @@ export class ClientListComponent implements OnInit {
     })
   }
 
-  downloadPDF() {
-      let self = this;
-      this.http.url('')
-  }
   getReport() {
     let self = this;
     window.open(self.http.url("/report/my_big_report"));

@@ -6,10 +6,9 @@ import kz.greetgo.depinject.core.BeanGetter;
 import kz.greetgo.sandbox.controller.model.model.*;
 import kz.greetgo.sandbox.controller.register.ClientRegister;
 import kz.greetgo.sandbox.db.dao.ClientDao;
-import kz.greetgo.sandbox.db.register_impl.jdbc.ClientJdbc;
-import kz.greetgo.sandbox.db.register_impl.jdbc.ClientJdbcListRecord;
+import kz.greetgo.sandbox.db.register_impl.jdbc.ClientCountSql;
+import kz.greetgo.sandbox.db.register_impl.jdbc.ClientListSql;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Bean
@@ -71,7 +70,8 @@ public class ClientRegisterImpl implements ClientRegister {
 				maxes = 0;
 			clientToSave.id = maxes + 1;
 		}
-		List<ClientPhone> clientPhones = new ArrayList<>();
+
+
 		List<String> clientListPhoneNumber = clientDao.get().selectClientPhoneNumberById(clientToSave.id);
 
 		clientDao.get().upsertClient(clientToSave);
@@ -80,13 +80,14 @@ public class ClientRegisterImpl implements ClientRegister {
 
 		for (ClientPhone clientPhone : clientToSave.phone) {
 			if (clientListPhoneNumber.contains(clientPhone.number)) {
-				clientListPhoneNumber.remove(clientPhone.number); }
+				clientListPhoneNumber.remove(clientPhone.number);
+			}
 		}
-		for(String phoneNumber: clientListPhoneNumber){
+		for (String phoneNumber : clientListPhoneNumber) {
 			clientDao.get().deleteClientPhoneByIdandNumber(clientToSave.id, phoneNumber);
 		}
 		for (ClientPhone clientPhone1 : clientToSave.phone) {
-			clientDao.get().upsertClientPhone(clientPhone1,clientToSave.id);
+			clientDao.get().upsertClientPhone(clientPhone1, clientToSave.id);
 		}
 
 		return clientDao.get().selectClientRecord(clientToSave.id);
@@ -96,13 +97,15 @@ public class ClientRegisterImpl implements ClientRegister {
 	public List<ClientRecord> getClientList(ClientFilter clientFilter) {
 
 
-		return jdbc.get().execute(new ClientJdbcListRecord(clientFilter));
+		return jdbc.get().execute(new ClientListSql(clientFilter));
+
 	}
 
 	@Override
 	public Integer getClientTotalRecord(ClientFilter clientFilter) {
 
-		return jdbc.get().execute(new ClientJdbc(clientFilter));
+
+		return jdbc.get().execute(new ClientCountSql(clientFilter));
 
 	}
 
