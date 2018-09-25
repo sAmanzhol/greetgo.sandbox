@@ -48,11 +48,11 @@ export class ClientListComponent implements OnInit {
       self.clientRecord = data.json();
     })
   }
-  downloadPDF() {
+  getReport() {
     let self = this;
-    this.http.url('')
-
+    this.http.url("/report/my_big_report")
   }
+
   changePagination(page) {
     let self = this;
     self.clientFilter.page = page;

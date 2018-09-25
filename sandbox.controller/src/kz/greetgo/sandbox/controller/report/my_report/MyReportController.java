@@ -1,4 +1,4 @@
-package kz.greetgo.sandbox.db.report.my_report;
+package kz.greetgo.sandbox.controller.report.my_report;
 
 import kz.greetgo.depinject.core.Bean;
 import kz.greetgo.depinject.core.BeanGetter;

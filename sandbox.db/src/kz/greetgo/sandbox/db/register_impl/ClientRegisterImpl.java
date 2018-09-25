@@ -6,105 +6,107 @@ import kz.greetgo.depinject.core.BeanGetter;
 import kz.greetgo.sandbox.controller.model.model.*;
 import kz.greetgo.sandbox.controller.register.ClientRegister;
 import kz.greetgo.sandbox.db.dao.ClientDao;
-import kz.greetgo.sandbox.db.register_impl.jdbc.ClientDetailsJdbc;
 import kz.greetgo.sandbox.db.register_impl.jdbc.ClientJdbc;
 import kz.greetgo.sandbox.db.register_impl.jdbc.ClientJdbcListRecord;
-import kz.greetgo.sandbox.db.register_impl.jdbc.ClientJdbcRecord;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
 @Bean
 public class ClientRegisterImpl implements ClientRegister {
 
-    public BeanGetter<ClientDao> clientDao;
+	public BeanGetter<ClientDao> clientDao;
 
-    public BeanGetter<Jdbc> jdbc;
+	public BeanGetter<Jdbc> jdbc;
 
-    @Override
-    public List<Charm> getCharm() {
-        return clientDao.get().listCharm();
-    }
+	@Override
+	public List<Charm> getCharm() {
 
-    @Override
-    public void deleteClient(Integer clientMarkId) {
+		return clientDao.get().listCharm();
+	}
 
-        clientDao.get().deleteClientById(clientMarkId);
-    }
+	@Override
+	public void deleteClient(Integer clientMarkId) {
 
-    @Override
-    public Charm getCharmById(Integer charmId) {
-        Charm charm;
+		clientDao.get().deleteClientById(clientMarkId);
+	}
 
-        if (charmId == null) {
-            return null;
-        }
+	@Override
+	public Charm getCharmById(Integer charmId) {
 
-        charm = clientDao.get().getCharmById(charmId);
-        if (charm != null) {
-            return clientDao.get().getCharmById(charmId);
-        }
-        if (charm == null) {
-            charm = new Charm();
-            charm.id = charmId;
-            charm.name = String.valueOf(charmId);
-            charm.description = String.valueOf(charmId);
-            charm.energy = charmId;
-            charm.actually = false;
-        }
+		Charm charm;
 
-        return charm;
-    }
+		if (charmId == null) return null;
 
-    @Override
-    public ClientDetails getClientDetails(Integer clientMarkId) {
-        ClientDetails clientDetails;
-        clientDetails = jdbc.get().execute(new ClientDetailsJdbc(clientMarkId));
-        return clientDetails;
-    }
+		charm = clientDao.get().getCharmById(charmId);
+		if (charm != null) return charm;
 
-    @Override
-    public ClientRecord saveClient(ClientToSave clientToSave) {
+		charm = new Charm();
+		charm.id = charmId;
+		charm.name = String.valueOf(charmId);
+		charm.description = String.valueOf(charmId);
+		charm.energy = charmId;
+		charm.actually = false;
 
-        ClientRecord clientRecord;
+		return charm;
+	}
 
-        if (clientToSave.id == null) {
-            Integer maxes = clientDao.get().getmaxClientId();
-            if (maxes == null)
-                maxes = 0;
-            clientToSave.id = (int) (maxes + 1);
-        }
+	@Override
+	public ClientDetails getClientDetails(Integer clientMarkId) {
 
-        clientDao.get().deleteClientPhone(clientToSave.id);
-        clientDao.get().upsertClient(clientToSave);
-        clientDao.get().upsertClientAddr(clientToSave.addressOfResidence, clientToSave.id);
-        clientDao.get().upsertClientAddr(clientToSave.addressOfRegistration, clientToSave.id);
-        for (ClientPhone clientPhone : clientToSave.phone) {
-            clientDao.get().upsertClientPhone(clientPhone, clientToSave.id);
-        }
-        clientDao.get().upsertClientAccount(clientToSave.id, new Timestamp(2));
+		ClientDetails clientDetails = clientDao.get().selectClient(clientMarkId);
+		clientDetails.addressOfResidence = clientDao.get().selectClientAddrById(clientMarkId, AddrType.FACT);
+		clientDetails.addressOfRegistration = clientDao.get().selectClientAddrById(clientMarkId, AddrType.REG);
+		clientDetails.phone.addAll(clientDao.get().selectClientPhoneById(clientMarkId));
+		return clientDetails;
 
-        clientRecord = jdbc.get().execute(new ClientJdbcRecord(clientToSave.id));
-        System.err.println("ClientRecordsss:" + clientRecord);
-        return clientRecord;
+	}
 
-    }
+	@Override
+	public ClientRecord saveClient(ClientToSave clientToSave) {
 
-    @Override
-    public List<ClientRecord> getClientList(ClientFilter clientFilter) {
+		if (clientToSave.id == null) {
+			Integer maxes = clientDao.get().getmaxClientId();
+			if (maxes == null)
+				maxes = 0;
+			clientToSave.id = maxes + 1;
+		}
 
-        List<ClientRecord> clientRecords = new ArrayList<>();
-        clientRecords = jdbc.get().execute(new ClientJdbcListRecord(clientFilter));
-        return clientRecords;
-    }
+		List<ClientPhone> clientPhones = new ArrayList<>();
 
-    @Override
-    public Integer getClientTotalRecord(ClientFilter clientFilter) {
+		List<String> clientListPhoneNumber = clientDao.get().selectClientPhoneById(clientToSave.id);
+		clientDao.get().upsertClient(clientToSave);
+		clientDao.get().upsertClientAddr(clientToSave.addressOfResidence, clientToSave.id);
+		clientDao.get().upsertClientAddr(clientToSave.addressOfRegistration, clientToSave.id);
 
-        clientFilter.recordTotal = jdbc.get().execute(new ClientJdbc(clientFilter));
-        return clientFilter.recordTotal;
+		for (ClientPhone clientPhone : clientToSave.phone) {
+			if (clientListPhoneNumber.contains(clientPhone.number)) {
+				clientListPhoneNumber.remove(clientPhone.number);
+			}
+		}
+		for(String phoneNumber: clientListPhoneNumber){
+			clientDao.get().deleteClientPhone1(clientToSave.id, phoneNumber);
+		}
 
-    }
+		for (ClientPhone clientPhone1 : clientToSave.phone) {
+			clientDao.get().upsertClientPhone(clientPhone1,clientToSave.id);
+		}
+
+		return clientDao.get().selectClientRecord(clientToSave.id);
+	}
+
+	@Override
+	public List<ClientRecord> getClientList(ClientFilter clientFilter) {
+
+
+		return jdbc.get().execute(new ClientJdbcListRecord(clientFilter));
+	}
+
+	@Override
+	public Integer getClientTotalRecord(ClientFilter clientFilter) {
+
+		return jdbc.get().execute(new ClientJdbc(clientFilter));
+
+	}
 
 }

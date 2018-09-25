@@ -1,4 +1,8 @@
-package kz.greetgo.sandbox.db.report.my_report_big_data;
+package kz.greetgo.sandbox.controller.report.my_big_report;
+
+import kz.greetgo.sandbox.controller.report.model.MyReportFootData;
+import kz.greetgo.sandbox.controller.report.model.MyReportHeadData;
+import kz.greetgo.sandbox.controller.report.model.MyReportRow;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -6,11 +10,12 @@ import java.io.PrintStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class MyBigReportHtml implements MybigReportView {
+
+public class MyBigReportViewHtml implements MybigReportView {
 
 	private final PrintStream printStream;
 
-	public MyBigReportHtml(PrintStream printStream) {
+	public MyBigReportViewHtml(PrintStream printStream) {
 
 		this.printStream = printStream;
 	}
@@ -54,7 +59,7 @@ public class MyBigReportHtml implements MybigReportView {
 		){
 			try(PrintStream printStream=new PrintStream(fileOutputStream,false,"UTF-8")){
 
-				MyBigReportHtml viewHtml = new MyBigReportHtml(printStream);
+				MyBigReportViewHtml viewHtml = new MyBigReportViewHtml(printStream);
 
 				MyReportHeadData myReportHeadData = new MyReportHeadData();
 				myReportHeadData.title="Cool";
@@ -74,4 +79,6 @@ public class MyBigReportHtml implements MybigReportView {
  			}
 		}
 	}
+
+
 }
