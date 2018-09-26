@@ -1,11 +1,12 @@
 package kz.greetgo.sandbox.db.register_impl.report.my_report_big_data;
 
 import kz.greetgo.depinject.core.BeanGetter;
-import kz.greetgo.sandbox.controller.register.MyBigReportRegister;
+import kz.greetgo.sandbox.controller.model.model.ClientFilter;
+import kz.greetgo.sandbox.controller.register.ReportRegister;
 import kz.greetgo.sandbox.controller.report.model.MyReportFootData;
 import kz.greetgo.sandbox.controller.report.model.MyReportHeadData;
 import kz.greetgo.sandbox.controller.report.model.MyReportRow;
-import kz.greetgo.sandbox.controller.report.my_big_report.MybigReportView;
+import kz.greetgo.sandbox.controller.report.report.ReportView;
 import kz.greetgo.sandbox.db.test.util.ParentTestNg;
 import org.testng.annotations.Test;
 
@@ -17,9 +18,9 @@ import static org.fest.assertions.api.Assertions.assertThat;
 
 public class MyBigReportRegisterTest extends ParentTestNg {
 
-	public BeanGetter<MyBigReportRegister> myBigReportRegisterBeanGetter;
+	public BeanGetter<ReportRegister> myBigReportRegisterBeanGetter;
 
-	private static class TestView implements MybigReportView {
+	private static class TestView implements ReportView {
 
 		public MyReportHeadData headData = null;
 
@@ -50,13 +51,13 @@ public class MyBigReportRegisterTest extends ParentTestNg {
 		//insert into db test data
 
 
+		ClientFilter clientFilter= new ClientFilter();
 		String userid ="asd";
 		Date from = new Date();
 		Date to = new Date();
 		TestView testView = new TestView();
 
-		myBigReportRegisterBeanGetter.get().genReport(userid, from, to, testView);
-
+		myBigReportRegisterBeanGetter.get().genReport(testView,clientFilter);
 		assertThat(testView.headData).isNotNull();
 		assertThat(testView.headData.title).isEqualTo("dasdasdsadas");
 	}

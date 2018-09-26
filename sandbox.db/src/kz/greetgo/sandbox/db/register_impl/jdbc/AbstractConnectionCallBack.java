@@ -1,5 +1,6 @@
 package kz.greetgo.sandbox.db.register_impl.jdbc;
 
+import com.itextpdf.text.DocumentException;
 import kz.greetgo.db.ConnectionCallback;
 import org.apache.ibatis.jdbc.SQL;
 
@@ -52,7 +53,7 @@ public abstract class AbstractConnectionCallBack<T, R> implements ConnectionCall
 
 				protected abstract void limit();
 
-				protected abstract void addRow(T t);
+				protected abstract void addRow(T t) throws DocumentException;
 
 
 	public R doInConnection(Connection connection) throws Exception {

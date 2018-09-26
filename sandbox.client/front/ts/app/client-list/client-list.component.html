@@ -91,8 +91,7 @@
       </div>
       <br><br>
       <div class="col s12">
-        <button class="waves-effect waves-light btn material-icons "
-                (click)="getReport()">file_download
+        <button class="waves-effect waves-light btn material-icons " (click)="closeorOpenForm()">file_download
         </button>
       </div>
 
@@ -159,6 +158,40 @@
 
     <!--first row-->
 
+    <!--report modal form-->
+    <div class="w3-container">
+      <div [class.openReport]="isOpenReport" class="w3-modal">
+
+        <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
+          <div class="w3-center"><br>
+            <span (click)="closeorOpenForm()" class="w3-button w3-xlarge w3-hover-red w3-display-topright"
+                  title="Close Modal">&times;</span>
+            <h2>REPORT FILES</h2>
+          </div>
+          <div class="w3-container">
+            <div class="w3-section">
+              <button class="w3-button w3-block w3-green w3-section w3-padding" type="submit"
+                      (click)="getReport('pdf')">Report PDF
+              </button>
+              <button class="w3-button w3-block w3-green w3-section w3-padding" type="submit"
+                      (click)="getReport('xlsx')">Report XLXS
+              </button>
+            </div>
+          </div>
+
+          <div class="w3-container w3-border-top w3-padding-16 w3-light-grey">
+            <div class="col s2 offset-s9">
+              <button (click)="closeorOpenForm()" type="button"
+                      class="w3-button w3-red">Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!--report modal form-->
 
   </div>
 

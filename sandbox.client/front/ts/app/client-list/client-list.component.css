@@ -7,3 +7,6 @@ tbody tr:active {
   background: rgb(46, 255, 196);;
 }
 
+.openReport{
+  display: block;
+}
