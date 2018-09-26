@@ -17,98 +17,103 @@ import java.util.Date;
 
 public class ReportViewPdf implements ReportView {
 
+    private PrintStream printStream;
 
-	private PrintStream printStream;
+    private Document document = new Document();
 
-	private Document document = new Document();
+    public ReportViewPdf(PrintStream printStream) {
 
-	public ReportViewPdf(PrintStream printStream) {
+        this.printStream = printStream;
+    }
 
-		this.printStream = printStream;
-	}
+    private void initating() throws DocumentException {
+        document = new Document();
+        document.setPageSize(PageSize.A4);
+        PdfWriter.getInstance(document, printStream);
+        document.open();
+    }
 
-	private void initating() throws DocumentException {
+    @Override
+    public void start(MyReportHeadData headData) throws DocumentException {
 
-		document = new Document();
-		document.setPageSize(PageSize.A4);
-		PdfWriter.getInstance(document, printStream);
-		document.open();
-	}
+        initating();
+        PdfPTable table = new PdfPTable(9);
+        table.addCell("id");
+        table.addCell("firstname");
+        table.addCell("lastname");
+        table.addCell("patronymic");
+        table.addCell("character");
+        table.addCell("date of birth");
+        table.addCell("maximum balance");
+        table.addCell("total account balance");
+        table.addCell("minimum balance");
+        document.add(table);
+    }
 
-	@Override
-	public void start(MyReportHeadData headData) throws DocumentException {
+    @Override
+    public void addRow(MyReportRow row) throws DocumentException {
 
-		initating();
-		Paragraph paragraph = new Paragraph("");
-		PdfPTable table = new PdfPTable(3);
-		/*	table.getDefaultCell().setBorder(Rectangle.NO_BORDER);*/
-		paragraph.add("TITLE: " + headData.title + "\n");
-		table.addCell("COL1");
-		table.addCell("COL1");
-		table.addCell("COL1");
-		document.add(paragraph);
-		document.add(table);
+        PdfPTable table = new PdfPTable(9);
+        table.addCell(String.valueOf(row.id));
+        table.addCell(row.firstname);
+        table.addCell(row.lastname);
+        table.addCell(row.patronymic);
+        table.addCell(row.characterName);
+        table.addCell(String.valueOf(row.dateOfBirth));
+        table.addCell(String.valueOf(row.maximumBalance));
+        table.addCell(String.valueOf(row.totalAccountBalance));
+        table.addCell(String.valueOf(row.minimumBalance));
+        document.add(table);
+    }
 
-	}
+    @Override
+    public void finish(MyReportFootData footData) throws DocumentException {
 
-	@Override
-	public void addRow(MyReportRow row) throws DocumentException {
-		PdfPTable table = new PdfPTable(9);
-		table.addCell(String.valueOf(row.id));
-		table.addCell(row.firstname);
-		table.addCell(row.lastname);
-		table.addCell(row.patronymic);
-		table.addCell(row.characterName);
-		table.addCell(String.valueOf(row.dateOfBirth));
-		table.addCell(String.valueOf(row.maximumBalance));
-		table.addCell(String.valueOf(row.minimumBalance));
-		table.addCell(String.valueOf(row.totalAccountBalance));
-		document.add(table);
-	}
-
-	@Override
-	public void finish(MyReportFootData footData) throws DocumentException {
-
-		Paragraph paragraph = new Paragraph();
-		paragraph.add("AUTHOR: " + footData.generatedBy + "\n");
-		paragraph.add("DATE: " + footData.generatedAt + "\n");
-		document.add(paragraph);
-		document.close();
-	}
-
-
-	public static void main(String[] args) throws Exception {
+        /*Paragraph paragraph = new Paragraph();
+        paragraph.add("Author: " + footData.generatedBy + "\n");
+        paragraph.add("Date: " + footData.generatedAt + "\n");
+        document.add(paragraph);*/
+        document.close();
+    }
 
 
-		File file = new File("build/my_report/result.pdf");
-		file.getParentFile().mkdir();
-		try (FileOutputStream fileOutputStream = new FileOutputStream(file);) {
+    public static void main(String[] args) throws Exception {
 
-			try (PrintStream printStream = new PrintStream(fileOutputStream, false, "UTF-8")) {
 
-				ReportViewPdf reportViewPdf = new ReportViewPdf(printStream);
+        File file = new File("build/my_report/result.pdf");
+        file.getParentFile().mkdir();
+        try (FileOutputStream fileOutputStream = new FileOutputStream(file);) {
 
-				MyReportHeadData myReportHeadData = new MyReportHeadData();
-				myReportHeadData.title = "cool";
-				reportViewPdf.start(myReportHeadData);
+            try (PrintStream printStream = new PrintStream(fileOutputStream, false, "UTF-8")) {
 
-				for (int i = 0; i < 100; i++) {
-					MyReportRow myReportRow = new MyReportRow();
-					myReportRow.firstname = "col1" + i + 1;
-					myReportRow.lastname= "col2" + i + 1;
-					myReportRow.patronymic = "col3" + i + 1;
-					reportViewPdf.addRow(myReportRow);
-				}
+                ReportViewPdf reportViewPdf = new ReportViewPdf(printStream);
 
-				MyReportFootData myReportFootData = new MyReportFootData();
-				myReportFootData.generatedBy = "Nazar";
-				myReportFootData.generatedAt = new Date();
-				reportViewPdf.finish(myReportFootData);
+                MyReportHeadData myReportHeadData = new MyReportHeadData();
+                myReportHeadData.title = "cool";
+                reportViewPdf.start(myReportHeadData);
 
-			}
-		}
+                for (int i = 0; i < 100; i++) {
+                    MyReportRow myReportRow = new MyReportRow();
+                    myReportRow.id = i + 1;
+                    myReportRow.firstname = "col1" + i + 1;
+                    myReportRow.lastname = "col2" + i + 1;
+                    myReportRow.patronymic = "col3" + i + 1;
+                    myReportRow.characterName = "col3" + i + 1;
+                    myReportRow.dateOfBirth = new Date(i);
+                    myReportRow.maximumBalance = i;
+                    myReportRow.totalAccountBalance = i;
+                    myReportRow.minimumBalance = i;
+                    reportViewPdf.addRow(myReportRow);
+                }
+                MyReportFootData myReportFootData = new MyReportFootData();
+                myReportFootData.generatedBy = "Nazar";
+                myReportFootData.generatedAt = new Date();
+                reportViewPdf.finish(myReportFootData);
 
-	}
+            }
+        }
+
+    }
 
 
 }

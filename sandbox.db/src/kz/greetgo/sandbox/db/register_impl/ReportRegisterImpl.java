@@ -10,31 +10,29 @@ import kz.greetgo.sandbox.controller.report.model.MyReportFootData;
 import kz.greetgo.sandbox.controller.report.model.MyReportHeadData;
 import kz.greetgo.sandbox.controller.report.model.MyReportRow;
 import kz.greetgo.sandbox.controller.report.report.ReportView;
-import kz.greetgo.sandbox.db.register_impl.jdbc.ReportSql;
+import kz.greetgo.sandbox.db.register_impl.jdbc.ClientReportSql;
 
 import java.util.Date;
 
 @Bean
 public class ReportRegisterImpl implements ReportRegister {
 
-	public BeanGetter<Jdbc> jdbc;
+    public BeanGetter<Jdbc> jdbc;
 
-	@Override
-	public void genReport(ReportView view, ClientFilter clientFilter) throws DocumentException {
+    @Override
+    public void genReport(ReportView view, ClientFilter clientFilter) throws DocumentException {
 
-		MyReportHeadData myReportHeadData = new MyReportHeadData();
-		myReportHeadData.title = "FROM";
-		view.start(myReportHeadData);
+        MyReportHeadData myReportHeadData = new MyReportHeadData();
+        myReportHeadData.title = "Report";
 
-		MyReportRow myReportRow = new MyReportRow();
+        view.start(myReportHeadData);
 
-		jdbc.get().execute(new ReportSql(view, clientFilter));
+        jdbc.get().execute(new ClientReportSql(view, clientFilter));
 
-		MyReportFootData myReportFootData = new MyReportFootData();
-		myReportFootData.generatedBy = "Nazar";
-		myReportFootData.generatedAt = new Date();
-		view.finish(myReportFootData);
-
-	}
+        MyReportFootData myReportFootData = new MyReportFootData();
+        myReportFootData.generatedBy = "Nazar";
+        myReportFootData.generatedAt = new Date();
+        view.finish(myReportFootData);
+    }
 
 }

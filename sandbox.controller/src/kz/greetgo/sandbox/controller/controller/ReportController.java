@@ -23,33 +23,36 @@ import java.io.PrintStream;
 @NoSecurity
 public class ReportController implements Controller {
 
-	public BeanGetter<ReportRegister> myBigReportRegister;
+    public BeanGetter<ReportRegister> myBigReportRegister;
 
-	@Mapping("/report-{ContentType}")
-	public void myBigReport(@ParPath("ContentType") String contentType, @Par("clientFilter") @Json ClientFilter clientFilter , RequestTunnel tunnel) throws Exception {
+    @Mapping("/report-{ContentType}")
+    public void myBigReport(@ParPath("ContentType") String contentType, @Par("clientFilter") @Json ClientFilter clientFilter, RequestTunnel tunnel) throws Exception {
 
 
-		tunnel.setResponseContentType(contentType);
+        tunnel.setResponseContentType(contentType);
 
-		OutputStream out = tunnel.getResponseOutputStream();
+        OutputStream out = tunnel.getResponseOutputStream();
 
-		PrintStream printStream = new PrintStream(out, false, "UTF-8");
+        try(PrintStream printStream = new PrintStream(out, false, "UTF-8")) {
 
-		ReportView view = null;
 
-		if (contentType.equals("pdf")) {
-			tunnel.setResponseHeader("content-disposition", "attachment; filename=result.pdf");
-			view = new ReportViewPdf(printStream);
-		}
-		if (contentType.equals("xlsx")) {
-			tunnel.setResponseHeader("content-disposition", "attachment; filename=result.xlsx");
-			view = new ReportViewXlsx(printStream);
-		}
+            ReportView view = null;
 
-		myBigReportRegister.get().genReport(view,clientFilter);
+            if (contentType.equals("pdf")) {
+                tunnel.setResponseHeader("content-disposition", "attachment; filename=result.pdf");
+                view = new ReportViewPdf(printStream);
+            }
+            if (contentType.equals("xlsx")) {
+                tunnel.setResponseHeader("content-disposition", "attachment; filename=result.xlsx");
+                view = new ReportViewXlsx(printStream);
+            }
 
-		printStream.flush();
-		tunnel.flushBuffer();
-	}
+            myBigReportRegister.get().genReport(view, clientFilter);
+
+
+            printStream.flush();
+            tunnel.flushBuffer();
+        }
+    }
 
 }

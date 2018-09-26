@@ -11,11 +11,8 @@ public abstract class AbstractBasicSql<T, R> extends AbstractConnectionCallBack<
 		this.clientFilter = clientFilter;
 	}
 
-
 	@Override
 	public void where() {
-
-
 		sb.append(" where 1=1 ");
 
 		if (!clientFilter.firstname.equals("")) {

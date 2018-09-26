@@ -14,8 +14,6 @@ import java.io.PrintStream;
 public class ReportViewXlsx implements ReportView {
 	private PrintStream printStream;
 
-
-
 	public ReportViewXlsx(PrintStream printStream) {
 		this.printStream=printStream;
 	}
@@ -26,6 +24,7 @@ public class ReportViewXlsx implements ReportView {
 
 	@Override
 	public void start(MyReportHeadData headData) throws DocumentException {
+				initating();
 
 	}
 
@@ -42,14 +41,11 @@ public class ReportViewXlsx implements ReportView {
 	public static void main(String[] args) throws Exception {
 		int rowCount = 9000;
 
-		String tmpDir = System.getProperty("user.home") + "/trans/tmp";
+		String tmpDir = System.getProperty("user.name") + "/trans/tmp";
+//		String tmpDir = System.getProperty("build/my_report/");
 		String workDir = tmpDir + "/generated_xlsx_" + rowCount;
+//		String workDir = tmpDir + rowCount;
 
-		try {
-			Runtime.getRuntime().exec(/*wmd*/"rm -rvf " + workDir).waitFor();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 
 		long time1 = System.currentTimeMillis();
 
