@@ -2,7 +2,6 @@ package kz.greetgo.sandbox.register.test.dao;
 
 import kz.greetgo.sandbox.controller.model.Address;
 import kz.greetgo.sandbox.controller.model.Client;
-import kz.greetgo.sandbox.controller.model.PhoneType;
 import kz.greetgo.sandbox.controller.model.db.*;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -11,36 +10,45 @@ import java.util.List;
 
 public interface ClientTestDao {
 
+  @Select("insert into charm(name, description, energy, actual)\n" +
+    "    values ('OPENNESS', 'OPENNESS', 1, true),\n" +
+    "      ('CONSCIENTIOUSNESS', 'CONSCIENTIOUSNESS', 2, true),\n" +
+    "      ('EXTRAVERSION', 'EXTRAVERSION', 3, true),\n" +
+    "      ('AGREEABLENESS', 'AGREEABLENESS', 4, true),\n" +
+    "      ('NEUROTICISM', 'NEUROTICISM', 5, true);")
+  void insertDefaultCharms();
 
-  @Select("with charm as (insert into charm (name, description, energy) " +
-    "values (#{charmDb.name}, #{charmDb.description}, #{charmDb.energy}) returning id)" +
+  @Select("with charm as (insert into charm (name, description, energy, actual) " +
+    "values (#{charmDb.name}, #{charmDb.description}, #{charmDb.energy}, true) returning id)" +
     " select * from charm")
   int insertCharm(@Param("charmDb") CharmDb charmDb);
 
 
-  @Select("with client as (insert into client (surname, name, patronymic, gender, birth_date, charm) " +
-    "values (#{clientDb.surname}, #{clientDb.name}, #{clientDb.patronymic}, #{clientDb.gender}, #{clientDb.birthDate}, 1) returning id) " +
+  @Select("with client as (insert into client (surname, name, patronymic, gender, birth_date, charm, actual) " +
+    "values (#{clientDb.surname}, #{clientDb.name}, #{clientDb.patronymic}, #{clientDb.gender}, #{clientDb.birthDate}, 1, true)" +
+    " returning id) " +
     "select * from client")
   int insertClientDb(@Param("clientDb") ClientDb clientDb);
 
 
-  @Select("with client_account as (insert into client_account(client, money, number, registered_at) " +
-    "values(#{clientAccountDb.client}, #{clientAccountDb.money}, #{clientAccountDb.number}, #{clientAccountDb.registeredAt}) returning id) " +
+  @Select("with client_account as (insert into client_account(client, money, number, registered_at, actual) " +
+    "values(#{clientAccountDb.client}, #{clientAccountDb.money}, #{clientAccountDb.number}, #{clientAccountDb.registeredAt}, true)" +
+    " returning id) " +
     "select * from client_account")
   int insertClientAccountDb(@Param("clientAccountDb") ClientAccountDb clientAccountDb);
 
-  @Select("with transaction_type as(insert into transaction_type(code, name) " +
-    "values(#{transactionTypeDb.code}, #{transactionTypeDb.name}) returning id) " +
+  @Select("with transaction_type as(insert into transaction_type(code, name, actual) " +
+    "values(#{transactionTypeDb.code}, #{transactionTypeDb.name}, true) returning id) " +
     "select * from transaction_type")
   int insertTransactionType(@Param("transactionTypeDb") TransactionTypeDb transactionTypeDb);
 
-  @Select("with client_account_transaction as (insert into client_account_transaction(account, money, finished_at, type)" +
-    "values(#{clientATDb.account}, #{clientATDb.money}, #{clientATDb.finishedAt}, #{clientATDb.type}) returning id)" +
+  @Select("with client_account_transaction as (insert into client_account_transaction(account, money, finished_at, type, actual)" +
+    "values(#{clientATDb.account}, #{clientATDb.money}, #{clientATDb.finishedAt}, #{clientATDb.type}, true) returning id)" +
     "select * from client_account_transaction")
   int insertClientAccountTransaction(@Param("clientATDb") ClientAccountTransactionDb clientATDb);
 
-  @Select("with client as (insert into client (surname, name, patronymic, gender, birth_date, charm) " +
-    "values (#{client.surname}, #{client.name}, #{client.patronymic}, 'MALE', #{client.birthDay}, 1) returning id) " +
+  @Select("with client as (insert into client (surname, name, patronymic, gender, birth_date, charm, actual) " +
+    "values (#{client.surname}, #{client.name}, #{client.patronymic}, 'MALE', #{client.birthDay}, 1, true) returning id) " +
     "select * from client")
   int insertClient(@Param("client") Client client);
 
@@ -70,19 +78,26 @@ public interface ClientTestDao {
   Address getAddress(@Param("id") int id,
                      @Param("type") String type);
 
-  @Select("select * from client_phone where client = #{id}")
+  @Select("select * from client_phone where client = #{id} and actual = true")
   List<ClientPhoneDb> phoneList(@Param("id") int id);
 
-  @Select("select id, surname, name, patronymic, gender, birth_date, charm from client where id=#{id}")
+  @Select("select id, surname, name, patronymic, gender, birth_date, charm from client where id=#{id} and actual = true")
   ClientDb getClientDb(@Param("id") int id);
 
-//  @Insert("insert into client values(#{id}, #{surname}, #{name}, #{patronymic}, #{gender}, #{charm})")
-//  void insertClientDb(@Param("id") int id,
-//                      @Param("surname") String surname,
-//                      @Param("name") String name,
-//                      @Param("patronymic") String patronymic,
-//                      @Param("gender") String gender,
-//                      @Param("charm") int charm);
+
+  @Select("select *\n" +
+    "from client_addr\n" +
+    "where client = #{client} and type = #{type} and actual = true")
+  ClientAddrDb getAddr(@Param("client") int client, @Param("type") String type);
+
+
+//  @Select("insert into client_phone(client, number, type)\n" +
+//    "    values(36, '333737382', 'WORK')\n" +
+//    "on conflict(client, number) do update set\n" +
+//    "number = '111',\n" +
+//    "type = excluded.type;")
+//  void saveOrUpdatePhones(@Param("phones") ClientPhoneDb phones,
+//                          @Param("newNumber") String newNumber);
 
   @Select("select client, type, street, house, flat from client_addr where client=#{client} and type = #{type}")
   ClientAddrDb getClientAddrDb(@Param("id") int id,
@@ -93,5 +108,43 @@ public interface ClientTestDao {
   ClientPhoneDb getClientPhoneDb(@Param("client") int client,
                                  @Param("number") String number);
 
+
+  @Select("select id from charm where name = #{name} and actual = true")
+  Integer getCharmByName(@Param("name") String name);
+
+
+  @Select("insert into  client (id, surname, name, patronymic, gender, birth_date, charm, actual)\n" +
+    "  values (#{client.id}, #{client.surname}, #{client.name}, #{client.patronymic}, " +
+    "    #{client.gender}, #{client.birthDate}, #{client.charm}, true)\n" +
+    "  on conflict (id) do update set\n" +
+    "    surname = excluded.surname,\n" +
+    "    name = excluded.name,\n" +
+    "    patronymic = excluded.patronymic,\n" +
+    "    gender = excluded.gender,\n" +
+    "    birth_date = excluded.birth_date,\n" +
+    "    charm = excluded.charm,\n" +
+    "    actual = true;")
+  void saveOrUpdateClient(@Param("client") ClientDb client);
+
+
+  @Select("insert into client_addr(client, type, street, house, flat, actual)\n" +
+    "values(#{address.client}, #{address.type}, #{address.street}, #{address.house}, #{address.flat}, true)\n" +
+    "on conflict (client, type) do update set\n" +
+    "street = excluded.street,\n" +
+    "house = excluded.house,\n" +
+    "flat = excluded.flat," +
+    "actual = true;")
+  void saveOrUpdateAddress(@Param("address") ClientAddrDb address);
+
+  @Select("insert into client_phone(client, number, type, actual)\n" +
+    "    values(#{phone.client}, #{phone.number}, #{phone.type}, true)\n" +
+    "on conflict(client, number) do update set\n" +
+    "actual = true,\n" +
+    "type = excluded.type;")
+  void saveOrUpdatePhone(@Param("phone") ClientPhoneDb phone);
+
+  @Select("update client_phone set actual = false where client " +
+    "= #{client} and number= #{number}")
+  void deactualPhone(@Param("client") int client, @Param("number") String number);
 
 }

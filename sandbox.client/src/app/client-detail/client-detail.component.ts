@@ -44,7 +44,8 @@ export class ClientDetailComponent implements OnInit {
   public savePhone() {
     this.clientToSave.phones.push({
       detail: {type: this.phone.detail.type, typeRuss: ""},
-      number: this.phone.number
+      number: this.phone.number,
+      oldNumber: this.phone.oldNumber
     });//this.phone
     this.phone = new Phone();
   }

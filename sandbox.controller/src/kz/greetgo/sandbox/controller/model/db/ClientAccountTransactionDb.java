@@ -9,5 +9,6 @@ public class ClientAccountTransactionDb {
   public float money;
   public Timestamp finishedAt;
   public int type;
+  public boolean actual = true;
 
 }

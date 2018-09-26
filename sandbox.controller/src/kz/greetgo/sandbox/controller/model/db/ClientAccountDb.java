@@ -8,4 +8,7 @@ public class ClientAccountDb {
   public float money;
   public String number;
   public Timestamp registeredAt;
+  public boolean actual = true;
+
+
 }

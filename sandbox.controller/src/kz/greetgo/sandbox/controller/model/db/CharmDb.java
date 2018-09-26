@@ -5,4 +5,5 @@ public class CharmDb {
   public String name;
   public String description;
   public float energy;
+  public boolean actual;
 }

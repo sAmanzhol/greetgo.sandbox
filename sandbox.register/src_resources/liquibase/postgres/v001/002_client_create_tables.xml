@@ -10,6 +10,7 @@
         name varchar(50) not null,
         description varchar(500),
         energy float not null,
+        actual boolean,
         primary key(id)
       )
     ]]></sql>
@@ -24,6 +25,7 @@
         patronymic varchar(50),
         gender varchar(10) not null,
         birth_date date not null,
+        actual boolean,
         charm integer references charm(id),
         primary key(id)
       )
@@ -38,6 +40,7 @@
         street varchar(50),
         house varchar(20),
         flat varchar(20),
+        actual boolean,
         primary key(client, type)
       )
     ]]></sql>
@@ -49,6 +52,7 @@
         client integer references client(id),
         number varchar(20) not null,
         type varchar(10) not null,
+        actual boolean,
         primary key(client, number)
       )
     ]]></sql>
@@ -62,6 +66,7 @@
         money float not null,
         number varchar(25),
         registered_at timestamp,
+        actual boolean,
         primary key(id)
       )
     ]]></sql>
@@ -73,6 +78,7 @@
         id serial not null,
         code varchar(50) not null,
         name varchar(50) not null,
+        actual boolean,
         primary key(id)
       )
     ]]></sql>
@@ -86,6 +92,7 @@
         money float not null,
         finished_at timestamp,
         type integer references transaction_type(id),
+        actual boolean,
         primary key(id)
       )
     ]]></sql>

@@ -5,5 +5,14 @@ public enum CharacterType {
   CONSCIENTIOUSNESS,
   EXTRAVERSION,
   AGREEABLENESS,
-  NEUROTICISM
+  NEUROTICISM;
+
+
+  public static CharacterType parseOrNull(String strEnum) {
+    try {
+      return CharacterType.valueOf(strEnum);
+    } catch (Exception e) {
+      return null;
+    }
+  }
 }

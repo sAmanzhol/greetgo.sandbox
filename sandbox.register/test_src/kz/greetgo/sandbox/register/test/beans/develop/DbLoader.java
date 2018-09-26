@@ -25,6 +25,7 @@ public class DbLoader {
 
     loadPersons();
 
+
     logger.info("FINISH");
   }
 
@@ -69,4 +70,38 @@ public class DbLoader {
       authTestDao.get().personCan(username, can.name());
     }
   }
+/*
+
+    CharmDb charm = this.randomEntity.get().charmDb();
+    int charmId = clientTestDao.get().insertCharm(charm);
+
+    ClientDb clientDb = this.randomEntity.get().clientDb(charmId);
+    int clientId = clientTestDao.get().insertClientDb(clientDb);
+ */
+  private void loadClientData(){
+
+  }
+  private void addClient(){
+//    ClientDb clientDb = new ClientDb();
+//    clientDb.name = RND.str(5);
+//    clientDb.patronymic = RND.str(4);
+//    clientDb.surname = RND.str(4);
+//    clientDb.birthDate = new Date();
+//    try {
+//      clientDb.birthDate = new SimpleDateFormat("dd/MM/yyyy")
+//        .parse("20/12/1998");
+//    } catch (ParseException e) {
+//      e.printStackTrace();
+//    }
+//    clientDb.gender = GenderType.MALE;
+//    clientDb.charm = charmId;
+//
+//    return clientDb;
+  }
+  private void addCharacter(){
+
+  }
+
+
+
 }
