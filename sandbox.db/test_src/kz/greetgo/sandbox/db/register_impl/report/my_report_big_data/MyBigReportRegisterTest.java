@@ -36,7 +36,6 @@ public class MyBigReportRegisterTest extends ParentTestNg {
 
 		@Override
 		public void addRow(MyReportRow row) {
-
 			this.row.add(row);
 		}
 
@@ -52,13 +51,10 @@ public class MyBigReportRegisterTest extends ParentTestNg {
 
 
 		ClientFilter clientFilter= new ClientFilter();
-		String userid ="asd";
-		Date from = new Date();
-		Date to = new Date();
 		TestView testView = new TestView();
 
 		myBigReportRegisterBeanGetter.get().genReport(testView,clientFilter);
 		assertThat(testView.headData).isNotNull();
-		assertThat(testView.headData.title).isEqualTo("dasdasdsadas");
+		assertThat(testView.headData.title).isEqualTo("Report");
 	}
 }
