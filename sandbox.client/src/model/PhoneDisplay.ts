@@ -1,7 +1,7 @@
 export class PhoneDisplay {
-  public id: string;
+  public id: number;
   public type: string;
-  public value: string;
+  public value: number;
 
   public static create(a: any): PhoneDisplay {
     const ret = new PhoneDisplay();
@@ -10,9 +10,9 @@ export class PhoneDisplay {
   }
 
   constructor() {
-    this.id = "";
+    this.id = null;
     this.type = "Home";
-    this.value = ""
+    this.value = null;
   }
 
   assign(a: any) {

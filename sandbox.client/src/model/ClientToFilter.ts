@@ -1,15 +1,15 @@
 export class ClientToFilter {
-  public target: string;
-  public type: string;
-  public query: string;
-  public page: string;
-  public itemCount: string;
+  public sortColumn: string;
+  public sortDirection: string;
+  public fio: string;
+  public page: number;
+  public itemCount: number;
 
   public static createDefault(): ClientToFilter {
     return ClientToFilter.create({
-      target: "id",
-      type: "asc",
-      query: "",
+      sortColumn: "id",
+      sortDirection: "asc",
+      fio: "",
       page: 1,
       itemCount: 10
     });
@@ -22,9 +22,9 @@ export class ClientToFilter {
   }
 
   assign(a: any) {
-    this.target = a.target;
-    this.type = a.type;
-    this.query = a.query;
+    this.sortColumn = a.sortColumn;
+    this.sortDirection = a.sortDirection;
+    this.fio = a.fio;
     this.page = a.page;
     this.itemCount = a.itemCount;
   }

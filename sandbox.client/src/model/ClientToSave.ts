@@ -1,14 +1,13 @@
 import {PhoneDisplay} from "./PhoneDisplay";
-import {PhoneRecord} from "./PhoneRecord";
 
 export class ClientToSave {
-  public id: string;
+  public id: number;
   public surname: string;
   public name: string;
   public patronymic: string;
-  public birthDate: string;
+  public birthDate: Date;
   public gender: string;
-  public character: string;
+  public characterId: number;
   public streetRegistration: string;
   public houseRegistration: string;
   public apartmentRegistration: string;
@@ -25,13 +24,13 @@ export class ClientToSave {
   }
 
   constructor() {
-    this.id = "";
+    this.id = null;
     this.surname = "";
     this.name = "";
     this.patronymic = "";
-    this.birthDate = "";
+    this.birthDate = null;
     this.gender = "";
-    this.character = "";
+    this.characterId = null;
     this.streetRegistration = "";
     this.houseRegistration = "";
     this.apartmentRegistration = "";
@@ -49,13 +48,13 @@ export class ClientToSave {
     this.patronymic = a.patronymic;
     this.birthDate = a.birthDate;
     this.gender = a.gender;
-    this.character = a.character;
+    this.characterId = a.characterId;
     this.streetRegistration = a.streetRegistration;
     this.houseRegistration = a.houseRegistration;
     this.apartmentRegistration = a.apartmentRegistration;
     this.streetResidence = a.streetResidence;
     this.houseResidence = a.houseResidence;
     this.apartmentResidence = a.apartmentResidence;
-    this.numbers = (a.numbers instanceof Array) ? a.numbers.map(c => c) : [];
+    this.numbers = a.numbers;
   }
 }

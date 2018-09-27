@@ -1,11 +1,11 @@
 export class ClientRecord {
-  public id: string;
+  public id: number;
   public fio: string;
   public character: string;
-  public age: string;
-  public balance: string;
-  public balanceMax: string;
-  public balanceMin: string;
+  public age: number;
+  public balance: number;
+  public balanceMax: number;
+  public balanceMin: number;
 
   public static create(a: any): ClientRecord {
     const ret = new ClientRecord();

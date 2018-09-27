@@ -1,8 +1,9 @@
 import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {ClientInfoService} from "./client-info.service";
-import {ClientsService} from "../../clients/clients.service";
-import {ClientToFilter} from "../../../model/ClientToFilter";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {ClientInfoService} from "./client-info.service";
+import {PhonesService} from "../../phones/phones.service";
+import {CharactersService} from "../../characters/characters.service";
+import {ClientsComponent} from "../../clients/clients.component";
 import {ClientToSave} from "../../../model/ClientToSave";
 import {PhoneDisplay} from "../../../model/PhoneDisplay";
 
@@ -19,15 +20,14 @@ export class ClientInfoComponent implements OnInit {
   @Output() outModalData = new EventEmitter();
 
   closeResult: string;
-  characters = [];
+  characterTypes = [];
   // fixme название переменной вводит в заблуждение. на первый взгляд кажется, что это список номеров, а не их типы. То же самое для character
-  phones = [];
+  phoneTypes = [];
   client = new ClientToSave();
-  filter = ClientToFilter.createDefault();
 
   @ViewChild('modal') modal: ElementRef;
 
-  constructor(public Service: ClientInfoService, public ClientsService: ClientsService, private modalService: NgbModal) {
+  constructor(public Service: ClientInfoService, public ClientsComponent: ClientsComponent, public PhonesService: PhonesService, public CharactersService: CharactersService, private modalService: NgbModal) {
   }
 
   ngOnInit() {
@@ -36,7 +36,7 @@ export class ClientInfoComponent implements OnInit {
   }
 
   ngOnChanges() {
-    if (this.inModalData["type"] == "edit") {
+    if (this.inModalData["clientId"]) {
       this.getClient(this.inModalData["clientId"]);
     } else {
       this.client = new ClientToSave();
@@ -67,9 +67,7 @@ export class ClientInfoComponent implements OnInit {
 
   closeModal() {
     this.inModalData = {
-      "open": false,
-      "type": "",
-      "clientId": ""
+      "clientId": null
     };
 
     this.outModalData.emit(this.inModalData);
@@ -78,37 +76,21 @@ export class ClientInfoComponent implements OnInit {
 
   async getClient(id) {
     //fixme Нужны ли везде эти трай кетчи?
-    try {
-      this.client = await this.Service.getClient(id);
-    } catch (e) {
-      console.error(e);
-    }
-  }
-
-  async getCharacters() {
-    try {
-      this.characters = await this.Service.getCharacters();
-    } catch (e) {
-      console.error(e);
-    }
-  }
-
-  async getPhoneTypes() {
-    try {
-      this.phones = await this.Service.getPhoneTypes();
-    } catch (e) {
-      console.error(e);
-    }
+    this.client = await this.Service.getClient(id);
+    console.log(this.client);
   }
 
   async crupdate(clientToSave) {
-    try {
-      await this.Service.crupdateClient(clientToSave);
+    await this.Service.crupdateClient(clientToSave);
+    this.closeModal();
+    this.ClientsComponent.loadPage();
+  }
 
-      this.closeModal();
-      this.ClientsService.load(this.filter);
-    } catch (e) {
-      console.error(e);
-    }
+  async getCharacters() {
+    this.characterTypes = await this.CharactersService.getCharacters();
+  }
+
+  async getPhoneTypes() {
+    this.phoneTypes = await this.PhonesService.getPhoneTypes();
   }
 }

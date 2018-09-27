@@ -5,7 +5,7 @@ import kz.greetgo.depinject.core.BeanGetter;
 import kz.greetgo.mvc.annotations.ToJson;
 import kz.greetgo.mvc.annotations.on_methods.ControllerPrefix;
 import kz.greetgo.mvc.annotations.on_methods.OnGet;
-import kz.greetgo.sandbox.controller.model.PhoneRecord;
+import kz.greetgo.sandbox.controller.model.PhoneTypeRecord;
 import kz.greetgo.sandbox.controller.register.PhoneRegister;
 import kz.greetgo.sandbox.controller.util.Controller;
 
@@ -19,7 +19,7 @@ public class PhoneController implements Controller {
 
   @ToJson
   @OnGet("/list")
-  public List<PhoneRecord> list() {
+  public List<PhoneTypeRecord> list() {
     return phoneRegister.get().list();
   }
 }

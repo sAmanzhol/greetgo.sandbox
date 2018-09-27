@@ -1,5 +1,5 @@
 export class CharacterRecord {
-  public id: string;
+  public id: number;
   public value: string;
 
   public static create(a: any): CharacterRecord {

@@ -1,16 +1,17 @@
 package kz.greetgo.sandbox.controller.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ClientToSave {
-  public String id;
+  public Integer id;
   public String surname;
   public String name;
   public String patronymic;
-  public String birthDate;
+  public Date birthDate;
   public String gender;
-  public String character;
+  public int characterId;
   public String streetRegistration;
   public String houseRegistration;
   public String apartmentRegistration;
@@ -23,14 +24,14 @@ public class ClientToSave {
   public ClientToSave() {
   }
 
-  public ClientToSave(String id, String surname, String name, String patronymic, String birthDate, String gender, String streetRegistration, String houseRegistration, String apartmentRegistration, String streetResidence, String houseResidence, String apartmentResidence, List<PhoneDisplay> numbers) {
+  public ClientToSave(int id, String surname, String name, String patronymic, Date birthDate, String gender, int characterId, String streetRegistration, String houseRegistration, String apartmentRegistration, String streetResidence, String houseResidence, String apartmentResidence, List<PhoneDisplay> numbers) {
     this.id = id;
     this.surname = surname;
     this.name = name;
     this.patronymic = patronymic;
     this.birthDate = birthDate;
     this.gender = gender;
-    this.character = character;
+    this.characterId = characterId;
     this.streetRegistration = streetRegistration;
     this.houseRegistration = houseRegistration;
     this.apartmentRegistration = apartmentRegistration;
