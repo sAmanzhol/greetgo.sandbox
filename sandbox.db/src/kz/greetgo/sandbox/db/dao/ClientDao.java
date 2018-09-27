@@ -28,8 +28,11 @@ public interface ClientDao {
     @Select("select number from client_phone where client = #{id}")
     List<String> selectClientPhoneNumberById(@Param("id") int id);
 
-    @Select("select * from client_phone where client = #{id} order by type desc")
-    List<ClientPhone> selectClientPhoneById(@Param("id") int id);
+    @Select("select * from client_phone where client = #{id} and type ='MOBILE' ")
+    List<ClientPhone> selectClientPhoneByMobile(@Param("id") int id);
+
+    @Select("select * from client_phone where client = #{id} and type != 'MOBILE' " )
+    List<ClientPhone> selectClientPhoneByNotMobile(@Param("id") int id);
 
     @Select("select * from charm where id = #{id}")
     Charm getCharmById(@Param("id") int id);

@@ -1,5 +1,7 @@
-package kz.greetgo.sandbox.controller.model.model;
+package kz.greetgo.sandbox.controller.report.model;
 
+
+import kz.greetgo.sandbox.controller.model.model.Charm;
 
 import java.util.Date;
 
@@ -19,6 +21,7 @@ public class ClientRecord {
         this.lastname="";
         this.patronymic="";
         this.characterName=new Charm().name;
+        this.dateOfBirth=new Date();
         this.totalAccountBalance=0;
         this.maximumBalance=0;
         this.minimumBalance=0;
@@ -37,6 +40,5 @@ public class ClientRecord {
           ", totalAccountBalance=" + totalAccountBalance +
           ", maximumBalance=" + maximumBalance +
           ", minimumBalance=" + minimumBalance +
-          '}';
-    }
+          '}';    }
 }

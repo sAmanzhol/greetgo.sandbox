@@ -12,7 +12,13 @@ public abstract class AbstractBasicSql<T, R> extends AbstractConnectionCallBack<
 	}
 
 	@Override
+	protected void from() {
+		sb.append(" from client c ");
+	}
+
+	@Override
 	public void where() {
+
 		sb.append(" where 1=1 ");
 
 		if (!clientFilter.firstname.equals("")) {

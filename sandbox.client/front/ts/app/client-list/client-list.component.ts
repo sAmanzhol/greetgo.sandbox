@@ -32,6 +32,7 @@ export class ClientListComponent implements OnInit {
     this.getTotalRecord();
   }
 
+  date:Date = new Date();
   getTotalRecord() {
 
     var self = this;

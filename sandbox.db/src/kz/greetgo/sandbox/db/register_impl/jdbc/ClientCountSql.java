@@ -28,19 +28,14 @@ public class ClientCountSql extends AbstractBasicSql<Integer, Integer> {
 	@Override
 	protected void select() {
 
-		sb.append("select count(id)");
+		sb.append("select count(c.id) ");
 
 	}
+
 
 	@Override
 	protected void leftJoin() {
 
-	}
-
-	@Override
-	protected void from() {
-
-		sb.append(" from client");
 	}
 
 	@Override

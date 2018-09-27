@@ -56,7 +56,8 @@ public class ClientRegisterImpl implements ClientRegister {
 		ClientDetails clientDetails = clientDao.get().selectClient(clientMarkId);
 		clientDetails.addressOfResidence = clientDao.get().selectClientAddrById(clientMarkId, AddrType.FACT);
 		clientDetails.addressOfRegistration = clientDao.get().selectClientAddrById(clientMarkId, AddrType.REG);
-		clientDetails.phone.addAll(clientDao.get().selectClientPhoneById(clientMarkId));
+		clientDetails.phone.addAll(clientDao.get().selectClientPhoneByMobile(clientMarkId));
+		clientDetails.phone.addAll(clientDao.get().selectClientPhoneByNotMobile(clientMarkId));
 		return clientDetails;
 
 	}

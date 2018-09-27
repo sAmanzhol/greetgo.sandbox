@@ -15,14 +15,17 @@ import kz.greetgo.sandbox.db.test.util.TestsBeanContainerCreator;
  * </p>
  */
 public class RecreateDbAndLoadTestData {
-  public static void main(String[] args) throws Exception {
-    new RecreateDbAndLoadTestData().run();
-  }
 
-  private void run() throws Exception {
-    TestsBeanContainer bc = TestsBeanContainerCreator.create();
+	public static void main(String[] args) throws Exception {
 
-    bc.dbWorker().recreateAll();
-    bc.dbLoader().loadTestData();
-  }
+		new RecreateDbAndLoadTestData().run();
+	}
+
+	private void run() throws Exception {
+
+		TestsBeanContainer bc = TestsBeanContainerCreator.create();
+
+		bc.dbWorker().recreateAll();
+		bc.dbLoader().loadTestData();
+	}
 }

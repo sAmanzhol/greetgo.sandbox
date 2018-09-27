@@ -10,6 +10,7 @@ import {Charm} from "../../model/Charm";
 import {PhoneType} from "../../model/PhoneType";
 import {ClientPhone} from "../../model/ClientPhone";
 import {ClientToSave} from "../../model/ClientToSave";
+import {DatePipe} from "@angular/common";
 
 
 @Component({
@@ -21,6 +22,11 @@ export class ClientEditFormComponent implements OnInit {
   constructor(private http: HttpService) {}
   ngOnInit() {
     this.isOpen=false;
+  }
+
+  checkDate() {
+    const dateSendingToServer = new DatePipe('en-US').transform(this.clientDetails.dateOfBirth, 'mm/dd/yyyy')
+    console.log(dateSendingToServer);
   }
 
   @Output() onChangedClientRecord = new EventEmitter<ClientRecord>();
@@ -104,6 +110,8 @@ export class ClientEditFormComponent implements OnInit {
       self.titleName = "Редактировать";
       this.http.get('/client/get-client-details', {clientMark: clientId}).subscribe(data => {
           self.clientDetails = ClientDetails.copy(data.json());
+          console.log("CLIENT DETAILS IS THIS"+self.clientDetails.dateOfBirth);
+
           self.getCharmById();
         }
       )
@@ -113,4 +121,5 @@ export class ClientEditFormComponent implements OnInit {
 
 
 }
+
 

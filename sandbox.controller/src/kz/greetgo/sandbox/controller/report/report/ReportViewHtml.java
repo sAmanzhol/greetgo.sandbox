@@ -1,8 +1,8 @@
 package kz.greetgo.sandbox.controller.report.report;
 
+import kz.greetgo.sandbox.controller.model.model.ClientRecord;
 import kz.greetgo.sandbox.controller.report.model.MyReportFootData;
 import kz.greetgo.sandbox.controller.report.model.MyReportHeadData;
-import kz.greetgo.sandbox.controller.report.model.MyReportRow;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -17,6 +17,7 @@ public class ReportViewHtml implements ReportView {
 
 	public ReportViewHtml(PrintStream printStream) {
 
+		printStream.flush();
 		this.printStream = printStream;
 	}
 
@@ -34,9 +35,9 @@ public class ReportViewHtml implements ReportView {
 	}
 
 	@Override
-	public void addRow(MyReportRow row) {
+	public void addRow(ClientRecord row) {
 
-		printStream.println("<tr><td>" + row.firstname + "</td><td>" + row.lastname+ "</td><td>" + row.patronymic+ "</td></tr>");
+		printStream.println("<tr><td>" + row.firstname + "</td><td>" + row.lastname + "</td><td>" + row.patronymic + "</td></tr>");
 
 	}
 
@@ -50,6 +51,12 @@ public class ReportViewHtml implements ReportView {
 		printStream.println("</body>");
 		printStream.println("</html>"); ;
 
+	}
+
+	@Override
+	public void close() throws Exception {
+
+		printStream.close();
 	}
 
 	public static void main(String[] args) throws Exception {
@@ -67,11 +74,11 @@ public class ReportViewHtml implements ReportView {
 				viewHtml.start(myReportHeadData);
 
 				for (int i = 0; i < 1000; i++) {
-					MyReportRow myReportRow = new MyReportRow();
-					myReportRow.firstname = "col1" + i;
-					myReportRow.lastname = "col2" + i;
-					myReportRow.patronymic = "col3" + i;
-					viewHtml.addRow(myReportRow);
+					ClientRecord clientRecord = new ClientRecord();
+					clientRecord.firstname = "col1" + i;
+					clientRecord.lastname = "col2" + i;
+					clientRecord.patronymic = "col3" + i;
+					viewHtml.addRow(clientRecord);
 				}
 				MyReportFootData myReportFootData = new MyReportFootData();
 				myReportFootData.generatedBy = "Nazar";

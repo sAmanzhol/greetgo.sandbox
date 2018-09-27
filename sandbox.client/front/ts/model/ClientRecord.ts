@@ -6,7 +6,7 @@ export class ClientRecord {
   public lastname:string|null;
   public patronymic:string|null;
   public characterName:string;
-  public dateOfBirth:string;
+  public dateOfBirth:Date = new Date();
   public totalAccountBalance:number/*int*/;
   public maximumBalance:number/*int*/;
   public minimumBalance:number/*int*/;
@@ -16,7 +16,7 @@ export class ClientRecord {
     this.lastname="";
     this.patronymic="";
     this.characterName=new Charm().name;
-    this.dateOfBirth="2018-10-22";
+    this.dateOfBirth=new Date();
     this.totalAccountBalance=0;
     this.maximumBalance=0;
     this.minimumBalance=0;
