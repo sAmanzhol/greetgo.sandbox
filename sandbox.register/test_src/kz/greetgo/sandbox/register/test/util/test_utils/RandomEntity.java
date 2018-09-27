@@ -101,6 +101,19 @@ public class RandomEntity {
     return clientAddrDb;
   }
 
+  public ClientAddrDb clientAddrDb(int clientID, String type) {
+    ClientAddrDb clientAddrDb = new ClientAddrDb();
+
+    clientAddrDb.client = clientID;
+    if (AddressTypeDb.parseOrNull(type) != null) {
+      clientAddrDb.type = AddressTypeDb.parseOrNull(type);
+    }
+    clientAddrDb.street = RND.intStr(7);
+    clientAddrDb.flat = RND.intStr(7);
+    clientAddrDb.house = RND.intStr(7);
+    return clientAddrDb;
+  }
+
   public List<ClientPhoneDb> clientPhoneDb(ClientToSave toSave) {
     List<ClientPhoneDb> phoneList = new ArrayList<>();
 
@@ -110,6 +123,20 @@ public class RandomEntity {
       phoneDb.number = phone.number;
       phoneDb.oldNumber = phone.oldNumber;
       phoneDb.type = PhoneTypeDb.parseOrNull(phone.detail.type.toString());
+      phoneList.add(phoneDb);
+    }
+    return phoneList;
+  }
+
+  public List<ClientPhoneDb> clientPhoneDb(int clientID) {
+    List<ClientPhoneDb> phoneList = new ArrayList<>();
+
+    for (int i = 0; i < 3; i++) {
+      ClientPhoneDb phoneDb = new ClientPhoneDb();
+      phoneDb.client = clientID;
+      phoneDb.number = RND.intStr(8);
+      phoneDb.oldNumber = phoneDb.number;
+      phoneDb.type = PhoneTypeDb.parseOrNull("WORK");
       phoneList.add(phoneDb);
     }
     return phoneList;
@@ -135,17 +162,20 @@ public class RandomEntity {
   }
 
   public ClientAccountDb clientAccountDb(int clientId) {
-    ClientAccountDb clientAccountDb = new ClientAccountDb();
-    clientAccountDb.client = clientId;
-    clientAccountDb.money = (float) RND.plusInt(9);
-    clientAccountDb.registeredAt = new Timestamp(1);
-    return clientAccountDb;
+    ClientAccountDb account = new ClientAccountDb();
+    account.client = clientId;
+    account.registeredAt = new Timestamp(new Date().getTime());
+    account.money = RND.plusLong(9999);
+    account.number = RND.intStr(7);
+    account.actual = true;
+    return account;
   }
 
   public TransactionTypeDb transactionTypeDb() {
     TransactionTypeDb trTypeDb = new TransactionTypeDb();
-    trTypeDb.code = "12345678";
-    trTypeDb.name = "out";
+    trTypeDb.code = RND.str(7);
+    trTypeDb.name = RND.str(8);
+    trTypeDb.actual = true;
     return trTypeDb;
   }
 
@@ -153,9 +183,10 @@ public class RandomEntity {
 
     ClientAccountTransactionDb accountTransactionDb = new ClientAccountTransactionDb();
     accountTransactionDb.account = clientA;
-    accountTransactionDb.money = (float) RND.plusInt(6);
-    accountTransactionDb.finishedAt = new Timestamp(1);
+    accountTransactionDb.money = RND.plusLong(9999);
+    accountTransactionDb.finishedAt = new Timestamp(new Date().getTime());
     accountTransactionDb.type = tTypeId;
+    accountTransactionDb.actual = true;
     return accountTransactionDb;
   }
 
@@ -223,4 +254,6 @@ public class RandomEntity {
     toSave.phones.add(new Phone(new PhoneDetail(PhoneType.WORK, "work"), Integer.toString(RND.plusInt(156347)), "2222"));
     return toSave;
   }
+
+
 }

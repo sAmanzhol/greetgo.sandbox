@@ -12,7 +12,7 @@ public interface ClientRegister {
     List<ClientRecord> getClientList();
     ClientDetail getClientDetailById(int id);
     ClientRecord saveClient(ClientToSave toSave);
-    void deleteClient(long id);
+    void deleteClient(int id);
     ClientRecordListWrapper filterClients(ClientFilter clientFilter);
 
 //    void test();

@@ -1,12 +1,12 @@
 package kz.greetgo.sandbox.controller.model;
 
 public class Character {
-  public CharacterType type;
-  public String typeRuss;
+  public int id;
+  public String type;
 
-  public Character(CharacterType type, String typeRuss) {
+  public Character(int id, String type) {
+    this.id = id;
     this.type = type;
-    this.typeRuss = typeRuss;
   }
 
   public Character() {

@@ -1,10 +1,18 @@
 package kz.greetgo.sandbox.controller.model.db;
 
-public enum PhoneTypeDb {
-  HOME,
-  WORK,
-  MOBILE;
+import kz.greetgo.sandbox.controller.model.PhoneType;
 
+public enum PhoneTypeDb {
+  HOME("домашний"),
+  WORK("рабочий"),
+  MOBILE("мобильный");
+
+
+  public String name;
+
+  PhoneTypeDb(String name){
+     this.name = name;
+  }
 
   public static PhoneTypeDb parseOrNull(String strEnum) {
     try {
@@ -14,3 +22,4 @@ public enum PhoneTypeDb {
     }
   }
 }
+

@@ -2,10 +2,7 @@ package kz.greetgo.sandbox.register.impl;
 
 import kz.greetgo.depinject.core.BeanGetter;
 import kz.greetgo.sandbox.controller.model.*;
-import kz.greetgo.sandbox.controller.model.db.CharmDb;
-import kz.greetgo.sandbox.controller.model.db.ClientAddrDb;
-import kz.greetgo.sandbox.controller.model.db.ClientDb;
-import kz.greetgo.sandbox.controller.model.db.ClientPhoneDb;
+import kz.greetgo.sandbox.controller.model.db.*;
 import kz.greetgo.sandbox.controller.register.ClientRegister;
 import kz.greetgo.sandbox.register.test.dao.ClientTestDao;
 import kz.greetgo.sandbox.register.test.util.ParentTestNg;
@@ -68,7 +65,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
   @Test
   public void testFilter_filter_emptyFilter() {
-//    this.createRequired();
+    this.createRequired();
     CharmDb charm = this.randomEntity.get().charmDb();
     int charmId = clientTestDao.get().insertCharm(charm);
 
@@ -408,6 +405,63 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     ClientDb clientDb = this.randomEntity.get().clientDb(charmId);
     int clientId = clientTestDao.get().insertClientDb(clientDb);
+
+
+    TransactionTypeDb tType = this.randomEntity.get().transactionTypeDb();
+    ClientAccountDb account = this.randomEntity.get().clientAccountDb(clientId);
+    int clientAccount = this.clientTestDao.get().insertClientAccountDb(account);
+    int tTypeId = this.clientTestDao.get().insertTransactionType(tType);
+
+    ClientAddrDb clientAddrDb = this.randomEntity.get().clientAddrDb(clientId, "REG");
+    clientTestDao.get().saveOrUpdateAddress(clientAddrDb);
+    clientAddrDb = this.randomEntity.get().clientAddrDb(clientId, "FACT");
+    clientTestDao.get().saveOrUpdateAddress(clientAddrDb);
+
+    ClientAccountTransactionDb accountTransaction = this.randomEntity.get().clientAccountTransactionDb(tTypeId, clientAccount);
+    int cAccountTDb = this.clientTestDao.get().insertClientAccountTransaction(accountTransaction);
+    ClientAddrDb rAddress = this.clientTestDao.get().getAddr(clientId, "REG");
+    ClientAddrDb fAddress = this.clientTestDao.get().getAddr(clientId, "FACT");
+    List<ClientPhoneDb> phoneDb = this.randomEntity.get().clientPhoneDb(clientId);//
+
+//    List<ClientPhoneDb> phoneDb = this.clientTestDao.get().getPhoneList(clientId);
+    for (ClientPhoneDb phone : phoneDb) {
+//      clientTestDao.get().deactualPhone(phone.client, phone.oldNumber);
+      clientTestDao.get().saveOrUpdatePhone(phone);
+    }
+    this.clientTestDao.get().insertAddress(rAddress);
+    this.clientTestDao.get().insertAddress(fAddress);
+
+    //
+    //
+
+
+//    this.clientTestDao.get().deactualClient(clientId);
+//    List<Integer> accounts = this.clientTestDao.get().deactualAccounts(clientId);
+//    for (Integer acc : accounts) {
+//      this.clientTestDao.get().deactualTransactions(acc);
+//    }
+//    this.clientTestDao.get().deactualAddress(clientId, "REG");
+//    this.clientTestDao.get().deactualAddress(clientId, "FACT");
+//    for (ClientPhoneDb phone : phoneDb) {
+//      this.clientTestDao.get().deactualPhone(phone.client, phone.number);
+//    }
+
+
+
+    this.clientRegister.get().deleteClient(clientId);
+    //
+    //
+
+    List<ClientPhoneDb> phoneList = this.clientTestDao.get().getPhoneList(clientId);
+    assertThat(this.clientTestDao.get().getClientDb(clientId)).isNull();
+    assertThat(this.clientTestDao.get().getClientAcc(clientAccount)).isNull();
+    assertThat(this.clientTestDao.get().getAccountTransaction(clientAccount)).isNull();
+    assertThat(this.clientTestDao.get().getAddressDb(rAddress.client, rAddress.type.toString()));
+    assertThat(this.clientTestDao.get().getAddressDb(fAddress.client, fAddress.type.toString()));
+    for (ClientPhoneDb phone : phoneList) {
+      assertThat(clientTestDao.get().getPhone(phone.client, phone.number)).isNull();
+    }
+
 
   }
 

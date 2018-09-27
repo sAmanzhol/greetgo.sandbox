@@ -1,8 +1,8 @@
 import {Gender} from "./Gender";
-import {Character} from "./Character";
 import {Address} from "./Address";
 import {Phone} from "./Phone";
 import {ClientDetail} from "./ClientDetail";
+import {Character} from "./Character";
 
 export class ClientToSave {
   public clientID: number/*int*/;
@@ -11,7 +11,7 @@ export class ClientToSave {
   public patronymic: string;
   public gender: Gender = new Gender();
   public birthDay: Date;
-  public character: Character = new Character();
+  public character: Character;
   public actualAddress: Address = new Address();
   public registrationAddress: Address = new Address();
   public phones: Phone[];

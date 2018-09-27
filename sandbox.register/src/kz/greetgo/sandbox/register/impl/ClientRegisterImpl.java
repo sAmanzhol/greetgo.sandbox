@@ -94,18 +94,18 @@ public class ClientRegisterImpl implements ClientRegister {
     genders.add(male);
     genders.add(female);
 
-    characters = new ArrayList<>();
-    Character opennesCharacter = new Character(CharacterType.OPENNESS, "открытый");
-    Character agreeablenessCharacter = new Character(CharacterType.AGREEABLENESS, "любзеный");
-    Character conscientiousnessCharacter = new Character(CharacterType.CONSCIENTIOUSNESS, "добросовестный");
-    Character extraversionCharacter = new Character(CharacterType.EXTRAVERSION, "экстраверт");
-    Character neuroticismCharacter = new Character(CharacterType.NEUROTICISM, "невротичный");
+//    characters = new ArrayList<>();
+//    Character opennesCharacter = new Character(CharacterType.OPENNESS, "открытый");
+//    Character agreeablenessCharacter = new Character(CharacterType.AGREEABLENESS, "любзеный");
+//    Character conscientiousnessCharacter = new Character(CharacterType.CONSCIENTIOUSNESS, "добросовестный");
+//    Character extraversionCharacter = new Character(CharacterType.EXTRAVERSION, "экстраверт");
+//    Character neuroticismCharacter = new Character(CharacterType.NEUROTICISM, "невротичный");
 
-    characters.add(opennesCharacter);
-    characters.add(agreeablenessCharacter);
-    characters.add(conscientiousnessCharacter);
-    characters.add(extraversionCharacter);
-    characters.add(neuroticismCharacter);
+//    characters.add(opennesCharacter);
+//    characters.add(agreeablenessCharacter);
+//    characters.add(conscientiousnessCharacter);
+//    characters.add(extraversionCharacter);
+//    characters.add(neuroticismCharacter);
 
     Date birthdayDate = new Date();
 
@@ -115,21 +115,21 @@ public class ClientRegisterImpl implements ClientRegister {
     } catch (ParseException e) {
       e.printStackTrace();
     }
-    clients.add(new Client(1, "Sultanova", "Madina", "Mahammadnova", female, birthdayDate, opennesCharacter, 1000, 475, 5000, Address.empty(), new Address("Mamyr-4", "311", "8"), phones));
-    clients.add(new Client(2, "Asan", "Arman", "Kairatuly", male, birthdayDate, agreeablenessCharacter, 100, 0, 1425, Address.empty(), new Address("Mamyr-4", "311", "85"), phones));
-    clients.add(new Client(3, "Kuyan", "Kirill", "Kirillovich", female, birthdayDate, extraversionCharacter, 10, 8, 5545, Address.empty(), new Address("Mamyr-4", "311", "21"), phones));
-    clients.add(new Client(4, "Adam", "Vova", "Rei", male, birthdayDate, neuroticismCharacter, 40, 12, 5478, Address.empty(), new Address("Mamyr-4", "311", "73"), phones));
-    clients.add(new Client(5, "Malikaidar", "Symbat", "Isaevna", male, birthdayDate, neuroticismCharacter, 100, 74, 6574, Address.empty(), new Address("Mamyr-4", "311", "31"), phones));
-    clients.add(new Client(6, "Umirbekiva", "Madina", "MAliyasovna", male, birthdayDate, neuroticismCharacter, 10, 475, 96, Address.empty(), new Address("Mamyr-4", "311", "25"), phones));
-    clients.add(new Client(7, "Carrey", "Jim", "Nim", male, birthdayDate, neuroticismCharacter, 5, 252, 78, Address.empty(), new Address("Mamyr-4", "311", "82"), phones));
-    clients.add(new Client(8, "Tsay", "Roman", "Romanovich", male, birthdayDate, neuroticismCharacter, 250, 77, 68, Address.empty(), new Address("Pravda", "311", "72"), phones));
-    clients.add(new Client(6, "Sau", "Tut", "Tutovich", male, birthdayDate, neuroticismCharacter, 2370, 56, 15, Address.empty(), new Address("Mamyr-4", "311", "45"), phones));
-    clients.add(new Client(7, "Kiqu", "Erik", "", male, birthdayDate, neuroticismCharacter, 124, 74, 23, Address.empty(), new Address("Shalyapina", "311", "11K"), phones));
-    clients.add(new Client(8, "Dan", "Lan", "Balan", male, birthdayDate, neuroticismCharacter, 7, 825, 57, Address.empty(), new Address("Abai", "311", "9B"), phones));
-    clients.add(new Client(9, "Kiaus", "Simona", "", male, birthdayDate, neuroticismCharacter, 8, 546, 17, Address.empty(), new Address("Mamyr-4", "311", "9B"), phones));
-    clients.add(new Client(10, "Albu", "Andrea", "Gias", male, birthdayDate, neuroticismCharacter, 999, 90, 87, Address.empty(), new Address("Mamyr-1", "311", "9B"), phones));
-    clients.add(new Client(11, "Dun", "Era", "", male, birthdayDate, neuroticismCharacter, 201, 851, 63, Address.empty(), new Address("mkr-4", "311", "9B"), phones));
-    clients.add(new Client(12, "Luka", "Lukas", "Riu", male, birthdayDate, neuroticismCharacter, 9, 14, 45, Address.empty(), new Address("Mamyr-4", "311", "9B"), phones));
+//    clients.add(new Client(1, "Sultanova", "Madina", "Mahammadnova", female, birthdayDate, opennesCharacter, 1000, 475, 5000, Address.empty(), new Address("Mamyr-4", "311", "8"), phones));
+//    clients.add(new Client(2, "Asan", "Arman", "Kairatuly", male, birthdayDate, agreeablenessCharacter, 100, 0, 1425, Address.empty(), new Address("Mamyr-4", "311", "85"), phones));
+//    clients.add(new Client(3, "Kuyan", "Kirill", "Kirillovich", female, birthdayDate, extraversionCharacter, 10, 8, 5545, Address.empty(), new Address("Mamyr-4", "311", "21"), phones));
+//    clients.add(new Client(4, "Adam", "Vova", "Rei", male, birthdayDate, neuroticismCharacter, 40, 12, 5478, Address.empty(), new Address("Mamyr-4", "311", "73"), phones));
+//    clients.add(new Client(5, "Malikaidar", "Symbat", "Isaevna", male, birthdayDate, neuroticismCharacter, 100, 74, 6574, Address.empty(), new Address("Mamyr-4", "311", "31"), phones));
+//    clients.add(new Client(6, "Umirbekiva", "Madina", "MAliyasovna", male, birthdayDate, neuroticismCharacter, 10, 475, 96, Address.empty(), new Address("Mamyr-4", "311", "25"), phones));
+//    clients.add(new Client(7, "Carrey", "Jim", "Nim", male, birthdayDate, neuroticismCharacter, 5, 252, 78, Address.empty(), new Address("Mamyr-4", "311", "82"), phones));
+//    clients.add(new Client(8, "Tsay", "Roman", "Romanovich", male, birthdayDate, neuroticismCharacter, 250, 77, 68, Address.empty(), new Address("Pravda", "311", "72"), phones));
+//    clients.add(new Client(6, "Sau", "Tut", "Tutovich", male, birthdayDate, neuroticismCharacter, 2370, 56, 15, Address.empty(), new Address("Mamyr-4", "311", "45"), phones));
+//    clients.add(new Client(7, "Kiqu", "Erik", "", male, birthdayDate, neuroticismCharacter, 124, 74, 23, Address.empty(), new Address("Shalyapina", "311", "11K"), phones));
+//    clients.add(new Client(8, "Dan", "Lan", "Balan", male, birthdayDate, neuroticismCharacter, 7, 825, 57, Address.empty(), new Address("Abai", "311", "9B"), phones));
+//    clients.add(new Client(9, "Kiaus", "Simona", "", male, birthdayDate, neuroticismCharacter, 8, 546, 17, Address.empty(), new Address("Mamyr-4", "311", "9B"), phones));
+//    clients.add(new Client(10, "Albu", "Andrea", "Gias", male, birthdayDate, neuroticismCharacter, 999, 90, 87, Address.empty(), new Address("Mamyr-1", "311", "9B"), phones));
+//    clients.add(new Client(11, "Dun", "Era", "", male, birthdayDate, neuroticismCharacter, 201, 851, 63, Address.empty(), new Address("mkr-4", "311", "9B"), phones));
+//    clients.add(new Client(12, "Luka", "Lukas", "Riu", male, birthdayDate, neuroticismCharacter, 9, 14, 45, Address.empty(), new Address("Mamyr-4", "311", "9B"), phones));
 
   }
 
@@ -218,8 +218,7 @@ public class ClientRegisterImpl implements ClientRegister {
 
     List<String> phoneD = clientDao.get().getPhoneD();
     List<String> gendersString = clientDao.get().getGenders();
-    List<String> charactersString = clientDao.get().getCharacters();
-
+    List<CharmDb> charactersString = clientDao.get().getCharacters();
     this.genders = new ArrayList<>();
     for (String t : gendersString) {
       for (GenderType tt : GenderType.values()) {
@@ -230,8 +229,10 @@ public class ClientRegisterImpl implements ClientRegister {
       }
     }
     this.characters = new ArrayList<>();
-    for (String t : charactersString) {
-      characters.add(new Character(CharacterType.AGREEABLENESS, t));
+    for (CharmDb t : charactersString) {
+      if (CharacterType.parseOrNull(t.name) != null) {
+        characters.add(new Character(t.id, CharacterType.parseOrNull(t.name).name));
+      }
     }
     this.phoneDetails = new ArrayList<>();
 
@@ -249,18 +250,19 @@ public class ClientRegisterImpl implements ClientRegister {
       return ClientDetail.forSave(this.genders, this.characters, this.phoneDetails);
     } else {
       ClientDb client = clientDao.get().getClientDb(id);
-      String charm = clientDao.get().getCharm(client.id);
+      String charm = clientDao.get().getCharmName(client.id);
       Address regAddress = clientDao.get().getAddress(client.id, "REG");
       Address factAddress = clientDao.get().getAddress(client.id, "FACT");
       List<ClientPhoneDb> phoneList = clientDao.get().phoneList(client.id);
+      CharmDb charmDb = clientDao.get().getCharm(client.id);
 
 
-      CharacterType type = CharacterType.AGREEABLENESS;
-      for (CharacterType t : CharacterType.values()) {
-        if (t.name().equalsIgnoreCase(charm)) {
-          type = t;
-        }
-      }
+      CharacterType type = CharacterType.parseOrNull(charmDb.name);
+//      for (CharacterType t : CharacterType.values()) {
+//        if (t.name().equalsIgnoreCase(charm)) {
+//          type = t;
+//        }
+//      }
 
       List<Phone> phones = new ArrayList<>();
 
@@ -290,7 +292,7 @@ public class ClientRegisterImpl implements ClientRegister {
 //    }
 
       ClientDetail clientDetail = new ClientDetail(client.surname, client.name, client.patronymic,
-        new Gender(client.gender, client.gender.toString()), this.genders, client.birthDate, new Character(type, charm),
+        new Gender(client.gender, client.gender.toString()), this.genders, client.birthDate, new Character(charmDb.id, type.name),
         this.characters, factAddress, regAddress, phones, this.phoneDetails, client.id);
 
       return clientDetail;
@@ -302,11 +304,15 @@ public class ClientRegisterImpl implements ClientRegister {
   @Override
   public ClientRecord saveClient(ClientToSave toSave) {
     ClientRecord clientRecord = new ClientRecord();
-    int charmId = clientDao.get().getCharmByName(toSave.character.type.toString());
+    int charmId = toSave.character.id;////clientDao.get().getCharmById(toSave.character.id);//////getCharmByName
     ClientDb client = new ClientDb();
     client = client.convertToSaveToClient(toSave, charmId);
 
-    clientDao.get().saveOrUpdateClient(client);
+    if (client.id != -1) {
+      clientDao.get().saveOrUpdateClient(client);
+    } else {
+      toSave.clientID = clientDao.get().insertClient(client);
+    }
 
     ClientAddrDb address = new ClientAddrDb();
     address = address.getAddressFromToSave(toSave, "REG");
@@ -359,15 +365,27 @@ public class ClientRegisterImpl implements ClientRegister {
   }
 
   @Override
-  public void deleteClient(long id) {
-    if (clients != null) {
+  public void deleteClient(int id) {
+//    if (clients != null) {
+//
+//      for (Client client : clients) {
+//        if (client.id == id) {
+//          clients.remove(client);
+//          break;
+//        }
+//      }
+//    }
 
-      for (Client client : clients) {
-        if (client.id == id) {
-          clients.remove(client);
-          break;
-        }
-      }
+    List<ClientPhoneDb> phoneDb = this.clientDao.get().getPhoneList(id);
+    this.clientDao.get().deactualClient(id);
+    List<Integer> accounts = this.clientDao.get().deactualAccounts(id);
+    for (Integer acc : accounts) {
+      this.clientDao.get().deactualTransactions(acc);
+    }
+    this.clientDao.get().deactualAddress(id, "REG");
+    this.clientDao.get().deactualAddress(id, "FACT");
+    for (ClientPhoneDb phone : phoneDb) {
+      this.clientDao.get().deactualPhone(phone.client, phone.number);
     }
   }
 
@@ -386,6 +404,8 @@ public class ClientRegisterImpl implements ClientRegister {
       "  x.min,\n" +
       "  x.max,\n" +
       "  x1.id,\n" +
+      "  x2.name,\n" +
+      "  x2.id,\n" +
       "  count(x1.id)\n" +
       "  over (\n" +
       "    partition by 1 )\n" +
@@ -443,6 +463,8 @@ public class ClientRegisterImpl implements ClientRegister {
       } else {
         sq = sq.concat(Integer.toString(clientFilter.offset * clientFilter.limit) + "\n");
       }
+      sq += " and x1.actual = true\n";
+
 //      sq = sq.concat(Integer.toString(clientFilter.offset + 1) + "\n");///
 //      prepareStValue.add(Integer.toString(clientFilter.offset));
     }
@@ -453,10 +475,12 @@ public class ClientRegisterImpl implements ClientRegister {
     ////      } else {
     ////        filteredList = filteredList.subList(clientFilter.offset * clientFilter.limit, clientFilter.offset * clientFilter.limit + clientFilter.limit);
     ////      }
-    if (!"".equals(clientFilter.columnName) && clientFilter.columnName != null) {
-      sq += "order by \n";
 
-      sq = sq.concat(clientFilter.columnName + " ");
+    sq += "order by  x1.id asc\n";
+
+    if (!"".equals(clientFilter.columnName) && clientFilter.columnName != null) {
+
+      sq = sq.concat(", " + clientFilter.columnName + " ");
 //      prepareStValue.add(clientFilter.columnName);
       if (clientFilter.isAsc) {
 //        prepareStValue.add("asc");
@@ -494,34 +518,24 @@ public class ClientRegisterImpl implements ClientRegister {
             LocalDate currentDate = LocalDate.now();
 
             LocalDate birthDate = Instant.ofEpochMilli(d.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
-//              d.toInstant()
-//              .atZone(ZoneId.systemDefault())
-//              .toLocalDate();
             if ((birthDate != null) && (currentDate != null)) {
               clientRecord.age = Period.between(birthDate, currentDate).getYears();
             } else {
               clientRecord.age = 0;
             }
 
-
-//
-//            LocalDate currentDate = LocalDate.now();
-//            LocalDate localDate = rs.getObject(4, LocalDate.class);
-//            if ((localDate != null) && (currentDate != null)) {
-//              clientRecord.age = Period.between(localDate, currentDate).getYears();
-//            } else {
-//              clientRecord.age = 0;
-//            }
-//
-//            clientRecord.age = 0;
-
-            clientRecord.character = new Character(CharacterType.AGREEABLENESS, "агрессивгый");
-
             clientRecord.totalBalance = (int) rs.getDouble(5);
             clientRecord.minBalance = (int) rs.getFloat(6);
             clientRecord.maxBalance = (int) rs.getFloat(7);
             clientRecord.clientId = rs.getInt(8);
-            count = rs.getInt(9);
+
+            if (CharacterType.parseOrNull(rs.getString(9)) != null) {
+              CharacterType ch = CharacterType.parseOrNull(rs.getString(9));
+              clientRecord.character = new Character(rs.getInt(10), ch.name);
+            } else {// (clientRecord.character == null) {
+              clientRecord.character = new Character(11, "невротичный");
+            }
+            count = rs.getInt(11);
             recordList.add(clientRecord);
           }
         }

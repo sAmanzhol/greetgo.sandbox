@@ -45,12 +45,12 @@
 
   <p *ngIf="clientDetailService.clientDetail.character != null">Характер:
     <mat-form-field>
-      <mat-select [(value)]="clientToSave.character.type" required>
-        <mat-option *ngFor="let r of clientDetailService.clientDetail.characters" value="{{r.type}}">
-          {{r.typeRuss}}
+      <mat-select [(value)]="clientToSave.character.id" required>
+        <mat-option *ngFor="let r of clientDetailService.clientDetail.characters" value="{{r.id}}">
+          {{r.type}}
         </mat-option>
       </mat-select>
-      <mat-label>{{clientDetailService.clientDetail.character.typeRuss}}</mat-label>
+      <mat-label>{{clientDetailService.clientDetail.character}}</mat-label>
     </mat-form-field>
   </p>
 
