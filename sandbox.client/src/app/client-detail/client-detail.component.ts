@@ -53,6 +53,15 @@ export class ClientDetailComponent implements OnInit {
     this.phone.detail = new PhoneDetail();
   }
 
+  public deletePhone(number: String) {
+    for (let ph of this.clientToSave.phones) {
+      if (ph.oldNumber == number) {
+        ph.oldNumber = "-1";
+      }
+    }
+
+  }
+
 }
 
 

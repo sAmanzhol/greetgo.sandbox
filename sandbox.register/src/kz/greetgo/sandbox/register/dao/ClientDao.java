@@ -1,7 +1,6 @@
 package kz.greetgo.sandbox.register.dao;
 
 import kz.greetgo.sandbox.controller.model.Address;
-import kz.greetgo.sandbox.controller.model.TransactionInfo;
 import kz.greetgo.sandbox.controller.model.db.CharmDb;
 import kz.greetgo.sandbox.controller.model.db.ClientAddrDb;
 import kz.greetgo.sandbox.controller.model.db.ClientDb;
@@ -19,25 +18,6 @@ public interface ClientDao {
   @Select("select id, surname, name, patronymic, gender, birth_date, charm from client where id=#{id}")
   ClientDb getClientDb(@Param("id") int id);
 
-  @Select("select client, type, street, house, flat from client_addr where client=#{client} and type = #{type}")
-  ClientAddrDb getClientAddrDb(@Param("id") int id,
-                               @Param("type") String type);
-//  @Insert("insert into ")
-
-  @Select("select client, number, type from client_phone where client=#{client} and number=#{number}")
-  ClientPhoneDb getClientPhoneDb(@Param("client") int client,
-                                 @Param("number") String number);
-
-  @Select("select * from charm where actual = true")
-  List<CharmDb> getCharacters();
-
-  @Select("select distinct gender from client")
-  List<String> getGenders();
-
-  @Select("select distinct type\n" +
-    "from client_phone")
-  List<String> getPhoneD();
-
   @Select("select charm.name from charm join client c on charm.id = c.charm and c.id = #{id}")
   String getCharmName(@Param("id") int id);
 
@@ -50,11 +30,6 @@ public interface ClientDao {
   Address getAddress(@Param("id") int id,
                      @Param("type") String type);
 
-//  @Select("select * from client_phone where client = #{id}")
-//  List<ClientPhoneDb> phoneList(@Param("id") int id);
-
-
-  //save OrUpdate
   @Select("select id from charm where name = #{name} and actual = true")
   Integer getCharmByName(@Param("name") String name);
 
@@ -103,28 +78,6 @@ public interface ClientDao {
     "= #{client} and number= #{number}")
   void deactualPhone(@Param("client") int client, @Param("number") String number);
 
-  @Select("select\n" +
-    "  x1.id,\n" +
-    "  x.sum,\n" +
-    "  x.min,\n" +
-    "  x.max\n" +
-    "from (\n" +
-    "       select\n" +
-    "         max(a.money),\n" +
-    "         min(a.money),\n" +
-    "         sum(a.money),\n" +
-    "         c.id\n" +
-    "       from client as c\n" +
-    "         left join client_account as a\n" +
-    "           on c.id = a.client\n" +
-    "       group by c.id\n" +
-    "     ) x\n" +
-    "  join client x1 on x1.id = x.id\n" +
-    "--   join client_account x2 on x1.id = x2.client\n" +
-    "where x1.id = #{id};")
-  TransactionInfo getTransactionInfo(@Param("id") int id);
-
-  //delete
   @Update("update client set actual = false where id = #{id};")
   void deactualClient(@Param("id") int id);
 

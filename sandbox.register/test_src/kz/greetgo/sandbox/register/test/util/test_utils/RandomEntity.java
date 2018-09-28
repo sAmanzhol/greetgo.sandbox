@@ -16,33 +16,6 @@ import java.util.List;
 @Bean
 public class RandomEntity {
 
-//  public Client client() {
-//    Client client = new Client();
-//    client.name = RND.str(10);
-//    client.surname = RND.str(10);
-//    client.patronymic = RND.str(10);
-//    client.birthDay = new Date();
-//    client.gender = new Gender(GenderType.FEMALE, "");
-//    client.character = new Character(CharacterType.AGREEABLENESS, "");
-//    return client;
-//  }
-
-  public ClientDb clientDb() {
-    ClientDb client = new ClientDb();
-//    client.id = RND.plusInt(2);
-    client.name = RND.str(10);
-    client.surname = RND.str(10);
-    client.patronymic = RND.str(10);
-    client.birthDate = new Date();
-    try {
-      client.birthDate = new SimpleDateFormat("dd/MM/yyyy")
-        .parse("20/12/1998");
-    } catch (ParseException e) {
-      e.printStackTrace();
-    }
-    return client;
-  }
-
   public CharmDb charmDb() {
     CharmDb charmDb = new CharmDb();
     charmDb.name = RND.str(5);
@@ -69,39 +42,6 @@ public class RandomEntity {
     return clientDb;
   }
 
-  public ClientDb clientDb(ClientToSave toSave, int charmId) {
-
-    ClientDb clientDb = new ClientDb();
-    clientDb.id = toSave.clientID;
-    clientDb.name = toSave.name;
-    clientDb.patronymic = toSave.patronymic;
-    clientDb.surname = toSave.surname;
-    clientDb.birthDate = toSave.birthDay;
-    clientDb.charm = charmId;
-    clientDb.gender = toSave.gender.type;
-    return clientDb;
-  }
-
-  public ClientAddrDb clientAddrDb(ClientToSave toSave, String type) {
-    ClientAddrDb clientAddrDb = new ClientAddrDb();
-
-    clientAddrDb.client
-      = toSave.clientID;
-    if (AddressTypeDb.parseOrNull(type) != null) {
-      clientAddrDb.type = AddressTypeDb.parseOrNull(type);
-    }
-    if ("FACT".equals(type)) {
-      clientAddrDb.street = toSave.actualAddress.street;
-      clientAddrDb.flat = toSave.actualAddress.flat;
-      clientAddrDb.house = toSave.actualAddress.house;
-    } else if ("REG".equals(type)) {
-      clientAddrDb.street = toSave.registrationAddress.street;
-      clientAddrDb.flat = toSave.registrationAddress.flat;
-      clientAddrDb.house = toSave.registrationAddress.house;
-    }
-    return clientAddrDb;
-  }
-
   public ClientAddrDb clientAddrDb(int clientID, String type) {
     ClientAddrDb clientAddrDb = new ClientAddrDb();
 
@@ -122,20 +62,9 @@ public class RandomEntity {
       ClientPhoneDb phoneDb = new ClientPhoneDb();
       phoneDb.client = toSave.clientID;
       phoneDb.number = phone.number;
-//      phoneDb.oldNumber = phone.oldNumber;
-//      phoneDb.type = PhoneTypeDb.parseOrNull(phone.detail.type.toString());
       phoneList.add(phoneDb);
     }
     return phoneList;
-  }
-
-  public ClientPhoneDb clientPhoneDb(int clientID) {
-
-    ClientPhoneDb phoneDb = new ClientPhoneDb();
-    phoneDb.client = clientID;
-    phoneDb.number = Integer.toString(RND.plusInt(152556));
-    phoneDb.type = "HOME";
-    return phoneDb;
   }
 
   public ClientPhoneDb clientPhoneDb(int clientID, Phone ph) {
@@ -219,32 +148,6 @@ public class RandomEntity {
     return accountTransactionDb;
   }
 
-  public ClientRecord record() {
-
-//    ClientRecord clientRecord = new ClientRecord();
-//
-//    clientRecord.
-//    return clientRecord;
-    return null;
-
-  }
-
-  public ClientFilter filter() {
-    return new ClientFilter();
-  }
-
-  public ClientFilter filter(String column) {
-    ClientFilter clientFilter = new ClientFilter();
-    clientFilter.columnName = column;
-    return clientFilter;
-  }
-
-  public ClientFilter filter(int limit) {
-    ClientFilter clientFilter = new ClientFilter();
-    clientFilter.limit = limit;
-    return clientFilter;
-  }
-
   public ClientFilter filterE() {
     ClientFilter clientFilter = new ClientFilter();
     clientFilter.name = "";
@@ -255,12 +158,6 @@ public class RandomEntity {
     clientFilter.isAsc = true;
     return clientFilter;
   }
-
-//  public List<CharmDb> charmDbList(){
-//    List<CharmDb> charmDbList = new ArrayList<>();
-//
-//    return charmDbList;
-//  }
 
 
   public ClientToSave clientToSave() {

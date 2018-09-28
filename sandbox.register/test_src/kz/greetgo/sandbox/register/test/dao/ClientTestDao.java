@@ -1,8 +1,9 @@
 package kz.greetgo.sandbox.register.test.dao;
 
-import kz.greetgo.sandbox.controller.model.Client;
 import kz.greetgo.sandbox.controller.model.db.*;
-import org.apache.ibatis.annotations.*;
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -28,24 +29,11 @@ public interface ClientTestDao {
     "select * from client")
   int insertClientDb(@Param("clientDb") ClientDb clientDb);
 
-
-//  @Select("with client_account as (insert into client_account(client, money, number, registered_at, actual) " +
-//    "values(#{clientAccountDb.client}, #{clientAccountDb.money}, #{clientAccountDb.number}, #{clientAccountDb.registeredAt}," +
-//    " #{clientAccountDb.actual}) returning id) " +
-//    "select * from client_account")
-//  int insertClientAccountDb(@Param("clientAccountDb") ClientAccountDb clientAccountDb);
-
   @Select("with client_account as (insert into client_account(client, money, number, registered_at, actual)\n" +
     "    values(#{clientAccountDb.client}, #{clientAccountDb.money},#{clientAccountDb.number}, #{clientAccountDb.registeredAt},\n" +
     "true) returning id) select * from client_account")
   int insertClientAccountDb(@Param("clientAccountDb") ClientAccountDb clientAccountDb);
 
-  //public int id;
-  //  public int client;
-  //  public float money;
-  //  public String number;
-  //  public Timestamp registeredAt;
-  //  public boolean actual = true;
 
   @Select("with transaction_type as(insert into transaction_type(code, name, actual) " +
     "values(#{transactionTypeDb.code}, #{transactionTypeDb.name}, true) returning id) " +
@@ -56,31 +44,6 @@ public interface ClientTestDao {
     "values(#{clientATDb.account}, #{clientATDb.money}, #{clientATDb.finishedAt}, #{clientATDb.type}, true) returning id)" +
     "select * from client_account_transaction")
   int insertClientAccountTransaction(@Param("clientATDb") ClientAccountTransactionDb clientATDb);
-
-  @Select("with client as (insert into client (surname, name, patronymic, gender, birth_date, charm, actual) " +
-    "values (#{client.surname}, #{client.name}, #{client.patronymic}, 'MALE', #{client.birthDay}, #{client.charm}, true) returning id) " +
-    "select * from client")
-  int insertClient(@Param("client") Client client);
-
-  @Select("select id from client where surname = #{client.surname}, name = #{client.name}, patronymic = #{client.patronymic}," +
-    "birthDate = #{client.birthDate}, gender = #{client.gender}, charm = #{client.charm}")
-  long getId(@Param("client") Client client);
-
-  @Select("select name from client where id = #{id}")
-  String getName(@Param("id") int id);
-
-  @Select("select distinct name from charm")
-  List<String> getCharacters();
-
-  @Select("select distinct gender from client")
-  List<String> getGenders();
-
-  @Select("select distinct type\n" +
-    "from client_phone")
-  List<String> getPhoneD();
-
-//  @Select("select charm.name from charm join client c on charm.id = c.charm and c.id = #{id}")
-//  String getCharm(@Param("id") int id);
 
   @Select("select addr.client, addr.street, addr.house, addr.flat " +
     "from client_addr addr " +
@@ -99,20 +62,6 @@ public interface ClientTestDao {
     "from client_addr\n" +
     "where client = #{client} and type = #{type} and actual = true")
   ClientAddrDb getAddr(@Param("client") int client, @Param("type") String type);
-
-
-  @Select("select client, type, street, house, flat from client_addr where client=#{client} and type = #{type}")
-  ClientAddrDb getClientAddrDb(@Param("id") int id,
-                               @Param("type") String type);
-//  @Insert("insert into ")
-
-  @Select("select client, number, type from client_phone where client=#{client} and number=#{number}")
-  ClientPhoneDb getClientPhoneDb(@Param("client") int client,
-                                 @Param("number") String number);
-
-
-  @Select("select id from charm where name = #{name} and actual = true")
-  Integer getCharmIdByName(@Param("name") String name);
 
   @Select("select * from charm where  name = #{name} and actual = true")
   CharmDb getCharmByName(@Param("name") String name);
@@ -147,36 +96,6 @@ public interface ClientTestDao {
     "actual = true,\n" +
     "type = excluded.type;")
   void saveOrUpdatePhone(@Param("phone") ClientPhoneDb phone);
-
-  @Update("update client_phone set actual = false where client " +
-    "= #{client} and number= #{number}")
-  void deactualPhone(@Param("client") int client, @Param("number") String number);
-
-
-  @Insert("insert into client_addr(client, type, street, house, flat)\n" +
-    "values(#{addr.client}, #{addr.type}, #{addr.street}, #{addr.house}, #{addr.flat})\n" +
-    "on conflict (client, type) do update set\n" +
-    "street = excluded.street,\n" +
-    "house = excluded.house,\n" +
-    "flat = excluded.flat;")
-  void insertAddress(@Param("addr") ClientAddrDb addr);
-
-  //delete
-  @Update("update client set actual = false where id = #{id};")
-  void deactualClient(@Param("id") int id);
-
-  @Select("with client_account as(update client_account set actual = false " +
-    "where client = #{clientId} returning id) select * from client_account;")
-  List<Integer> deactualAccounts(@Param("clientId") int clientId);
-
-
-  @Update("update client_account_transaction set actual = false where account = #{accountId};")
-  void deactualTransactions(@Param("accountId") int accountId);
-
-  @Update("update client_addr set actual = false where client = #{clientId} and type = #{type};")
-  void deactualAddress(@Param("clientId") int clientId, @Param("type") String type);
-
-  //checking delete
 
   @Select("select * from client_account where id = #{id} and actual = true")
   ClientAccountDb getClientAcc(@Param("id") int id);

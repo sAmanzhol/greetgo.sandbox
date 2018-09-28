@@ -90,18 +90,22 @@
 
   <p>Телефоны* </p>
   <div *ngFor="let r of clientToSave.phones">
-
-    <mat-form-field>
-      <mat-select [(value)]="r.detail.type" required>
-        <mat-option *ngFor="let s of clientDetailService.clientDetail.phoneDetailList" value="{{s.type}}">
-          {{s.typeRuss}}
-        </mat-option>
-      </mat-select>
-      <mat-label></mat-label>
-    </mat-form-field>
-    <mat-form-field appearance="legacy">
-      <input matInput required [(ngModel)]="r.number">
-    </mat-form-field>
+    <div *ngIf="!(r.oldNumber =='-1')">
+      <mat-form-field>
+        <mat-select [(value)]="r.detail.type" required>
+          <mat-option *ngFor="let s of clientDetailService.clientDetail.phoneDetailList" value="{{s.type}}">
+            {{s.typeRuss}}
+          </mat-option>
+        </mat-select>
+        <mat-label></mat-label>
+      </mat-form-field>
+      <mat-form-field appearance="legacy">
+        <input matInput required [(ngModel)]="r.number">
+      </mat-form-field>
+      <button mat-icon-button>
+        <mat-icon aria-label="Remove icon-button" (click)="deletePhone(r.number)">clear</mat-icon>
+      </button>
+    </div>
   </div>
   <div>
     <mat-form-field>
