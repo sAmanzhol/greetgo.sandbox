@@ -33,12 +33,12 @@ export class ClientTableComponent implements OnInit {
   }
 
   async pagination(a) {
-     // console.log(a);
+    // console.log(a);
     if (a) {
       this.clientFilter.offset = await a.pageIndex;
       this.clientFilter.limit = await a.pageSize;
-      // console.log("limit: ", this.clientFilter.limit);
-      // console.log("offset: ", this.clientFilter.offset);
+      console.log("limit: ", this.clientFilter.limit);
+      console.log("offset: ", this.clientFilter.offset);
     }
     this.filtering();
   }
