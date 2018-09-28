@@ -27,7 +27,7 @@ public class ClientRecord {
   }
 
 
-  public ClientRecord convertToSaveToClientRecord(ClientToSave toSave, TransactionInfo transactionInfo) {
+  public ClientRecord convertToSaveToClientRecord(ClientToSave toSave){//}, TransactionInfo transactionInfo) {
     this.fio = toSave.surname + " " + toSave.name + " " + toSave.patronymic;
     LocalDate currentDate = LocalDate.now();
     LocalDate birthDate = toSave.birthDay.toInstant()
@@ -38,9 +38,9 @@ public class ClientRecord {
     } else {
       this.age = 0;
     }
-    this.totalBalance = transactionInfo.totalBalance;
-    this.minBalance = transactionInfo.minBalance;
-    this.maxBalance = transactionInfo.maxBalance;
+//    this.totalBalance = transactionInfo.totalBalance;
+//    this.minBalance = transactionInfo.minBalance;
+//    this.maxBalance = transactionInfo.maxBalance;
     this.character = toSave.character;
     this.clientId = toSave.clientID;
     return this;

@@ -76,9 +76,9 @@ public class ClientRegisterImpl implements ClientRegister {
     clients = new ArrayList<>();
 
     phoneDetails = new ArrayList<PhoneDetail>();
-    PhoneDetail phoneDetail1 = new PhoneDetail(PhoneType.MOBILE, "Мобильный");
-    PhoneDetail phoneDetail2 = new PhoneDetail(PhoneType.HOME, "Домашний");
-    PhoneDetail phoneDetail3 = new PhoneDetail(PhoneType.WORK, "Рабочий");
+    PhoneDetail phoneDetail1 = new PhoneDetail(PhoneTypeDb.MOBILE, "Мобильный");
+    PhoneDetail phoneDetail2 = new PhoneDetail(PhoneTypeDb.HOME, "Домашний");
+    PhoneDetail phoneDetail3 = new PhoneDetail(PhoneTypeDb.WORK, "Рабочий");
     phoneDetails.add(phoneDetail1);
     phoneDetails.add(phoneDetail2);
     phoneDetails.add(phoneDetail3);
@@ -216,35 +216,30 @@ public class ClientRegisterImpl implements ClientRegister {
 //    }
 //    return clientDetail;
 
-    List<String> phoneD = clientDao.get().getPhoneD();
-    List<String> gendersString = clientDao.get().getGenders();
-    List<CharmDb> charactersString = clientDao.get().getCharacters();
     this.genders = new ArrayList<>();
-    for (String t : gendersString) {
-      for (GenderType tt : GenderType.values()) {
-        if (tt.name().equalsIgnoreCase(t)) {
-          this.genders.add(new Gender(tt, t));
-          break;
-        }
-      }
+//    List<String> phoneD = clientDao.get().getPhoneD();
+    for (GenderType type : GenderType.values()) {
+      this.genders.add(new Gender(type, type.name));
     }
     this.characters = new ArrayList<>();
-    for (CharmDb t : charactersString) {
-      if (CharacterType.parseOrNull(t.name) != null) {
-        characters.add(new Character(t.id, CharacterType.parseOrNull(t.name).name));
-      }
+    for (CharacterType t : CharacterType.values()) {
+      int charmId = clientDao.get().getCharmByName(t.toString());
+      characters.add(new Character(charmId, t.name));
     }
-    this.phoneDetails = new ArrayList<>();
 
-    for (int i = 0; i < phoneD.size(); i++) {
-      for (PhoneType t : PhoneType.values()) {
-        if (t.name().equalsIgnoreCase(phoneD.get(i))) {
-          PhoneDetail phoneDetail = new PhoneDetail(t, phoneD.get(i));
-          this.phoneDetails.add(phoneDetail);
-          break;
-        }
-      }
+    this.phoneDetails = new ArrayList<>();
+    for (PhoneTypeDb ph : PhoneTypeDb.values()) {
+      this.phoneDetails.add(new PhoneDetail(ph, ph.name));
     }
+//    for (int i = 0; i < phoneD.size(); i++) {
+//      for (PhoneType t : PhoneType.values()) {
+//        if (t.name().equalsIgnoreCase(phoneD.get(i))) {
+//          PhoneDetail phoneDetail = new PhoneDetail(t, phoneD.get(i));
+//          this.phoneDetails.add(phoneDetail);
+//          break;
+//        }
+//      }
+//    }
 
     if (id == 0 || id == -1) {
       return ClientDetail.forSave(this.genders, this.characters, this.phoneDetails);
@@ -257,7 +252,12 @@ public class ClientRegisterImpl implements ClientRegister {
       CharmDb charmDb = clientDao.get().getCharm(client.id);
 
 
-      CharacterType type = CharacterType.parseOrNull(charmDb.name);
+      Character cType;
+      if (CharacterType.parseOrNull(charmDb.name) != null) {
+        cType = new Character(charmDb.id, CharacterType.parseOrNull(charmDb.name).name);
+      } else {
+        cType = new Character(charmDb.id, "");
+      }
 //      for (CharacterType t : CharacterType.values()) {
 //        if (t.name().equalsIgnoreCase(charm)) {
 //          type = t;
@@ -267,17 +267,18 @@ public class ClientRegisterImpl implements ClientRegister {
       List<Phone> phones = new ArrayList<>();
 
 
-      for (int i = 0; i < phoneList.size(); i++) {
-        for (PhoneDetail t : this.phoneDetails) {
-//          if (t.type == phoneList.get(i).type) {
-          if (PhoneTypeDb.parseOrNull(t.type.toString()) != null) {
-
-            Phone phone = new Phone(t, phoneList.get(i).number);
-            phones.add(phone);
-            break;
-          }
+//      for (int i = 0; i < phoneList.size(); i++) {
+      for (ClientPhoneDb phone : phoneList) {
+        if (PhoneTypeDb.parseOrNull(phone.type) != null) {
+          Phone ph = new Phone(new PhoneDetail(PhoneTypeDb.parseOrNull(phone.type),
+            PhoneTypeDb.parseOrNull(phone.type).name), phone.number);
+          phones.add(ph);
         }
       }
+//        for (PhoneDetail t : this.phoneDetails) {
+//          if (t.type == phoneList.get(i).type) {
+//        }
+
 
 //      DateFormat srcDf = new SimpleDateFormat("dd/MM/yyyy");
 //      Date birthDate = srcDf.format(client.birthDate);
@@ -291,12 +292,33 @@ public class ClientRegisterImpl implements ClientRegister {
 //      e.printStackTrace();
 //    }
 
+
+//      Date date = client.birthDate;
+//      SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+////      sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+//      String formattedDate = sdf.format(date);
+//      try {
+//        client.birthDate = sdf.parse(formattedDate);//"20/12/1998");
+//      } catch (ParseException e) {
+//        e.printStackTrace();
+//      }
+
+      Date birthdayDate = new Date();
+
+      try {
+        birthdayDate = new SimpleDateFormat("dd/MM/yyyy")
+          .parse("20/12/1998");
+      } catch (ParseException e) {
+        e.printStackTrace();
+      }
+
       ClientDetail clientDetail = new ClientDetail(client.surname, client.name, client.patronymic,
-        new Gender(client.gender, client.gender.toString()), this.genders, client.birthDate, new Character(charmDb.id, type.name),
-        this.characters, factAddress, regAddress, phones, this.phoneDetails, client.id);
+        new Gender(client.gender, client.gender.toString()), this.genders, birthdayDate,
+        cType, this.characters, factAddress, regAddress, phones, this.phoneDetails, client.id);
 
       return clientDetail;
     }
+
     //return null;
   }
 
@@ -304,15 +326,20 @@ public class ClientRegisterImpl implements ClientRegister {
   @Override
   public ClientRecord saveClient(ClientToSave toSave) {
     ClientRecord clientRecord = new ClientRecord();
-    int charmId = toSave.character.id;////clientDao.get().getCharmById(toSave.character.id);//////getCharmByName
+//    int charmId = toSave.character.id;////clientDao.get().getCharmById(toSave.character.id);//////getCharmByName
     ClientDb client = new ClientDb();
-    client = client.convertToSaveToClient(toSave, charmId);
 
-    if (client.id != -1) {
-      clientDao.get().saveOrUpdateClient(client);
-    } else {
+    client = client.convertToSaveToClient(toSave);
+
+    if (toSave.clientID == -1 || toSave.clientID == 0) {
       toSave.clientID = clientDao.get().insertClient(client);
+      client.id = toSave.clientID;
     }
+    String characterName = clientDao.get().getCharmName(toSave.character.id);
+    if (CharacterType.parseOrNull(characterName) != null) {
+      toSave.character.type = CharacterType.parseOrNull(characterName).name;
+    }
+    clientDao.get().saveOrUpdateClient(client);
 
     ClientAddrDb address = new ClientAddrDb();
     address = address.getAddressFromToSave(toSave, "REG");
@@ -320,14 +347,18 @@ public class ClientRegisterImpl implements ClientRegister {
     address = address.getAddressFromToSave(toSave, "FACT");
     clientDao.get().saveOrUpdateAddress(address);
 
-    List<ClientPhoneDb> phoneList = ClientPhoneDb.getPhoneListFromToSave(toSave);
-    for (ClientPhoneDb phone : phoneList) {
 
-      clientDao.get().deactualPhone(phone.client, phone.oldNumber);
-      clientDao.get().saveOrUpdatePhone(phone);
+    List<Phone> phoneList = Phone.getPhoneListFromToSave(toSave);
+    for (Phone phone : phoneList) {
+
+      if (phone.oldNumber == null) {
+        phone.oldNumber = phone.number;
+      }
+      clientDao.get().deactualPhone(toSave.clientID, phone.oldNumber);
+      clientDao.get().saveOrUpdatePhone(toSave.clientID, phone.number, phone.detail.type.toString());
     }
 
-    ClientAccountDb clientAccountDb;
+//    ClientAccountDb clientAccountDb;
 
     /*
 
@@ -340,15 +371,16 @@ public class ClientRegisterImpl implements ClientRegister {
     ClientAccountTransactionDb accountTransactionDb = this.randomEntity.get().clientAccountTransactionDb(tTypeId, clientAccount);
     int cAccountTDb = clientTestDao.get().insertClientAccountTransaction(accountTransactionDb);
      */
-    TransactionInfo transactionInfo = clientDao.get().getTransactionInfo(toSave.clientID);
+//    TransactionInfo transactionInfo = clientDao.get().getTransactionInfo(toSave.clientID);
+//
+//    if (transactionInfo == null) {
+//      transactionInfo = new TransactionInfo();
+//      transactionInfo.id = toSave.clientID;
+//      transactionInfo.maxBalance = 0;
+//      transactionInfo.minBalance = 0;
+//      transactionInfo.maxBalance = 0;
+//    }
 
-    if (transactionInfo == null) {
-      transactionInfo = new TransactionInfo();
-      transactionInfo.id = toSave.clientID;
-      transactionInfo.maxBalance = 0;
-      transactionInfo.minBalance = 0;
-      transactionInfo.maxBalance = 0;
-    }
 
 //    if (clients != null) {
 //      for (Client client : clients) {
@@ -361,7 +393,7 @@ public class ClientRegisterImpl implements ClientRegister {
 //      clients.add(newClient);
 //      return convertClientToRecord(newClient);
 //    }
-    return clientRecord.convertToSaveToClientRecord(toSave, transactionInfo);
+    return clientRecord.convertToSaveToClientRecord(toSave);//, transactionInfo);
   }
 
   @Override

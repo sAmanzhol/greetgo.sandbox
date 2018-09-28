@@ -16,13 +16,13 @@ public class ClientDb {
   public int charm;
   public boolean actual = true;
 
-  public ClientDb convertToSaveToClient(ClientToSave toSave, int charmId) {
+  public ClientDb convertToSaveToClient(ClientToSave toSave) {
     this.id = toSave.clientID;
     this.name = toSave.name;
     this.patronymic = toSave.patronymic;
     this.surname = toSave.surname;
     this.birthDate = toSave.birthDay;
-    this.charm = charmId;
+    this.charm = toSave.character.id;
     this.gender = toSave.gender.type;
     return this;
   }

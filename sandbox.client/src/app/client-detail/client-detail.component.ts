@@ -4,6 +4,7 @@ import {ClientDetailService} from "./client-detail.service";
 import {ClientToSave} from "../../model/ClientToSave";
 import {ClientDetail} from "../../model/ClientDetail";
 import {Phone} from "../../model/Phone";
+import {PhoneDetail} from "../../model/PhoneDetail";
 
 
 @Component({
@@ -19,6 +20,7 @@ export class ClientDetailComponent implements OnInit {
   public clientToSave: ClientToSave = new ClientToSave();
   clientDetail: ClientDetail = new ClientDetail();
   public phone: Phone = new Phone();
+  date: Date;
 
   constructor(public clientDetailService: ClientDetailService, public dialogRef: MatDialogRef<ClientDetailComponent>, @Inject(MAT_DIALOG_DATA) public data: number) {
   }
@@ -31,10 +33,15 @@ export class ClientDetailComponent implements OnInit {
     this.clientDetailService.load(this.data);
     this.clientDetail = await this.clientDetailService.loadClientDetailRecord(this.data);
     this.clientToSave = ClientToSave.create(this.clientDetail);
+    console.log("BirthDay:" + this.clientDetail.birthDay);
+
+    this.date = new Date("2015-03-25");
+    // this.date.setDate(this.date.getDate() + 3);
+    console.log("Date is: " + this.date);
   }
 
   async saveClient() {
-    if (this.phone.number != null || this.phone.detail != null) {
+    if (this.phone.number != "" || this.phone.detail != null) {
       await this.savePhone();
     }
     let a = await this.clientDetailService.saveClient(this.clientToSave);
@@ -47,7 +54,8 @@ export class ClientDetailComponent implements OnInit {
       number: this.phone.number,
       oldNumber: this.phone.oldNumber
     });//this.phone
-    this.phone = new Phone();
+    this.phone.number = "";
+    this.phone.detail = new PhoneDetail();
   }
 
 }

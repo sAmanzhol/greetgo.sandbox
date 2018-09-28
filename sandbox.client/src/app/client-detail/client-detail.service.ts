@@ -2,7 +2,6 @@ import {Injectable} from "@angular/core";
 import {HttpService} from "../http.service";
 import {ClientDetail} from "../../model/ClientDetail";
 import {ClientToSave} from "../../model/ClientToSave";
-import {toPromise} from "rxjs-compat/operator/toPromise";
 import {ClientRecord} from "../../model/ClientRecord";
 
 @Injectable({
@@ -23,6 +22,7 @@ export class ClientDetailService {
       .then(body => ClientDetail.create(body));
 
   }
+
   async load(id: number) {
     try {
       this.loading = true;
@@ -33,10 +33,11 @@ export class ClientDetailService {
       console.error(e);
     }
   }
-    saveClient(ToSave: ClientToSave){
-      let s = JSON.stringify(ToSave);
-      //debugger;
-     return this.http.post("/client/save", {'toSave': s}) // {params: HttpParams})
+
+  saveClient(ToSave: ClientToSave) {
+    let s = JSON.stringify(ToSave);
+    //debugger;
+    return this.http.post("/client/save", {'toSave': s}) // {params: HttpParams})
       .toPromise()
       .then(resp => resp.body as any)
       .then(body => ClientRecord.create(body));

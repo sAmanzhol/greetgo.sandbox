@@ -28,7 +28,7 @@ public interface ClientDao {
   ClientPhoneDb getClientPhoneDb(@Param("client") int client,
                                  @Param("number") String number);
 
-  @Select("select * from charm")
+  @Select("select * from charm where actual = true")
   List<CharmDb> getCharacters();
 
   @Select("select distinct gender from client")
@@ -59,8 +59,8 @@ public interface ClientDao {
   Integer getCharmByName(@Param("name") String name);
 
 
-  @Select("insert into  client (surname, name, patronymic, gender, birth_date, charm, actual)\n" +
-    "  values (#{client.surname}, #{client.name}, #{client.patronymic}, " +
+  @Select("insert into  client (id, surname, name, patronymic, gender, birth_date, charm, actual)\n" +
+    "  values (#{client.id}, #{client.surname}, #{client.name}, #{client.patronymic}, " +
     "    #{client.gender}, #{client.birthDate}, #{client.charm}, true)\n" +
     "  on conflict (id) do update set\n" +
     "    surname = excluded.surname,\n" +
@@ -74,7 +74,7 @@ public interface ClientDao {
 
 
   @Select("with client as (insert into client (surname, name, patronymic, gender, birth_date, charm, actual) " +
-    "values (#{clientDb.surname}, #{clientDb.name}, #{clientDb.patronymic}, #{clientDb.gender}, #{clientDb.birthDate}, 1, true)" +
+    "values (#{clientDb.surname}, #{clientDb.name}, #{clientDb.patronymic}, #{clientDb.gender}, #{clientDb.birthDate}, #{clientDb.charm}, true)" +
     " returning id) " +
     "select * from client")
   int insertClient(@Param("clientDb") ClientDb clientDb);
@@ -92,11 +92,12 @@ public interface ClientDao {
   void saveOrUpdateAddress(@Param("address") ClientAddrDb address);
 
   @Select("insert into client_phone(client, number, type, actual)\n" +
-    "    values(#{phone.client}, #{phone.number}, #{phone.type}, true)\n" +
+    "    values(#{client}, #{number}, #{type}, true)\n" +
     "on conflict(client, number) do update set\n" +
     "actual = true,\n" +
     "type = excluded.type;")
-  void saveOrUpdatePhone(@Param("phone") ClientPhoneDb phone);
+  void saveOrUpdatePhone(@Param("client") int client, @Param("number") String number,
+                         @Param("type") String type);
 
   @Select("update client_phone set actual = false where client " +
     "= #{client} and number= #{number}")

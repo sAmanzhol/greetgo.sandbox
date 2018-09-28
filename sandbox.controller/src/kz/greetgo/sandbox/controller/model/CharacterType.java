@@ -2,10 +2,10 @@ package kz.greetgo.sandbox.controller.model;
 
 public enum CharacterType {
   OPENNESS("открытый"),
-  CONSCIENTIOUSNESS("любзеный"),
-  EXTRAVERSION("добросовестный"),
-  AGREEABLENESS("экстраверт"),
-  NEUROTICISM("невротичный");
+  CONSCIENTIOUSNESS("добросовестный"),
+  EXTRAVERSION("экстраверт"),
+  AGREEABLENESS("приятный"),
+  NEUROTICISM("нервный");
 
   public String name;
 

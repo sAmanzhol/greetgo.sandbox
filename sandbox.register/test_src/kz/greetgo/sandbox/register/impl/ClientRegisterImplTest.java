@@ -352,7 +352,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
   @Test
   public void saveOrUpdateFullClient() {
-//    this.createRequired();
+    this.createRequired();
 
 
     ClientToSave toSave = this.randomEntity.get().clientToSave();
@@ -383,7 +383,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     for (ClientPhoneDb phone : phoneDb) {
 
-      clientTestDao.get().deactualPhone(phone.client, phone.oldNumber);
+//      clientTestDao.get().deactualPhone(phone.client, phone.oldNumber);
       clientTestDao.get().saveOrUpdatePhone(phone);
 
 //      System.out.println("Phone Type: " + phone.type + ", Number: " + phone.number +
@@ -445,7 +445,6 @@ public class ClientRegisterImplTest extends ParentTestNg {
 //    for (ClientPhoneDb phone : phoneDb) {
 //      this.clientTestDao.get().deactualPhone(phone.client, phone.number);
 //    }
-
 
 
     this.clientRegister.get().deleteClient(clientId);

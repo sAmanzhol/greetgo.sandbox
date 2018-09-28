@@ -27,7 +27,7 @@ public interface ClientTestDao {
 
 
   @Select("with client as (insert into client (surname, name, patronymic, gender, birth_date, charm, actual) " +
-    "values (#{clientDb.surname}, #{clientDb.name}, #{clientDb.patronymic}, #{clientDb.gender}, #{clientDb.birthDate}, 1, true)" +
+    "values (#{clientDb.surname}, #{clientDb.name}, #{clientDb.patronymic}, #{clientDb.gender}, #{clientDb.birthDate}, #{clientDb.charm}, true)" +
     " returning id) " +
     "select * from client")
   int insertClientDb(@Param("clientDb") ClientDb clientDb);
@@ -62,7 +62,7 @@ public interface ClientTestDao {
   int insertClientAccountTransaction(@Param("clientATDb") ClientAccountTransactionDb clientATDb);
 
   @Select("with client as (insert into client (surname, name, patronymic, gender, birth_date, charm, actual) " +
-    "values (#{client.surname}, #{client.name}, #{client.patronymic}, 'MALE', #{client.birthDay}, 1, true) returning id) " +
+    "values (#{client.surname}, #{client.name}, #{client.patronymic}, 'MALE', #{client.birthDay}, #{client.charm}, true) returning id) " +
     "select * from client")
   int insertClient(@Param("client") Client client);
 

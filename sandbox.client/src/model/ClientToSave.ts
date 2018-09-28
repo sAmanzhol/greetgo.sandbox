@@ -11,7 +11,7 @@ export class ClientToSave {
   public patronymic: string;
   public gender: Gender = new Gender();
   public birthDay: Date;
-  public character: Character;
+  public character: Character = new Character();
   public actualAddress: Address = new Address();
   public registrationAddress: Address = new Address();
   public phones: Phone[];
