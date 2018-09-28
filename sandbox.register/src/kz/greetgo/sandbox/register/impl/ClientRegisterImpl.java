@@ -511,7 +511,7 @@ public class ClientRegisterImpl implements ClientRegister {
     }
     final String newSQL = sq;
 
-    System.out.println("newSQL: \n" + newSQL);
+//    System.out.println("newSQL: \n" + newSQL);
     jdbc.get().execute(con -> {
       try (PreparedStatement ps = con.prepareStatement(newSQL)) {
 //        prepareStValue.forEach(item -> {
@@ -527,7 +527,7 @@ public class ClientRegisterImpl implements ClientRegister {
               + rs.getString(2) + " " + rs.getString(3);
 
             Date d = rs.getDate(4);
-            System.out.println("Date is: " + d);
+//            System.out.println("Date is: " + d);
 
             LocalDate currentDate = LocalDate.now();
 

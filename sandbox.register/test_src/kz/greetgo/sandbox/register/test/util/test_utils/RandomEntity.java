@@ -29,6 +29,7 @@ public class RandomEntity {
 
   public ClientDb clientDb() {
     ClientDb client = new ClientDb();
+//    client.id = RND.plusInt(2);
     client.name = RND.str(10);
     client.surname = RND.str(10);
     client.patronymic = RND.str(10);
@@ -128,15 +129,43 @@ public class RandomEntity {
     return phoneList;
   }
 
-  public List<ClientPhoneDb> clientPhoneDb(int clientID) {
+  public ClientPhoneDb clientPhoneDb(int clientID) {
+
+    ClientPhoneDb phoneDb = new ClientPhoneDb();
+    phoneDb.client = clientID;
+    phoneDb.number = Integer.toString(RND.plusInt(152556));
+    phoneDb.type = "HOME";
+    return phoneDb;
+  }
+
+  public ClientPhoneDb clientPhoneDb(int clientID, Phone ph) {
+
+    ClientPhoneDb phoneDb = new ClientPhoneDb();
+    phoneDb.client = clientID;
+    phoneDb.number = ph.number;
+    phoneDb.type = "HOME";
+    return phoneDb;
+  }
+
+  public Phone phone(String oldNumber) {
+
+    Phone phone = new Phone();
+    phone.detail = new PhoneDetail(PhoneTypeDb.parseOrNull("WORK"), PhoneTypeDb.parseOrNull("WORK").name);
+    phone.oldNumber = oldNumber;
+    phone.number = Integer.toString(RND.plusInt(89999));
+    return phone;
+  }
+
+  public List<ClientPhoneDb> clientPhoneDbList(int clientID) {
     List<ClientPhoneDb> phoneList = new ArrayList<>();
 
     for (int i = 0; i < 3; i++) {
       ClientPhoneDb phoneDb = new ClientPhoneDb();
       phoneDb.client = clientID;
       phoneDb.number = RND.intStr(8);
-//      phoneDb.oldNumber = phoneDb.number;
-//      phoneDb.type = PhoneTypeDb.parseOrNull("WORK");
+      if (PhoneTypeDb.parseOrNull("WORK") != null) {
+        phoneDb.type = PhoneTypeDb.parseOrNull("WORK").toString();
+      }
       phoneList.add(phoneDb);
     }
     return phoneList;
@@ -236,6 +265,7 @@ public class RandomEntity {
 
   public ClientToSave clientToSave() {
     ClientToSave toSave = new ClientToSave();
+    toSave.clientID = RND.plusInt(2);
     toSave.surname = RND.str(6);
     toSave.name = RND.str(5);
     toSave.patronymic = RND.str(6);
@@ -248,10 +278,29 @@ public class RandomEntity {
     } catch (ParseException e) {
       e.printStackTrace();
     }
-    toSave.character = new Character(11, CharacterType.AGREEABLENESS.name);
+    toSave.character = new Character(11, CharacterType.AGREEABLENESS.toString());
     toSave.gender = new Gender(GenderType.FEMALE, "female");
-//    toSave.phones.add(new Phone(new PhoneDetail(PhoneType.HOME, "home"), Integer.toString(RND.plusInt(152556)), "111"));
-//    toSave.phones.add(new Phone(new PhoneDetail(PhoneType.WORK, "work"), Integer.toString(RND.plusInt(156347)), "2222"));
+    if (PhoneTypeDb.parseOrNull("HOME") != null) {
+      toSave.phones.add(new Phone(new PhoneDetail(PhoneTypeDb.parseOrNull("HOME"), PhoneTypeDb.parseOrNull("HOME").name), "111", "111"));
+    }
+    if (PhoneTypeDb.parseOrNull("WORK") != null) {
+      toSave.phones.add(new Phone(new PhoneDetail(PhoneTypeDb.parseOrNull("WORK"), PhoneTypeDb.parseOrNull("WORK").name), "2222", "2222"));
+    }
+    return toSave;
+  }
+
+  public ClientToSave clientToSaveE() {
+    ClientToSave toSave = new ClientToSave();
+    toSave.clientID = -1;
+    toSave.surname = "";
+    toSave.name = "";
+    toSave.patronymic = "";
+    toSave.actualAddress = new Address();
+    toSave.registrationAddress = new Address();
+    toSave.birthDay = new Date();
+    toSave.character = new Character();
+    toSave.gender = new Gender();
+    toSave.phones.add(new Phone());
     return toSave;
   }
 

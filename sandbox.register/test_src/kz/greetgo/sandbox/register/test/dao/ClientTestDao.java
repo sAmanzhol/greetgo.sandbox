@@ -1,12 +1,8 @@
 package kz.greetgo.sandbox.register.test.dao;
 
-import kz.greetgo.sandbox.controller.model.Address;
 import kz.greetgo.sandbox.controller.model.Client;
 import kz.greetgo.sandbox.controller.model.db.*;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -83,14 +79,14 @@ public interface ClientTestDao {
     "from client_phone")
   List<String> getPhoneD();
 
-  @Select("select charm.name from charm join client c on charm.id = c.charm and c.id = #{id}")
-  String getCharm(@Param("id") int id);
+//  @Select("select charm.name from charm join client c on charm.id = c.charm and c.id = #{id}")
+//  String getCharm(@Param("id") int id);
 
-  @Select("select addr.street, addr.house, addr.flat " +
+  @Select("select addr.client, addr.street, addr.house, addr.flat " +
     "from client_addr addr " +
-    "join client c on addr.client = c.id and addr.type = #{type} and c.id = #{id}")
-  Address getAddress(@Param("id") int id,
-                     @Param("type") String type);
+    "where addr.type = #{type} and addr.client = #{id}")
+  ClientAddrDb getAddress(@Param("id") int id,
+                          @Param("type") String type);
 
   @Select("select * from client_phone where client = #{id} and actual = true")
   List<ClientPhoneDb> getPhoneList(@Param("id") int id);
@@ -105,14 +101,6 @@ public interface ClientTestDao {
   ClientAddrDb getAddr(@Param("client") int client, @Param("type") String type);
 
 
-//  @Select("insert into client_phone(client, number, type)\n" +
-//    "    values(36, '333737382', 'WORK')\n" +
-//    "on conflict(client, number) do update set\n" +
-//    "number = '111',\n" +
-//    "type = excluded.type;")
-//  void saveOrUpdatePhones(@Param("phones") ClientPhoneDb phones,
-//                          @Param("newNumber") String newNumber);
-
   @Select("select client, type, street, house, flat from client_addr where client=#{client} and type = #{type}")
   ClientAddrDb getClientAddrDb(@Param("id") int id,
                                @Param("type") String type);
@@ -124,7 +112,10 @@ public interface ClientTestDao {
 
 
   @Select("select id from charm where name = #{name} and actual = true")
-  Integer getCharmByName(@Param("name") String name);
+  Integer getCharmIdByName(@Param("name") String name);
+
+  @Select("select * from charm where  name = #{name} and actual = true")
+  CharmDb getCharmByName(@Param("name") String name);
 
 
   @Select("insert into  client (id, surname, name, patronymic, gender, birth_date, charm, actual)\n" +
@@ -160,13 +151,6 @@ public interface ClientTestDao {
   @Update("update client_phone set actual = false where client " +
     "= #{client} and number= #{number}")
   void deactualPhone(@Param("client") int client, @Param("number") String number);
-
-  // create data to delete
-//  @Insert("insert into client_account(client, money, number, registered_at, actual)\n" +
-//    "values (#{account.client}, #{account.money}, #{account.number}, #{account,registeredAt}," +
-//    " #{account.actual});")
-//  void insertAccount(@Param("account") ClientAccountDb account);
-//
 
 
   @Insert("insert into client_addr(client, type, street, house, flat)\n" +
@@ -209,6 +193,27 @@ public interface ClientTestDao {
 
   @Select("select * from client_account_transaction where account = #{account} and actual = true;")
   List<ClientAccountTransactionDb> getTransactions(@Param("account") int account);
+
+  @Delete("truncate table client cascade;")
+  void truncateClient();
+
+  @Delete("truncate table client_account_transaction cascade;")
+  void truncateAccountTransaction();
+
+  @Delete("truncate table client_account cascade;")
+  void truncateAccount();
+
+  @Delete("truncate table client_addr cascade;")
+  void truncateAddress();
+
+  @Delete("truncate table client_phone cascade;")
+  void truncatePhones();
+
+  @Delete("truncate table transaction_type cascade;")
+  void trunccateTransactionType();
+
+  @Delete("truncate table charm cascade;")
+  void truncateCharms();
 
 
 }
