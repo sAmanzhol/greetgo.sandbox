@@ -1,6 +1,6 @@
 import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {ClientInfoService} from "./client-info.service";
+import {ClientSaveService} from "./client-save.service";
 import {PhonesService} from "../../phones/phones.service";
 import {CharactersService} from "../../characters/characters.service";
 import {ClientsComponent} from "../../clients/clients.component";
@@ -9,10 +9,10 @@ import {PhoneDisplay} from "../../../model/PhoneDisplay";
 
 @Component({
   selector: 'app-client-info',
-  templateUrl: './client-info.component.html',
-  styleUrls: ['./client-info.component.css']
+  templateUrl: './client-save.component.html',
+  styleUrls: ['./client-save.component.css']
 })
-export class ClientInfoComponent implements OnInit {
+export class ClientSaveComponent implements OnInit {
   // fixme .07. Из списка на форму редактирования должен передоваться только ИД клиента.
   // fixme 1.07.1. ... а если осуществляется добавление клиента, то передаём null.
 
@@ -27,7 +27,7 @@ export class ClientInfoComponent implements OnInit {
 
   @ViewChild('modal') modal: ElementRef;
 
-  constructor(public Service: ClientInfoService, public ClientsComponent: ClientsComponent, public PhonesService: PhonesService, public CharactersService: CharactersService, private modalService: NgbModal) {
+  constructor(public Service: ClientSaveService, public ClientsComponent: ClientsComponent, public PhonesService: PhonesService, public CharactersService: CharactersService, private modalService: NgbModal) {
   }
 
   ngOnInit() {
@@ -88,6 +88,7 @@ export class ClientInfoComponent implements OnInit {
 
   async getCharacters() {
     this.characterTypes = await this.CharactersService.getCharacters();
+    console.log(this.characterTypes);
   }
 
   async getPhoneTypes() {

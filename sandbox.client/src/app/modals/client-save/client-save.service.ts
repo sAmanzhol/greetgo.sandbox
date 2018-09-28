@@ -5,7 +5,7 @@ import {ClientDisplay} from "../../../model/ClientDisplay";
 @Injectable({
   providedIn: 'root'
 })
-export class ClientInfoService {
+export class ClientSaveService {
 
   //fixme на стороне сервера ты разделил на разные контролеры и регистры, а тут почему-то нет
   constructor(private http: HttpService) {

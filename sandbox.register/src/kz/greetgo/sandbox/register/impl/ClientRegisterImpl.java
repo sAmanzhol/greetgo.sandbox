@@ -108,7 +108,7 @@ public class ClientRegisterImpl implements ClientRegister {
         .orElse(new CharacterRecord());
 
       ClientRecord clientRecord = new ClientRecord(
-        clientRecordToUpdate.id, clientDisplay.surname + " " + clientDisplay.name + " " + clientDisplay.patronymic, character.value, age, 0, 1000, 0
+        clientRecordToUpdate.id, clientDisplay.surname + " " + clientDisplay.name + " " + clientDisplay.patronymic, character.name, age, 0, 1000, 0
       );
 
       list.set(indexRecordToUpdate, clientRecord);
@@ -131,7 +131,7 @@ public class ClientRegisterImpl implements ClientRegister {
         .orElse(new CharacterRecord());
 
       ClientRecord clientRecord = new ClientRecord(
-        newId, clientDisplay.surname + " " + clientDisplay.name + " " + clientDisplay.patronymic, character.value, age, 0, 1000, 0
+        newId, clientDisplay.surname + " " + clientDisplay.name + " " + clientDisplay.patronymic, character.name, age, 0, 1000, 0
       );
 
       list.add(clientRecord);
