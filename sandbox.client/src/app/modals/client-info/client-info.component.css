@@ -1,5 +1,9 @@
 .type-button, .delete-button {
-  border-radius: 0px;
+  border-radius: 0;
+}
+
+.phone-type:hover {
+  cursor: pointer;
 }
 
 @media (min-width: 576px) {

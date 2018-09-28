@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ClientsService} from "./clients.service";
 import {ClientToFilter} from "../../model/ClientToFilter";
+import {ClientRecord} from "../../model/ClientRecord";
 
 @Component({
   selector: 'app-clients',
@@ -8,53 +9,48 @@ import {ClientToFilter} from "../../model/ClientToFilter";
   styleUrls: ['./clients.component.css']
 })
 export class ClientsComponent implements OnInit {
-  modalData = {};
+
   filter = ClientToFilter.createDefault();
+  public list: ClientRecord[] = [];
+  public count: number = 0;
+  modalData = {
+    "clientId": null
+  };
+  modalOpen = false;
 
   constructor(public Service: ClientsService) {
   }
 
   ngOnInit() {
-    this.modalData = {
-      "open": false,
-      "type": "",
-      "clientId": null
-    };
-
     this.loadPage();
   }
 
-  loadPage() {
-    this.Service.load(this.filter);
-  }
-
-  openModal(type, clientId) {
+  openModal(clientId) {
+    this.modalOpen = true;
     this.modalData = {
-      "open": true,
-      "type": type,
       "clientId": clientId
     };
   }
 
-
   closeModal(data) {
+    this.modalOpen = false;
     this.modalData = data;
   }
 
   sort(target, type) {
-    this.filter.target = target;
-    this.filter.type = type;
+    this.filter.sortColumn = target;
+    this.filter.sortDirection = type;
 
     this.loadPage();
   }
 
-  search(query) {
-    this.filter.query = query;
-
-    this.loadPage();
+  async loadPage(filter = this.filter) {
+    this.count = await this.Service.getCount(filter);
+    this.list = await this.Service.getClients(filter);
   }
 
-  delete(id, filter = this.filter) {
-    this.Service.delete(id, filter);
+  async delete(id, filter = this.filter) {
+    await this.Service.deleteClient(id);
+    this.loadPage(filter);
   }
 }

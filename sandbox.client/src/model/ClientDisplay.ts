@@ -1,15 +1,15 @@
 import {PhoneDisplay} from "./PhoneDisplay";
 
 export class ClientDisplay {
-  public id: string;
+  public id: number;
   public surname: string;
   public name: string;
   public patronymic: string;
 
   // fixme birthdate doljen byt' date
-  public birthDate: string;
+  public birthDate: Date;
   public gender: string;
-  public character: string;
+  public characterId: number;
   public streetRegistration: string;
   public houseRegistration: string;
   public apartmentRegistration: string;
@@ -26,13 +26,13 @@ export class ClientDisplay {
   }
 
   constructor() {
-    this.id = "";
+    this.id = null;
     this.surname = "";
     this.name = "";
     this.patronymic = "";
-    this.birthDate = "";
+    this.birthDate = null;
     this.gender = "";
-    this.character = "";
+    this.characterId = null;
     this.streetRegistration = "";
     this.houseRegistration = "";
     this.apartmentRegistration = "";
@@ -47,15 +47,15 @@ export class ClientDisplay {
     this.surname = a.surname;
     this.name = a.name;
     this.patronymic = a.patronymic;
-    this.birthDate = a.birthDate;
+    this.birthDate = new Date(a.birthDate);
     this.gender = a.gender;
-    this.character = a.character;
+    this.characterId = a.characterId;
     this.streetRegistration = a.streetRegistration;
     this.houseRegistration = a.houseRegistration;
     this.apartmentRegistration = a.apartmentRegistration;
     this.streetResidence = a.streetResidence;
     this.houseResidence = a.houseResidence;
     this.apartmentResidence = a.apartmentResidence;
-    this.numbers = (a.numbers instanceof Array) ? a.numbers.map(c => c) : [];
+    this.numbers = a.numbers;
   }
 }

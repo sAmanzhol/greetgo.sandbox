@@ -4,7 +4,6 @@ import kz.greetgo.depinject.core.Bean;
 import kz.greetgo.depinject.core.BeanGetter;
 import kz.greetgo.mvc.annotations.Json;
 import kz.greetgo.mvc.annotations.Par;
-import kz.greetgo.mvc.annotations.ParPath;
 import kz.greetgo.mvc.annotations.ToJson;
 import kz.greetgo.mvc.annotations.on_methods.ControllerPrefix;
 import kz.greetgo.mvc.annotations.on_methods.OnDelete;
@@ -38,20 +37,20 @@ public class ClientController implements Controller {
   }
 
   @ToJson
-  @OnPost("/{id}")
-  public ClientDisplay crupdate(@ParPath("id") String id, @Json @Par("clientToSave") ClientToSave clientToSave) {
-    return clientRegister.get().crupdate(id, clientToSave);
+  @OnPost("/")
+  public ClientRecord save(@Json @Par("clientToSave") ClientToSave clientToSave) {
+    return clientRegister.get().save(clientToSave);
   }
 
   @ToJson
   @OnGet("/")
-  public ClientDisplay get(@Par("id") String id) {
-    return clientRegister.get().get(id);
+  public ClientDisplay details(@Par("id") int id) {
+    return clientRegister.get().details(id);
   }
 
   @ToJson
   @OnDelete("/")
-  public ClientDisplay delete(@Par("id") String id) {
-    return clientRegister.get().delete(id);
+  public void delete(@Par("id") int id) {
+    clientRegister.get().delete(id);
   }
 }

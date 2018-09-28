@@ -1,9 +1,9 @@
 package kz.greetgo.sandbox.controller.register;
 
-import kz.greetgo.sandbox.controller.model.PhoneRecord;
+import kz.greetgo.sandbox.controller.model.PhoneTypeRecord;
 
 import java.util.List;
 
 public interface PhoneRegister {
-  List<PhoneRecord> list();
+  List<PhoneTypeRecord> list();
 }

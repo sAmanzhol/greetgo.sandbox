@@ -26,7 +26,9 @@
                class="form-control client-info-input" [(ngModel)]="client['patronymic']" #patronymic="ngModel"
                [ngClass]="{'is-invalid': (form.submitted || patronymic.dirty) && patronymic.errors}">
         <input type="text" id="birthDate" name="birthDate" placeholder="Дата рождения" onfocus="(this.type='date')"
-               class="form-control client-info-input" [(ngModel)]="client['birthDate']" #birthDate="ngModel"
+               class="form-control client-info-input" [ngModel]="client['birthDate'] | date:'yyyy-MM-dd'"
+               (ngModelChange)="client['birthDate'] = $event"
+               [value]="client['birthDate'] | date:'yyyy-MM-dd'" #birthDate="ngModel"
                [ngClass]="{'is-invalid': (form.submitted || birthDate.dirty) && birthDate.errors}" required>
       </div>
 
@@ -39,12 +41,14 @@
           <option value="male">Мужской</option>
         </select>
 
-        <select id="character" name="character" class="form-control client-info-input" [(ngModel)]="client['character']"
-                #character="ngModel" [ngClass]="{'is-invalid': (form.submitted || character.dirty) && character.errors}"
+        <select id="characterId" name="characterId" class="form-control client-info-input"
+                [(ngModel)]="client['characterId']"
+                #characterId="ngModel"
+                [ngClass]="{'is-invalid': (form.submitted || characterId.dirty) && characterId.errors}"
                 required>
-          <option value="" selected>Выберите характер...</option>
+          <option value=null selected>Выберите характер...</option>
 
-          <option value={{c.id}} *ngFor="let c of characters">{{c.value}}</option>
+          <option value={{c.id}} *ngFor="let c of characterTypes">{{c.value}}</option>
         </select>
       </div>
 
@@ -96,18 +100,24 @@
       <hr class="mt-0">
 
       <div class="form-group d-flex justify-content-between flex-wrap">
-        <div *ngFor="let p of client['numbers']; let first = first; let index = index" class="input-group client-info-input mb-2">
+        <div *ngFor="let p of client['numbers']; let first = first; let index = index"
+             class="input-group client-info-input mb-2">
           <span ngbDropdown>
-            <button type="button" class="type-button btn rounded-left" id="dropdownBasic1" ngbDropdownToggle>{{p.type}}</button>
+            <button type="button" class="type-button btn rounded-left" id="dropdownBasic1"
+                    ngbDropdownToggle>{{p.type}}</button>
             <ul ngbDropdownMenu aria-labelledby="dropdownBasic1">
-              <li *ngFor="let t of phones" value={{t.id}} class="dropdown-item" (click)="changePhoneType(p, t.type)">{{t.type}}</li>
+              <li *ngFor="let t of phoneTypes" value={{t.id}} class="dropdown-item phone-type"
+                  (click)="changePhoneType(p, t.type)">{{t.type}}</li>
             </ul>
           </span>
 
-          <input type="text" name=`phone{{index}}` placeholder="Введите номер" mask="0(000)-000-00-00" class="form-control" [(ngModel)]="p.value" [ngClass]="{'is-invalid': (form.submitted) && !p.value}" required>
+          <input type="text" name=`phone{{index}}` placeholder="Введите номер" mask="0(000)-000-00-00"
+                 class="form-control" [(ngModel)]="p.value" [ngClass]="{'is-invalid': (form.submitted) && !p.value}"
+                 required>
 
           <span *ngIf="!first" class="input-group-btn">
-            <button class="delete-button btn btn-danger rounded-right" type="button" (click)="deletePhone(index)"><span><i class="fas fa-minus"></i></span></button>
+            <button class="delete-button btn btn-danger rounded-right" type="button" (click)="deletePhone(index)"><span><i
+              class="fas fa-minus"></i></span></button>
           </span>
         </div>
       </div>
@@ -115,11 +125,11 @@
       <button type="button" class="btn btn-success btn-sm" (click)="addPhone()">Add Phone</button>
     </div>
 
-    <div class="modal-footer" *ngIf="inModalData['type']=='add'">
+    <div class="modal-footer" *ngIf="!inModalData['clientId']">
       <button type="submit" class="btn btn-primary">Добавить</button>
     </div>
 
-    <div class="modal-footer" *ngIf="inModalData['type']=='edit'">
+    <div class="modal-footer" *ngIf="inModalData['clientId']">
       <button type="button" class="btn btn-secondary" (click)="modal.close('Cancel click')">Отменить</button>
       <button type="submit" class="btn btn-primary">Изменить</button>
     </div>

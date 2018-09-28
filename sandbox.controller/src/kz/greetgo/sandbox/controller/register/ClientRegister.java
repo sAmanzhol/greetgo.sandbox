@@ -8,16 +8,16 @@ import kz.greetgo.sandbox.controller.model.ClientToSave;
 import java.util.List;
 
 public interface ClientRegister {
-  List<ClientRecord> list(ClientToFilter filter);
-
   int count(ClientToFilter filter);
 
+  List<ClientRecord> list(ClientToFilter filter);
+
   // FIXME: 9/24/18 Должен возвращать ClientRecord. Переименуй метод в save
-  ClientDisplay crupdate(String id, ClientToSave clientDisplay);
+  ClientRecord save(ClientToSave clientToSave);
 
   // FIXME: 9/24/18 Название метода должно бытьdetails
-  ClientDisplay get(String id);
+  ClientDisplay details(int id);
 
   // FIXME: 9/24/18 Не должен возвращать ничего
-  ClientDisplay delete(String id);
+  void delete(int id);
 }
