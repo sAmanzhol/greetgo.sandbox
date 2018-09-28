@@ -34,7 +34,7 @@ export class ClientToSave {
       this.name = a.name;
     }
     if (a.birthDay) {
-      this.birthDay = a.birthDay;
+      this.birthDay = new Date(a.birthDay);
     }
     if (a.patronymic) {
       this.patronymic = a.patronymic;

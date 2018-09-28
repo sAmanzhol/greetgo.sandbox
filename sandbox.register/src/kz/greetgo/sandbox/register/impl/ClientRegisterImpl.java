@@ -293,27 +293,9 @@ public class ClientRegisterImpl implements ClientRegister {
 //    }
 
 
-//      Date date = client.birthDate;
-//      SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-////      sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-//      String formattedDate = sdf.format(date);
-//      try {
-//        client.birthDate = sdf.parse(formattedDate);//"20/12/1998");
-//      } catch (ParseException e) {
-//        e.printStackTrace();
-//      }
-
-      Date birthdayDate = new Date();
-
-      try {
-        birthdayDate = new SimpleDateFormat("dd/MM/yyyy")
-          .parse("20/12/1998");
-      } catch (ParseException e) {
-        e.printStackTrace();
-      }
 
       ClientDetail clientDetail = new ClientDetail(client.surname, client.name, client.patronymic,
-        new Gender(client.gender, client.gender.toString()), this.genders, birthdayDate,
+        new Gender(client.gender, client.gender.toString()), this.genders, client.birthDate,
         cType, this.characters, factAddress, regAddress, phones, this.phoneDetails, client.id);
 
       return clientDetail;

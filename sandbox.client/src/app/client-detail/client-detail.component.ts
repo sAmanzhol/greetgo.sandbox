@@ -33,11 +33,6 @@ export class ClientDetailComponent implements OnInit {
     this.clientDetailService.load(this.data);
     this.clientDetail = await this.clientDetailService.loadClientDetailRecord(this.data);
     this.clientToSave = ClientToSave.create(this.clientDetail);
-    console.log("BirthDay:" + this.clientDetail.birthDay);
-
-    this.date = new Date("2015-03-25");
-    // this.date.setDate(this.date.getDate() + 3);
-    console.log("Date is: " + this.date);
   }
 
   async saveClient() {
