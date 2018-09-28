@@ -61,8 +61,10 @@ export class LoginService {
   }
 
   async login() {
+
     try {
       this.loading = true;
+      console.log()
       this.http.token = await this.http.post("/auth/login", {
         username: this.username,
         password: this.password,

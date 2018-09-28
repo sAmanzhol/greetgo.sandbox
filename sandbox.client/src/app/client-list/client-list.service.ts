@@ -27,7 +27,6 @@ export class ClientListService {
       this.loading = false;
 
     } catch (e) {
-
       this.loading = false;
       console.error(e);
 

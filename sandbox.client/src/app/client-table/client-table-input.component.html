@@ -1,0 +1,28 @@
+<p-dialog header="Title" [(visible)]="display">
+
+  <!--surname: string;-->
+  <!--name: string;-->
+  <!--patronomic: string;-->
+  <!--gender: GenderType;-->
+  <!--birthDate:string;-->
+  <!--charm: Charm = new Charm();-->
+  <!--adressP:Address = new Address();-->
+  <!--adressR:Address = new Address();-->
+  <!--phone:Phone = new Phone();-->
+
+  <input type="text" pInputText  [(ngModel)]="surname" />
+  <input type="text" pInputText  [(ngModel)]="name"/>
+  <input type="text" pInputText  [(ngModel)]="patronomic"/>
+  <!--<input type="text" pInputText  [(ngModel)]="gender."/>-->
+
+
+  <button type="button" (click)="accept()" pButton icon="pi pi-check" label="Confirm"></button>
+
+  <button type="button" (click)="decline()" pButton icon="pi pi-times" label="Delete"></button>
+
+</p-dialog>
+
+
+<p-messages [value]="msgs"></p-messages>
+
+<button pButton type="button" icon="pi pi-plus" (click)="showDialog()" label="Click" ></button>
