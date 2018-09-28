@@ -50,8 +50,8 @@ public interface ClientDao {
   Address getAddress(@Param("id") int id,
                      @Param("type") String type);
 
-  @Select("select * from client_phone where client = #{id}")
-  List<ClientPhoneDb> phoneList(@Param("id") int id);
+//  @Select("select * from client_phone where client = #{id}")
+//  List<ClientPhoneDb> phoneList(@Param("id") int id);
 
 
   //save OrUpdate

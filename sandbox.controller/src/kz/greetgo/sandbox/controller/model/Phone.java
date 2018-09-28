@@ -1,5 +1,6 @@
 package kz.greetgo.sandbox.controller.model;
 
+import kz.greetgo.sandbox.controller.model.db.ClientPhoneDb;
 import kz.greetgo.sandbox.controller.model.db.PhoneTypeDb;
 
 import java.util.ArrayList;
@@ -37,6 +38,21 @@ public class Phone {
       ph.detail = new PhoneDetail(PhoneTypeDb.parseOrNull(phone.detail.type.toString()),
         PhoneTypeDb.parseOrNull(phone.detail.type.toString()).name);
       ph.oldNumber = phone.oldNumber;
+      phoneList.add(ph);
+    }
+    return phoneList;
+  }
+  public static List<Phone> getPhoneListFromDb(List<ClientPhoneDb> phoneDbList) {
+    List<Phone> phoneList = new ArrayList<>();
+    for (ClientPhoneDb phone : phoneDbList) {
+      if (phone == null || phone.number == null) {
+        continue;
+      }
+      Phone ph = new Phone();
+      ph.number = phone.number;
+      ph.detail = new PhoneDetail(PhoneTypeDb.parseOrNull(phone.type),
+        PhoneTypeDb.parseOrNull(phone.type).name);
+      ph.oldNumber = phone.number;
       phoneList.add(ph);
     }
     return phoneList;
