@@ -170,10 +170,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
     private boolean rndBoolean() {
 
         int IntRnd = (int) (Math.random() * 10 - 5);
-        if (IntRnd < 0) {
-            return false;
-        } else
-            return true;
+        return IntRnd >= 0;
     }
 
 

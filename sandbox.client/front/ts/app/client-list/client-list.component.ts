@@ -24,7 +24,7 @@ export class ClientListComponent implements OnInit {
   clientOnSelect: ClientRecord = new ClientRecord();
   clientFilter: ClientFilter;
   phoneType: PhoneType[] = [PhoneType.HOME, PhoneType.WORK, PhoneType.MOBILE, PhoneType.EMBEDDED]
-
+  isOpenReport: boolean = false;
 
   ngOnInit() {
     this.clientFilter = new ClientFilter();
@@ -32,6 +32,7 @@ export class ClientListComponent implements OnInit {
     this.getTotalRecord();
   }
 
+  date:Date = new Date();
   getTotalRecord() {
 
     var self = this;
@@ -48,6 +49,13 @@ export class ClientListComponent implements OnInit {
       self.clientRecord = data.json();
     })
   }
+
+  getReport(type: string) {
+    let self = this;
+    let clientFilter = JSON.stringify(self.clientFilter )
+    window.open(self.http.url("/report/report-"+type+"?clientFilter="+clientFilter));
+  }
+
 
   changePagination(page) {
     let self = this;
@@ -139,6 +147,10 @@ export class ClientListComponent implements OnInit {
     }
 
     self.clientEditFormComponent.showAddFormOrEditForm(clientId);
+  }
+
+  closeorOpenForm() {
+    this.isOpenReport = !this.isOpenReport;
   }
 
 

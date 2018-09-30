@@ -13,15 +13,4 @@ public class ClientFilter {
     public int recordSize;
     public int recordTotal;
 
-    public ClientFilter() {
-        this.firstname = "";
-        this.lastname = "";
-        this.patronymic = "";
-        this.orderBy = "";
-        this.sort = true;
-        this.page = 0;
-        this.pageTotal = 0;
-        this.recordSize = 10;
-        this.recordTotal =0;
-    }
 }

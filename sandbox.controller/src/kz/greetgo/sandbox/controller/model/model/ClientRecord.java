@@ -19,7 +19,6 @@ public class ClientRecord {
         this.lastname="";
         this.patronymic="";
         this.characterName=new Charm().name;
-        this.dateOfBirth=new Date();
         this.totalAccountBalance=0;
         this.maximumBalance=0;
         this.minimumBalance=0;
