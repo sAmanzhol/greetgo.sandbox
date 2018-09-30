@@ -26,7 +26,7 @@ public class ClientRegisterImpl implements ClientRegister {
 
 	@Override
 	public void deleteClient(Integer clientMarkId) {
-
+// TODO: asset 9/30/18 Prosto mozhno nazvat clientId
 		clientDao.get().deleteClientById(clientMarkId);
 	}
 
@@ -52,10 +52,11 @@ public class ClientRegisterImpl implements ClientRegister {
 
 	@Override
 	public ClientDetails getClientDetails(Integer clientMarkId) {
-
+    // TODO: asset 9/30/18 clientId
 		ClientDetails clientDetails = clientDao.get().selectClient(clientMarkId);
 		clientDetails.addressOfResidence = clientDao.get().selectClientAddrById(clientMarkId, AddrType.FACT);
 		clientDetails.addressOfRegistration = clientDao.get().selectClientAddrById(clientMarkId, AddrType.REG);
+		// TODO: asset 9/30/18 Prikolno))
 		clientDetails.phone.addAll(clientDao.get().selectClientPhoneByMobile(clientMarkId));
 		clientDetails.phone.addAll(clientDao.get().selectClientPhoneByNotMobile(clientMarkId));
 		return clientDetails;
@@ -66,13 +67,14 @@ public class ClientRegisterImpl implements ClientRegister {
 	public ClientRecord saveClient(ClientToSave clientToSave) {
 
 		if (clientToSave.id == null) {
+			// TODO: asset 9/30/18 V baze mozhno geeri id dlya clientov
 			Integer maxes = clientDao.get().getmaxClientId();
 			if (maxes == null)
 				maxes = 0;
 			clientToSave.id = maxes + 1;
 		}
 
-
+// TODO: asset 9/30/18 Nuzhno ubrat vniz
 		List<String> clientListPhoneNumber = clientDao.get().selectClientPhoneNumberById(clientToSave.id);
 
 		clientDao.get().upsertClient(clientToSave);

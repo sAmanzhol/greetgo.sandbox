@@ -86,6 +86,7 @@ public class AbstractClientListSql extends AbstractBasicSql<ClientRecord, List<C
 		clientRecord.firstname = rs.getString("firstname");
 		clientRecord.lastname = rs.getString("lastname");
 		clientRecord.patronymic = rs.getString("patronymic");
+		// TODO: asset 9/30/18 Date of birth razve mozhet byt null-om??
 		if (rs.getDate("dateOfBirth") != null){
 			System.err.println("DATA IS NOT NULLL");
 			clientRecord.dateOfBirth = rs.getDate("dateOfBirth");}

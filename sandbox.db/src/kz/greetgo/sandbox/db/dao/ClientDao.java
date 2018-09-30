@@ -107,7 +107,8 @@ public interface ClientDao {
     @Select("select min(money) from client_account where client= #{id} group by client")
     Integer selectMinimumBalance(@Param("id") int id);
 
-
+    // TODO: asset 9/30/18 Mozhno ne ispolzovat "as" esli u tebya i tak tipa firstname, a dateOfBirth ya by pomenyal
+    // TODO: by na date_of_birth
     @Select("select id as id,\n" +
             "  firstname as firstname,\n" +
             "  lastname as lastname,\n" +

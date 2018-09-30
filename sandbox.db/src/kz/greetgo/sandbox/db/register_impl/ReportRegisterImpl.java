@@ -30,6 +30,7 @@ public class ReportRegisterImpl implements ReportRegister {
         jdbc.get().execute(new ClientReportSql(view, clientFilter));
 
         MyReportFootData myReportFootData = new MyReportFootData();
+        // TODO: asset 9/30/18  generatedBy vsegda Nazar?
         myReportFootData.generatedBy = "Nazar";
         myReportFootData.generatedAt = new Date();
         view.finish(myReportFootData);

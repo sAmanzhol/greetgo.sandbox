@@ -72,6 +72,7 @@ public class ClientCountSql extends AbstractBasicSql<Integer, Integer> {
 		try {
 			return rs.getInt("count");
 		} catch (SQLException e) {
+			// TODO: asset 9/30/18 Pochemu tut oshybka proglatyvaetsya?
 			e.printStackTrace();
 		}
 		return null;
