@@ -49,9 +49,9 @@ public class CiaMigration  {
 		SAXParserFactory spf = SAXParserFactory.newInstance();
 		SAXParser saxParser = spf.newSAXParser();
 
-	/*	try (PreparedStatement ps = connection.prepareStatement(drops)) {
-			ps.executeUpdate();
-		}*/
+		try (PreparedStatement ps = connection.prepareStatement(drops)) {
+			ps.execute();
+		}
 
 		try (PreparedStatement ps = connection.prepareStatement(sql)) {
 			ps.executeUpdate();
