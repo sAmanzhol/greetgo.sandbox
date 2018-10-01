@@ -9,11 +9,4 @@ public enum GenderType {
     this.name = name;
   }
 
-  public static GenderType parseOrNull(String strEnum) {
-    try {
-      return GenderType.valueOf(strEnum);
-    } catch (Exception e) {
-      return null;
-    }
-  }
 }

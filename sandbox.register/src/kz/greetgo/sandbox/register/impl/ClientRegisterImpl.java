@@ -22,8 +22,6 @@ import java.util.List;
 @Bean
 public class ClientRegisterImpl implements ClientRegister {
 
-  List<Client> clients = null;
-  List<ClientRecord> clientRecords = null;
   List<Character> characters = null;
   List<Gender> genders = null;
   List<PhoneDetail> phoneDetails = null;
@@ -32,38 +30,6 @@ public class ClientRegisterImpl implements ClientRegister {
 
 
   public BeanGetter<Jdbc> jdbc;
-
-  @Override
-  public List<ClientRecord> getClientList() {
-    clientRecords = new ArrayList<>();
-    if (clients != null) {
-      for (Client client : clients) {
-        clientRecords.add(convertClientToRecord(client));
-      }
-    }
-    return clientRecords;
-  }
-
-  public ClientRecord convertClientToRecord(Client client) {
-    ClientRecord clientRecord = new ClientRecord();
-    clientRecord.fio = client.surname + " " + client.name + " " + client.patronymic;
-    LocalDate currentDate = LocalDate.now();
-    LocalDate birthDate = client.birthDay.toInstant()
-      .atZone(ZoneId.systemDefault())
-      .toLocalDate();
-    if ((birthDate != null) && (currentDate != null)) {
-      clientRecord.age = Period.between(birthDate, currentDate).getYears();
-    } else {
-      clientRecord.age = 0;
-    }
-    clientRecord.totalBalance = client.totalBalance;
-    clientRecord.minBalance = client.minBalance;
-    clientRecord.maxBalance = client.maxBalance;
-    clientRecord.character = client.character;
-    clientRecord.clientId = client.id;
-    return clientRecord;
-  }
-
 
   @Override
   public ClientDetail getClientDetailById(int id) {
@@ -87,7 +53,6 @@ public class ClientRegisterImpl implements ClientRegister {
       return ClientDetail.forSave(this.genders, this.characters, this.phoneDetails);
     } else {
       ClientDb client = clientDao.get().getClientDb(id);
-//      String charm = clientDao.get().getCharmName(client.id);
       Address regAddress = clientDao.get().getAddress(client.id, "REG");
       Address factAddress = clientDao.get().getAddress(client.id, "FACT");
       List<ClientPhoneDb> phoneList = clientDao.get().getPhoneList(client.id);
@@ -216,21 +181,21 @@ public class ClientRegisterImpl implements ClientRegister {
 
     ArrayList<String> prepareStValue = new ArrayList<>();
     if (!"".equals(clientFilter.name)) {
-      sq += " x1.name = ?\n";
+      sq += " x1.name like ?\n";
       prepareStValue.add(clientFilter.name);
     }
     if (!"".equals(clientFilter.surname)) {
       if (prepareStValue.size() != 0) {
         sq += " and";
       }
-      sq += " x1.surname = ?\n";
+      sq += " x1.surname like ?\n";
       prepareStValue.add(clientFilter.surname);
     }
     if (!"".equals(clientFilter.patronymic)) {
       if (prepareStValue.size() != 0) {
         sq += " and";
       }
-      sq += " x1.patronymic = ?\n";
+      sq += " x1.patronymic like ?\n";
       prepareStValue.add(clientFilter.patronymic);
     }
     if (prepareStValue.size() != 0) {
@@ -238,18 +203,57 @@ public class ClientRegisterImpl implements ClientRegister {
     }
     sq += " x1.actual = true\n";
 
-    sq += "order by  x1.id asc\n";
-
     if (!"".equals(clientFilter.columnName) && clientFilter.columnName != null) {
-
-      sq = sq.concat(", " + clientFilter.columnName + " ");
-      if (clientFilter.isAsc) {
-        sq = sq.concat("asc ");
-      } else {
-        sq = sq.concat("desc ");
+      sq += "order by \n";
+      if ("fio".equals(clientFilter.columnName)) {
+        sq = sq.concat("x1.surname ");
+        if (clientFilter.isAsc) {
+          sq = sq.concat("asc, ");
+        } else {
+          sq = sq.concat("desc, ");
+        }
+        sq = sq.concat("x1.name ");
+        if (clientFilter.isAsc) {
+          sq = sq.concat("asc, ");
+        } else {
+          sq = sq.concat("desc, ");
+        }
+        sq = sq.concat("x1.patronymic ");
+        if (clientFilter.isAsc) {
+          sq = sq.concat("asc\n");
+        } else {
+          sq = sq.concat("desc\n");
+        }
+      } else if ("age".equals(clientFilter.columnName)) {
+        sq = sq.concat("x1.birth_date ");
+        if (clientFilter.isAsc) {
+          sq = sq.concat("asc\n");
+        } else {
+          sq = sq.concat("desc\n");
+        }
+      } else if ("tot".equals(clientFilter.columnName)) {
+        sq = sq.concat("x.sum ");
+        if (clientFilter.isAsc) {
+          sq = sq.concat("asc\n");
+        } else {
+          sq = sq.concat("desc\n");
+        }
+      } else if ("min".equals(clientFilter.columnName)) {
+        sq = sq.concat("x.min ");
+        if (clientFilter.isAsc) {
+          sq = sq.concat("asc\n");
+        } else {
+          sq = sq.concat("desc\n");
+        }
+      } else if ("max".equals(clientFilter.columnName)) {
+        sq = sq.concat("x.max ");
+        if (clientFilter.isAsc) {
+          sq = sq.concat("asc\n");
+        } else {
+          sq = sq.concat("desc\n");
+        }
       }
     }
-    //offset 4
     if (clientFilter.offset >= 0) {
       sq += "offset ";
       sq = sq.concat(Integer.toString(clientFilter.offset * clientFilter.limit) + "\n");
@@ -309,12 +313,6 @@ public class ClientRegisterImpl implements ClientRegister {
 
   @Override
   public ClientRecordListWrapper filterClients(ClientFilter clientFilter) {
-
     return this.getRecordsFromDb(clientFilter);
   }
-
-
-//  public static void main(String[] args) {
-//    System.out.println("ClientRegisterImpl.main");
-//  }
 }

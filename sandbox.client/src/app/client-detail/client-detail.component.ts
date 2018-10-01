@@ -48,7 +48,7 @@ export class ClientDetailComponent implements OnInit {
       detail: {type: this.phone.detail.type, typeRuss: ""},
       number: this.phone.number,
       oldNumber: this.phone.number
-    });//this.phone
+    });
     this.phone.number = "";
     this.phone.detail = new PhoneDetail();
   }
@@ -60,10 +60,6 @@ export class ClientDetailComponent implements OnInit {
       }
     }
 
-  }
-
-  test() {
-    console.log("this.clientToSave.phones", this.clientToSave.phones);
   }
 }
 

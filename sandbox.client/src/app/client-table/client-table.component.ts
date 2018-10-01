@@ -57,6 +57,8 @@ export class ClientTableComponent implements OnInit {
     }
     console.log("isAsc: ", this.clientFilter.isAsc);
     console.log("columnName: ", this.clientFilter.columnName);
+
+
     this.filtering();
 
   }

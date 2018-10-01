@@ -16,17 +16,6 @@ public class ClientRecord {
   public ClientRecord() {
   }
 
-  public ClientRecord(String fio, Character character, int age, float totalBalance, float minBalance, float maxBalance, int clientId) {
-    this.fio = fio;
-    this.character = character;
-    this.age = age;
-    this.totalBalance = totalBalance;
-    this.minBalance = minBalance;
-    this.maxBalance = maxBalance;
-    this.clientId = clientId;
-  }
-
-
   public ClientRecord convertToSaveToClientRecord(ClientToSave toSave) {
     this.fio = toSave.surname + " " + toSave.name + " " + toSave.patronymic;
     LocalDate currentDate = LocalDate.now();

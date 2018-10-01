@@ -1,7 +1,5 @@
 package kz.greetgo.sandbox.controller.model.db;
 
-import kz.greetgo.sandbox.controller.model.PhoneType;
-
 public enum PhoneTypeDb {
   HOME("домашний"),
   WORK("рабочий"),

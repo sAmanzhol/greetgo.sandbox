@@ -100,7 +100,7 @@
         <mat-label></mat-label>
       </mat-form-field>
       <mat-form-field appearance="legacy">
-        <input matInput required [(ngModel)]="r.number">
+        <input matInput [(ngModel)]="r.number" type="number" required>
       </mat-form-field>
       <button mat-icon-button>
         <mat-icon aria-label="Remove icon-button" (click)="deletePhone(r.number)">clear</mat-icon>
@@ -118,7 +118,7 @@
     </mat-form-field>
     <mat-form-field appearance="legacy">
       <mat-label></mat-label>
-      <input matInput [(ngModel)]="phone.number">
+      <input matInput [(ngModel)]="phone.number" type="number" required>
     </mat-form-field>
     <br>
     <button mat-icon-button (click)="savePhone()">Добавить новый номер
@@ -132,4 +132,3 @@
   <button mat-button (click)="saveClient()">Сохранить</button>
   <button mat-button mat-dialog-close>Выйти</button>
 </mat-dialog-actions>
-<!--{{test()}}-->

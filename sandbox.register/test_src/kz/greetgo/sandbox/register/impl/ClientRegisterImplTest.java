@@ -77,7 +77,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
   }
 
   @Test
-  public void testFilter_count(){
+  public void testFilter_count() {
     for (int i = 0; i < 20; i++) {
       CharmDb charm = this.randomEntity.get().charmDb();
       int charmId = clientTestDao.get().insertCharm(charm);
@@ -95,7 +95,6 @@ public class ClientRegisterImplTest extends ParentTestNg {
     //
     for (int i = 0; i < clientRecordListWrapper.records.size(); i++) {
       System.out.println(clientRecordListWrapper.records.get(i).clientId);
-//      assertThat(clientRecordListWrapper.records.get(i).fio, containsString("Madina"));
       System.out.println(clientRecordListWrapper.records.get(i).fio);
 
     }
@@ -105,6 +104,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
     assertThat(clientRecordListWrapper.count).isEqualTo(20);
 
   }
+
   @Test
   public void testFilter_name() {
 
@@ -159,7 +159,6 @@ public class ClientRegisterImplTest extends ParentTestNg {
   @Test
   public void testFilter_surname() {
 
-//
     CharmDb charm = this.randomEntity.get().charmDb();
     int charmId = clientTestDao.get().insertCharm(charm);
 
@@ -198,7 +197,6 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     ClientFilter clientFilter = this.randomEntity.get().filterE();
     clientFilter.limit = 1;
-//    clientFilter.name = "Madina";
     //
     //
     ClientRecordListWrapper clientRecordListWrapper = clientRegister.get().filterClients(clientFilter);
@@ -248,7 +246,6 @@ public class ClientRegisterImplTest extends ParentTestNg {
     ClientDetail clientDetail = clientRegister.get().getClientDetailById(clientId);
     //
     //
-//    System.out.println(clientDetail.clientId + "\n" + clientDetail.name + "\n" + clientDetail.birthDay);
     assertThat(clientDetail).isNotNull();
   }
 

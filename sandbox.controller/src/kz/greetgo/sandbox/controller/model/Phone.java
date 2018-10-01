@@ -14,12 +14,6 @@ public class Phone {
   public Phone() {
   }
 
-  public Phone(PhoneDetail detail, String number) {
-    this.detail = detail;
-    this.number = number;
-    this.oldNumber = number;
-  }
-
   public Phone(PhoneDetail detail, String number, String oldNumber) {
     this.detail = detail;
     this.number = number;
@@ -30,7 +24,7 @@ public class Phone {
 
     List<Phone> phoneList = new ArrayList<>();
     for (Phone phone : toSave.phones) {
-      if (phone.number == "" || phone == null || phone.number == null || phone.detail == null
+      if ("".equals(phone.number) || phone == null || phone.number == null || phone.detail == null
         || PhoneTypeDb.parseOrNull(phone.detail.type.toString()) == null) {
         continue;
       }
@@ -43,6 +37,7 @@ public class Phone {
     }
     return phoneList;
   }
+
   public static List<Phone> getPhoneListFromDb(List<ClientPhoneDb> phoneDbList) {
     List<Phone> phoneList = new ArrayList<>();
     for (ClientPhoneDb phone : phoneDbList) {
