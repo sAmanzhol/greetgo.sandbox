@@ -75,12 +75,12 @@
   <p>Адрес регистрации* </p>
   <mat-form-field appearance="legacy">
     <mat-label>Улица</mat-label>
-    <input matInput required [(ngModel)]="clientToSave.registrationAddress.street">
+    <input matInput [(ngModel)]="clientToSave.registrationAddress.street" required>
   </mat-form-field>
 
   <mat-form-field appearance="legacy">
     <mat-label>Дом</mat-label>
-    <input matInput [(ngModel)]="clientToSave.registrationAddress.house">
+    <input matInput [(ngModel)]="clientToSave.registrationAddress.house" required>
   </mat-form-field>
   <br>
   <mat-form-field appearance="legacy">
@@ -118,7 +118,7 @@
     </mat-form-field>
     <mat-form-field appearance="legacy">
       <mat-label></mat-label>
-      <input matInput [(ngModel)]="phone.number" type="number" required>
+      <input matInput [(ngModel)]="phone.number" type="number">
     </mat-form-field>
     <br>
     <button mat-icon-button (click)="savePhone()">Добавить новый номер

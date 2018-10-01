@@ -17,7 +17,9 @@ public class ClientRecord {
   }
 
   public ClientRecord convertToSaveToClientRecord(ClientToSave toSave) {
-    this.fio = toSave.surname + " " + toSave.name + " " + toSave.patronymic;
+    this.fio = toSave.surname + " " + toSave.name;
+    if (toSave.patronymic != null)
+      this.fio += " " + toSave.patronymic;
     LocalDate currentDate = LocalDate.now();
     LocalDate birthDate = toSave.birthDay.toInstant()
       .atZone(ZoneId.systemDefault())

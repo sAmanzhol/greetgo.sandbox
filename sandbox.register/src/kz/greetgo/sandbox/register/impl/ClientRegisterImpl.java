@@ -103,9 +103,13 @@ public class ClientRegisterImpl implements ClientRegister {
 
     ClientAddrDb address = new ClientAddrDb();
     address = address.getAddressFromToSave(toSave, "REG");
-    clientDao.get().saveOrUpdateAddress(address);
+    if (!"".equals(address.street) && !"".equals(address.house)) {
+      clientDao.get().saveOrUpdateAddress(address);
+    }
     address = address.getAddressFromToSave(toSave, "FACT");
-    clientDao.get().saveOrUpdateAddress(address);
+    if (!"".equals(address.street) && !"".equals(address.house)) {
+      clientDao.get().saveOrUpdateAddress(address);
+    }
 
 
     List<Phone> phoneList = Phone.getPhoneListFromToSave(toSave);
@@ -181,22 +185,22 @@ public class ClientRegisterImpl implements ClientRegister {
 
     ArrayList<String> prepareStValue = new ArrayList<>();
     if (!"".equals(clientFilter.name)) {
-      sq += " x1.name like ?\n";
-      prepareStValue.add(clientFilter.name);
+      sq += " lower(x1.name) like ?\n";
+      prepareStValue.add("%" + clientFilter.name.toLowerCase() + "%");
     }
     if (!"".equals(clientFilter.surname)) {
       if (prepareStValue.size() != 0) {
         sq += " and";
       }
-      sq += " x1.surname like ?\n";
-      prepareStValue.add(clientFilter.surname);
+      sq += " lower(x1.surname) like ?\n";
+      prepareStValue.add("%" + clientFilter.surname.toLowerCase() + "%");
     }
     if (!"".equals(clientFilter.patronymic)) {
       if (prepareStValue.size() != 0) {
         sq += " and";
       }
-      sq += " x1.patronymic like ?\n";
-      prepareStValue.add(clientFilter.patronymic);
+      sq += " lower(x1.patronymic) like ?\n";
+      prepareStValue.add("%" + clientFilter.patronymic.toLowerCase() + "%");
     }
     if (prepareStValue.size() != 0) {
       sq += " and";
@@ -265,7 +269,7 @@ public class ClientRegisterImpl implements ClientRegister {
     }
     final String newSQL = sq;
 
-//    System.out.println("newSQL: " + newSQL);
+    System.out.println("newSQL: " + newSQL);
     jdbc.get().execute(con -> {
       try (PreparedStatement ps = con.prepareStatement(newSQL)) {
         for (int i = 0; i < prepareStValue.size(); i++) {
@@ -275,7 +279,9 @@ public class ClientRegisterImpl implements ClientRegister {
           while (rs.next()) {
             ClientRecord clientRecord = new ClientRecord();
             clientRecord.fio = rs.getString(1) + " "
-              + rs.getString(2) + " " + rs.getString(3);
+              + rs.getString(2);
+            if(rs.getString(3) != null)
+              clientRecord.fio += " " + rs.getString(3);
 
             Date d = rs.getDate(4);
             LocalDate currentDate = LocalDate.now();
