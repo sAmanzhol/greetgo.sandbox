@@ -66,16 +66,10 @@ public class ClientCountSql extends AbstractBasicSql<Integer, Integer> {
 	}
 
 	@Override
-	protected Integer doInSelection(ResultSet rs) {
+	protected Integer doInSelection(ResultSet rs) throws SQLException {
 
-
-		try {
 			return rs.getInt("count");
-		} catch (SQLException e) {
-			// TODO: asset 9/30/18 Pochemu tut oshybka proglatyvaetsya?
-			e.printStackTrace();
-		}
-		return null;
+
 	}
 
 }

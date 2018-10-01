@@ -8,7 +8,6 @@ import kz.greetgo.sandbox.controller.model.model.ClientFilter;
 import kz.greetgo.sandbox.controller.register.ReportRegister;
 import kz.greetgo.sandbox.controller.report.model.MyReportFootData;
 import kz.greetgo.sandbox.controller.report.model.MyReportHeadData;
-import kz.greetgo.sandbox.controller.report.model.MyReportRow;
 import kz.greetgo.sandbox.controller.report.report.ReportView;
 import kz.greetgo.sandbox.db.register_impl.jdbc.ClientReportSql;
 

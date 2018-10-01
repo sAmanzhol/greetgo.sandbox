@@ -25,9 +25,9 @@ public class ReportController implements Controller {
 
 	public BeanGetter<ReportRegister> myBigReportRegister;
 
-	@Mapping("/report-{ContentType}")
+	@Mapping("/{content_type}")
 	// TODO: asset 9/30/18 Nado pogovarit
-	public void myBigReport(@ParPath("ContentType") String contentType, @Par("clientFilter") @Json ClientFilter clientFilter, RequestTunnel tunnel) throws Exception {
+	public void myBigReport(@ParPath("content_type") String contentType, @Par("clientFilter") @Json ClientFilter clientFilter, RequestTunnel tunnel) throws Exception {
 
 
 		tunnel.setResponseContentType(contentType);

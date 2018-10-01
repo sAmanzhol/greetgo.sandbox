@@ -28,7 +28,6 @@ public class ReportViewPdf implements ReportView {
 
 	private void initating() throws DocumentException {
 		// TODO: asset 9/30/18 Nado obsudit
-
 		document = new Document();
 		document.setPageSize(PageSize.A4);
 		PdfWriter.getInstance(document, printStream);

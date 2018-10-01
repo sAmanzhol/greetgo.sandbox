@@ -25,9 +25,9 @@ public class ClientRegisterImpl implements ClientRegister {
 	}
 
 	@Override
-	public void deleteClient(Integer clientMarkId) {
-// TODO: asset 9/30/18 Prosto mozhno nazvat clientId
-		clientDao.get().deleteClientById(clientMarkId);
+	public void deleteClient(Integer clientId) {
+
+		clientDao.get().deleteClientById(clientId);
 	}
 
 	@Override
@@ -51,14 +51,14 @@ public class ClientRegisterImpl implements ClientRegister {
 	}
 
 	@Override
-	public ClientDetails getClientDetails(Integer clientMarkId) {
-    // TODO: asset 9/30/18 clientId
-		ClientDetails clientDetails = clientDao.get().selectClient(clientMarkId);
-		clientDetails.addressOfResidence = clientDao.get().selectClientAddrById(clientMarkId, AddrType.FACT);
-		clientDetails.addressOfRegistration = clientDao.get().selectClientAddrById(clientMarkId, AddrType.REG);
+	public ClientDetails getClientDetails(Integer clientId) {
+
+		ClientDetails clientDetails = clientDao.get().selectClient(clientId);
+		clientDetails.addressOfResidence = clientDao.get().selectClientAddrById(clientId, AddrType.FACT);
+		clientDetails.addressOfRegistration = clientDao.get().selectClientAddrById(clientId, AddrType.REG);
 		// TODO: asset 9/30/18 Prikolno))
-		clientDetails.phone.addAll(clientDao.get().selectClientPhoneByMobile(clientMarkId));
-		clientDetails.phone.addAll(clientDao.get().selectClientPhoneByNotMobile(clientMarkId));
+		clientDetails.phone.addAll(clientDao.get().selectClientPhoneByMobile(clientId));
+		clientDetails.phone.addAll(clientDao.get().selectClientPhoneByNotMobile(clientId));
 		return clientDetails;
 
 	}
@@ -74,13 +74,14 @@ public class ClientRegisterImpl implements ClientRegister {
 			clientToSave.id = maxes + 1;
 		}
 
-// TODO: asset 9/30/18 Nuzhno ubrat vniz
-		List<String> clientListPhoneNumber = clientDao.get().selectClientPhoneNumberById(clientToSave.id);
+
 
 		clientDao.get().upsertClient(clientToSave);
 		clientDao.get().upsertClientAddr(clientToSave.addressOfResidence, clientToSave.id);
 		clientDao.get().upsertClientAddr(clientToSave.addressOfRegistration, clientToSave.id);
 
+// TODO: asset 9/30/18 Nuzhno ubrat vniz
+		List<String> clientListPhoneNumber = clientDao.get().selectClientPhoneNumberById(clientToSave.id);
 		for (ClientPhone clientPhone : clientToSave.phone) {
 			if (clientListPhoneNumber.contains(clientPhone.number)) {
 				clientListPhoneNumber.remove(clientPhone.number);
@@ -106,6 +107,7 @@ public class ClientRegisterImpl implements ClientRegister {
 
 	@Override
 	public Integer getClientTotalRecord(ClientFilter clientFilter) {
+
 
 
 		return jdbc.get().execute(new ClientCountSql(clientFilter));
