@@ -269,7 +269,7 @@ public class ClientRegisterImpl implements ClientRegister {
     }
     final String newSQL = sq;
 
-    System.out.println("newSQL: " + newSQL);
+//    System.out.println("newSQL: " + newSQL);
     jdbc.get().execute(con -> {
       try (PreparedStatement ps = con.prepareStatement(newSQL)) {
         for (int i = 0; i < prepareStValue.size(); i++) {
