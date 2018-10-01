@@ -4,6 +4,8 @@ import kz.greetgo.depinject.core.Bean;
 import kz.greetgo.depinject.core.BeanGetter;
 import kz.greetgo.sandbox.controller.model.UserCan;
 import kz.greetgo.sandbox.register.beans.all.IdGenerator;
+import kz.greetgo.sandbox.register.dao_model.*;
+import kz.greetgo.sandbox.register.dao_model.Character;
 import kz.greetgo.sandbox.register.test.dao.AuthTestDao;
 import kz.greetgo.sandbox.register.test.dao.CharacterTestDao;
 import kz.greetgo.sandbox.register.test.dao.ClientTestDao;
@@ -28,6 +30,8 @@ public class DbLoader {
   public BeanGetter<ClientTestDao> clientTestDao;
 
   public void loadTestData() throws Exception {
+
+    clientTestDao.get().removeAll();
 
     loadPersons();
 
@@ -93,7 +97,12 @@ public class DbLoader {
   }
 
   private void charm(String name, String description, float energy) {
-    characterTestDao.get().insertCharacter(name, description, energy);
+    Character character = new Character();
+    character.name = name;
+    character.description = description;
+    character.energy = energy;
+
+    characterTestDao.get().insertCharacter(character);
   }
 
   private void loadCharms() {
@@ -115,7 +124,15 @@ public class DbLoader {
   }
 
   private void client(String surname, String name, String patronymic, String gender, Date birth_date, int charm) {
-    clientTestDao.get().insertClient(surname, name, patronymic, gender, birth_date, charm);
+    Client client = new Client();
+    client.surname = surname;
+    client.name = name;
+    client.patronymic = patronymic;
+    client.gender = gender;
+    client.birth_date = birth_date;
+    client.charm = charm;
+
+    clientTestDao.get().insertClient(client);
   }
 
   private void loadClients() {
@@ -137,7 +154,14 @@ public class DbLoader {
   }
 
   private void client_addr(int client, String type, String street, String house, String flat) {
-    clientTestDao.get().insertClientAddr(client, type, street, house, flat);
+    Client_addr client_addr = new Client_addr();
+    client_addr.client = client;
+    client_addr.type = type;
+    client_addr.street = street;
+    client_addr.house = house;
+    client_addr.flat = flat;
+
+    clientTestDao.get().insertClientAddr(client_addr);
   }
 
   private void loadClientsAddr() {
@@ -159,7 +183,12 @@ public class DbLoader {
   }
 
   private void client_phone(int client, String type, String number) {
-    clientTestDao.get().insertClientPhone(client, type, number);
+    Client_phone client_phone = new Client_phone();
+    client_phone.client = client;
+    client_phone.type = type;
+    client_phone.number = number;
+
+    clientTestDao.get().insertClientPhone(client_phone);
   }
 
   private void loadClientsPhone() {
@@ -181,7 +210,11 @@ public class DbLoader {
   }
 
   private void client_account(int client, String number) {
-    clientTestDao.get().insertClientAccount(client, number);
+    Client_account client_account = new Client_account();
+    client_account.client = client;
+    client_account.number = number;
+
+    clientTestDao.get().insertClientAccount(client_account);
   }
 
   private void loadClientsAccounts() {
@@ -203,7 +236,11 @@ public class DbLoader {
   }
 
   private void transaction_type(String code, String name) {
-    clientTestDao.get().insertTransactionType(code, name);
+    Transaction_type transaction_type = new Transaction_type();
+    transaction_type.name = name;
+    transaction_type.code = code;
+
+    clientTestDao.get().insertTransactionType(transaction_type);
   }
 
   private void loadTransactionTypes() {
@@ -219,7 +256,12 @@ public class DbLoader {
   }
 
   private void client_account_transaction(int account, float money, int type) {
-    clientTestDao.get().insertClientAccountTransaction(account, money, type);
+    Client_account_transaction client_account_transaction = new Client_account_transaction();
+    client_account_transaction.account = account;
+    client_account_transaction.money = money;
+    client_account_transaction.type = type;
+
+    clientTestDao.get().insertClientAccountTransaction(client_account_transaction);
   }
 
   private void loadClientsAccountTransactions() {

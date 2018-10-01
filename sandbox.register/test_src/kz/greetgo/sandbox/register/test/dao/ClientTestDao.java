@@ -1,48 +1,49 @@
 package kz.greetgo.sandbox.register.test.dao;
 
+import kz.greetgo.sandbox.register.dao_model.*;
 import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Param;
-
-import java.util.Date;
+import org.apache.ibatis.annotations.Update;
 
 public interface ClientTestDao {
-  @Insert("insert into Client (surname, name, patronymic, gender, birth_date, charm) " +
-    "values (#{surname}, #{name}, #{patronymic}, #{gender}::gender, #{birth_date}, #{charm})")
-  void insertClient(@Param("surname") String surname,
-                    @Param("name") String name,
-                    @Param("patronymic") String patronymic,
-                    @Param("gender") String gender,
-                    @Param("birth_date") Date birth_date,
-                    @Param("charm") int charm);
+
+  @Insert("insert into Client (id, surname, name, patronymic, gender, birth_date, charm) " +
+    "values (#{id}, #{surname}, #{name}, #{patronymic}, #{gender}::gender, #{birth_date}, #{charm}) " +
+    "on conflict (id) do update set actual = 1;")
+  void insertClient(Client client);
+
+  @Insert("insert into Client_account (id, client, money, number) " +
+    "values (#{id}, #{client}, #{money}, #{number}) " +
+    "on conflict (id) do update set actual = 1;")
+  void insertClientAccount(Client_account client_account);
 
   @Insert("insert into Client_addr (client, type, street, house, flat) " +
-    "values (#{client}, #{type}::addr, #{street}, #{house}, #{flat})")
-  void insertClientAddr(@Param("client") int client,
-                        @Param("type") String type,
-                        @Param("street") String street,
-                        @Param("house") String house,
-                        @Param("flat") String flat);
+    "values (#{client}, #{type}::addr, #{street}, #{house}, #{flat}) " +
+    "on conflict (id) do update set actual = 1;")
+  void insertClientAddr(Client_addr client_addr);
 
   @Insert("insert into Client_phone (client, type, number) " +
-    "values (#{client}, #{type}::phone, #{number})")
-  void insertClientPhone(@Param("client") int client,
-                         @Param("type") String type,
-                         @Param("number") String number);
+    "values (#{client}, #{type}::phone, #{number}) " +
+    "on conflict (id) do update set actual = 1;")
+  void insertClientPhone(Client_phone client_phone);
 
-  @Insert("insert into Client_account (client, number) " +
-    "values (#{client}, #{number})")
-  void insertClientAccount(@Param("client") int client,
-                           @Param("number") String number);
+  @Insert("insert into Transaction_type (id, code, name) " +
+    "values (#{id}, #{code}, #{name}) " +
+    "on conflict (id) do update set actual = 1;")
+  void insertTransactionType(Transaction_type transaction_type);
+
+  @Insert("insert into Client_account_transaction (id, account, money, type) " +
+    "values (#{id}, #{account}, #{money}, #{type}) " +
+    "on conflict (id) do update set actual = 1;")
+  void insertClientAccountTransaction(Client_account_transaction client_account_transaction);
 
 
-  @Insert("insert into Transaction_type (code, name) " +
-    "values (#{code}, #{name})")
-  void insertTransactionType(@Param("code") String code,
-                             @Param("name") String name);
-
-  @Insert("insert into Client_account_transaction (account, money, type) " +
-    "values (#{account}, #{money}, #{type})")
-  void insertClientAccountTransaction(@Param("account") int account,
-                                      @Param("money") float money,
-                                      @Param("type") int type);
+  @Update("" +
+    "update Client set actual=0 where actual=1;" +
+    "update Client_account set actual=0 where actual=1;" +
+    "update Transaction_type set actual=0 where actual=1;" +
+    "update Client_account_transaction set actual=0 where actual=1;" +
+    "update Client_phone set actual=0 where actual=1;" +
+    "update Client_addr set actual=0 where actual=1;" +
+    "update Charm set actual=0 where actual=1;")
+  void removeAll();
 }
