@@ -233,20 +233,10 @@ public class ClientRegisterImpl implements ClientRegister {
       sq += " x1.patronymic = ?\n";
       prepareStValue.add(clientFilter.patronymic);
     }
-    if (clientFilter.offset >= 0) {
-      if (prepareStValue.size() != 0) {
-        sq += " and";
-      }
-      sq += " x1.id > ";// >=
-
-
-      if (clientFilter.offset == 0) {
-        sq = sq.concat(Integer.toString(0) + "\n");
-      } else {
-        sq = sq.concat(Integer.toString(clientFilter.offset * clientFilter.limit) + "\n");
-      }
-      sq += " and x1.actual = true\n";
+    if (prepareStValue.size() != 0) {
+      sq += " and";
     }
+    sq += " x1.actual = true\n";
 
     sq += "order by  x1.id asc\n";
 
@@ -259,12 +249,19 @@ public class ClientRegisterImpl implements ClientRegister {
         sq = sq.concat("desc ");
       }
     }
+    //offset 4
+    if (clientFilter.offset >= 0) {
+      sq += "offset ";
+      sq = sq.concat(Integer.toString(clientFilter.offset * clientFilter.limit) + "\n");
+    }
+
     if (clientFilter.limit >= 0) {
       sq += "limit ";
       sq = sq.concat(Integer.toString(clientFilter.limit) + ";");
     }
     final String newSQL = sq;
 
+//    System.out.println("newSQL: " + newSQL);
     jdbc.get().execute(con -> {
       try (PreparedStatement ps = con.prepareStatement(newSQL)) {
         for (int i = 0; i < prepareStValue.size(); i++) {
@@ -317,7 +314,7 @@ public class ClientRegisterImpl implements ClientRegister {
   }
 
 
-  public static void main(String[] args) {
-    System.out.println("ClientRegisterImpl.main");
-  }
+//  public static void main(String[] args) {
+//    System.out.println("ClientRegisterImpl.main");
+//  }
 }

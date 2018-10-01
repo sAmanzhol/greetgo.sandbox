@@ -2,6 +2,7 @@ package kz.greetgo.sandbox.register.test.dao;
 
 import kz.greetgo.sandbox.controller.model.db.*;
 import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
@@ -62,6 +63,15 @@ public interface ClientTestDao {
     "from client_addr\n" +
     "where client = #{client} and type = #{type} and actual = true")
   ClientAddrDb getAddr(@Param("client") int client, @Param("type") String type);
+
+  @Insert("insert into client_addr(client, type, street, house, flat)\n" +
+    "values(#{addr.client}, #{addr.type}, #{addr.street}, #{addr.house}, #{addr.flat})\n" +
+    "on conflict (client, type) do update set\n" +
+    "street = excluded.street,\n" +
+    "house = excluded.house,\n" +
+    "flat = excluded.flat;")
+  void insertAddress(@Param("addr") ClientAddrDb addr);
+
 
   @Select("select * from charm where  name = #{name} and actual = true")
   CharmDb getCharmByName(@Param("name") String name);

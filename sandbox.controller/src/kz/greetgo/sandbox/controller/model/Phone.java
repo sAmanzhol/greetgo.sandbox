@@ -30,7 +30,8 @@ public class Phone {
 
     List<Phone> phoneList = new ArrayList<>();
     for (Phone phone : toSave.phones) {
-      if (phone == null || phone.number == null || phone.detail == null || PhoneTypeDb.parseOrNull(phone.detail.type.toString()) == null) {
+      if (phone.number == "" || phone == null || phone.number == null || phone.detail == null
+        || PhoneTypeDb.parseOrNull(phone.detail.type.toString()) == null) {
         continue;
       }
       Phone ph = new Phone();

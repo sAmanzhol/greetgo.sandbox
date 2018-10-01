@@ -77,7 +77,36 @@ public class ClientRegisterImplTest extends ParentTestNg {
   }
 
   @Test
-  public void testFilter_filter_nameFilter() {
+  public void testFilter_count(){
+    for (int i = 0; i < 20; i++) {
+      CharmDb charm = this.randomEntity.get().charmDb();
+      int charmId = clientTestDao.get().insertCharm(charm);
+
+      ClientDb clientDb = this.randomEntity.get().clientDb(charmId, Integer.toString(i) + " name", 1);
+      int clientId = clientTestDao.get().insertClientDb(clientDb);
+    }
+    ClientFilter clientFilter = this.randomEntity.get().filterE();
+    clientFilter.limit = 2;
+    clientFilter.offset = 1;
+    //
+    //
+    ClientRecordListWrapper clientRecordListWrapper = clientRegister.get().filterClients(clientFilter);
+    //
+    //
+    for (int i = 0; i < clientRecordListWrapper.records.size(); i++) {
+      System.out.println(clientRecordListWrapper.records.get(i).clientId);
+//      assertThat(clientRecordListWrapper.records.get(i).fio, containsString("Madina"));
+      System.out.println(clientRecordListWrapper.records.get(i).fio);
+
+    }
+    assertThat(clientRecordListWrapper).isNotNull();
+    assertThat(clientRecordListWrapper.records).isNotNull();
+    assertThat(clientRecordListWrapper.records).hasSize(2);
+    assertThat(clientRecordListWrapper.count).isEqualTo(20);
+
+  }
+  @Test
+  public void testFilter_name() {
 
     for (int i = 0; i < 3; i++) {
       CharmDb charm = this.randomEntity.get().charmDb();
@@ -93,20 +122,13 @@ public class ClientRegisterImplTest extends ParentTestNg {
     ClientRecordListWrapper clientRecordListWrapper = clientRegister.get().filterClients(clientFilter);
     //
     //
-//    for (int i = 0; i < clientRecordListWrapper.records.size(); i++) {
-//      System.out.println(clientRecordListWrapper.records.get(i).clientId);
-//      assertThat(clientRecordListWrapper.records.get(i).fio, containsString("Madina"));
-//      System.out.println(clientRecordListWrapper.records.get(i).fio);
-//
-//    }
     assertThat(clientRecordListWrapper).isNotNull();
     assertThat(clientRecordListWrapper.records).isNotNull();
     assertThat(clientRecordListWrapper.records).hasSize(3);
-
   }
 
   @Test
-  public void testFilter_filter_patronymicFilter() {
+  public void testFilter_patronymic() {
 
 
     CharmDb charm = this.randomEntity.get().charmDb();
@@ -135,7 +157,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
 
   @Test
-  public void testFilter_filter_surnameFilter() {
+  public void testFilter_surname() {
 
 //
     CharmDb charm = this.randomEntity.get().charmDb();
@@ -164,7 +186,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
 
   @Test
-  public void testFilter_filter_limit() {
+  public void testFilter_limit() {
 
     for (int i = 0; i < 5; i++) {
       CharmDb charm = this.randomEntity.get().charmDb();
@@ -187,7 +209,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
   }
 
   @Test
-  public void testFilter_filter_offset() {
+  public void testFilter_offset() {
     for (int i = 0; i < 5; i++) {
       CharmDb charm = this.randomEntity.get().charmDb();
       int charmId = clientTestDao.get().insertCharm(charm);

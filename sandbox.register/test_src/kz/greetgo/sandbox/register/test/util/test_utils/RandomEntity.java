@@ -100,9 +100,9 @@ public class RandomEntity {
     return phoneList;
   }
 
-  public ClientDb clientDb(int charmId, String param, int ch) {
+  public ClientDb clientDb(int charmId, String param, int mode) {
     ClientDb clientDb = clientDb(charmId);
-    switch (ch) {
+    switch (mode) {
       case 1:
         clientDb.name = param;
         break;
