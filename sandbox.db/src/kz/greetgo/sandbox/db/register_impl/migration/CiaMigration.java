@@ -14,19 +14,15 @@ public class CiaMigration  {
 
 	private Connection connection;
 	public BeanGetter<Jdbc> jdbc;
+	private File inFile;
 
-
-	public CiaMigration(Connection connection) {
+	public CiaMigration(Connection connection,File inFile) {
 		this.connection = connection;
+		this.inFile = inFile;
 	}
 
 
-	private final String url = "jdbc:postgresql://localhost:5432/nazar_sandbox";
-	private final String user = "nazar_sandbox";
-	private final String password = "111";
-
-
-	public Object doInConnection(Connection connection) throws Exception {
+	public void doInConnection(Connection connection) throws Exception {
 
 		String sb = "insert into tmp_client (id, firstname, lastname, patronymic, gender, birth_date, charm, " +
 			" phone_type, phone_number, addr_type, addr_street, addr_house, addr_flat) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
@@ -60,10 +56,9 @@ public class CiaMigration  {
 
 		try (PreparedStatement ps = connection.prepareStatement(sb)) {
 			MyHandler myHandler = new MyHandler(ps);
-			saxParser.parse(new File("/home/nazar/IdeaProjects/greetgo.sandbox-1/sandbox.db/src_resources/out_source_file/from_cia_2018-02-21-154532-1-300.xml"), myHandler);
+			saxParser.parse(inFile, myHandler);
 		}
 
-		return null;
 	}
 
 
