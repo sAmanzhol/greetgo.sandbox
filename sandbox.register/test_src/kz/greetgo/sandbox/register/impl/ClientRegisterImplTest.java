@@ -93,11 +93,11 @@ public class ClientRegisterImplTest extends ParentTestNg {
     ClientRecordListWrapper clientRecordListWrapper = clientRegister.get().filterClients(clientFilter);
     //
     //
-    for (int i = 0; i < clientRecordListWrapper.records.size(); i++) {
-      System.out.println(clientRecordListWrapper.records.get(i).clientId);
-      System.out.println(clientRecordListWrapper.records.get(i).fio);
-
-    }
+//    for (int i = 0; i < clientRecordListWrapper.records.size(); i++) {
+//      System.out.println(clientRecordListWrapper.records.get(i).clientId);
+//      System.out.println(clientRecordListWrapper.records.get(i).fio);
+//
+//    }
     assertThat(clientRecordListWrapper).isNotNull();
     assertThat(clientRecordListWrapper.records).isNotNull();
     assertThat(clientRecordListWrapper.records).hasSize(2);
@@ -223,9 +223,6 @@ public class ClientRegisterImplTest extends ParentTestNg {
     ClientRecordListWrapper clientRecordListWrapper = clientRegister.get().filterClients(clientFilter);
     //
     //
-    for (int i = 0; i < clientRecordListWrapper.records.size(); i++) {
-      assertThat(clientRecordListWrapper.records.get(i).clientId).isEqualTo(3); // => 2 + 1
-    }
     assertThat(clientRecordListWrapper).isNotNull();
     assertThat(clientRecordListWrapper.records).isNotNull();
     assertThat(clientRecordListWrapper.records).hasSize(1);
@@ -240,7 +237,6 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     ClientDb clientDb = this.randomEntity.get().clientDb(charmId);
     int clientId = clientTestDao.get().insertClientDb(clientDb);
-
     //
     //
     ClientDetail clientDetail = clientRegister.get().getClientDetailById(clientId);
@@ -503,13 +499,11 @@ public class ClientRegisterImplTest extends ParentTestNg {
     }
     this.clientTestDao.get().insertAddress(rAddress);
     this.clientTestDao.get().insertAddress(fAddress);
-
     //
     //
     this.clientRegister.get().deleteClient(clientId);
     //
     //
-
     List<ClientPhoneDb> phoneList = this.clientTestDao.get().getPhoneList(clientId);
     assertThat(this.clientTestDao.get().getClientDb(clientId)).isNull();
     assertThat(this.clientTestDao.get().getClientAcc(clientAccount)).isNull();
