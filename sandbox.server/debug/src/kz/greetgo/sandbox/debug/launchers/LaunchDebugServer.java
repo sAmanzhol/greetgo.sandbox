@@ -17,7 +17,7 @@ public class LaunchDebugServer {
     DepinjectUtil.implementAndUseBeanContainers(
 ///MODIFY replace sandbox {PROJECT_NAME}
       "kz.greetgo.sandbox.debug",
-      Modules.standDir() + "/build/src_bean_containers");
+      Modules.debugDir() + "/build/src_bean_containers");
 
     DebugBeanContainer container = Depinject.newInstance(DebugBeanContainer.class);
 

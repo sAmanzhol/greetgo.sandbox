@@ -57,9 +57,9 @@ public class Modules {
     return findDir("sandbox.register");
   }
 
-  public static File standDir() {
+  public static File debugDir() {
 ///MODIFY replace sandbox {PROJECT_NAME}
-    return findDir("sandbox.debug");
+    return findDir("sandbox.server/debug");
   }
 
   public static File controllerDir() {
