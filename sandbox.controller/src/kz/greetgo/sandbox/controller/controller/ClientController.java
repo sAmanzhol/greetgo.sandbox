@@ -27,6 +27,7 @@ public class ClientController implements Controller {
     return clientRegisterBeanGetter.get().filterClients(clientFilter);
   }
 
+  // TODO: 02.10.18 см. 2.02
   @ToJson
   @PublicAccess
   @OnGet("/detail")

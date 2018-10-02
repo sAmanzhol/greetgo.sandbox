@@ -1,8 +1,19 @@
 package kz.greetgo.sandbox.register.impl;
 
 import kz.greetgo.depinject.core.BeanGetter;
-import kz.greetgo.sandbox.controller.model.*;
-import kz.greetgo.sandbox.controller.model.db.*;
+import kz.greetgo.sandbox.controller.model.CharacterType;
+import kz.greetgo.sandbox.controller.model.ClientDetail;
+import kz.greetgo.sandbox.controller.model.ClientFilter;
+import kz.greetgo.sandbox.controller.model.ClientRecord;
+import kz.greetgo.sandbox.controller.model.ClientRecordListWrapper;
+import kz.greetgo.sandbox.controller.model.ClientToSave;
+import kz.greetgo.sandbox.controller.model.db.CharmDb;
+import kz.greetgo.sandbox.controller.model.db.ClientAccountDb;
+import kz.greetgo.sandbox.controller.model.db.ClientAccountTransactionDb;
+import kz.greetgo.sandbox.controller.model.db.ClientAddrDb;
+import kz.greetgo.sandbox.controller.model.db.ClientDb;
+import kz.greetgo.sandbox.controller.model.db.ClientPhoneDb;
+import kz.greetgo.sandbox.controller.model.db.TransactionTypeDb;
 import kz.greetgo.sandbox.controller.register.ClientRegister;
 import kz.greetgo.sandbox.register.test.dao.ClientTestDao;
 import kz.greetgo.sandbox.register.test.util.ParentTestNg;
@@ -38,6 +49,8 @@ public class ClientRegisterImplTest extends ParentTestNg {
     this.createRequired();
   }
 
+  // TODO: 02.10.18 look 2.03.5
+
   @Test(expectedExceptions = NullPointerException.class)
   public void testFilter_NullFilter() {
     //
@@ -58,12 +71,12 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     ClientAccountDb clientAccountDb = this.randomEntity.get().clientAccountDb(clientId);
     int clientAccount = clientTestDao.get().insertClientAccountDb(clientAccountDb);
-//
-//    TransactionTypeDb typeTDb = this.randomEntity.get().transactionTypeDb();
-//    int tTypeId = clientTestDao.get().insertTransactionType(typeTDb);
-//
-//    ClientAccountTransactionDb accountTransactionDb = this.randomEntity.get().clientAccountTransactionDb(tTypeId, clientAccount);
-//    int cAccountTDb = clientTestDao.get().insertClientAccountTransaction(accountTransactionDb);
+    //
+    //    TransactionTypeDb typeTDb = this.randomEntity.get().transactionTypeDb();
+    //    int tTypeId = clientTestDao.get().insertTransactionType(typeTDb);
+    //
+    //    ClientAccountTransactionDb accountTransactionDb = this.randomEntity.get().clientAccountTransactionDb(tTypeId, clientAccount);
+    //    int cAccountTDb = clientTestDao.get().insertClientAccountTransaction(accountTransactionDb);
 
     ClientFilter clientFilter = this.randomEntity.get().filterE();
     //
@@ -93,11 +106,11 @@ public class ClientRegisterImplTest extends ParentTestNg {
     ClientRecordListWrapper clientRecordListWrapper = clientRegister.get().filterClients(clientFilter);
     //
     //
-//    for (int i = 0; i < clientRecordListWrapper.records.size(); i++) {
-//      System.out.println(clientRecordListWrapper.records.get(i).clientId);
-//      System.out.println(clientRecordListWrapper.records.get(i).fio);
-//
-//    }
+    //    for (int i = 0; i < clientRecordListWrapper.records.size(); i++) {
+    //      System.out.println(clientRecordListWrapper.records.get(i).clientId);
+    //      System.out.println(clientRecordListWrapper.records.get(i).fio);
+    //
+    //    }
     assertThat(clientRecordListWrapper).isNotNull();
     assertThat(clientRecordListWrapper.records).isNotNull();
     assertThat(clientRecordListWrapper.records).hasSize(2);
@@ -144,16 +157,18 @@ public class ClientRegisterImplTest extends ParentTestNg {
     ClientRecordListWrapper clientRecordListWrapper = clientRegister.get().filterClients(clientFilter);
     //
     //
-//    for (int i = 0; i < clientRecordListWrapper.records.size(); i++) {
-//      System.out.println(clientRecordListWrapper.records.get(i).clientId);
-//      System.out.println(clientRecordListWrapper.records.get(i).fio);
-//
-//    }
+    //    for (int i = 0; i < clientRecordListWrapper.records.size(); i++) {
+    //      System.out.println(clientRecordListWrapper.records.get(i).clientId);
+    //      System.out.println(clientRecordListWrapper.records.get(i).fio);
+    //
+    //    }
     assertThat(clientRecordListWrapper).isNotNull();
     assertThat(clientRecordListWrapper.records).isNotNull();
     assertThat(clientRecordListWrapper.records).hasSize(1);
 
   }
+
+  // TODO: 02.10.18 look 2.03.2
 
 
   @Test
@@ -172,17 +187,19 @@ public class ClientRegisterImplTest extends ParentTestNg {
     ClientRecordListWrapper clientRecordListWrapper = clientRegister.get().filterClients(clientFilter);
     //
     //
-//    for (int i = 0; i < clientRecordListWrapper.records.size(); i++) {
-//      System.out.println(clientRecordListWrapper.records.get(i).clientId);
-//      System.out.println(clientRecordListWrapper.records.get(i).fio);
-//
-//    }
+    //    for (int i = 0; i < clientRecordListWrapper.records.size(); i++) {
+    //      System.out.println(clientRecordListWrapper.records.get(i).clientId);
+    //      System.out.println(clientRecordListWrapper.records.get(i).fio);
+    //
+    //    }
     assertThat(clientRecordListWrapper).isNotNull();
     assertThat(clientRecordListWrapper.records).isNotNull();
     assertThat(clientRecordListWrapper.records).hasSize(1);
 
   }
 
+
+  // TODO: 02.10.18 look 2.03.3
 
   @Test
   public void testFilter_limit() {
@@ -311,7 +328,11 @@ public class ClientRegisterImplTest extends ParentTestNg {
     assertThat(record).isNotNull();
     assertThat(record.fio).isEqualToIgnoringCase(clientToSave.surname + " " + clientToSave.name + " "
       + clientToSave.patronymic);
+
+    // TODO: 02.10.18 нужно проверить ВСЕ поля ClientToSave в БД
   }
+
+  // TODO: 02.10.18 нужно проверять все поля ClientRecord
 
   @Test
   public void testUpdateClient() {
@@ -320,8 +341,8 @@ public class ClientRegisterImplTest extends ParentTestNg {
     ClientDb clientDb = this.randomEntity.get().clientDb(charm.id);
     int clientId = clientTestDao.get().insertClientDb(clientDb);
 
-//    System.out.println("Before update: \nFio is:" + clientDb.surname + " " + clientDb.name +
-//      " "+ clientDb.patronymic);
+    //    System.out.println("Before update: \nFio is:" + clientDb.surname + " " + clientDb.name +
+    //      " "+ clientDb.patronymic);
 
     ClientToSave clientToSave = this.randomEntity.get().clientToSave();
     clientToSave.clientID = clientId;
@@ -332,7 +353,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
     //
     //
 
-//    System.out.println("After update: \nFio is:" + record.fio);
+    //    System.out.println("After update: \nFio is:" + record.fio);
     assertThat(record).isNotNull();
     assertThat(record.fio).isEqualToIgnoringCase(clientToSave.surname + " " + clientToSave.name + " "
       + clientToSave.patronymic);
@@ -367,7 +388,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
     ClientToSave clientToSave = this.randomEntity.get().clientToSave();
     clientToSave.clientID = clientId;
     clientToSave.character.id = charm.id;
-//    System.out.println("Before update: \nStreet is:" + clientToSave.registrationAddress.street);
+    //    System.out.println("Before update: \nStreet is:" + clientToSave.registrationAddress.street);
 
     clientTestDao.get().saveOrUpdateClient(clientDb);
 
@@ -392,9 +413,9 @@ public class ClientRegisterImplTest extends ParentTestNg {
     assertThat(add).isNotEqualTo(rAddress);
     add = clientTestDao.get().getAddress(clientToSave.clientID, "FACT");
     assertThat(add).isNotEqualTo(fAddress);
-//    System.out.println("After update: \nStreet is:" + add.street);
-//    assertThat(record.fio).isEqualToIgnoringCase(clientToSave.surname + " " + clientToSave.name + " "
-//      + clientToSave.patronymic);
+    //    System.out.println("After update: \nStreet is:" + add.street);
+    //    assertThat(record.fio).isEqualToIgnoringCase(clientToSave.surname + " " + clientToSave.name + " "
+    //      + clientToSave.patronymic);
 
   }
 
@@ -440,7 +461,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
     ClientToSave toSave = this.randomEntity.get().clientToSave();
     toSave.clientID = clientId;
     toSave.character.id = charm.id;
-//    System.out.println("Before update: \nStreet is:" + clientToSave.registrationAddress.street);
+    //    System.out.println("Before update: \nStreet is:" + clientToSave.registrationAddress.street);
 
     clientTestDao.get().saveOrUpdateClient(clientDb);
 

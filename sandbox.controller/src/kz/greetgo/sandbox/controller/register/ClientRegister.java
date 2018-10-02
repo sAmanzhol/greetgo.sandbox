@@ -1,8 +1,10 @@
 package kz.greetgo.sandbox.controller.register;
 
-import kz.greetgo.sandbox.controller.model.*;
-
-import java.util.List;
+import kz.greetgo.sandbox.controller.model.ClientDetail;
+import kz.greetgo.sandbox.controller.model.ClientFilter;
+import kz.greetgo.sandbox.controller.model.ClientRecord;
+import kz.greetgo.sandbox.controller.model.ClientRecordListWrapper;
+import kz.greetgo.sandbox.controller.model.ClientToSave;
 
 /**
  * Created by msultanova on 9/5/18.
