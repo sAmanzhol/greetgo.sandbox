@@ -15,7 +15,8 @@ import java.util.Date;
 public class ReportViewXlsx implements ReportView {
 
 	private PrintStream printStream;
-	private Xlsx xlsx = new Xlsx();
+
+	private Xlsx f = new Xlsx();
 
 	private Sheet sheet;
 
@@ -26,9 +27,8 @@ public class ReportViewXlsx implements ReportView {
 
 	private void initating() throws DocumentException {
 
-		// TODO: asset 9/30/18 Mozhno ubart eto
-		/*xlsx.setWorkDir(printStream.toString());*/
-		sheet = xlsx.newSheet(true);
+		f = new Xlsx();
+		sheet = f.newSheet(true);
 		sheet.skipRows(3);
 	}
 
@@ -36,8 +36,6 @@ public class ReportViewXlsx implements ReportView {
 	public void start(MyReportHeadData headData) throws DocumentException {
 
 		initating();
-
-
 		sheet.row().start();
 		sheet.style().alignment().horizontalCenter();
 		sheet.cellStr(3, "ID");
@@ -50,6 +48,7 @@ public class ReportViewXlsx implements ReportView {
 		sheet.cellStr(10, "total account balance");
 		sheet.cellStr(11, "minimum balance");
 		sheet.row().finish();
+
 	}
 
 
@@ -83,12 +82,14 @@ public class ReportViewXlsx implements ReportView {
 		sheet.cellStr(3, "Author: " + footData.generatedBy);
 		sheet.cellStr(4, "Date: " + footData.generatedAt);
 		sheet.row().finish();
+
 	}
 
 	@Override
 	public void close() throws Exception {
 
-		xlsx.complete(printStream);
+		sheet.row().finish();
+		f.complete(printStream);
 		printStream.flush();
 		printStream.close();
 	}
