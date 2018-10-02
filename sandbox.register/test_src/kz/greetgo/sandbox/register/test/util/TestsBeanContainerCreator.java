@@ -6,8 +6,16 @@ import kz.greetgo.depinject.gen.DepinjectUtil;
 
 import java.util.Date;
 
+
 public class TestsBeanContainerCreator {
+
+
+
   public static TestsBeanContainer create() {
+
+    //noinspection unused
+    String sound = "asd";
+
     try {
       return Depinject.newInstance(TestsBeanContainer.class);
     } catch (NoImplementor ignore) {

@@ -62,7 +62,6 @@ public class AuthRegisterImplTest extends ParentTestNg {
     String encodedPassword = passwordEncoder.get().encode(password);
 
     authTestDao.get().insertPerson(id, username, encodedPassword);
-
     //
     //
     authRegister.get().login(username, RND.str(10));

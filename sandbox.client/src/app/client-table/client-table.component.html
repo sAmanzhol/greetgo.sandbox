@@ -1,0 +1,71 @@
+<div>
+  <mat-form-field appearance="legacy">
+    <mat-label>Имя</mat-label>
+    <input matInput [(ngModel)]="clientFilter.name">
+  </mat-form-field>
+  <mat-form-field appearance="legacy">
+    <mat-label>Фамилия</mat-label>
+    <input matInput [(ngModel)]="clientFilter.surname">
+  </mat-form-field>
+  <mat-form-field appearance="legacy">
+    <mat-label>Отчество</mat-label>
+    <input matInput [(ngModel)]="clientFilter.patronymic">
+  </mat-form-field>
+  <button mat-icon-button>
+    <mat-icon aria-label="Remove icon-button" (click)="clear()">clear</mat-icon>
+  </button>
+  <button mat-icon-button>
+    <mat-icon aria-label="Remove icon-button" (click)="filtering()">search</mat-icon>
+  </button>
+  <button mat-icon-button (click)="openDialog(-1)">
+    <mat-icon aria-label="Remove icon-button">add</mat-icon>
+    Добавить нового клиента
+  </button>
+  <div class="mat-elevation-z8">
+    <table mat-table [dataSource]="clientTableService.list">
+      <ng-container matColumnDef="fio">
+        <th mat-header-cell *matHeaderCellDef (click)="sorting('fio')"> ФИО.</th>
+        <td mat-cell *matCellDef="let element"> {{element.fio}}</td>
+      </ng-container>
+      <ng-container matColumnDef="character">
+        <th mat-header-cell *matHeaderCellDef> Характер</th>
+        <td mat-cell *matCellDef="let element"> {{element.character.type}}</td>
+        <!--{{element.character}}</td>-->
+      </ng-container>
+      <ng-container matColumnDef="age">
+        <th mat-header-cell *matHeaderCellDef (click)="sorting('age')"> Возраст</th>
+        <td mat-cell *matCellDef="let element"> {{element.age}}</td>
+      </ng-container>
+      <ng-container matColumnDef="totalBalance">
+        <th mat-header-cell *matHeaderCellDef (click)="sorting('tot')"> Общий остаток счетов</th>
+        <td mat-cell *matCellDef="let element"> {{element.totalBalance}}</td>
+      </ng-container>
+      <ng-container matColumnDef="maxBalance">
+        <th mat-header-cell *matHeaderCellDef (click)="sorting('max')"> Максимальный остаток</th>
+        <td mat-cell *matCellDef="let element"> {{element.maxBalance}}</td>
+      </ng-container>
+      <ng-container matColumnDef="minBalance">
+        <th mat-header-cell *matHeaderCellDef (click)="sorting('min')"> Минимальный остаток</th>
+        <td mat-cell *matCellDef="let element"> {{element.minBalance}}</td>
+      </ng-container>
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef> Действия</th>
+        <div *matCellDef="let element">
+          <button mat-icon-button (click)="delete(element)">
+            <mat-icon aria-label="Remove icon-button">remove</mat-icon>
+          </button>
+          <button mat-icon-button (click)="openDialog(element.clientId)">
+            <mat-icon aria-label="Remove icon-button">...</mat-icon>
+          </button>
+        </div>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    <mat-paginator [length]="length"
+                   [pageSize]="pageSize"
+                   [pageSizeOptions]="pageSizeOptions"
+                   (page)="pagination($event)">
+    </mat-paginator>
+  </div>
+</div>

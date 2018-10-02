@@ -4,6 +4,7 @@ import kz.greetgo.depinject.core.Bean;
 import kz.greetgo.depinject.core.BeanGetter;
 import kz.greetgo.sandbox.controller.model.UserCan;
 import kz.greetgo.sandbox.register.beans.all.IdGenerator;
+import kz.greetgo.sandbox.register.dao.ClientDao;
 import kz.greetgo.sandbox.register.test.dao.AuthTestDao;
 import kz.greetgo.security.password.PasswordEncoder;
 import org.apache.log4j.Logger;
@@ -20,10 +21,14 @@ public class DbLoader {
   public BeanGetter<AuthTestDao> authTestDao;
   public BeanGetter<IdGenerator> idGenerator;
   public BeanGetter<PasswordEncoder> passwordEncoder;
+  public BeanGetter<ClientDao> clientDao;
 
   public void loadTestData() throws Exception {
 
     loadPersons();
+
+    loadClient();
+
 
     logger.info("FINISH");
   }
@@ -69,4 +74,44 @@ public class DbLoader {
       authTestDao.get().personCan(username, can.name());
     }
   }
+/*
+
+    CharmDb charm = this.randomEntity.get().charmDb();
+    int charmId = clientTestDao.get().insertCharm(charm);
+
+    ClientDb clientDb = this.randomEntity.get().clientDb(charmId);
+    int clientId = clientTestDao.get().insertClientDb(clientDb);
+ */
+  private void loadClient(){
+
+//    addCharm("");
+    //    characters = new ArrayList<>();
+    //    Character opennesCharacter = new Character(CharacterType.OPENNESS, "открытый");
+    //    Character agreeablenessCharacter = new Character(CharacterType.AGREEABLENESS, "любзеный");
+    //    Character conscientiousnessCharacter = new Character(CharacterType.CONSCIENTIOUSNESS, "добросовестный");
+    //    Character extraversionCharacter = new Character(CharacterType.EXTRAVERSION, "экстраверт");
+    //    Character neuroticismCharacter = new Character(CharacterType.NEUROTICISM, "невротичный");
+
+  }
+  private void addCharm(String name, String description, double energy){
+    this.clientDao.get().upsert(name, description, energy);
+  }
+  private void addClient(){
+//    ClientDb clientDb = new ClientDb();
+//    clientDb.name = RND.str(5);
+//    clientDb.patronymic = RND.str(4);
+//    clientDb.surname = RND.str(4);
+//    clientDb.birthDate = new Date();
+//    try {
+//      clientDb.birthDate = new SimpleDateFormat("dd/MM/yyyy")
+//        .parse("20/12/1998");
+//    } catch (ParseException e) {
+//      e.printStackTrace();
+//    }
+//    clientDb.gender = GenderType.MALE;
+//    clientDb.charm = charmId;
+//
+//    return clientDb;
+  }
+
 }

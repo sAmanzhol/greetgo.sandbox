@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+  <changeSet author="madina" id="create-table-charm">
+    <sql endDelimiter=";;"><![CDATA[
+      create table charm (
+        id serial not null,
+        name varchar(50) not null,
+        description varchar(500),
+        energy float not null,
+        actual boolean,
+        primary key(id)
+      )
+    ]]></sql>
+  </changeSet>
+
+  <changeSet author="madina" id="create-table-client">
+    <sql endDelimiter=";;"><![CDATA[
+      create table client (
+        id serial not null,
+        surname varchar(50) not null,
+        name varchar(50) not null,
+        patronymic varchar(50),
+        gender varchar(10) not null,
+        birth_date date not null,
+        actual boolean,
+        charm integer references charm(id),
+        primary key(id)
+      )
+    ]]></sql>
+  </changeSet>
+
+  <changeSet author="madina" id="create-table-client_addr">
+    <sql endDelimiter=";;"><![CDATA[
+      create table client_addr (
+        client integer references client(id),
+        type varchar(10) not null,
+        street varchar(50),
+        house varchar(20),
+        flat varchar(20),
+        actual boolean,
+        primary key(client, type)
+      )
+    ]]></sql>
+  </changeSet>
+
+  <changeSet author="madina" id="create-table-client_phone">
+    <sql endDelimiter=";;"><![CDATA[
+      create table client_phone (
+        client integer references client(id),
+        number varchar(20) not null,
+        type varchar(10) not null,
+        actual boolean,
+        primary key(client, number)
+      )
+    ]]></sql>
+  </changeSet>
+
+  <changeSet author="madina" id="create-table-client_account">
+    <sql endDelimiter=";;"><![CDATA[
+      create table client_account (
+        id serial not null,
+        client integer references client(id),
+        money float not null,
+        number varchar(25),
+        registered_at timestamp,
+        actual boolean,
+        primary key(id)
+      )
+    ]]></sql>
+  </changeSet>
+
+  <changeSet author="madina" id="create-table-transaction_type">
+    <sql endDelimiter=";;"><![CDATA[
+      create table transaction_type (
+        id serial not null,
+        code varchar(50) not null,
+        name varchar(50) not null,
+        actual boolean,
+        primary key(id)
+      )
+    ]]></sql>
+  </changeSet>
+
+  <changeSet author="madina" id="create-table-client_account_transaction">
+    <sql endDelimiter=";;"><![CDATA[
+      create table client_account_transaction (
+        id serial not null,
+        account integer references client_account(id),
+        money float not null,
+        finished_at timestamp,
+        type integer references transaction_type(id),
+        actual boolean,
+        primary key(id)
+      )
+    ]]></sql>
+  </changeSet>
+  <changeSet author="madina" id="insert-charms">
+    <sql endDelimiter=";;"><![CDATA[
+      insert into charm(name, description, energy, actual)
+    values ('OPENNESS', 'A person with a high level of openness to experience in a personality test enjoys
+    trying new things. They are imaginative, curious, and open-minded.', 1, true),
+
+      ('CONSCIENTIOUSNESS', ' A person scoring high in conscientiousness usually has a high level of
+      self-discipline. These individuals prefer to follow a plan, rather than act spontaneously. ', 2, true),
+
+      ('EXTRAVERSION', 'A person who scores high in extraversion on a personality test is the life of the
+       party. They enjoy being with people, participating in social gatherings, and are full of energy. ',
+        3, true),
+
+      ('AGREEABLENESS', 'A person with a high level of agreeableness in a personality test is usually warm,
+       friendly, and tactful. They generally have an optimistic view of human nature and get along well with
+       others.', 4, true),
+
+      ('NEUROTICISM', 'Individuals who score high on neuroticism are more likely than average to be moody and
+       to experience such feelings as anxiety, worry, fear, anger, frustration, envy, jealousy, guilt,
+       depressed mood, and loneliness.', 5, true);
+    ]]></sql>
+  </changeSet>
+
+</databaseChangeLog>

@@ -10,6 +10,4 @@ public class PersonDisplay {
   public String role;
   public List<UserCan> cans = new ArrayList<>();
 
-  //The following code would be not removed after regenerating
-  ///LEAVE_FURTHER
 }
