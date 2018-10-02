@@ -97,5 +97,13 @@
     ]]></sql>
     </changeSet>
 
+    <changeSet author="anazar" id="002_client-008">
+        <sql endDelimiter=";;"><![CDATA[
+      CREATE SEQUENCE serial START 1000;
+    ]]></sql>
+    </changeSet>
+
+
+
 
 </databaseChangeLog>

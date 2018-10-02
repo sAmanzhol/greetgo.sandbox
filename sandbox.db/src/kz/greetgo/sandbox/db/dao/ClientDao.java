@@ -14,13 +14,6 @@ public interface ClientDao {
     @Delete("delete from client where id = #{id}")
     void deleteClientById(@Param("id") int id);
 
-    @Select("select * from client where id = #{id}")
-    Client selectClientById(@Param("id") int id);
-
-    @Select("select name from charm where id = #{id}")
-    String nameCharmById(@Param("id") int id);
-
-
     @Select("select * from client_addr where client = #{id} and type =#{type}")
     ClientAddr selectClientAddrById(@Param("id") int id,
                                     @Param("type") AddrType type);
@@ -31,14 +24,14 @@ public interface ClientDao {
     @Select("select * from client_phone where client = #{id} and type ='MOBILE' ")
     List<ClientPhone> selectClientPhoneByMobile(@Param("id") int id);
 
-    @Select("select * from client_phone where client = #{id} and type != 'MOBILE' " )
+    @Select("select * from client_phone where client = #{id} and type != 'MOBILE' ")
     List<ClientPhone> selectClientPhoneByNotMobile(@Param("id") int id);
 
     @Select("select * from charm where id = #{id}")
     Charm getCharmById(@Param("id") int id);
 
-    @Select("select max(id) from client")
-    Integer getmaxClientId();
+    @Select("SELECT nextval('serial')")
+    Integer selectNextValue();
 
 
     @Insert("insert into client (id, firstname, lastname, patronymic, gender, birth_date, charm) values " +
@@ -55,8 +48,6 @@ public interface ClientDao {
     void upsertClientPhone(@Param("clientPhone") ClientPhone clientPhone,
                            @Param("client") Integer client);
 
-    @Delete("delete from client_phone where client = #{clientPhone.client} and number = #{clientPhone.number} ")
-    void deleteClientPhone(@Param("id") ClientPhone clientPhone);
 
     @Insert("insert into client_addr (client, type, street, house, flat) values (#{client}, #{clientAddr.type}, " +
             "#{clientAddr.street}, #{clientAddr.house}, #{clientAddr.flat}) on conflict (client, type) do update set " +
@@ -75,7 +66,7 @@ public interface ClientDao {
             "  c.lastname   as lastname,\n" +
             "  c.patronymic as patronymic,\n" +
             "  ch.name      as characterName,\n" +
-            "  c.birth_date as dateOfBirth,\n" +
+            "  c.birth_date as date_of_birth,\n" +
             "  ca.maximumBalance,\n" +
             "  ca.minimumBalance,\n" +
             "  ca.totalAccountBalance\n" +
@@ -91,34 +82,14 @@ public interface ClientDao {
             "where c.id = #{id}")
     ClientRecord selectClientRecord(@Param("id") Integer id);
 
-
-    @Insert("insert into client_account(client, registered_at) values (#{client}, #{registeredAt}) " +
-            "on conflict (id) do update set client=#{client}, registered_at=#{registeredAt} ")
-    void upsertClientAccount(@Param("client") Integer client,
-                             @Param("registeredAt") Timestamp timestamp);
-
-
-    @Select("select avg(money) from client_account where client= #{id} group by client")
-    Integer selectTotalAccountBalance(@Param("id") int id);
-
-    @Select("select max(money) from client_account where client= #{id} group by client")
-    Integer selectMaximumBalance(@Param("id") int id);
-
-    @Select("select min(money) from client_account where client= #{id} group by client")
-    Integer selectMinimumBalance(@Param("id") int id);
-
-    // TODO: asset 9/30/18 Mozhno ne ispolzovat "as" esli u tebya i tak tipa firstname, a dateOfBirth ya by pomenyal
-    // TODO: by na date_of_birth
     @Select("select id as id,\n" +
             "  firstname as firstname,\n" +
             "  lastname as lastname,\n" +
             "  patronymic as patronymic,\n" +
             "  gender as gender,\n" +
             "  charm as characterId,\n" +
-            "  birth_date as dateOfBirth from client where id=#{id}")
+            "  birth_date as date_of_birth from client where id=#{id}")
     ClientDetails selectClient(@Param("id") Integer id);
 
-    @Select("select * from client_phone where client = #{id}")
-    List<ClientPhone> listPhone(@Param("id") Integer id);
 
 }

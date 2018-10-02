@@ -23,39 +23,37 @@ import java.io.PrintStream;
 @NoSecurity
 public class ReportController implements Controller {
 
-	public BeanGetter<ReportRegister> myBigReportRegister;
+    public BeanGetter<ReportRegister> myBigReportRegister;
 
-	@Mapping("/{content_type}")
-	// TODO: asset 9/30/18 Nado pogovarit
-	public void myBigReport(@ParPath("content_type") String contentType, @Par("clientFilter") @Json ClientFilter clientFilter, RequestTunnel tunnel) throws Exception {
+    @Mapping("/{content_type}")
+    public void myBigReport(@ParPath("content_type") String contentType, @Par("clientFilter") @Json ClientFilter clientFilter, RequestTunnel tunnel) throws Exception {
 
-
-		tunnel.setResponseContentType(contentType);
-		tunnel.setResponseHeader("Content-Disposition", "attachment; filename=result." + contentType);
-		OutputStream out = tunnel.getResponseOutputStream();
+        tunnel.setResponseContentType(contentType);
+        tunnel.setResponseHeader("Content-Disposition", "attachment; filename=result." + contentType);
+        OutputStream out = tunnel.getResponseOutputStream();
 
 
-			try (ReportView view = getReportView(contentType, new PrintStream(out, false, "UTF-8"))) {
+        try (ReportView view = getReportView(contentType, new PrintStream(out, false, "UTF-8"))) {
 
 
-				myBigReportRegister.get().genReport(view, clientFilter);
+            myBigReportRegister.get().genReport(view, clientFilter);
 
 
-				tunnel.flushBuffer();
-			}
+            tunnel.flushBuffer();
+        }
 
 
-	}
+    }
 
-	private ReportView getReportView(String contentType, PrintStream printStream) {
+    private ReportView getReportView(String contentType, PrintStream printStream) {
 
-		switch (contentType) {
-			case "pdf":
-				return new ReportViewPdf(printStream);
-			case "xlsx":
-				return new ReportViewXlsx(printStream);
-		}
-		throw new RuntimeException("Unknown type = " + contentType);
-	}
+        switch (contentType) {
+            case "pdf":
+                return new ReportViewPdf(printStream);
+            case "xlsx":
+                return new ReportViewXlsx(printStream);
+        }
+        throw new RuntimeException("Unknown type = " + contentType);
+    }
 
 }
