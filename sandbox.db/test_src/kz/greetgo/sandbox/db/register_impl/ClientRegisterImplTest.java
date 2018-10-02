@@ -742,8 +742,5 @@ public class ClientRegisterImplTest extends ParentTestNg {
         //
         assertThat(clientFilter.recordTotal).isEqualTo(2);
     }
-    @Test
-    public void coala(){
-        int x = 5;
-    }
+
 }
