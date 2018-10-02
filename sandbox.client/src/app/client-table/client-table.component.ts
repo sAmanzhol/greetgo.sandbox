@@ -1,69 +1,66 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewChild,ChangeDetectorRef} from '@angular/core';
 import {ClientRecord} from "../../model/ClientRecord";
 import {TableModule} from 'primeng/table';
 import {LazyLoadEvent, SortEvent} from "primeng/api";
 import {LoginService} from "../login/login.service";
 import {ClientTableService} from "./client-table.service";
 import {forEach} from "@angular/router/src/utils/collection";
+import {ClientRepositoryService} from "../client-repository/client-repository.service";
+import {HttpService} from "../http.service";
+import {ClientTableInputComponent} from "../client-table-dialogs/client-table-input.component";
+import {BehaviorSubject} from "rxjs/BehaviorSubject";
 
 @Component({
   selector: 'app-client-table',
   templateUrl: './client-table.component.html',
   styleUrls: ['./client-table.component.css']
 })
+
 export class ClientTableComponent implements OnInit {
-  cols : any[];
-  clients : ClientItem[];
-  totalRecords : number;
+  cols: any[];
+  clients: ClientItem[];
+  totalRecords: number;
+
+  @ViewChild(ClientTableInputComponent ) editDialog: ClientTableInputComponent ;
+
+
+  constructor(public login: LoginService, public clientRepoService: ClientRepositoryService,private cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
-    this.clientTableService.load(null);
-
-    this.transformClientRecToClientItem(this.clientTableService.list);
-
     this.totalRecords = 10;
     this.cols =
       [
-      { field: 'fio', header: 'ФИО' },
-      { field: 'charm', header: 'Характер' },
-      { field: 'totalAccBal', header: 'общ.остаток счетов' },
-      { field: 'maxAccBal', header: 'макс. остаток' },
-      { field: 'minAccBal', header: 'мин. остаток' }
-    ];
+        {field: 'fio', header: 'ФИО'},
+        {field: 'charm', header: 'Характер'},
+        {field: 'totalAccBal', header: 'общ.остаток счетов'},
+        {field: 'maxAccBal', header: 'макс. остаток'},
+        {field: 'minAccBal', header: 'мин. остаток'}
+      ];
   }
 
-  getTestData(){
-    return [
-      {fio:"Test1",age:10,charm:"Test",totalAccBal:"Test",maxAccBal:"Test",minAccBal:"Test"},
-      {fio:"Test2",age:10,charm:"Test",totalAccBal:"Test",maxAccBal:"Test",minAccBal:"Test"},
-      {fio:"Test3",age:10,charm:"Test",totalAccBal:"Test",maxAccBal:"Test",minAccBal:"Test"},
-      {fio:"Test4",age:10,charm:"Test",totalAccBal:"Test",maxAccBal:"Test",minAccBal:"Test"},
-      {fio:"Test6",age:10,charm:"Test",totalAccBal:"Test",maxAccBal:"Test",minAccBal:"Test"},
-      {fio:"Test5",age:10,charm:"Test",totalAccBal:"Test",maxAccBal:"Test",minAccBal:"Test"}
-    ];
+  ngAfterViewChecked(){
+    this.cdr.detectChanges();
   }
 
-  public transformClientRecToClientItem(clientRecs : ClientRecord[]) : ClientItem[]
-  {
-    let result : ClientItem[];
-
-    for(let rec of clientRecs)
-    {
-      result.push({
-        fio:rec.surname + " " + rec.name + " " + rec.patronomic,
-        age:rec.getAge(),
-        charm:rec.charm,
-        totalAccBal:rec.getTotalAccBal(),
-        maxAccBal:rec.getMaxAccBal(),
-        minAccBal:rec.getMinAccBal()
-      })
-    }
-    return result;
+  delete(id: number) {
+    this.editDialog.delete(id);
   }
 
-  public loadData(event : LazyLoadEvent){
-    console.log(event);
-    this.clients = this.getTestData()///Нужно сделать запрос с параметрами
+  edit(id: number) {
+    this.editDialog.invoke(id);
+  }
+
+  add(){
+    this.editDialog.invoke(null);
+  }
+
+  public onRowSelect(event: any) {
+
+  }
+
+  public loadData(event: LazyLoadEvent) {
+    this.clients = this.clientRepoService.getClientItem();
+   // this.clients = this.getTestData()///Нужно сделать запрос с параметрами
 
     //event.first = First row offset
     //event.rows = Number of rows per page
@@ -76,12 +73,10 @@ export class ClientTableComponent implements OnInit {
 
   }
 
-  constructor(public login:LoginService,public clientTableService : ClientTableService) {}
-
-
-}
+  }
 
 export interface ClientItem {
+  id;
   fio;
   charm;
   age
@@ -89,5 +84,6 @@ export interface ClientItem {
   maxAccBal;
   minAccBal;
 }
+
 
 

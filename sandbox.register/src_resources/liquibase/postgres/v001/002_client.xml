@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+    <changeSet author="ers" id="create-table-gender">
+        <sql endDelimiter=";;"><![CDATA[
+    create type gender as enum ('FEMALE','MALE')
+    ]]></sql>
+    </changeSet>
+
+    <changeSet author="ers" id="create-table-clients">
+        <sql endDelimiter=";;"><![CDATA[
+     create table clients
+        (
+            id serial PRIMARY KEY NOT NULL,
+            surname varchar(255) NOT NULL,
+            name varchar(255) NOT NULL,
+            patronymic varchar(255),
+            gender gender,
+            birth_date Date,
+            charm int
+        )
+    ]]></sql>
+    </changeSet>
+
+    <!--CHARM-->
+
+    <changeSet author="ers" id="create-table-charms">
+        <sql endDelimiter=";;"><![CDATA[
+     create table charms
+        (
+            id serial PRIMARY KEY NOT NULL,
+            name varchar(255) NOT NULL,
+            description text,
+            energy float
+        )
+    ]]></sql>
+    </changeSet>
+
+    <!--CLIENT_ADDRESS-->
+
+    <changeSet author="ers" id="create-table-addr-type">
+        <sql endDelimiter=";;"><![CDATA[
+     create type addr_type as enum ('FACT','REG')
+    ]]></sql>
+    </changeSet>
+
+    <changeSet author="ers" id="create-table-client-addr">
+        <sql endDelimiter=";;"><![CDATA[
+     create table client_addr
+        (
+            id serial PRIMARY KEY NOT NULL,
+            client int,
+            type addr_type NOT NULL,
+            street varchar(255),
+            house varchar(255),
+            flat varchar(255)
+        )
+    ]]></sql>
+    </changeSet>
+
+    <!--CLIENT_PHONE-->
+
+    <changeSet author="ers" id="create-table-phone-type">
+        <sql endDelimiter=";;"><![CDATA[
+     create type phone_type as enum ('HOME','WORK','MOBILE')
+    ]]></sql>
+    </changeSet>
+
+    <changeSet author="ers" id="create-table-client-phone">
+        <sql endDelimiter=";;"><![CDATA[
+     create table client_phone
+        (
+            id serial PRIMARY KEY NOT NULL,
+            client int,
+            number addr_type NOT NULL,
+            type phone_type
+        )
+    ]]></sql>
+    </changeSet>
+
+
+    <!--CLIENT_ACCOUNT-->
+
+    <changeSet author="ers" id="create-table-client-account-transaction">
+        <sql endDelimiter=";;"><![CDATA[
+     create table client_account_transaction
+        (
+            id serial PRIMARY KEY NOT NULL,
+            account int,
+            money float,
+            finished_at timestamp,
+            type int
+        )
+    ]]></sql>
+    </changeSet>
+
+    <changeSet author="ers" id="create-table-client-transaction-type">
+        <sql endDelimiter=";;"><![CDATA[
+     create table transaction_type
+        (
+            id serial PRIMARY KEY NOT NULL,
+            code varchar(30),
+            name varchar(255)
+        )
+    ]]></sql>
+    </changeSet>
+
+</databaseChangeLog>

@@ -15,11 +15,14 @@ import {TableModule} from 'primeng/table';
 import {ConfirmDialogModule} from 'primeng/confirmdialog';
 import {ConfirmationService} from 'primeng/api';
 import {MessagesModule} from 'primeng/messages'
-import {ClientTableInputComponent} from './client-table/client-table-input.component';
+import {ClientTableInputComponent} from './client-table-dialogs/client-table-input.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ButtonModule} from 'primeng/button';
 import {DialogModule} from 'primeng/dialog';
 import {InputTextModule} from 'primeng/inputtext';
+import {DropdownModule} from 'primeng/dropdown';
+import {RadioButtonModule} from 'primeng/radiobutton';
+import {InputMaskModule} from 'primeng/inputmask';
 
 @NgModule({
   declarations: [
@@ -42,7 +45,10 @@ import {InputTextModule} from 'primeng/inputtext';
     ButtonModule,
     MessagesModule,
     DialogModule,
-    InputTextModule
+    InputTextModule,
+    DropdownModule,
+    RadioButtonModule,
+    InputMaskModule
   ],
 
   providers: [HttpService, LoginService, ClientListService,ConfirmationService],

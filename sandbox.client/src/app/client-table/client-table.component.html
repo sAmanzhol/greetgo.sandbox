@@ -1,11 +1,17 @@
 <div id = "clientsTable">
 <h3 class="first">Список клиентов</h3>
-<p-table [columns]="cols" [value]="clients" [lazy] = "true" (onLazyLoad)="loadData($event)" [paginator]="true" [rows]="2" [totalRecords]="totalRecords">
+<p-table [columns]="cols" selectionMode="single"
+         (onRowSelect)="onRowSelect($event)"
+         [value]="clients" [lazy] = "true" (onLazyLoad)="loadData($event)" [paginator]="true" [rows]="totalRecords"
+         [totalRecords]="totalRecords">
   <ng-template pTemplate="header" let-columns>
     <tr>
       <th *ngFor="let col of columns" [pSortableColumn]="col.field">
         {{col.header}}
         <p-sortIcon [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+      </th>
+      <th>
+        ACTIONS
       </th>
     </tr>
   </ng-template>
@@ -14,7 +20,20 @@
       <td *ngFor="let col of columns">
         {{rowData[col.field]}}
       </td>
+      <td>
+        <button type="button" pButton icon="pi pi-ellipsis-h" (click)="edit(rowData['id'])"  style="margin: auto 0.5em"></button>
+        <button type="button" pButton icon="pi pi-times" (click)="delete(rowData['id'])" style="margin: auto 0.5em"></button>
+      </td>
     </tr>
   </ng-template>
+
+  <ng-template pTemplate="summary" let-rowData>
+    <div style="text-align:left">
+      <button type="button" pButton icon="fa fa-plus" (click)="add()" label="Добавить"></button>
+    </div>
+  </ng-template>
+
 </p-table>
 </div>
+
+<app-client-table-input ></app-client-table-input>

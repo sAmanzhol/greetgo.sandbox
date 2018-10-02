@@ -1,5 +1,5 @@
 
 export class GenderType{
-  MALE = "MALE"
-  FEMALE = "FEMALE"
+ public static MALE = "MALE"
+ public static FEMALE = "FEMALE"
 }
