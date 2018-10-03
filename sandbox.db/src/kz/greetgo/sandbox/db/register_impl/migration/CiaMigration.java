@@ -15,10 +15,12 @@ public class CiaMigration  {
 	private Connection connection;
 	public BeanGetter<Jdbc> jdbc;
 	private File inFile;
+	private Integer batchSize;
 
-	public CiaMigration(Connection connection,File inFile) {
+	public CiaMigration(Connection connection,File inFile,Integer batchSize) {
 		this.connection = connection;
 		this.inFile = inFile;
+		this.batchSize=batchSize;
 	}
 
 
@@ -55,7 +57,7 @@ public class CiaMigration  {
 
 
 		try (PreparedStatement ps = connection.prepareStatement(sb)) {
-			MyHandler myHandler = new MyHandler(ps);
+			MyHandler myHandler = new MyHandler(ps, batchSize);
 			saxParser.parse(inFile, myHandler);
 		}
 

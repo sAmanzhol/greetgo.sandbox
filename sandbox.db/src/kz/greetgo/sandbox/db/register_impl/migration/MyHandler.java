@@ -25,13 +25,17 @@ public class MyHandler extends DefaultHandler {
 	public CiaAddress ciaAddress = new CiaAddress();
 
 	String element;
+	int size=0;
 
 	private PreparedStatement ps;
+	private Integer batchSize;
 
 
-	public MyHandler(PreparedStatement ps) {
+	public MyHandler(PreparedStatement ps,Integer batchSize) {
+
 
 		this.ps = ps;
+		this.batchSize=batchSize;
 	}
 
 
@@ -51,6 +55,7 @@ private void addBatchs() throws SQLException {
 		ps.setString(11,ciaSystem.address.get(0).street);
 		ps.setString(12,ciaSystem.address.get(0).house);
 		ps.setString(13,ciaSystem.address.get(0).flat);
+		size++;
 		ps.addBatch();
 	}
 
@@ -96,9 +101,11 @@ private void addBatchs() throws SQLException {
 		super.endElement(uri, localName, qName);
 
 
-		if (qName.equals("client")) {
+		if (qName.equals("client") ) {
 			try {
 				addBatchs();
+				if (size==batchSize)
+					ps.executeBatch();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
