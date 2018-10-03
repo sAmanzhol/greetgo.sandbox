@@ -19,6 +19,6 @@ public class MigrationController {
 	@NoSecurity
 	public void getMigration(@ParPath("type") String type) throws Exception {
 		Connection connection = null;
-		migrationRegister.get().getMirgtaion();
+		migrationRegister.get().getMigration("/home/nazar/IdeaProjects/greetgo.sandbox-1/sandbox.db/src_resources/out_source_file/from_frs_2018-02-21-154543-1-30009json.txt");
 	}
 }

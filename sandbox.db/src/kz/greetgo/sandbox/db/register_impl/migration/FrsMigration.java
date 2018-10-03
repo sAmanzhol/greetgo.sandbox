@@ -1,114 +1,79 @@
 package kz.greetgo.sandbox.db.register_impl.migration;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
-public class FrsMigration {
+public class FrsMigration extends AbstractParse {
 
+	private Connection connection;
 
-    public static void main(String[] args) {
-        int i =0;
+	private File inFile;
 
-        BufferedReader objReader = null;
-
-        try {
-
-            String strCurrentLine;
-
-            objReader = new BufferedReader(new FileReader("D:\\git Repositories\\greetgo.sandbox-1\\sandbox.db\\src_resources\\out_source_file\\from_frs_2018-02-21-154543-1-30009json.txt"));
-
-            while ((strCurrentLine = objReader.readLine()) != null) {
-
-//                System.out.println(strCurrentLine);
-
-                ObjectMapper mapper = new ObjectMapper();
-
-                User user = mapper.readValue(strCurrentLine, User.class);
+	private Integer batchSize;
 
 
-                System.err.println("NEW LINE: " + i++);
-                System.err.println("ID: "+user.client_id);
-                System.err.println("REGISTERED_AT: "+user.registered_at);
-                System.err.println("FINISHED_AT: "+user.finished_at);
-                System.err.println("ACCOUNT_NUMBER: "+user.account_number);
-                System.err.println("MONEY: "+user.money);
-                System.err.println("TRANSACTION_TYPE: "+user.transaction_type);
-                System.err.println("TYPE: "+user.type);
-            }
+	public FrsMigration(Connection connection, File inFile, Integer batchSize) {
 
-        } catch (IOException e) {
+		this.connection = connection;
+		this.inFile = inFile;
+		this.batchSize = batchSize;
+	}
 
-            e.printStackTrace();
+	@Override
+	protected void dropClient() throws SQLException {
 
-        } finally {
+		String dropClient = "drop table tmp_client_transaction";
+		try (PreparedStatement ps = connection.prepareStatement(dropClient)) {
+			ps.execute();
+		}
+	}
 
-            try {
+	@Override
+	protected void createClient() throws SQLException {
 
-                if (objReader != null)
+		String createClient = "create table tmp_client_transaction\n" +
+			"( client_id varchar(255),\n" +
+			"  registered_at varchar(255),\n" +
+			"  finished_at varchar(255),\n" +
+			"  transaction_type varchar(255),\n" +
+			"  type varchar(255),\n" +
+			"  money varchar(255),\n" +
+			"  account_number varchar(255))";
+		try (PreparedStatement ps = connection.prepareStatement(createClient)) {
+			ps.executeUpdate();
+		}
 
-                    objReader.close();
+	}
 
-            } catch (IOException ex) {
+	@Override
+	protected void insertClient() throws SQLException, IOException {
 
-                ex.printStackTrace();
 
-            }
+		String insertClient = "insert into tmp_client_transaction (client_id, registered_at, finished_at, transaction_type, type, money, account_number)\n" +
+			" VALUES (?,?,?,?,?,?,?)";
+		String strCurrentLine;
+		try (PreparedStatement ps = connection.prepareStatement(insertClient)) {
+			try (BufferedReader objReader = new BufferedReader(new FileReader(inFile))) {
+				while ((strCurrentLine = objReader.readLine()) != null) {
+					JsonParse jsonParse = new JsonParse(strCurrentLine, ps, batchSize);
+					jsonParse.parse();
+				}
+				ps.executeBatch();
 
-        }
-    }
+			}
+		}
+
+
+	}
 
 }
 
-class User {
-    public String finished_at;
-    public String registered_at;
-    public String account_number;
-    public String money;
-    public String type;
-    public String transaction_type;
-    public String client_id;
-    /*money
-account_number
-finished_at
-type
-transaction_type
-registered_at
-client_id
-*/
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "finished_at='" + finished_at + '\'' +
-                ", account_number='" + account_number + '\'' +
-                ", money='" + money + '\'' +
-                ", type='" + type + '\'' +
-                ", transaction_type='" + transaction_type + '\'' +
-                ", registered_at='" + registered_at + '\'' +
-                ", client_id='" + client_id + '\'' +
-                '}';
-    }
-}
 
-class Car {
 
-    private String color;
-    private String type;
 
-    // standard getters setters
-}
-
-class UserSimple {
-
-    String name;
-
-    String email;
-
-    int age;
-
-    boolean isDeveloper;
-}
