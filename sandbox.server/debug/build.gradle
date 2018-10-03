@@ -18,12 +18,22 @@ dependencies {
   compile "org.eclipse.jetty:apache-jsp:$jettyVersion"
 
   compile "com.google.guava:guava:$guavaVersion"
-
   compile "cglib:cglib:3.2.2"
-
   compile 'jstl:jstl:1.2'
 
-
   testCompile "kz.greetgo.depinject:greetgo.depinject.testng:$depinjectVersion"
+}
 
+task launchDebugServer(type: JavaExec) {
+  group "scripts"
+///MODIFY replace sandbox {PROJECT_NAME}
+  main = "kz.greetgo.sandbox.debug.launchers.LaunchDebugServer"
+  classpath = sourceSets.main.runtimeClasspath
+}
+
+task launchModelConverter(type: JavaExec) {
+  group "scripts"
+///MODIFY replace sandbox {PROJECT_NAME}
+  main = "kz.greetgo.sandbox.debug.launchers.LaunchModelConverter"
+  classpath = sourceSets.main.runtimeClasspath
 }

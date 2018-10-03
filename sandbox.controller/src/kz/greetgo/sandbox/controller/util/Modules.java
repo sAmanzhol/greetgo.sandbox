@@ -2,6 +2,9 @@
 package kz.greetgo.sandbox.controller.util;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @SuppressWarnings("unused")
 public class Modules {
@@ -20,50 +23,63 @@ public class Modules {
     throw new RuntimeException("Cannot find sandbox.root dir");
   }
 
-  private static File findDir(String moduleName) {
+  private static Path findGreetgoProjectNamePath() {
+    Path markerPath = Paths.get(".greetgo", "project-name.txt");
     {
-      File point = new File(".");
-      if (point.getAbsoluteFile().getName().equals(moduleName)) {
+      Path point = Paths.get(".");
+      if (Files.exists(point.resolve(markerPath))) {
         return point;
       }
     }
 
     {
-      File dir = new File(moduleName);
-      if (dir.isDirectory()
-        && new File("build.gradle").isFile()
-        && new File("settings.gradle").isFile()
-        && new File("README.md").isFile()
-        ) {
-        return dir;
+      Path points = Paths.get("..");
+      if (Files.exists(points.resolve(markerPath))) {
+        return points;
+      }
+
+      for (int i = 0; i < 7; i++) {
+        points = points.resolve("..");
+
+        if (Files.exists(points.resolve(markerPath))) {
+          return points;
+        }
       }
     }
 
-    {
-      File dir = new File("../" + moduleName);
-      if (dir.isDirectory()) return dir;
+    throw new RuntimeException("Cannot find greetgo/project-name.txt" +
+      " from " + new File(".").getAbsoluteFile().toPath().normalize());
+  }
+
+  private static File getDir(String moduleName) {
+
+    Path modulePath = findGreetgoProjectNamePath().resolve(moduleName);
+
+    if (Files.isDirectory(modulePath)) {
+      return modulePath.toFile();
     }
 
-    throw new IllegalArgumentException("Cannot find directory " + moduleName);
+    throw new IllegalArgumentException("Cannot find directory " + moduleName
+      + " from " + new File(".").getAbsoluteFile().toPath().normalize());
   }
 
   public static File clientDir() {
 ///MODIFY replace sandbox {PROJECT_NAME}
-    return findDir("sandbox.client");
+    return getDir("sandbox.client");
   }
 
   public static File registerDir() {
 ///MODIFY replace sandbox {PROJECT_NAME}
-    return findDir("sandbox.register");
+    return getDir("sandbox.register");
   }
 
   public static File debugDir() {
 ///MODIFY replace sandbox {PROJECT_NAME}
-    return findDir("sandbox.server/debug");
+    return getDir("sandbox.server/debug");
   }
 
   public static File controllerDir() {
 ///MODIFY replace sandbox {PROJECT_NAME}
-    return findDir("sandbox.controller");
+    return getDir("sandbox.controller");
   }
 }
