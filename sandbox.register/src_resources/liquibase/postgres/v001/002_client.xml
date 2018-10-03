@@ -13,7 +13,7 @@
         <sql endDelimiter=";;"><![CDATA[
      create table clients
         (
-            id serial PRIMARY KEY NOT NULL,
+            id bigserial PRIMARY KEY NOT NULL,
             surname varchar(255) NOT NULL,
             name varchar(255) NOT NULL,
             patronymic varchar(255),
@@ -30,7 +30,7 @@
         <sql endDelimiter=";;"><![CDATA[
      create table charms
         (
-            id serial PRIMARY KEY NOT NULL,
+            id bigserial PRIMARY KEY NOT NULL,
             name varchar(255) NOT NULL,
             description text,
             energy float
@@ -50,7 +50,7 @@
         <sql endDelimiter=";;"><![CDATA[
      create table client_addr
         (
-            id serial PRIMARY KEY NOT NULL,
+            id bigserial PRIMARY KEY NOT NULL,
             client int,
             type addr_type NOT NULL,
             street varchar(255),
@@ -72,7 +72,7 @@
         <sql endDelimiter=";;"><![CDATA[
      create table client_phone
         (
-            id serial PRIMARY KEY NOT NULL,
+            id bigserial PRIMARY KEY NOT NULL,
             client int,
             number addr_type NOT NULL,
             type phone_type
@@ -82,12 +82,24 @@
 
 
     <!--CLIENT_ACCOUNT-->
+    <changeSet author="ers" id="create-table-client-account">
+        <sql endDelimiter=";;"><![CDATA[
+     create table client_account
+        (
+            id bigserial PRIMARY KEY NOT NULL,
+            client int,
+            money float,
+            number varchar(255),
+            registered_at timestamp
+        )
+    ]]></sql>
+    </changeSet>
 
     <changeSet author="ers" id="create-table-client-account-transaction">
         <sql endDelimiter=";;"><![CDATA[
      create table client_account_transaction
         (
-            id serial PRIMARY KEY NOT NULL,
+            id bigserial PRIMARY KEY NOT NULL,
             account int,
             money float,
             finished_at timestamp,
@@ -100,7 +112,7 @@
         <sql endDelimiter=";;"><![CDATA[
      create table transaction_type
         (
-            id serial PRIMARY KEY NOT NULL,
+            id bigserial PRIMARY KEY NOT NULL,
             code varchar(30),
             name varchar(255)
         )
