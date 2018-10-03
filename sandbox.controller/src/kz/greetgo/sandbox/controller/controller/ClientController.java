@@ -37,19 +37,19 @@ public class ClientController implements Controller {
   }
 
   @ToJson
-  @OnPost("/")
-  public ClientRecord save(@Json @Par("clientToSave") ClientToSave clientToSave) {
-    return clientRegister.get().save(clientToSave);
+  @OnPost("/crupdate")
+  public ClientRecord crupdate(@Json @Par("clientToSave") ClientToSave clientToSave) {
+    return clientRegister.get().crupdate(clientToSave);
   }
 
   @ToJson
-  @OnGet("/")
+  @OnGet("/details")
   public ClientDisplay details(@Par("id") int id) {
     return clientRegister.get().details(id);
   }
 
   @ToJson
-  @OnDelete("/")
+  @OnDelete("/delete")
   public void delete(@Par("id") int id) {
     clientRegister.get().delete(id);
   }

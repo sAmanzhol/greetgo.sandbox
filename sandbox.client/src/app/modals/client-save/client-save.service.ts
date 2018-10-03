@@ -12,13 +12,13 @@ export class ClientSaveService {
   }
 
   crupdateClient(clientToSave): Promise<ClientDisplay> {
-    return this.http.post("/client/", {clientToSave: JSON.stringify(clientToSave)})
+    return this.http.post("/client/crupdate", {clientToSave: JSON.stringify(clientToSave)})
       .toPromise()
       .then(resp => resp.body as ClientDisplay)
   }
 
   getClient(id): Promise<ClientDisplay> {
-    return this.http.get("/client/", {id: id})
+    return this.http.get("/client/details", {id: id})
       .toPromise()
       .then(resp => ClientDisplay.of(resp.body))
   }

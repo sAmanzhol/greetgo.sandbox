@@ -18,12 +18,12 @@ public interface ClientTestDao {
 
   @Insert("insert into Client_addr (client, type, street, house, flat) " +
     "values (#{client}, #{type}::addr, #{street}, #{house}, #{flat}) " +
-    "on conflict (id) do update set actual = 1;")
+    "on conflict (client, type) do update set actual = 1;")
   void insertClientAddr(Client_addr client_addr);
 
   @Insert("insert into Client_phone (client, type, number) " +
     "values (#{client}, #{type}::phone, #{number}) " +
-    "on conflict (id) do update set actual = 1;")
+    "on conflict (client, number) do update set actual = 1;")
   void insertClientPhone(Client_phone client_phone);
 
   @Insert("insert into Transaction_type (id, code, name) " +

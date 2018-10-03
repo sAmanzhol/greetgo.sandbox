@@ -13,7 +13,7 @@ public interface ClientRegister {
   List<ClientRecord> list(ClientToFilter filter);
 
   // FIXME: 9/24/18 Должен возвращать ClientRecord. Переименуй метод в save
-  ClientRecord save(ClientToSave clientToSave);
+  ClientRecord crupdate(ClientToSave clientToSave);
 
   // FIXME: 9/24/18 Название метода должно бытьdetails
   ClientDisplay details(int id);
