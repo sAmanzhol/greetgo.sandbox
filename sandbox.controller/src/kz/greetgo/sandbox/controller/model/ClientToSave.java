@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 public class ClientToSave {
-  public Integer id;
+  public String id;
   public String surname;
   public String name;
   public String patronymic;
@@ -24,7 +24,7 @@ public class ClientToSave {
   public ClientToSave() {
   }
 
-  public ClientToSave(int id, String surname, String name, String patronymic, Date birthDate, String gender, int characterId, String streetRegistration, String houseRegistration, String apartmentRegistration, String streetResidence, String houseResidence, String apartmentResidence, List<PhoneDisplay> numbers) {
+  public ClientToSave(String id, String surname, String name, String patronymic, Date birthDate, String gender, int characterId, String streetRegistration, String houseRegistration, String apartmentRegistration, String streetResidence, String houseResidence, String apartmentResidence, List<PhoneDisplay> numbers) {
     this.id = id;
     this.surname = surname;
     this.name = name;

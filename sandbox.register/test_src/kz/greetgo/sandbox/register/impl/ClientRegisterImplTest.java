@@ -1,8 +1,7 @@
 package kz.greetgo.sandbox.register.impl;
 
 import kz.greetgo.depinject.core.BeanGetter;
-import kz.greetgo.sandbox.controller.model.ClientRecord;
-import kz.greetgo.sandbox.controller.model.ClientToFilter;
+import kz.greetgo.sandbox.controller.model.*;
 import kz.greetgo.sandbox.controller.register.ClientRegister;
 import kz.greetgo.sandbox.register.dao_model.Character;
 import kz.greetgo.sandbox.register.dao_model.*;
@@ -11,9 +10,7 @@ import kz.greetgo.sandbox.register.test.dao.ClientTestDao;
 import kz.greetgo.sandbox.register.test.util.ParentTestNg;
 import org.testng.annotations.Test;
 
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
+import java.util.*;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 
@@ -79,6 +76,28 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     clientTestDao.get().insertClientAccountTransaction(client_account_transaction);
     return client_account_transaction;
+  }
+
+  private Client_addr insertClientAddr(int client, String type, String street, String house, String flat) {
+    Client_addr client_addr = new Client_addr();
+    client_addr.client = client;
+    client_addr.type = type;
+    client_addr.street = street;
+    client_addr.house = house;
+    client_addr.flat = flat;
+
+    clientTestDao.get().insertClientAddr(client_addr);
+    return client_addr;
+  }
+
+  private Client_phone insertClientPhone(int client, String type, String number) {
+    Client_phone client_phone = new Client_phone();
+    client_phone.client = client;
+    client_phone.type = type;
+    client_phone.number = number;
+
+    clientTestDao.get().insertClientPhone(client_phone);
+    return client_phone;
   }
 
   @Test
@@ -669,5 +688,136 @@ public class ClientRegisterImplTest extends ParentTestNg {
     //
 
     assertThat(list).hasSize(0);
+  }
+
+
+  @Test
+  public void crupdate_create() {
+    clientTestDao.get().removeAll();
+
+    Character charm = insertCharacterTest(101, "Самовлюблённый", "Самовлюблённый Самовлюблённый", 100);
+
+    ClientToSave clientToSave = new ClientToSave(
+      "",
+      "Фамилия",
+      "Имя",
+      "",
+      new GregorianCalendar(1977, 4, 25).getTime(),
+      "MALE",
+      charm.id,
+      "Ломоносов Рег",
+      "1",
+      "10",
+      "",
+      "",
+      "",
+      new ArrayList<PhoneDisplay>(Collections.singletonList(new PhoneDisplay("Home", "77077070077")))
+      );
+
+    //
+    //
+    ClientRecord clientRecord = clientRegister.get().crupdate(clientToSave);
+    //
+    //
+
+    assertThat(clientRecord.id).isNotNull();
+    assertThat(clientRecord.fio).isNotNull().isEqualTo(clientToSave.surname + " " + clientToSave.name + " " + clientToSave.patronymic);
+    assertThat(clientRecord.character).isNotNull().isEqualTo(charm.name);
+    assertThat(clientRecord.age).isNotNull().isEqualTo(41);
+    assertThat(clientRecord.balance).isNotNull().isEqualTo(0);
+    assertThat(clientRecord.balanceMax).isNotNull().isEqualTo(0);
+    assertThat(clientRecord.balanceMin).isNotNull().isEqualTo(0);
+  }
+
+  @Test
+  public void crupdate_update() {
+    clientTestDao.get().removeAll();
+
+    Character charm = insertCharacterTest(101, "Самовлюблённый", "Самовлюблённый Самовлюблённый", 100);
+    Character newCharm = insertCharacterTest(102, "Характерный", "Характерный Характерный", 100);
+
+    Client client = insertClient(101, "Колобова", "Розалия", "Наумовна", "FEMALE", new GregorianCalendar(1977, 4, 25).getTime(), charm.id);
+
+    ClientToSave clientToSave = new ClientToSave(
+      "101",
+      "Фамилия",
+      "Имя",
+      "Розалия",
+      new GregorianCalendar(1976, 4, 25).getTime(),
+      "FEMALE",
+      charm.id,
+      "Ломоносов Рег",
+      "1",
+      "10",
+      "Ломоносов Фак",
+      "2",
+      "20",
+      new ArrayList<PhoneDisplay>(Arrays.asList(new PhoneDisplay("Home", "77077070077"), new PhoneDisplay("Mobile", "77000000077")))
+    );
+
+    //
+    //
+    ClientRecord clientRecord = clientRegister.get().crupdate(clientToSave);
+    //
+    //
+
+    assertThat(clientRecord.id).isNotNull().isEqualTo(101);
+    assertThat(clientRecord.fio).isNotNull().isEqualTo(clientToSave.surname + " " + clientToSave.name + " " + clientToSave.patronymic);
+    assertThat(clientRecord.character).isNotNull().isEqualTo(newCharm.name);
+    assertThat(clientRecord.age).isNotNull().isEqualTo(42);
+    assertThat(clientRecord.balance).isNotNull();
+    assertThat(clientRecord.balanceMax).isNotNull();
+    assertThat(clientRecord.balanceMin).isNotNull();
+  }
+
+  @Test
+  public void details() {
+    Character charm = insertCharacterTest(101, "Самовлюблённый", "Самовлюблённый Самовлюблённый", 100);
+    Client client = insertClient(101, "Колобова", "Розалия", "Наумовна", "FEMALE", new GregorianCalendar(1977, 4, 25).getTime(), charm.id);
+
+    Client_addr client_addr_reg = insertClientAddr(101, "REG", "Lomonosov", "1", "2");
+    Client_addr client_addr_fact = insertClientAddr(101, "FACT", "Lomonosova Fact", "10", "20");
+
+    Client_phone client_phone_home = insertClientPhone(101, "HOME", "87077070077");
+    Client_phone client_phone_mobile = insertClientPhone(101, "MOBILE", "12345678899");
+
+    //
+    //
+    ClientDisplay clientDisplay = clientRegister.get().details(client.id);
+    //
+    //
+
+    assertThat(clientDisplay.id).isNotNull().isEqualTo(101);
+    assertThat(clientDisplay.surname).isNotNull().isEqualTo(client.surname);
+    assertThat(clientDisplay.name).isNotNull().isEqualTo(client.name);
+    assertThat(clientDisplay.patronymic).isNotNull().isEqualTo(client.patronymic);
+    assertThat(clientDisplay.gender).isNotNull().isEqualTo(client.gender);
+    assertThat(clientDisplay.birthDate).isNotNull().isInThePast().isEqualTo(client.birth_date);
+    assertThat(clientDisplay.characterId).isNotNull().isEqualTo(charm.id);
+    assertThat(clientDisplay.streetRegistration).isNotNull().isEqualTo(client_addr_reg.street);
+    assertThat(clientDisplay.houseRegistration).isNotNull().isEqualTo(client_addr_reg.house);
+    assertThat(clientDisplay.apartmentRegistration).isNotNull().isEqualTo(client_addr_reg.flat);
+    assertThat(clientDisplay.streetResidence).isNotNull().isEqualTo(client_addr_fact.street);
+    assertThat(clientDisplay.houseResidence).isNotNull().isEqualTo(client_addr_fact.house);
+    assertThat(clientDisplay.apartmentResidence).isNotNull().isEqualTo(client_addr_fact.flat);
+
+    assertThat(clientDisplay.numbers).hasSize(2)
+      .contains(new PhoneDisplay(client_phone_home.type, client_phone_home.number))
+      .contains(new PhoneDisplay(client_phone_mobile.type, client_phone_mobile.number));
+  }
+
+  @Test
+  public void delete() {
+    Character charm = insertCharacterTest(101, "Самовлюблённый", "Самовлюблённый Самовлюблённый", 100);
+    Client client = insertClient(101, "Колобова", "Розалия", "Наумовна", "FEMALE", new GregorianCalendar(1977, 4, 25).getTime(), charm.id);
+
+    //
+    //
+    clientRegister.get().delete(client.id);
+    //
+    //
+
+    int id = clientTestDao.get().getClient(client.id);
+    assertThat(id).isNull();
   }
 }

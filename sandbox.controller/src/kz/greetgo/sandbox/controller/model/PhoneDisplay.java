@@ -1,7 +1,6 @@
 package kz.greetgo.sandbox.controller.model;
 
 public class PhoneDisplay {
-  public int id;
   public String type;
   public String value;
 
@@ -9,8 +8,7 @@ public class PhoneDisplay {
 
   }
 
-  public PhoneDisplay(int id, String type, String value) {
-    this.id = id;
+  public PhoneDisplay(String type, String value) {
     this.type = type;
     this.value = value;
   }

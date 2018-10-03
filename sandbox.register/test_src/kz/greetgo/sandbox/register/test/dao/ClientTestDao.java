@@ -1,7 +1,10 @@
 package kz.greetgo.sandbox.register.test.dao;
 
+import kz.greetgo.sandbox.controller.model.ClientDisplay;
 import kz.greetgo.sandbox.register.dao_model.*;
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 public interface ClientTestDao {
@@ -36,6 +39,9 @@ public interface ClientTestDao {
     "on conflict (id) do update set actual = 1;")
   void insertClientAccountTransaction(Client_account_transaction client_account_transaction);
 
+  @Select("select id from Client " +
+    "where id = #{id}")
+  int getClient(@Param("id") int id);
 
   @Update("" +
     "update Client set actual=0 where actual=1;" +
