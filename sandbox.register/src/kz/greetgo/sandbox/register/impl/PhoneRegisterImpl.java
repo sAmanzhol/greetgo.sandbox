@@ -11,14 +11,8 @@ import java.util.List;
 @Bean
 public class PhoneRegisterImpl implements PhoneRegister {
 
-  private List<PhoneTypeRecord> list = new ArrayList<>(Arrays.asList(
-    new PhoneTypeRecord(1, "Home"),
-    new PhoneTypeRecord(2, "Work"),
-    new PhoneTypeRecord(3, "Mobile")
-  ));
-
   @Override
   public List<PhoneTypeRecord> list() {
-    return list;
+    return null;
   }
 }

@@ -12,7 +12,7 @@ export class ClientSaveService {
   }
 
   crupdateClient(clientToSave): Promise<ClientDisplay> {
-    return this.http.post("/client/crupdate", {clientToSave: JSON.stringify(clientToSave)})
+    return this.http.post("/client/save", {clientToSave: JSON.stringify(clientToSave)})
       .toPromise()
       .then(resp => resp.body as ClientDisplay)
   }

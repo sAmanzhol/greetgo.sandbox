@@ -37,9 +37,9 @@ public class ClientController implements Controller {
   }
 
   @ToJson
-  @OnPost("/crupdate")
-  public ClientRecord crupdate(@Json @Par("clientToSave") ClientToSave clientToSave) {
-    return clientRegister.get().crupdate(clientToSave);
+  @OnPost("/save")
+  public ClientRecord save(@Json @Par("clientToSave") ClientToSave clientToSave) {
+    return clientRegister.get().save(clientToSave);
   }
 
   @ToJson

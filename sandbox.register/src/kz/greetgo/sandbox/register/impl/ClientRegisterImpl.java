@@ -32,7 +32,7 @@ public class ClientRegisterImpl implements ClientRegister {
   }
 
   @Override
-  public ClientRecord crupdate(ClientToSave clientToSave) {
+  public ClientRecord save(ClientToSave clientToSave) {
     return new ClientRecord();
   }
 

@@ -21,6 +21,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
   public BeanGetter<ClientTestDao> clientTestDao;
   public BeanGetter<CharacterTestDao> characterTestDao;
 
+
   private Client insertClient(int id, String surname, String name, String patronymic, String gender, Date birth_date, int charm) {
     Client client = new Client();
     client.id = id;
@@ -100,9 +101,11 @@ public class ClientRegisterImplTest extends ParentTestNg {
     return client_phone;
   }
 
+
   @Test
   public void list_check_validity() {
     clientTestDao.get().removeAll();
+    characterTestDao.get().removeAll();
 
     Character charm = insertCharacterTest(101, "Самовлюблённый", "Самовлюблённый Самовлюблённый", 100);
 
@@ -145,6 +148,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
   @Test
   public void list_sortColumn_id_sortDirection_asc() {
     clientTestDao.get().removeAll();
+    characterTestDao.get().removeAll();
 
     int charmId = insertCharacterTest(101, "Самовлюблённый", "Самовлюблённый Самовлюблённый", 100).id;
 
@@ -170,6 +174,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
   @Test
   public void list_sortColumn_id_sortDirection_desc() {
     clientTestDao.get().removeAll();
+    characterTestDao.get().removeAll();
 
     int charmId = insertCharacterTest(101, "Самовлюблённый", "Самовлюблённый Самовлюблённый", 100).id;
 
@@ -195,6 +200,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
   @Test
   public void list_sortColumn_fio_sortDirection_asc() {
     clientTestDao.get().removeAll();
+    characterTestDao.get().removeAll();
 
     int charmId = insertCharacterTest(101, "Самовлюблённый", "Самовлюблённый Самовлюблённый", 100).id;
 
@@ -220,6 +226,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
   @Test
   public void list_sortColumn_fio_sortDirection_desc() {
     clientTestDao.get().removeAll();
+    characterTestDao.get().removeAll();
 
     int charmId = insertCharacterTest(101, "Самовлюблённый", "Самовлюблённый Самовлюблённый", 100).id;
 
@@ -245,6 +252,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
   @Test
   public void list_sortColumn_age_sortDirection_asc() {
     clientTestDao.get().removeAll();
+    characterTestDao.get().removeAll();
 
     int charmId = insertCharacterTest(101, "Самовлюблённый", "Самовлюблённый Самовлюблённый", 100).id;
 
@@ -270,6 +278,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
   @Test
   public void list_sortColumn_age_sortDirection_desc() {
     clientTestDao.get().removeAll();
+    characterTestDao.get().removeAll();
 
     int charmId = insertCharacterTest(101, "Самовлюблённый", "Самовлюблённый Самовлюблённый", 100).id;
 
@@ -295,6 +304,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
   @Test
   public void list_sortColumn_balance_sortDirection_asc() {
     clientTestDao.get().removeAll();
+    characterTestDao.get().removeAll();
 
     int charmId = insertCharacterTest(101, "Самовлюблённый", "Самовлюблённый Самовлюблённый", 100).id;
 
@@ -329,6 +339,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
   @Test
   public void list_sortColumn_balance_sortDirection_desc() {
     clientTestDao.get().removeAll();
+    characterTestDao.get().removeAll();
 
     int charmId = insertCharacterTest(101, "Самовлюблённый", "Самовлюблённый Самовлюблённый", 100).id;
 
@@ -363,6 +374,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
   @Test
   public void list_sortColumn_balanceMax_sortDirection_asc() {
     clientTestDao.get().removeAll();
+    characterTestDao.get().removeAll();
 
     int charmId = insertCharacterTest(101, "Самовлюблённый", "Самовлюблённый Самовлюблённый", 100).id;
 
@@ -397,6 +409,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
   @Test
   public void list_sortColumn_balanceMax_sortDirection_desc() {
     clientTestDao.get().removeAll();
+    characterTestDao.get().removeAll();
 
     int charmId = insertCharacterTest(101, "Самовлюблённый", "Самовлюблённый Самовлюблённый", 100).id;
 
@@ -431,6 +444,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
   @Test
   public void list_sortColumn_balanceMin_sortDirection_asc() {
     clientTestDao.get().removeAll();
+    characterTestDao.get().removeAll();
 
     int charmId = insertCharacterTest(101, "Самовлюблённый", "Самовлюблённый Самовлюблённый", 100).id;
 
@@ -465,6 +479,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
   @Test
   public void list_sortColumn_balanceMin_sortDirection_desc() {
     clientTestDao.get().removeAll();
+    characterTestDao.get().removeAll();
 
     int charmId = insertCharacterTest(101, "Самовлюблённый", "Самовлюблённый Самовлюблённый", 100).id;
 
@@ -500,6 +515,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
   @Test
   public void list_with_filter_fio_surname() {
     clientTestDao.get().removeAll();
+    characterTestDao.get().removeAll();
 
     int charmId = insertCharacterTest(101, "Самовлюблённый", "Самовлюблённый Самовлюблённый", 100).id;
 
@@ -524,6 +540,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
   @Test
   public void list_with_filter_fio_name() {
     clientTestDao.get().removeAll();
+    characterTestDao.get().removeAll();
 
     int charmId = insertCharacterTest(101, "Самовлюблённый", "Самовлюблённый Самовлюблённый", 100).id;
 
@@ -548,6 +565,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
   @Test
   public void list_with_filter_fio_patronymic() {
     clientTestDao.get().removeAll();
+    characterTestDao.get().removeAll();
 
     int charmId = insertCharacterTest(101, "Самовлюблённый", "Самовлюблённый Самовлюблённый", 100).id;
 
@@ -571,6 +589,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
   @Test
   public void list_with_pagination_top_items() {
     clientTestDao.get().removeAll();
+    characterTestDao.get().removeAll();
 
     int charmId = insertCharacterTest(101, "Самовлюблённый", "Самовлюблённый Самовлюблённый", 100).id;
 
@@ -603,6 +622,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
   @Test
   public void list_with_pagination_middle_items() {
     clientTestDao.get().removeAll();
+    characterTestDao.get().removeAll();
 
     int charmId = insertCharacterTest(101, "Самовлюблённый", "Самовлюблённый Самовлюблённый", 100).id;
 
@@ -635,6 +655,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
   @Test
   public void list_with_pagination_bottom_items() {
     clientTestDao.get().removeAll();
+    characterTestDao.get().removeAll();
 
     int charmId = insertCharacterTest(101, "Самовлюблённый", "Самовлюблённый Самовлюблённый", 100).id;
 
@@ -665,6 +686,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
   @Test
   public void list_with_pagination_no_items() {
     clientTestDao.get().removeAll();
+    characterTestDao.get().removeAll();
 
     int charmId = insertCharacterTest(101, "Самовлюблённый", "Самовлюблённый Самовлюблённый", 100).id;
 
@@ -694,6 +716,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
   @Test
   public void crupdate_create() {
     clientTestDao.get().removeAll();
+    characterTestDao.get().removeAll();
 
     Character charm = insertCharacterTest(101, "Самовлюблённый", "Самовлюблённый Самовлюблённый", 100);
 
@@ -711,27 +734,28 @@ public class ClientRegisterImplTest extends ParentTestNg {
       "",
       "",
       "",
-      new ArrayList<PhoneDisplay>(Collections.singletonList(new PhoneDisplay("Home", "77077070077")))
+      new ArrayList<>(Collections.singletonList(new PhoneDisplay("Home", "77077070077")))
       );
 
     //
     //
-    ClientRecord clientRecord = clientRegister.get().crupdate(clientToSave);
+    ClientRecord clientRecord = clientRegister.get().save(clientToSave);
     //
     //
 
     assertThat(clientRecord.id).isNotNull();
-    assertThat(clientRecord.fio).isNotNull().isEqualTo(clientToSave.surname + " " + clientToSave.name + " " + clientToSave.patronymic);
-    assertThat(clientRecord.character).isNotNull().isEqualTo(charm.name);
-    assertThat(clientRecord.age).isNotNull().isEqualTo(41);
+    assertThat(clientRecord.fio).isEqualTo(clientToSave.surname + " " + clientToSave.name + " " + clientToSave.patronymic);
+    assertThat(clientRecord.character).isEqualTo(charm.name);
+    assertThat(clientRecord.age).isEqualTo(41);
     assertThat(clientRecord.balance).isNotNull().isEqualTo(0);
-    assertThat(clientRecord.balanceMax).isNotNull().isEqualTo(0);
-    assertThat(clientRecord.balanceMin).isNotNull().isEqualTo(0);
+    assertThat(clientRecord.balanceMax).isEqualTo(0);
+    assertThat(clientRecord.balanceMin).isEqualTo(0);
   }
 
   @Test
   public void crupdate_update() {
     clientTestDao.get().removeAll();
+    characterTestDao.get().removeAll();
 
     Character charm = insertCharacterTest(101, "Самовлюблённый", "Самовлюблённый Самовлюблённый", 100);
     Character newCharm = insertCharacterTest(102, "Характерный", "Характерный Характерный", 100);
@@ -757,7 +781,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     //
     //
-    ClientRecord clientRecord = clientRegister.get().crupdate(clientToSave);
+    ClientRecord clientRecord = clientRegister.get().save(clientToSave);
     //
     //
 
@@ -817,7 +841,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
     //
     //
 
-    int id = clientTestDao.get().getClient(client.id);
-    assertThat(id).isNull();
+    int actual = clientTestDao.get().getClient(client.id);
+    assertThat(actual).isEqualTo(0);
   }
 }

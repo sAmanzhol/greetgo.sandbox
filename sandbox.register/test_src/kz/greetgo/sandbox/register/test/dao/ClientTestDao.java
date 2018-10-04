@@ -49,7 +49,6 @@ public interface ClientTestDao {
     "update Transaction_type set actual=0 where actual=1;" +
     "update Client_account_transaction set actual=0 where actual=1;" +
     "update Client_phone set actual=0 where actual=1;" +
-    "update Client_addr set actual=0 where actual=1;" +
-    "update Charm set actual=0 where actual=1;")
+    "update Client_addr set actual=0 where actual=1;")
   void removeAll();
 }
