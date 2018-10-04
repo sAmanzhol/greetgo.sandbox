@@ -33,8 +33,8 @@ public class CharacterRegisterImplTest extends ParentTestNg {
   private void list() {
     characterTestDao.get().removeAll();
 
-    Character charm1 = insertCharacterTest(101, "Самовлюблённый1", "Самовлюблённый Самовлюблённый", 100);
-    Character charm2 = insertCharacterTest(102, "Самовлюблённый2", "Самовлюблённый Самовлюблённый", 90);
+    Character charm1 = insertCharacterTest(101, "Самовлюблённый", "Самовлюблённый Самовлюблённый", 100);
+    Character charm2 = insertCharacterTest(102, "Характерный", "Характерный Характерный", 90);
     Character charm3 = insertCharacterTest(103, "Самовлюблённый3", "Самовлюблённый Самовлюблённый", 80);
     Character charm4 = insertCharacterTest(104, "Самовлюблённый4", "Самовлюблённый Самовлюблённый", 70);
     Character charm5 = insertCharacterTest(105, "Самовлюблённый5", "Самовлюблённый Самовлюблённый", 60);

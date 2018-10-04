@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Select;
 import java.util.List;
 
 public interface CharacterDao {
-  @Select("select * from charm")
+  @Select("select * from charm " +
+    "where actual = 1")
   List<CharacterRecord> list();
 }

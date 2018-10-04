@@ -5,7 +5,7 @@ package kz.greetgo.sandbox.controller.model;
 public class PhoneTypeRecord {
   public String type;
 
-  public PhoneTypeRecord(String type) {
-    this.type = type;
+  public PhoneTypeRecord(Object o) {
+    this.type = o.toString();
   }
 }

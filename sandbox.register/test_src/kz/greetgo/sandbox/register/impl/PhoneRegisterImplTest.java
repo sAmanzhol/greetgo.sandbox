@@ -25,7 +25,7 @@ public class PhoneRegisterImplTest extends ParentTestNg {
 
     assertThat(phoneTypeRecords).hasSize(3);
     assertThat(phoneTypeRecords.get(0).type).isEqualTo("HOME");
-    assertThat(phoneTypeRecords.get(1).type).isEqualTo("MOBILE");
-    assertThat(phoneTypeRecords.get(2).type).isEqualTo("WORK");
+    assertThat(phoneTypeRecords.get(1).type).isEqualTo("WORK");
+    assertThat(phoneTypeRecords.get(2).type).isEqualTo("MOBILE");
   }
 }
