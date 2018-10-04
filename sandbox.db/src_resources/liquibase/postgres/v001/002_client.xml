@@ -66,6 +66,8 @@
         money real,
         number varchar(255),
         registered_at timestamp,
+        frs_client_id varchar(255),
+        frs_account_number varchar(255),
         foreign key(client) references client(id)
       )
     ]]></sql>
@@ -89,6 +91,7 @@
       money real,
       finished_at timestamp,
       type int,
+      frs_account_number varchar(255),
       primary key(id),
       foreign key(account) references client_account(id),
       foreign key(type) references transaction_type(id)

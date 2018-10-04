@@ -8,7 +8,6 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -19,44 +18,29 @@ public class MyHandler extends DefaultHandler {
 	private CiaPhone ciaPhone = new CiaPhone();
 
 	private List<CiaSystem> ciaSystemList = new ArrayList<>();
+	private List<CiaPhone> ciaPhoneArrayList = new ArrayList<>();
+	private List<CiaAddress> ciaAddressArrayList = new ArrayList<>();
 
 	public CiaSystem ciaSystem = new CiaSystem();
 
 	public CiaAddress ciaAddress = new CiaAddress();
 
-	String element;
-	int size=0;
-
-	private PreparedStatement ps;
-	private Integer batchSize;
+	private String element;
 
 
-	public MyHandler(PreparedStatement ps,Integer batchSize) {
+	private MyWorker myWorker;
 
+	private int size=0;
 
-		this.ps = ps;
-		this.batchSize=batchSize;
+	public MyHandler(MyWorker myWorker) {
+
+		this.myWorker = myWorker;
 	}
 
 
+	private void addBatchs() throws SQLException {
 
-private void addBatchs() throws SQLException {
-
-		ps.setString(1,ciaSystem.id);
-		ps.setString(2,ciaSystem.firstname);
-		ps.setString(3,ciaSystem.lastname);
-		ps.setString(4,ciaSystem.patronymic);
-		ps.setString(5,ciaSystem.gender);
-		ps.setString(6,ciaSystem.birth_date);
-		ps.setString(7,ciaSystem.charm);
-		ps.setString(8,ciaSystem.phones.get(0).type);
-		ps.setString(9,ciaSystem.phones.get(0).number);
-		ps.setString(10,ciaSystem.address.get(0).type);
-		ps.setString(11,ciaSystem.address.get(0).street);
-		ps.setString(12,ciaSystem.address.get(0).house);
-		ps.setString(13,ciaSystem.address.get(0).flat);
-		size++;
-		ps.addBatch();
+		myWorker.insertParseXml(ciaSystem, ciaPhoneArrayList, ciaAddressArrayList);
 	}
 
 	@Override
@@ -69,12 +53,12 @@ private void addBatchs() throws SQLException {
 	@Override
 	public void endDocument() throws SAXException {
 
-
 		try {
-			ps.executeBatch();
+			myWorker.executeBatchs();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+
 
 		System.err.println(ciaSystemList);
 		super.endDocument();
@@ -83,7 +67,6 @@ private void addBatchs() throws SQLException {
 
 	@Override
 	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-
 
 		super.startElement(uri, localName, qName, attributes);
 		element = qName;
@@ -101,18 +84,19 @@ private void addBatchs() throws SQLException {
 		super.endElement(uri, localName, qName);
 
 
-		if (qName.equals("client") ) {
+		if (qName.equals("client")) {
 			try {
 				addBatchs();
-				if (size==batchSize)
-					ps.executeBatch();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 
 			/*ciaSystemList.add(ciaSystem);*/
+			System.err.println("size:" + size);
 			System.err.println(ciaSystem);
 			ciaSystem = new CiaSystem();
+			ciaAddressArrayList = new ArrayList<>();
+			ciaPhoneArrayList = new ArrayList<>();
 		}
 	}
 
@@ -124,7 +108,8 @@ private void addBatchs() throws SQLException {
 			ciaPhone = new CiaPhone();
 			ciaPhone.type = type;
 			ciaPhone.number = new String(ch, start, length);
-			ciaSystem.phones.add(ciaPhone);
+			ciaPhoneArrayList.add(ciaPhone);
+			size++;
 			element = "";
 		}
 	}
@@ -163,7 +148,7 @@ private void addBatchs() throws SQLException {
 				ciaAddress.street = attributes.getValue(0);
 				ciaAddress.house = attributes.getValue(1);
 				ciaAddress.flat = attributes.getValue(2);
-				ciaSystem.address.add(ciaAddress);
+				ciaAddressArrayList.add(ciaAddress);
 				break;
 			}
 			case "register": {
@@ -172,7 +157,7 @@ private void addBatchs() throws SQLException {
 				ciaAddress.street = attributes.getValue(0);
 				ciaAddress.house = attributes.getValue(1);
 				ciaAddress.flat = attributes.getValue(2);
-				ciaSystem.address.add(ciaAddress);
+				ciaAddressArrayList.add(ciaAddress);
 				break;
 			}
 			case "charm": {
@@ -183,4 +168,6 @@ private void addBatchs() throws SQLException {
 		}
 
 	}
+
+
 }

@@ -1,22 +1,24 @@
 package kz.greetgo.sandbox.db.register_impl.migration;
 
-import org.xml.sax.SAXException;
-
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
 import java.sql.SQLException;
 
 public abstract class AbstractParse {
 
-	public void migrate() throws SQLException, ParserConfigurationException, SAXException, IOException {
-		dropClient();
-		createClient();
-		insertClient();
+	public void migrate() throws Exception {
+		dropTable();
+		createTable();
+		insertTable();
+		addIntoCurrentTable();
+		updateTable();
 	}
 
-	protected abstract void insertClient() throws SQLException, IOException, SAXException, ParserConfigurationException;
+	protected abstract void dropTable() throws SQLException;
 
-	protected abstract void createClient() throws SQLException;
+	protected abstract void insertTable() throws Exception;
 
-	protected abstract void dropClient() throws SQLException;
+	protected abstract void createTable() throws SQLException;
+
+	protected abstract void addIntoCurrentTable();
+
+	protected abstract void updateTable() throws SQLException;
 }

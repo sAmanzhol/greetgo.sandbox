@@ -2,13 +2,10 @@ package kz.greetgo.sandbox.db.register_impl.migration;
 
 import kz.greetgo.db.Jdbc;
 import kz.greetgo.depinject.core.BeanGetter;
-import org.xml.sax.SAXException;
 
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.File;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -31,23 +28,18 @@ public class CiaMigration extends AbstractParse {
 		this.batchSize = batchSize;
 	}
 
+
 	@Override
-	protected void insertClient() throws SQLException, IOException, SAXException, ParserConfigurationException {
+	protected void dropTable() throws SQLException {
 
-		String insertClient = "insert into tmp_client (id, firstname, lastname, patronymic, gender, birth_date, charm, " +
-			" phone_type, phone_number, addr_type, addr_street, addr_house, addr_flat) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
-		SAXParserFactory spf = SAXParserFactory.newInstance();
-		SAXParser saxParser = spf.newSAXParser();
-
-		try (PreparedStatement ps = connection.prepareStatement(insertClient)) {
-			MyHandler myHandler = new MyHandler(ps, batchSize);
-			saxParser.parse(inFile, myHandler);
+		String dropClient = "drop table if exists tmp_client, tmp_client_phone, tmp_client_addr";
+		try (PreparedStatement ps = connection.prepareStatement(dropClient)) {
+			ps.execute();
 		}
-
 	}
 
 	@Override
-	protected void createClient() throws SQLException {
+	protected void createTable() throws SQLException {
 
 		String createClient = "" +
 			"create table tmp_client (id varchar(255) not null,\n" +
@@ -56,26 +48,53 @@ public class CiaMigration extends AbstractParse {
 			" patronymic varchar(255),\n" +
 			"gender varchar(255),\n" +
 			"birth_date varchar(255),\n" +
-			" charm varchar(255),\n" +
-			" phone_type varchar(255),\n" +
-			" phone_number varchar(255),\n" +
-			"addr_type varchar(255),\n" +
-			" addr_street varchar(255),\n" +
-			" addr_house varchar(255),\n" +
-			"addr_flat varchar(255));";
+			" charm varchar(255))";
+
+		String createClientPhone = "create table tmp_client_phone(\n" +
+			"  client_id varchar(255),\n" +
+			"  type varchar(255),\n" +
+			"  number varchar(255)\n" +
+			");";
+
+		String createClientAddr = "create table tmp_client_addr(\n" +
+			"  client_id varchar(255),\n" +
+			"  type varchar(255),\n" +
+			"  street varchar(255),\n" +
+			"  house varchar(255),\n" +
+			"  flat varchar(255)\n" +
+			");";
+
 		try (PreparedStatement ps = connection.prepareStatement(createClient)) {
 			ps.executeUpdate();
 		}
+		try (PreparedStatement ps = connection.prepareStatement(createClientPhone)) {
+			ps.executeUpdate();
+		} try (PreparedStatement ps = connection.prepareStatement(createClientAddr)) {
+			ps.executeUpdate();
+		}
+
+	}
+
+
+	@Override
+	protected void insertTable() throws Exception {
+
+		SAXParserFactory spf = SAXParserFactory.newInstance();
+		SAXParser saxParser = spf.newSAXParser();
+		MyWorker myWorker = new MyWorker(connection, batchSize);
+		MyHandler myHandler = new MyHandler(myWorker);
+		saxParser.parse(inFile, myHandler);
+
 	}
 
 	@Override
-	protected void dropClient() throws SQLException {
+	protected void addIntoCurrentTable() {
 
-		String dropClient = "drop table tmp_client";
+	}
 
-		try (PreparedStatement ps = connection.prepareStatement(dropClient)) {
-			ps.execute();
-		}
+	@Override
+	protected void updateTable() {
+
 	}
 
 
