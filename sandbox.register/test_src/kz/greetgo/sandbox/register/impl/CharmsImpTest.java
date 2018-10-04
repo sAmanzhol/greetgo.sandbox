@@ -14,7 +14,6 @@ import java.util.List;
 import static org.fest.assertions.api.Assertions.assertThat;
 
 public class CharmsImpTest extends ParentTestNg {
-    IdGenerator idGenerator = new IdGenerator();
     public BeanGetter<CharmRegister> charmRegister;
 
     @Test

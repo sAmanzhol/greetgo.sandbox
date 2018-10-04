@@ -1,6 +1,7 @@
 package kz.greetgo.sandbox.controller.model;
 
-import javax.security.auth.login.AccountException;
+import kz.greetgo.sandbox.controller.model.enums.Gender;
+
 import java.sql.Timestamp;
 import java.util.List;
 

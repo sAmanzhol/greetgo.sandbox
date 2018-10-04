@@ -51,7 +51,7 @@
      create table client_addr
         (
             id bigserial PRIMARY KEY NOT NULL,
-            client int,
+            client bigserial,
             type addr_type NOT NULL,
             street varchar(255),
             house varchar(255),
@@ -73,9 +73,9 @@
      create table client_phone
         (
             id bigserial PRIMARY KEY NOT NULL,
-            client int,
-            number addr_type NOT NULL,
-            type phone_type
+            client bigserial NOT NULL,
+            number varchar(255) NOT NULL,
+            type phone_type NOT NULL
         )
     ]]></sql>
     </changeSet>
@@ -87,7 +87,7 @@
      create table client_account
         (
             id bigserial PRIMARY KEY NOT NULL,
-            client int,
+            client bigserial,
             money float,
             number varchar(255),
             registered_at timestamp
@@ -100,7 +100,7 @@
      create table client_account_transaction
         (
             id bigserial PRIMARY KEY NOT NULL,
-            account int,
+            account bigserial,
             money float,
             finished_at timestamp,
             type int

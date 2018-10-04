@@ -22,17 +22,33 @@ public class CharmRegisterImpl implements CharmRegister {
     @Override
     public Charm getById(Long id) throws NullPointerException{
         if(id == null)
-            throw new NullPointerException("Id is null");
+            throw new NullPointerException("CHARM ID IS NULL");
 
         return charmsDao.get().load(id);
     }
 
     @Override
     public Long insert(Charm charm) {
-        if(charm == null)
-            throw new NullPointerException("Inserting charms is null");
+        if(charm == null && charm.name != null)
+            throw new NullPointerException("INSERTING CHARM IS NULL");
 
        return charmsDao.get().insert(charm);
+    }
+
+    @Override
+    public Charm update(Charm charm) {
+        if(charm == null && charm.name != null && charm.id != null)
+        throw new NullPointerException("UPDATING CHARM IS NULL");
+
+        return charmsDao.get().update(charm);
+    }
+
+    @Override
+    public void delete(Long id) {
+        if(id == null)
+            throw new NullPointerException("CHARM ID IS NULL");
+
+        charmsDao.get().delete(id);
     }
 
 

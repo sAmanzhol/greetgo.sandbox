@@ -7,10 +7,14 @@ import java.util.List;
 
 public interface CharmRegister {
 
+    List<Charm> list();
+
     Charm getById(Long id);
 
     Long insert(Charm charm);
 
-    List<Charm> list();
+    Charm update(Charm charm);
+
+    void delete(Long id);
 
 }
