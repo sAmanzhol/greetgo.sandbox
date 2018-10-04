@@ -3,6 +3,12 @@
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
 
+  <changeSet author="sultan" id="create-sequence-id">
+    <sql endDelimiter=";;"><![CDATA[
+      create sequence id start 1
+    ]]></sql>
+  </changeSet>
+
   <changeSet author="sultan" id="create-type-gender">
     <sql endDelimiter=";;"><![CDATA[
       create type gender as enum ('MALE', 'FEMALE')
@@ -65,6 +71,7 @@
   <changeSet author="sultan" id="create-table-client_phone">
     <sql endDelimiter=";;"><![CDATA[
       create table client_phone (
+        id serial not null unique,
         client int references client,
         type phone not null,
         number varchar(11) not null unique,

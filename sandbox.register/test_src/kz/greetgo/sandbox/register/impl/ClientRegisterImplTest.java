@@ -8,6 +8,7 @@ import kz.greetgo.sandbox.register.dao_model.*;
 import kz.greetgo.sandbox.register.test.dao.CharacterTestDao;
 import kz.greetgo.sandbox.register.test.dao.ClientTestDao;
 import kz.greetgo.sandbox.register.test.util.ParentTestNg;
+import kz.greetgo.util.RND;
 import org.testng.annotations.Test;
 
 import java.util.*;
@@ -714,28 +715,28 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
 
   @Test
-  public void crupdate_create() {
+  public void save_create() {
     clientTestDao.get().removeAll();
     characterTestDao.get().removeAll();
 
-    Character charm = insertCharacterTest(101, "Самовлюблённый", "Самовлюблённый Самовлюблённый", 100);
+    Character charm = insertCharacterTest(RND.plusInt(999999), RND.str(10), RND.str(20), RND.plusInt(100));
 
     ClientToSave clientToSave = new ClientToSave(
       "",
-      "Фамилия",
-      "Имя",
+      RND.str(10),
+      RND.str(6),
       "",
       new GregorianCalendar(1977, 4, 25).getTime(),
       "MALE",
       charm.id,
-      "Ломоносов Рег",
-      "1",
-      "10",
+      RND.str(15),
+      RND.str(3),
+      RND.str(1),
       "",
       "",
       "",
-      new ArrayList<>(Collections.singletonList(new PhoneDisplay("Home", "77077070077")))
-      );
+      new ArrayList<>(Collections.singletonList(new PhoneDisplay(0,"HOME", RND.str(11))))
+    );
 
     //
     //
@@ -753,7 +754,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
   }
 
   @Test
-  public void crupdate_update() {
+  public void save_update() {
     clientTestDao.get().removeAll();
     characterTestDao.get().removeAll();
 
@@ -762,22 +763,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     Client client = insertClient(101, "Колобова", "Розалия", "Наумовна", "FEMALE", new GregorianCalendar(1977, 4, 25).getTime(), charm.id);
 
-    ClientToSave clientToSave = new ClientToSave(
-      "101",
-      "Фамилия",
-      "Имя",
-      "Розалия",
-      new GregorianCalendar(1976, 4, 25).getTime(),
-      "FEMALE",
-      charm.id,
-      "Ломоносов Рег",
-      "1",
-      "10",
-      "Ломоносов Фак",
-      "2",
-      "20",
-      new ArrayList<PhoneDisplay>(Arrays.asList(new PhoneDisplay("Home", "77077070077"), new PhoneDisplay("Mobile", "77000000077")))
-    );
+    ClientToSave clientToSave = new ClientToSave("101", "Фамилия", "Имя", "Розалия", new GregorianCalendar(1976, 4, 25).getTime(), "FEMALE", newCharm.id, "Ломоносов Рег", "1", "10", "Lomonosov Фак", "2", "20", new ArrayList<PhoneDisplay>(Arrays.asList(new PhoneDisplay(0, "HOME", "77077070077"), new PhoneDisplay(0, "MOBILE", "77000000077"))));
 
     //
     //
@@ -825,9 +811,13 @@ public class ClientRegisterImplTest extends ParentTestNg {
     assertThat(clientDisplay.houseResidence).isNotNull().isEqualTo(client_addr_fact.house);
     assertThat(clientDisplay.apartmentResidence).isNotNull().isEqualTo(client_addr_fact.flat);
 
-    assertThat(clientDisplay.numbers).hasSize(2)
-      .contains(new PhoneDisplay(client_phone_home.type, client_phone_home.number))
-      .contains(new PhoneDisplay(client_phone_mobile.type, client_phone_mobile.number));
+    assertThat(clientDisplay.numbers).hasSize(2);
+
+    assertThat(clientDisplay.numbers.get(0).type).isEqualTo(client_phone_home.type);
+    assertThat(clientDisplay.numbers.get(0).number).isEqualTo(client_phone_home.number);
+
+    assertThat(clientDisplay.numbers.get(1).type).isEqualTo(client_phone_mobile.type);
+    assertThat(clientDisplay.numbers.get(1).number).isEqualTo(client_phone_mobile.number);
   }
 
   @Test
@@ -841,7 +831,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
     //
     //
 
-    int actual = clientTestDao.get().getClient(client.id);
+    int actual = clientTestDao.get().checkClient(client.id);
     assertThat(actual).isEqualTo(0);
   }
 }

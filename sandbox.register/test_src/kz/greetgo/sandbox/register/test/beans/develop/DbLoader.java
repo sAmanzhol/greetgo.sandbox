@@ -184,7 +184,7 @@ public class DbLoader {
     logger.info("Finish loading clients Addresses!");
   }
 
-  private void client_phone(int client, String type, String number) {
+  private void client_phone(int id, int client, String type, String number) {
     Client_phone client_phone = new Client_phone();
     client_phone.client = client;
     client_phone.type = type;
@@ -196,17 +196,17 @@ public class DbLoader {
   private void loadClientsPhone() {
     logger.info("Start loading clients Phones...");
 
-    client_phone(1, "HOME", "77077070071");
-    client_phone(2, "HOME", "77077070072");
-    client_phone(3, "HOME", "77077070073");
-    client_phone(4, "HOME", "77077070074");
-    client_phone(5, "HOME", "77077070075");
-    client_phone(6, "HOME", "77077070076");
-    client_phone(7, "HOME", "77077070077");
-    client_phone(8, "HOME", "77077070078");
-    client_phone(9, "HOME", "77077070079");
-    client_phone(10, "HOME", "77077070080");
-    client_phone(11, "HOME", "77077070081");
+    client_phone(1,1, "HOME", "77077070071");
+    client_phone(2,2, "HOME", "77077070072");
+    client_phone(3,3, "HOME", "77077070073");
+    client_phone(4,4, "HOME", "77077070074");
+    client_phone(5,5, "HOME", "77077070075");
+    client_phone(6,6, "HOME", "77077070076");
+    client_phone(7,7, "HOME", "77077070077");
+    client_phone(8,8, "HOME", "77077070078");
+    client_phone(9,9, "HOME", "77077070079");
+    client_phone(10,10, "HOME", "77077070080");
+    client_phone(11,11, "HOME", "77077070081");
 
     logger.info("Finish loading clients Phones!");
   }

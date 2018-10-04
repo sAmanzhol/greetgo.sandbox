@@ -24,8 +24,8 @@ public interface ClientTestDao {
     "on conflict (client, type) do update set actual = 1;")
   void insertClientAddr(Client_addr client_addr);
 
-  @Insert("insert into Client_phone (client, type, number) " +
-    "values (#{client}, #{type}::phone, #{number}) " +
+  @Insert("insert into Client_phone (id, client, type, number) " +
+    "values (nextval('id'), #{client}, #{type}::phone, #{number}) " +
     "on conflict (client, number) do update set actual = 1;")
   void insertClientPhone(Client_phone client_phone);
 
@@ -39,9 +39,9 @@ public interface ClientTestDao {
     "on conflict (id) do update set actual = 1;")
   void insertClientAccountTransaction(Client_account_transaction client_account_transaction);
 
-  @Select("select id from Client " +
+  @Select("select actual from Client " +
     "where id = #{id}")
-  int getClient(@Param("id") int id);
+  int checkClient(@Param("id") int id);
 
   @Update("" +
     "update Client set actual=0 where actual=1;" +
