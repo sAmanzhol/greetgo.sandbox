@@ -17,7 +17,8 @@ import {Account} from "../../model/Account";
 export class ClientRepositoryService  {
 
   clientRecList  : ClientRecord[] = [];
-
+  clientItemList : ClientItem[] = []
+  totalRecords : number = 0;
   charmList : Charm[] = [];
   loading: boolean = false;
 
@@ -50,7 +51,13 @@ export class ClientRepositoryService  {
     return this.http.get("/client/getAll")
       .toPromise()
       .then(resp => resp.body as Array<any>)
-      //.then(body => body.map(r => ClientRecord.create(r)))
+      .then(body => body.map(r => ClientRecord.create(r)))
+  }
+
+  loadRecordsCount(): Promise<number> {
+    return this.http.get("/client/getCount")
+      .toPromise()
+      .then(resp => resp.body as number)
   }
 
   setTestCharms(){
@@ -129,8 +136,20 @@ export class ClientRepositoryService  {
 
   }
 
-  getClientItem(): ClientItem[]{
-    return this.transformClientRecToClientItem(this.clientRecList);
+  async getRecordsCount(){
+    this.totalRecords = await this.loadRecordsCount();
+  }
+
+  async getClientItem(nameFilter : string,
+                surnameFilter : string,
+                patronymicFilter : string,
+                page:number,
+                limit:number,
+                colName:string,
+                order:number)
+  {
+    await this.getAll({nameFilter,surnameFilter,patronymicFilter,page,limit,colName,order});
+    this.clientItemList = this.transformClientRecToClientItem(this.clientRecList);
   }
 
   getById(id:number){
@@ -141,10 +160,13 @@ export class ClientRepositoryService  {
     try {
       this.loading = true;
 
-      if (param != null)
+      if (param != null) {
         this.clientRecList = await this.loadRecords(param);
+      }
       else
+      {
         this.clientRecList = await this.loadRecords(null);
+      }
 
       this.loading = false;
     }

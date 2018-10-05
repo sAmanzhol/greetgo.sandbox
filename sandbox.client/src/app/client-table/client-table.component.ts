@@ -27,7 +27,7 @@ export class ClientTableComponent implements OnInit {
   constructor(public login: LoginService, public clientRepoService: ClientRepositoryService,private cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
-    this.totalRecords = 10;
+    this.totalRecords = this.clientRepoService.totalRecords;
     this.cols =
       [
         {field: 'fio', header: 'ФИО'},
@@ -58,8 +58,11 @@ export class ClientTableComponent implements OnInit {
 
   }
 
-  public loadData(event: LazyLoadEvent) {
-    this.clients = this.clientRepoService.getClientItem();
+  public async loadData(event: LazyLoadEvent) {
+    await this.clientRepoService.getRecordsCount();
+    this.totalRecords = this.clientRepoService.totalRecords;
+    console.log(this.totalRecords);
+    this.clients = this.clientRepoService.getClientItem(event.rows,event.sortField,event.sortOrder);
    // this.clients = this.getTestData()///Нужно сделать запрос с параметрами
 
     //event.first = First row offset
@@ -70,7 +73,6 @@ export class ClientTableComponent implements OnInit {
     //filters: Filters object having field as key and filter value, filter matchMode as value
     //globalFilter: Value of the global filter if available
     //this.cars = //do a request to a remote datasource using a service and return the cars that match the lazy load criteria
-
   }
 
   }

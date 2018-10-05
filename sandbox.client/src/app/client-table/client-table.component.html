@@ -2,7 +2,7 @@
 <h3 class="first">Список клиентов</h3>
 <p-table [columns]="cols" selectionMode="single"
          (onRowSelect)="onRowSelect($event)"
-         [value]="clients" [lazy] = "true" (onLazyLoad)="loadData($event)" [paginator]="true" [rows]="totalRecords"
+         [value]="clients" [lazy] = "true" (onLazyLoad)="loadData($event)" [paginator]="true" [rows]="10"
          [totalRecords]="totalRecords">
   <ng-template pTemplate="header" let-columns>
     <tr>
