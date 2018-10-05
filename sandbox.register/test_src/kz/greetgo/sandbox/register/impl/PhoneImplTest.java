@@ -35,7 +35,7 @@ public class PhoneImplTest extends ParentTestNg {
         String number = RND.intStr(8);
         PhoneType type = RND.someEnum(PhoneType.HOME,PhoneType.MOBILE,PhoneType.WORK);
 
-        Phone newPhone = new Phone(null,1l,number,type);
+        Phone newPhone = new Phone(null,1l,number,type,true);
         //
         //
         Long retId  = phoneRegister.get().insert(newPhone);
@@ -50,7 +50,7 @@ public class PhoneImplTest extends ParentTestNg {
 
     @Test(expectedExceptions = NullPointerException.class)
     public void insertPhoneNull(){
-        Phone newPhone = new Phone(null,null,null,null);
+        Phone newPhone = new Phone(null,null,null,null,false);
         //
         //
         Long retId  =  phoneRegister.get().insert(newPhone);
@@ -63,7 +63,7 @@ public class PhoneImplTest extends ParentTestNg {
 
     @Test
     public void updatePhone(){
-        Phone newPhone = new Phone(null,-1l,RND.intStr(8),PhoneType.HOME);
+        Phone newPhone = new Phone(null,-1l,RND.intStr(8),PhoneType.HOME,true);
         //
         //
         Long retId  =  phoneRegister.get().insert(newPhone);
@@ -90,7 +90,7 @@ public class PhoneImplTest extends ParentTestNg {
 
     @Test
     public void updatePhoneWithFakeID(){
-        Phone newPhone = new Phone(1000l,-1l,RND.intStr(8),PhoneType.HOME);
+        Phone newPhone = new Phone(1000l,-1l,RND.intStr(8),PhoneType.HOME,true);
 
         //
         //
@@ -112,7 +112,7 @@ public class PhoneImplTest extends ParentTestNg {
 
     @Test
     public void updatePhoneWithNullId(){
-        Phone newPhone = new Phone(null,-1l,RND.intStr(8),PhoneType.HOME);
+        Phone newPhone = new Phone(null,-1l,RND.intStr(8),PhoneType.HOME,true);
         //
         //
         newPhone = phoneRegister.get().update(newPhone);
@@ -123,7 +123,7 @@ public class PhoneImplTest extends ParentTestNg {
 
     @Test(expectedExceptions = PersistenceException.class)
     public void updatePhoneWithNullData(){
-        Phone newPhone = new Phone(null,-1l,RND.intStr(8),PhoneType.HOME);
+        Phone newPhone = new Phone(null,-1l,RND.intStr(8),PhoneType.HOME,true);
         //
         //
         Long retId  =  phoneRegister.get().insert(newPhone);
@@ -148,7 +148,7 @@ public class PhoneImplTest extends ParentTestNg {
         String number = RND.intStr(8);
         PhoneType type = RND.someEnum(PhoneType.HOME,PhoneType.MOBILE,PhoneType.WORK);
 
-        Phone newPhone = new Phone(null,-1l,number,type);
+        Phone newPhone = new Phone(null,-1l,number,type,true);
         //
         //
         Long retId  = phoneRegister.get().insert(newPhone);

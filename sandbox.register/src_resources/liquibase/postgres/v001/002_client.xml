@@ -18,8 +18,9 @@
             name varchar(255) NOT NULL,
             patronymic varchar(255),
             gender gender,
-            birth_date Date,
-            charm int
+            birth_date Timestamp,
+            charm bigserial,
+            actual boolean default false
         )
     ]]></sql>
     </changeSet>
@@ -33,7 +34,8 @@
             id bigserial PRIMARY KEY NOT NULL,
             name varchar(255) NOT NULL,
             description text,
-            energy float
+            energy float,
+            actual boolean default false
         )
     ]]></sql>
     </changeSet>
@@ -55,7 +57,8 @@
             type addr_type NOT NULL,
             street varchar(255),
             house varchar(255),
-            flat varchar(255)
+            flat varchar(255),
+            actual boolean default false
         )
     ]]></sql>
     </changeSet>
@@ -75,7 +78,8 @@
             id bigserial PRIMARY KEY NOT NULL,
             client bigserial NOT NULL,
             number varchar(255) NOT NULL,
-            type phone_type NOT NULL
+            type phone_type NOT NULL,
+            actual boolean default false
         )
     ]]></sql>
     </changeSet>
@@ -90,7 +94,8 @@
             client bigserial,
             money float,
             number varchar(255),
-            registered_at timestamp
+            registered_at timestamp,
+            actual boolean default false
         )
     ]]></sql>
     </changeSet>
@@ -103,7 +108,8 @@
             account bigserial,
             money float,
             finished_at timestamp,
-            type int
+            type int,
+            actual boolean default false
         )
     ]]></sql>
     </changeSet>
@@ -114,7 +120,8 @@
         (
             id bigserial PRIMARY KEY NOT NULL,
             code varchar(30),
-            name varchar(255)
+            name varchar(255),
+            actual boolean default false
         )
     ]]></sql>
     </changeSet>

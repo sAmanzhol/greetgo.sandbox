@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Random;
 
 import static org.fest.assertions.api.Assertions.assertThat;
-@Test
+
 public class AddressImplTest extends ParentTestNg{
     public BeanGetter<AddressRegister> addressRegister;
 
@@ -73,7 +73,7 @@ public class AddressImplTest extends ParentTestNg{
         String house = RND.intStr(2) + "Dom";
         String flat = RND.intStr(2) + "KV";
 
-        Address address = new Address(null,client,AddressType.FACT,street,house,flat);
+        Address address = new Address(null,client,AddressType.FACT,street,house,flat,true);
 
         //
         //
@@ -111,7 +111,7 @@ public class AddressImplTest extends ParentTestNg{
         String house = rnd.nextInt(50) + "Dom";
         String flat = rnd.nextInt(50) + "KV";
 
-        Address address = new Address(null,client,AddressType.REG,street,house,flat);
+        Address address = new Address(null,client,AddressType.REG,street,house,flat,true);
         //
         //
         Long insRetId = addressRegister.get().insert(address);
@@ -156,7 +156,7 @@ public class AddressImplTest extends ParentTestNg{
         String house = rnd.nextInt(50) + "Dom";
         String flat = rnd.nextInt(50) + "KV";
 
-        Address address = new Address(null,client,AddressType.FACT,street,house,flat);
+        Address address = new Address(null,client,AddressType.FACT,street,house,flat,true);
 
         //
         //
@@ -177,7 +177,7 @@ public class AddressImplTest extends ParentTestNg{
     @Test(expectedExceptions = NullPointerException.class)
     public void insertAddressNull(){
 
-        Address address = new Address(null,null,null,null,null,null);
+        Address address = new Address(null,null,null,null,null,null,false);
         //
         //
         Long insRetId = addressRegister.get().insert(address);
@@ -199,7 +199,7 @@ public class AddressImplTest extends ParentTestNg{
 
     @Test
     public void insertAddressWithInjection(){
-        Address address = new Address(null,111l,AddressType.FACT,"AND DELETE *","AND SELECT *","AND SELECT *");
+        Address address = new Address(null,111l,AddressType.FACT,"AND DELETE *","AND SELECT *","AND SELECT *",true);
         //
         //
         Long insRetId = addressRegister.get().insert(address);
@@ -217,7 +217,7 @@ public class AddressImplTest extends ParentTestNg{
         String house = rnd.nextInt(50) + "Dom";
         String flat = rnd.nextInt(50) + "KV";
 
-        Address address = new Address(null,client,AddressType.REG,street,house,flat);
+        Address address = new Address(null,client,AddressType.REG,street,house,flat,true);
         //
         //
         Long insRetId = addressRegister.get().insert(address);

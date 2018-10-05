@@ -8,7 +8,16 @@ public class Account {
     public Float money;
     public String number;
     public Timestamp registered_at;
+    public Boolean actual;
 
     public List<AccountTransaction> transactions;
 
+    public Account(Long id, Float money, String number, Timestamp registered_at, boolean actual,List<AccountTransaction> transactions) {
+        this.id = id;
+        this.money = money;
+        this.number = number;
+        this.registered_at = registered_at;
+        this.actual = actual;
+        this.transactions = transactions;
+    }
 }

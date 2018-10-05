@@ -5,12 +5,14 @@ public class Charm {
     public String name;
     public String description;
     public Double energy;
+    public Boolean actual;
 
 
-    public Charm(Long id, String name, String description, Double energy) {
+    public Charm(Long id, String name, String description, Double energy,Boolean actual) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.energy = energy;
+        this.actual = actual;
     }
 }

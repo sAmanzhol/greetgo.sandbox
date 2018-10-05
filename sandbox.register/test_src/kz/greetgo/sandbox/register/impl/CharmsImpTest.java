@@ -35,7 +35,7 @@ public class CharmsImpTest extends ParentTestNg {
         String name = RND.str(5);
         String descr = RND.str(20);
         Double energy = 82d;
-        Charm charm = new Charm(null,name,descr,energy);
+        Charm charm = new Charm(null,name,descr,energy,true);
         //
         //
         Long insRetId = charmRegister.get().insert(charm); // Возвращенный айди после insert

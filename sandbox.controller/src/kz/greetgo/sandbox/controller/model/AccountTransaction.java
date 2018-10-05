@@ -8,4 +8,6 @@ public class AccountTransaction {
     public Float money;
     public Timestamp finished_at;
     public TransactionType type;
+
+    public Boolean actual;
 }

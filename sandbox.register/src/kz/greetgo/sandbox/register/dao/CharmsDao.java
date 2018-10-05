@@ -13,19 +13,19 @@ import java.util.List;
 
 public interface CharmsDao {
 
-    @Select("select * from charms")
+    @Select("select * from charms where actual = true")
     List<Charm> list();
 
-    @Select("select * from charms where id = #{id}")
+    @Select("select * from charms where id = #{id} and actual = true")
     Charm load(@Param("id") Long id);
 
-    @Select("insert into charms(id,name,description,energy) VALUES(DEFAULT,#{charm.name}, #{charm.description}, #{charm.energy}) RETURNING id")
+    @Select("insert into charms(id,name,description,energy,actual) VALUES(DEFAULT,#{charm.name}, #{charm.description}, #{charm.energy}, true) RETURNING id")
     Long insert(@Param("charm") Charm charm);
 
-    @Select("update charms set name = #{charm.name},description = #{charm.description},energy = #{charm.energy} where id = #{charm.id} RETURNING *")
+    @Select("update charms set name = #{charm.name},description = #{charm.description},energy = #{charm.energy} where id = #{charm.id} and actual = true RETURNING *")
     Charm update(@Param("charm") Charm charm);
 
-    @Delete("delete from charms where id = #{id}")
+    @Delete("update charms set actual = false where id = #{id} and actual = true")
     void delete(Long id);
 
 }
