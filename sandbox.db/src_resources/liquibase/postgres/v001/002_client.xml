@@ -26,6 +26,7 @@
         gender varchar(255) not null,
         birth_date date,
         charm int,
+        cia_id varchar(255) not null unique,
         primary key(id),
         foreign key(charm) references charm(id)
       )
@@ -103,6 +104,7 @@
     <changeSet author="anazar" id="002_client-008">
         <sql endDelimiter=";;"><![CDATA[
       CREATE SEQUENCE serial START 1000;
+      CREATE SEQUENCE cia_id_seq START 1000;
     ]]></sql>
     </changeSet>
 

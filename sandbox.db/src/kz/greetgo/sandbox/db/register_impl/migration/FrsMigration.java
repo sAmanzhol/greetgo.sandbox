@@ -25,9 +25,16 @@ public class FrsMigration extends AbstractParse {
 	}
 
 	@Override
+	protected void executed(String query) throws SQLException {
+		try(PreparedStatement ps = connection.prepareStatement(query)){
+			ps.executeUpdate();
+		}
+	}
+
+	@Override
 	protected void dropTable() throws SQLException {
 
-		String dropTmp = "drop table tmp_client_transaction";
+		String dropTmp = "drop table if exists tmp_client_transaction";
 		try (PreparedStatement ps = connection.prepareStatement(dropTmp)) {
 			ps.execute();
 		}
@@ -81,9 +88,8 @@ public class FrsMigration extends AbstractParse {
 	protected void updateTable() throws SQLException {
 		String updateTmp = "update tmp_client_transaction c\n" +
 			"set client_id =(select t.client_id from tmp_client_transaction t where t.client_id notnull and t.account_number= c.account_number)";
-		try(PreparedStatement ps = connection.prepareStatement(updateTmp)){
-			ps.executeUpdate();
-		}
+
+		executed(updateTmp);
 
 		/*insert into transaction_type (code, name) SELECT type, transaction_type from tmp_client_transaction;
 

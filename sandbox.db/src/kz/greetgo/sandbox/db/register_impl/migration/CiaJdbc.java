@@ -9,7 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
-public class MyWorker {
+public class CiaJdbc {
 
 	private Connection connection;
 
@@ -25,7 +25,7 @@ public class MyWorker {
 	private  boolean isPrepareStatement = true;
 
 
-	public MyWorker(Connection connection, Integer batchSize) {
+	public CiaJdbc(Connection connection, Integer batchSize) {
 
 		this.connection = connection;
 		this.batchSize = batchSize;

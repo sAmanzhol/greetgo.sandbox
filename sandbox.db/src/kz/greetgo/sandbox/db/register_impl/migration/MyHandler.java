@@ -28,19 +28,19 @@ public class MyHandler extends DefaultHandler {
 	private String element;
 
 
-	private MyWorker myWorker;
+	private CiaJdbc ciaJdbc;
 
 	private int size=0;
 
-	public MyHandler(MyWorker myWorker) {
+	public MyHandler(CiaJdbc ciaJdbc) {
 
-		this.myWorker = myWorker;
+		this.ciaJdbc = ciaJdbc;
 	}
 
 
 	private void addBatchs() throws SQLException {
 
-		myWorker.insertParseXml(ciaSystem, ciaPhoneArrayList, ciaAddressArrayList);
+		ciaJdbc.insertParseXml(ciaSystem, ciaPhoneArrayList, ciaAddressArrayList);
 	}
 
 	@Override
@@ -54,7 +54,7 @@ public class MyHandler extends DefaultHandler {
 	public void endDocument() throws SAXException {
 
 		try {
-			myWorker.executeBatchs();
+			ciaJdbc.executeBatchs();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -139,7 +139,7 @@ public class MyHandler extends DefaultHandler {
 				break;
 			}
 			case "birth": {
-				ciaSystem.birth_date = attributes.getValue(0);
+				ciaSystem.birth_date =attributes.getValue(0);
 				break;
 			}
 			case "fact": {

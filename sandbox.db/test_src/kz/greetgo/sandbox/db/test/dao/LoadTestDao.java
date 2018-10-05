@@ -14,8 +14,8 @@ public interface LoadTestDao {
 		" #{charm.energy}, #{charm.actually})")
 	void inserCharm(@Param("charm") Charm charm);
 
-	@Insert("insert into client (id, firstname, lastname, patronymic, gender, birth_date, charm) values (#{client.id}," +
-		" #{client.firstname}, #{client.lastname}, #{client.patronymic}, #{client.gender}, #{client.birthDate}, #{client.charm})")
+	@Insert("insert into client (id, firstname, lastname, patronymic, gender, birth_date, charm, cia_id) values (#{client.id}," +
+		" #{client.firstname}, #{client.lastname}, #{client.patronymic}, #{client.gender}, #{client.birthDate}, #{client.charm}, nextval('cia_id_seq'))")
 	void insertClient(@Param("client") Client client);
 
 	@Insert("insert into client_phone (client, number, type) " +

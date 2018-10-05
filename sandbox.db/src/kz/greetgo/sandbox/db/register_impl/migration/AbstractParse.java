@@ -8,9 +8,10 @@ public abstract class AbstractParse {
 		dropTable();
 		createTable();
 		insertTable();
-		addIntoCurrentTable();
 		updateTable();
+		addIntoCurrentTable();
 	}
+	protected abstract void executed(String sql) throws SQLException;
 
 	protected abstract void dropTable() throws SQLException;
 
@@ -18,7 +19,7 @@ public abstract class AbstractParse {
 
 	protected abstract void createTable() throws SQLException;
 
-	protected abstract void addIntoCurrentTable();
-
 	protected abstract void updateTable() throws SQLException;
+
+	protected abstract void addIntoCurrentTable();
 }
