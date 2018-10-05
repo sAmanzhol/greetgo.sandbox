@@ -11,6 +11,7 @@ import java.sql.BatchUpdateException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Bean
@@ -19,6 +20,9 @@ public class ClientRegistrImpl implements ClientRegister {
     public BeanGetter<Jdbc> jdbcBean;
 
     private final String INSERT_STATEMENT = "insert into clients (id,surname,name,patronymic,gender,birth_date,charm,actual) VALUES (default,?,?,?,?::gender,?,?,true) ";
+    private final String SELECT_STATEMENT = "select c.id,c.surname,c.name,c.patronymic,c.gender,c.birth_date," +
+            "c.charm as charm_id, ch.name as charm_name,ch.description,ch.energy  from clients c,charms ch "+
+            "where c.actual = true and c.charm = ch.id";
 
     @Override
     public Client getById(Long id) {
@@ -46,7 +50,7 @@ public class ClientRegistrImpl implements ClientRegister {
         resultId = jdbcBean.get().execute(con -> {
             Long id = null;
             try (PreparedStatement preparedStatement = con.prepareStatement(INSERT_STATEMENT + "RETURNING id")) {
-                setInsertStatement(preparedStatement, client);
+                setInsertStatementParams(preparedStatement, client);
                 preparedStatement.execute();
 
                 try (ResultSet rs = preparedStatement.getResultSet()) {
@@ -73,7 +77,7 @@ public class ClientRegistrImpl implements ClientRegister {
          jdbcBean.get().execute(con -> {
             try (PreparedStatement preparedStatement = con.prepareStatement(INSERT_STATEMENT)) {
                 for (Client client : clientList) {
-                    setInsertStatement(preparedStatement, clientList.get(0));
+                    setInsertStatementParams(preparedStatement, clientList.get(0));
                     preparedStatement.addBatch();
                 }
 
@@ -83,6 +87,7 @@ public class ClientRegistrImpl implements ClientRegister {
                 {
                     if(resultSet[i] > 0) {
                         //console log
+
                     }
                 }
             }
@@ -96,10 +101,49 @@ public class ClientRegistrImpl implements ClientRegister {
             return 1;
         });
     }
-
+//    c.id,c.surname,c.name,c.patronymic,c.gender,c.birth_date," +
+//            "c.charm as charm_id, ch.name as charm_name,ch.description,ch.energy
     @Override
-    public List<Client> getByParam(Long start, Long offset) {
-        return null;
+    public List<Client> getListByParam(List<String> FIO,Integer limit, Integer offset,  String sortCol,  String order) {
+        if(sortCol == null)
+            sortCol = "id";
+        if(order == null)
+            order = "ASC";
+
+        final String selectStmnt = getSelectStatement(FIO,limit,offset,sortCol,order);
+
+        System.out.println(selectStmnt);
+
+        List<Client> clientList = new ArrayList<>();
+        jdbcBean.get().execute(con ->
+        {
+            try(PreparedStatement preparedStatement = con.prepareStatement(selectStmnt))
+            {
+               try(ResultSet rs = preparedStatement.executeQuery())
+               {
+                   Client client = null;
+                   while (rs.next())
+                   {
+                       client = new Client(
+                               rs.getLong(1),
+                               rs.getString(2),
+                               rs.getString(3),
+                               rs.getString(4),
+                               rs.getObject(5),
+                               rs.getTimestamp(6),
+                               rs.getLong(7),
+                               rs.getString(8),
+                               rs.getString(9),
+                               rs.getDouble(10)
+                       );
+
+                       clientList.add(client);
+                   }
+               }
+            }
+         return !clientList.isEmpty();
+        });
+        return clientList;
     }
 
     @Override
@@ -124,13 +168,44 @@ public class ClientRegistrImpl implements ClientRegister {
                 || client.birthDate == null;
     }
 
-    void setInsertStatement(PreparedStatement statement, Client client) throws SQLException {
+    void setInsertStatementParams(PreparedStatement statement, Client client) throws SQLException {
         statement.setString(1, client.surname);
         statement.setString(2, client.name);
         statement.setString(3, client.patronymic);
         statement.setString(4, client.gender.toString());
         statement.setTimestamp(5, client.birthDate);
         statement.setLong(6, client.charm.id);
+    }
+
+    String getSelectStatement(List<String> fio,Integer limit, Integer offset, String sortCol, String order){
+        StringBuilder builder = new StringBuilder();
+        builder.append(SELECT_STATEMENT);
+        if(fio.size() >= 0 && fio.get(0) != null) {
+            builder.append(" and c.surname like '");
+            builder.append(fio.get(0));
+            builder.append("%'");
+        }
+        if(fio.size() >= 1 && fio.get(1) != null) {
+            builder.append(" and c.name like '");
+            builder.append(fio.get(1));
+            builder.append("%'");
+        }
+        if(fio.size() >= 2 && fio.get(1) != null) {
+            builder.append(" and c.patronymic like '");
+            builder.append(fio.get(2));
+            builder.append("%'");
+        }
+
+        builder.append(" order by ");
+        builder.append(sortCol);
+        builder.append(" ");
+        builder.append(order);
+        builder.append(" limit ");
+        builder.append(limit);
+        builder.append(" offset ");
+        builder.append(offset);
+
+        return builder.toString();
     }
 
 

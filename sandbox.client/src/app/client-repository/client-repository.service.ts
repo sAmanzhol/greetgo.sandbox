@@ -47,10 +47,10 @@ export class ClientRepositoryService  {
   }
 
   loadRecords(param: any | any): Promise<ClientRecord[]> {
-    return this.http.get("/client/list/")
+    return this.http.get("/client/getAll")
       .toPromise()
       .then(resp => resp.body as Array<any>)
-      .then(body => body.map(r => ClientRecord.create(r)))
+      //.then(body => body.map(r => ClientRecord.create(r)))
   }
 
   setTestCharms(){
@@ -159,6 +159,8 @@ export class ClientRepositoryService  {
     /*
     * Отправляешь запрос на контролер
     * */
+
+    console.log(this.loadRecords("someting"));
   }
 
   async update(client : ClientRecord){

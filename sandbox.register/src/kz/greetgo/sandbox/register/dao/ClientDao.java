@@ -19,7 +19,6 @@ public interface ClientDao {
     @Select("update clients set name = #{charm.name},description = #{charm.description},energy = #{charm.energy} where id = #{charm.id} and actual = true RETURNING *")
     Client update(@Param("client") Client client);
 
-
     @Select("select count(*) from clients where actual = true")
     Long getCount();
 

@@ -16,7 +16,7 @@ public interface ClientRegister {
 
     void insertBatch(List<Client> clientList);
 
-    List<Client> getByParam(Long start,Long offset);
+    List<Client> getListByParam(List<String> filters,Integer limit,Integer offset,String sortCol,String order);
 
     Long getCount();
 

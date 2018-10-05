@@ -145,4 +145,22 @@ public class ClientImplTest extends ParentTestNg {
         //
         assertThat(retClient).isNull();
     }
+
+    @Test void getClientWithParams(){
+        Integer limit = 10;
+        Integer offset = 0;
+        String sortCol = "name";
+        String order = "ASC";
+        List<String> filters = new ArrayList<>();
+        filters.add("Л");
+        filters.add("");
+        filters.add("");
+        //
+        //
+        List<Client> clientList = clientRegister.get().getListByParam(filters,limit,offset,sortCol,order);
+        //
+        //
+        assertThat(clientList).isNotNull();
+        assertThat(clientList).isNotEmpty();
+    }
 }
