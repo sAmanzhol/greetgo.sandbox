@@ -1,5 +1,7 @@
 package kz.greetgo.sandbox.controller.model;
 
+import java.util.Date;
+
 public class ClientToFilter {
   // FIXME: 9/24/18 Название target не говорит для чего будет использоваться переменная. Может быть больше подойдет sortColumn
   public SortColumn sortColumn;
@@ -9,6 +11,8 @@ public class ClientToFilter {
   public String fio;
   public int page;
   public int itemCount;
+
+  public String author;
 
   public ClientToFilter() {
   }

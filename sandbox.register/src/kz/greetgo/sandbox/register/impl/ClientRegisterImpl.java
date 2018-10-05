@@ -2,6 +2,9 @@ package kz.greetgo.sandbox.register.impl;
 
 import kz.greetgo.depinject.core.Bean;
 import kz.greetgo.depinject.core.BeanGetter;
+import kz.greetgo.sandbox.controller.controller.report.ClientReportView;
+import kz.greetgo.sandbox.controller.controller.report.model.ClientReportFootData;
+import kz.greetgo.sandbox.controller.controller.report.model.ClientReportHeadData;
 import kz.greetgo.sandbox.controller.model.*;
 import kz.greetgo.sandbox.controller.register.ClientRegister;
 import kz.greetgo.sandbox.register.dao.ClientDao;
@@ -10,8 +13,10 @@ import kz.greetgo.sandbox.register.dao_model.Client_addr;
 import kz.greetgo.sandbox.register.dao_model.Client_phone;
 import kz.greetgo.sandbox.register.impl.jdbc.ClientCountCallbackImpl;
 import kz.greetgo.sandbox.register.impl.jdbc.ClientListCallbackImpl;
+import kz.greetgo.sandbox.register.impl.jdbc.ClientListRenderCallbackImpl;
 import kz.greetgo.sandbox.register.util.JdbcSandbox;
 
+import java.util.Date;
 import java.util.List;
 
 // FIXME: 9/24/18 Избавься от варнингов в коде
@@ -20,6 +25,22 @@ import java.util.List;
 public class ClientRegisterImpl implements ClientRegister {
   public BeanGetter<ClientDao> clientDao;
   public BeanGetter<JdbcSandbox> jdbc;
+
+  @Override
+  public void generateReport(ClientToFilter clientToFilter, String author, Date createdAt, ClientReportView view) throws Exception {
+    ClientReportHeadData head = new ClientReportHeadData();
+    head.title = "Отчет:";
+
+    view.start(head);
+
+    jdbc.get().execute(new ClientListRenderCallbackImpl(clientToFilter, view));
+
+    ClientReportFootData foot = new ClientReportFootData();
+    foot.generatedBy = author;
+    foot.generatedAt = createdAt;
+
+    view.finish(foot);
+  }
 
   @Override
   public List<ClientRecord> list(ClientToFilter filter) {

@@ -28,4 +28,10 @@ export class ClientsService {
       .toPromise()
       .then(resp => resp.body);
   }
+
+  renderClientRecords(filter, type): Promise<void> {
+    return this.http.get("/client/render", {filter: JSON.stringify(filter)})
+      .toPromise()
+      .then(resp => resp.body);
+  }
 }

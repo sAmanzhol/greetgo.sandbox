@@ -116,6 +116,8 @@
   <ngb-pagination [collectionSize]="count" [pageSize]=10 [(page)]="this.filter.page" [maxSize]="5" [rotate]="true"
                   [boundaryLinks]="true" (pageChange)="loadPage()"></ngb-pagination>
 
+  <button class="btn btn-warning" (click)="openReport('pdf')">Report(pdf)</button>
+  <button class="btn btn-success" (click)="openReport('xlsx')">Report(xlsx)</button>
 
   <app-client-info #modal *ngIf="this.modalOpen" [inModalData]="this.modalData"
                    (outModalData)="closeModal($event)"></app-client-info>
