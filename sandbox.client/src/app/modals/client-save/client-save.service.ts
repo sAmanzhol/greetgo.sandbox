@@ -11,7 +11,7 @@ export class ClientSaveService {
   constructor(private http: HttpService) {
   }
 
-  crupdateClient(clientToSave): Promise<ClientDisplay> {
+  saveClient(clientToSave): Promise<ClientDisplay> {
     return this.http.post("/client/save", {clientToSave: JSON.stringify(clientToSave)})
       .toPromise()
       .then(resp => resp.body as ClientDisplay)

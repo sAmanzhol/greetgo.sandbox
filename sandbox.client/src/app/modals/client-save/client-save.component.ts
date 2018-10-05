@@ -50,7 +50,19 @@ export class ClientSaveComponent implements OnInit {
   }
 
   onSubmit() {
-    this.crupdate(this.client);
+    this.prepareNumbersChange();
+
+    this.save(this.client);
+  }
+
+  prepareNumbersChange() {
+    for (let i = 0; i < this.client["numbers"].length; i++) {
+      if (this.client["numbers"][i].id == 0 ) {
+        this.client["numbersChange"]["created"].push(PhoneDisplay.create({"type": this.client["numbers"][i].type, "number": this.client["numbers"][i].number}));
+      } else {
+        this.client["numbersChange"]["updated"].push(PhoneDisplay.create({"id": this.client["numbers"][i].id, "type": this.client["numbers"][i].type, "number": this.client["numbers"][i].number}));
+      }
+    }
   }
 
   addPhone() {
@@ -61,8 +73,12 @@ export class ClientSaveComponent implements OnInit {
     phone.type = type;
   }
 
-  deletePhone(index) {
-    this.client["numbers"].splice(index, 1)
+  deletePhone(index, id) {
+    this.client["numbers"].splice(index, 1);
+
+    if (id != 0) {
+      this.client["numbersChange"]["deleted"].push(PhoneDisplay.create({"id": id}));
+    }
   }
 
   closeModal() {
@@ -76,19 +92,17 @@ export class ClientSaveComponent implements OnInit {
 
   async getClient(id) {
     //fixme Нужны ли везде эти трай кетчи?
-    this.client = await this.Service.getClient(id);
-    console.log(this.client);
+    this.client.assign(await this.Service.getClient(id));
   }
 
-  async crupdate(clientToSave) {
-    await this.Service.crupdateClient(clientToSave);
+  async save(clientToSave) {
+    await this.Service.saveClient(clientToSave);
     this.closeModal();
     this.ClientsComponent.loadPage();
   }
 
   async getCharacters() {
     this.characterTypes = await this.CharactersService.getCharacters();
-    console.log(this.characterTypes);
   }
 
   async getPhoneTypes() {

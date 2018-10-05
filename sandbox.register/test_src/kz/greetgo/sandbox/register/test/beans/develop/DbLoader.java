@@ -170,16 +170,27 @@ public class DbLoader {
     logger.info("Start loading clients Addresses...");
 
     client_addr(1, "REG", "Ломоносова", "11", "1");
+    client_addr(1, "FACT", "Факт адрес", "1", "89");
     client_addr(2, "REG", "Пр.абылай Хана", "22", "2");
+    client_addr(2, "FACT", "", "", "");
     client_addr(3, "REG", "Ломоносова", "99", "4");
+    client_addr(3, "FACT", "", "", "");
     client_addr(4, "REG", "Пр.абылай Хана", "33", "5");
+    client_addr(4, "FACT", "", "", "");
     client_addr(5, "REG", "Ломоносова", "88", "2");
+    client_addr(5, "FACT", "", "", "");
     client_addr(6, "REG", "Пр.абылай Хана", "44", "1");
+    client_addr(6, "FACT", "", "", "");
     client_addr(7, "REG", "Ломоносова", "34", "1");
+    client_addr(7, "FACT", "", "", "");
     client_addr(8, "REG", "Пр.абылай Хана", "55", "2");
+    client_addr(8, "FACT", "", "", "");
     client_addr(9, "REG", "Ломоносова", "77", "4");
+    client_addr(9, "FACT", "", "", "");
     client_addr(10, "REG", "Пр.абылай Хана", "66", "3");
+    client_addr(10, "FACT", "", "", "");
     client_addr(11, "REG", "Ломоносова", "27", "3");
+    client_addr(11, "FACT", "", "", "");
 
     logger.info("Finish loading clients Addresses!");
   }

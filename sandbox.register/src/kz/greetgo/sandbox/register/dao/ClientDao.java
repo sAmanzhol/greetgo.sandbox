@@ -27,6 +27,7 @@ public interface ClientDao {
     "on conflict (client, number) do update set actual = 1;")
   void insertClientPhone(Client_phone client_phone);
 
+
   @Select("select currval('id')")
   int getId();
 
@@ -67,12 +68,17 @@ public interface ClientDao {
   void updateClientAddr(Client_addr client_addr);
 
   @Update("update Client_phone " +
-    "set number = #{number} " +
-    "where client = #{client} and type = #{type}::phone and actual = 1")
+    "set number = #{number}, type = #{type}::phone " +
+    "where id = #{id} and actual = 1")
   void updateClientPhone(Client_phone client_phone);
+
+  @Update("update Client_phone " +
+    "set actual = 0 " +
+    "where id = #{id}")
+  void deleteClientPhone(int id);
 
   @Update("update Client " +
     "set actual = 0 " +
     "where id = #{id}")
-  void delete(int id);
+  void deleteClient(int id);
 }

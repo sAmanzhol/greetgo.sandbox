@@ -47,8 +47,6 @@ export class ClientsComponent implements OnInit {
   async loadPage(filter = this.filter) {
     this.count = await this.Service.getCount(filter);
     this.list = await this.Service.getClients(filter);
-
-    console.log(this.list);
   }
 
   async delete(id, filter = this.filter) {

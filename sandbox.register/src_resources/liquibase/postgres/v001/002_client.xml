@@ -74,7 +74,7 @@
         id serial not null unique,
         client int references client,
         type phone not null,
-        number varchar(11) not null unique,
+        number varchar(11) not null,
         actual int not null default 1,
         primary key(client, number)
       )

@@ -205,9 +205,9 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     int charmId = insertCharacterTest(101, "Самовлюблённый", "Самовлюблённый Самовлюблённый", 100).id;
 
-    insertClient(101, "Колобова", "Розалия", "Наумовна", "FEMALE", new GregorianCalendar(1977, 4, 25).getTime(), charmId);
-    insertClient(102, "Панова", "Алира", "Иосифовна", "FEMALE", new GregorianCalendar(1999, 7, 16).getTime(), charmId);
-    insertClient(103, "Крюков", "Игнатий", "Улебович", "MALE", new GregorianCalendar(1965, 2, 2).getTime(), charmId);
+    insertClient(121, "Колобова", "Розалия", "Наумовна", "FEMALE", new GregorianCalendar(1977, 4, 25).getTime(), charmId);
+    insertClient(122, "Панова", "Алира", "Иосифовна", "FEMALE", new GregorianCalendar(1999, 7, 16).getTime(), charmId);
+    insertClient(123, "Крюков", "Игнатий", "Улебович", "MALE", new GregorianCalendar(1965, 2, 2).getTime(), charmId);
 
     ClientToFilter filter = new ClientToFilter("fio", "ASC", "", 1, 10);
 
@@ -219,9 +219,9 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     assertThat(list).hasSize(3);
 
-    assertThat(list.get(0).id).isEqualTo(101);
-    assertThat(list.get(1).id).isEqualTo(103);
-    assertThat(list.get(2).id).isEqualTo(102);
+    assertThat(list.get(0).id).isEqualTo(121);
+    assertThat(list.get(1).id).isEqualTo(123);
+    assertThat(list.get(2).id).isEqualTo(122);
   }
 
   @Test
@@ -231,9 +231,9 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     int charmId = insertCharacterTest(101, "Самовлюблённый", "Самовлюблённый Самовлюблённый", 100).id;
 
-    insertClient(101, "Колобова", "Розалия", "Наумовна", "FEMALE", new GregorianCalendar(1977, 4, 25).getTime(), charmId);
-    insertClient(102, "Панова", "Алира", "Иосифовна", "FEMALE", new GregorianCalendar(1999, 7, 16).getTime(), charmId);
-    insertClient(103, "Крюков", "Игнатий", "Улебович", "MALE", new GregorianCalendar(1965, 2, 2).getTime(), charmId);
+    insertClient(111, "Колобова", "Розалия", "Наумовна", "FEMALE", new GregorianCalendar(1977, 4, 25).getTime(), charmId);
+    insertClient(112, "Панова", "Алира", "Иосифовна", "FEMALE", new GregorianCalendar(1999, 7, 16).getTime(), charmId);
+    insertClient(113, "Крюков", "Игнатий", "Улебович", "MALE", new GregorianCalendar(1965, 2, 2).getTime(), charmId);
 
     ClientToFilter filter = new ClientToFilter("fio", "DESC", "", 1, 10);
 
@@ -245,9 +245,9 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     assertThat(list).hasSize(3);
 
-    assertThat(list.get(0).id).isEqualTo(102);
-    assertThat(list.get(1).id).isEqualTo(103);
-    assertThat(list.get(2).id).isEqualTo(101);
+    assertThat(list.get(0).id).isEqualTo(112);
+    assertThat(list.get(1).id).isEqualTo(113);
+    assertThat(list.get(2).id).isEqualTo(111);
   }
 
   @Test
@@ -520,9 +520,9 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     int charmId = insertCharacterTest(101, "Самовлюблённый", "Самовлюблённый Самовлюблённый", 100).id;
 
-    insertClient(101, "Колобова", "Розалия", "Наумовна", "FEMALE", new GregorianCalendar(1977, 4, 25).getTime(), charmId);
-    insertClient(102, "Панова", "Алира", "Иосифовна", "FEMALE", new GregorianCalendar(1999, 7, 16).getTime(), charmId);
-    insertClient(103, "Крюков", "Игнатий", "Улебович", "MALE", new GregorianCalendar(1965, 2, 2).getTime(), charmId);
+    insertClient(1010, "Колобова", "Розалия", "Наумовна", "FEMALE", new GregorianCalendar(1977, 4, 25).getTime(), charmId);
+    insertClient(1020, "Панова", "Алира", "Иосифовна", "FEMALE", new GregorianCalendar(1999, 7, 16).getTime(), charmId);
+    insertClient(1030, "Крюков", "Игнатий", "Улебович", "MALE", new GregorianCalendar(1965, 2, 2).getTime(), charmId);
 
     ClientToFilter filter = new ClientToFilter("id", "ASC", "К", 1, 10);
 
@@ -534,8 +534,8 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     assertThat(list).hasSize(2);
 
-    assertThat(list.get(0).id).isEqualTo(101);
-    assertThat(list.get(1).id).isEqualTo(103);
+    assertThat(list.get(0).id).isEqualTo(1010);
+    assertThat(list.get(1).id).isEqualTo(1030);
   }
 
   @Test
@@ -761,9 +761,9 @@ public class ClientRegisterImplTest extends ParentTestNg {
     Character charm = insertCharacterTest(101, "Самовлюблённый", "Самовлюблённый Самовлюблённый", 100);
     Character newCharm = insertCharacterTest(102, "Характерный", "Характерный Характерный", 100);
 
-    Client client = insertClient(101, "Колобова", "Розалия", "Наумовна", "FEMALE", new GregorianCalendar(1977, 4, 25).getTime(), charm.id);
+    insertClient(101, "Колобова", "Розалия", "Наумовна", "FEMALE", new GregorianCalendar(1977, 4, 25).getTime(), charm.id);
 
-    ClientToSave clientToSave = new ClientToSave("101", "Фамилия", "Имя", "Розалия", new GregorianCalendar(1976, 4, 25).getTime(), "FEMALE", newCharm.id, "Ломоносов Рег", "1", "10", "Lomonosov Фак", "2", "20", new ArrayList<PhoneDisplay>(Arrays.asList(new PhoneDisplay(0, "HOME", "77077070077"), new PhoneDisplay(0, "MOBILE", "77000000077"))));
+    ClientToSave clientToSave = new ClientToSave("101", "Фамилия", "Имя", "Розалия", new GregorianCalendar(1976, 4, 25).getTime(), "FEMALE", newCharm.id, "Ломоносов Рег", "1", "10", "Lomonosov Фак", "2", "20", new ArrayList<>(Arrays.asList(new PhoneDisplay(0, "HOME", "77077070077"), new PhoneDisplay(0, "MOBILE", "77000000077"))));
 
     //
     //
@@ -783,13 +783,13 @@ public class ClientRegisterImplTest extends ParentTestNg {
   @Test
   public void details() {
     Character charm = insertCharacterTest(101, "Самовлюблённый", "Самовлюблённый Самовлюблённый", 100);
-    Client client = insertClient(101, "Колобова", "Розалия", "Наумовна", "FEMALE", new GregorianCalendar(1977, 4, 25).getTime(), charm.id);
+    Client client = insertClient(201, "Колобова", "Розалия", "Наумовна", "FEMALE", new GregorianCalendar(1977, 4, 25).getTime(), charm.id);
 
-    Client_addr client_addr_reg = insertClientAddr(101, "REG", "Lomonosov", "1", "2");
-    Client_addr client_addr_fact = insertClientAddr(101, "FACT", "Lomonosova Fact", "10", "20");
+    Client_addr client_addr_reg = insertClientAddr(201, "REG", "Lomonosov", "1", "2");
+    Client_addr client_addr_fact = insertClientAddr(201, "FACT", "Lomonosova Fact", "10", "20");
 
-    Client_phone client_phone_home = insertClientPhone(101, "HOME", "87077070077");
-    Client_phone client_phone_mobile = insertClientPhone(101, "MOBILE", "12345678899");
+    Client_phone client_phone_home = insertClientPhone(201, "HOME", "87077070077");
+    Client_phone client_phone_mobile = insertClientPhone(201, "MOBILE", "12345678899");
 
     //
     //
@@ -797,7 +797,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
     //
     //
 
-    assertThat(clientDisplay.id).isNotNull().isEqualTo(101);
+    assertThat(clientDisplay.id).isNotNull().isEqualTo(201);
     assertThat(clientDisplay.surname).isNotNull().isEqualTo(client.surname);
     assertThat(clientDisplay.name).isNotNull().isEqualTo(client.name);
     assertThat(clientDisplay.patronymic).isNotNull().isEqualTo(client.patronymic);
