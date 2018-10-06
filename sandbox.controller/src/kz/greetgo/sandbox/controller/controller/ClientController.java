@@ -9,15 +9,14 @@ import kz.greetgo.mvc.annotations.on_methods.ControllerPrefix;
 import kz.greetgo.mvc.annotations.on_methods.OnDelete;
 import kz.greetgo.mvc.annotations.on_methods.OnGet;
 import kz.greetgo.mvc.annotations.on_methods.OnPost;
+import kz.greetgo.mvc.interfaces.BinResponse;
 import kz.greetgo.mvc.interfaces.RequestTunnel;
-import kz.greetgo.sandbox.controller.controller.report.ClientReportView;
-import kz.greetgo.sandbox.controller.controller.report.ClientReportViewPdf;
-import kz.greetgo.sandbox.controller.controller.report.ClientReportViewXlsx;
-import kz.greetgo.sandbox.controller.model.ClientDisplay;
-import kz.greetgo.sandbox.controller.model.ClientRecord;
-import kz.greetgo.sandbox.controller.model.ClientToFilter;
-import kz.greetgo.sandbox.controller.model.ClientToSave;
+import kz.greetgo.sandbox.controller.model.*;
+import kz.greetgo.sandbox.controller.report.ClientReportView;
+import kz.greetgo.sandbox.controller.report.ClientReportViewPdf;
+import kz.greetgo.sandbox.controller.report.ClientReportViewXlsx;
 import kz.greetgo.sandbox.controller.register.ClientRegister;
+import kz.greetgo.sandbox.controller.security.PublicAccess;
 import kz.greetgo.sandbox.controller.util.Controller;
 
 import java.io.OutputStream;
@@ -31,26 +30,25 @@ public class ClientController implements Controller {
 
   public BeanGetter<ClientRegister> clientRegister;
 
+  @PublicAccess
   @ToJson
-  @OnPost("/render")
-  public void render(@Json @Par("filter") ClientToFilter filter, RequestTunnel tunnel) throws Exception {
+  @OnGet("/render")
+  public void render(@Json @Par("filter") ClientToFilter filter, BinResponse binResponse) throws Exception {
     String userId = "User1"; // get it from session
     String type = "pdf"; // get it from content type
 
-    tunnel.setResponseHeader("Content-Disposition", "attachment; filename=" + userId + "_report." + type);
-    OutputStream out = tunnel.getResponseOutputStream();
+    binResponse.setFilename("report_client.pdf");
+    binResponse.setContentTypeByFilenameExtension();
 
-    PrintStream printStream = new PrintStream(out, false, "UTF-8");
+    ClientReportView view = getMyView(type, binResponse.out());
 
-    ClientReportView view = getMyView(type, printStream);
+    RenderFilter renderFilter = new RenderFilter(filter, userId, new Date(), view);
+    clientRegister.get().renderList(renderFilter);
 
-    clientRegister.get().generateReport(filter, userId, new Date(), view);
-
-    printStream.flush();
-    tunnel.flushBuffer();
+    binResponse.flushBuffers();
   }
 
-  private ClientReportView getMyView(String type, PrintStream printStream) {
+  private ClientReportView getMyView(String type, OutputStream printStream) {
     switch (type) {
       case "pdf":
         return new ClientReportViewPdf(printStream);

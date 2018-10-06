@@ -29,9 +29,7 @@ export class ClientsService {
       .then(resp => resp.body);
   }
 
-  renderClientRecords(filter, type): Promise<void> {
-    return this.http.get("/client/render", {filter: JSON.stringify(filter)})
-      .toPromise()
-      .then(resp => resp.body);
+  renderClientRecords(filter, type){
+    this.http.downloadResource("/client/render", {filter: JSON.stringify(filter)});
   }
 }

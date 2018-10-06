@@ -1,13 +1,13 @@
 package kz.greetgo.sandbox.register.impl.jdbc;
 
-import kz.greetgo.sandbox.controller.controller.report.ClientReportView;
+import kz.greetgo.sandbox.controller.report.ClientReportView;
 import kz.greetgo.sandbox.controller.model.ClientToFilter;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-public class ClientListRenderCallbackImpl<Void> extends ClientListCallbackAbstract<Void> {
+public class ClientListRenderCallbackImpl extends ClientListCallbackAbstract<Void> {
 
   private final ClientReportView view;
 

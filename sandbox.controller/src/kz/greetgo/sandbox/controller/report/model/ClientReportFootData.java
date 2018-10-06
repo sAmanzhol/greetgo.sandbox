@@ -1,4 +1,4 @@
-package kz.greetgo.sandbox.controller.controller.report.model;
+package kz.greetgo.sandbox.controller.report.model;
 
 import java.util.Date;
 
