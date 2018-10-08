@@ -25,7 +25,7 @@ public class ClientRegisterImpl implements ClientRegister {
   public BeanGetter<JdbcSandbox> jdbc;
 
   @Override
-  public void renderList(RenderFilter renderFilter) throws Exception {
+  public void render(RenderFilter renderFilter) throws Exception {
     ClientReportHeadData head = new ClientReportHeadData();
     head.title = "Отчет:";
 

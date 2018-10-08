@@ -10,17 +10,16 @@ import kz.greetgo.mvc.annotations.on_methods.OnDelete;
 import kz.greetgo.mvc.annotations.on_methods.OnGet;
 import kz.greetgo.mvc.annotations.on_methods.OnPost;
 import kz.greetgo.mvc.interfaces.BinResponse;
-import kz.greetgo.mvc.interfaces.RequestTunnel;
 import kz.greetgo.sandbox.controller.model.*;
+import kz.greetgo.sandbox.controller.register.ClientRegister;
 import kz.greetgo.sandbox.controller.report.ClientReportView;
 import kz.greetgo.sandbox.controller.report.ClientReportViewPdf;
 import kz.greetgo.sandbox.controller.report.ClientReportViewXlsx;
-import kz.greetgo.sandbox.controller.register.ClientRegister;
-import kz.greetgo.sandbox.controller.security.PublicAccess;
 import kz.greetgo.sandbox.controller.util.Controller;
 
 import java.io.OutputStream;
-import java.io.PrintStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -30,25 +29,24 @@ public class ClientController implements Controller {
 
   public BeanGetter<ClientRegister> clientRegister;
 
-  @PublicAccess
-  @ToJson
   @OnGet("/render")
-  public void render(@Json @Par("filter") ClientToFilter filter, BinResponse binResponse) throws Exception {
-    String userId = "User1"; // get it from session
-    String type = "pdf"; // get it from content type
+  public void render(@Json @Par("filter") ClientToFilter filter, @Par("type") String type, @Par("username") String author, BinResponse binResponse) throws Exception {
+    DateFormat df = new SimpleDateFormat("dd-MM-yyyy_HH-mm-ss");
 
-    binResponse.setFilename("report_client.pdf");
+    Date generatedAt = new Date();
+
+    binResponse.setFilename(author + "_" + df.format(generatedAt) + "." + type);
     binResponse.setContentTypeByFilenameExtension();
 
     ClientReportView view = getMyView(type, binResponse.out());
 
-    RenderFilter renderFilter = new RenderFilter(filter, userId, new Date(), view);
-    clientRegister.get().renderList(renderFilter);
+    RenderFilter renderFilter = new RenderFilter(filter, author, generatedAt, view);
+    clientRegister.get().render(renderFilter);
 
     binResponse.flushBuffers();
   }
 
-  private ClientReportView getMyView(String type, OutputStream printStream) {
+  private ClientReportView getMyView(String type, OutputStream printStream) throws Exception {
     switch (type) {
       case "pdf":
         return new ClientReportViewPdf(printStream);

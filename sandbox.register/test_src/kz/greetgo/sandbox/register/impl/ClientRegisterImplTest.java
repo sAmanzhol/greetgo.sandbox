@@ -146,8 +146,9 @@ public class ClientRegisterImplTest extends ParentTestNg {
     assertThat(client_account_transaction2.money).isNotNull().isEqualTo(-100);
   }
 
+
   @Test
-  public void list_sortColumn_id_sortDirection_asc() {
+  public void render_list_sortColumn_id_sortDirection_asc() {
     clientTestDao.get().removeAll();
     characterTestDao.get().removeAll();
 
@@ -173,7 +174,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
   }
 
   @Test
-  public void list_sortColumn_id_sortDirection_desc() {
+  public void render_list_sortColumn_id_sortDirection_desc() {
     clientTestDao.get().removeAll();
     characterTestDao.get().removeAll();
 
@@ -199,7 +200,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
   }
 
   @Test
-  public void list_sortColumn_fio_sortDirection_asc() {
+  public void render_list_sortColumn_fio_sortDirection_asc() {
     clientTestDao.get().removeAll();
     characterTestDao.get().removeAll();
 
@@ -225,7 +226,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
   }
 
   @Test
-  public void list_sortColumn_fio_sortDirection_desc() {
+  public void render_list_sortColumn_fio_sortDirection_desc() {
     clientTestDao.get().removeAll();
     characterTestDao.get().removeAll();
 
@@ -251,7 +252,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
   }
 
   @Test
-  public void list_sortColumn_age_sortDirection_asc() {
+  public void render_list_sortColumn_age_sortDirection_asc() {
     clientTestDao.get().removeAll();
     characterTestDao.get().removeAll();
 
@@ -277,7 +278,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
   }
 
   @Test
-  public void list_sortColumn_age_sortDirection_desc() {
+  public void render_list_sortColumn_age_sortDirection_desc() {
     clientTestDao.get().removeAll();
     characterTestDao.get().removeAll();
 
@@ -303,7 +304,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
   }
 
   @Test
-  public void list_sortColumn_balance_sortDirection_asc() {
+  public void render_list_sortColumn_balance_sortDirection_asc() {
     clientTestDao.get().removeAll();
     characterTestDao.get().removeAll();
 
@@ -338,7 +339,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
   }
 
   @Test
-  public void list_sortColumn_balance_sortDirection_desc() {
+  public void render_list_sortColumn_balance_sortDirection_desc() {
     clientTestDao.get().removeAll();
     characterTestDao.get().removeAll();
 
@@ -373,7 +374,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
   }
 
   @Test
-  public void list_sortColumn_balanceMax_sortDirection_asc() {
+  public void render_list_sortColumn_balanceMax_sortDirection_asc() {
     clientTestDao.get().removeAll();
     characterTestDao.get().removeAll();
 
@@ -408,7 +409,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
   }
 
   @Test
-  public void list_sortColumn_balanceMax_sortDirection_desc() {
+  public void render_list_sortColumn_balanceMax_sortDirection_desc() {
     clientTestDao.get().removeAll();
     characterTestDao.get().removeAll();
 
@@ -443,7 +444,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
   }
 
   @Test
-  public void list_sortColumn_balanceMin_sortDirection_asc() {
+  public void render_list_sortColumn_balanceMin_sortDirection_asc() {
     clientTestDao.get().removeAll();
     characterTestDao.get().removeAll();
 
@@ -478,7 +479,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
   }
 
   @Test
-  public void list_sortColumn_balanceMin_sortDirection_desc() {
+  public void render_list_sortColumn_balanceMin_sortDirection_desc() {
     clientTestDao.get().removeAll();
     characterTestDao.get().removeAll();
 
@@ -514,7 +515,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
   }
 
   @Test
-  public void list_with_filter_fio_surname() {
+  public void render_list_with_filter_fio_surname() {
     clientTestDao.get().removeAll();
     characterTestDao.get().removeAll();
 
@@ -539,7 +540,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
   }
 
   @Test
-  public void list_with_filter_fio_name() {
+  public void render_list_with_filter_fio_name() {
     clientTestDao.get().removeAll();
     characterTestDao.get().removeAll();
 
@@ -564,7 +565,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
   }
 
   @Test
-  public void list_with_filter_fio_patronymic() {
+  public void render_list_with_filter_fio_patronymic() {
     clientTestDao.get().removeAll();
     characterTestDao.get().removeAll();
 
@@ -586,6 +587,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     assertThat(list.get(0).id).isEqualTo(103);
   }
+
 
   @Test
   public void list_with_pagination_top_items() {
@@ -735,7 +737,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
       "",
       "",
       "",
-      new ArrayList<>(Collections.singletonList(new PhoneDisplay(0,"HOME", RND.str(11))))
+      new ArrayList<>(Collections.singletonList(new PhoneDisplay(0, "HOME", RND.str(11))))
     );
 
     //

@@ -20,5 +20,5 @@ public interface ClientRegister {
   // FIXME: 9/24/18 Не должен возвращать ничего
   void delete(int id);
 
-  void renderList(RenderFilter renderFilter) throws Exception;
+  void render(RenderFilter renderFilter) throws Exception;
 }

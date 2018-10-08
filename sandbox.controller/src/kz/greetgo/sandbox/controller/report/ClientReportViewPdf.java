@@ -1,61 +1,69 @@
 package kz.greetgo.sandbox.controller.report;
 
 import com.itextpdf.text.Document;
+import com.itextpdf.text.Font;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import kz.greetgo.sandbox.controller.model.ClientRecord;
 import kz.greetgo.sandbox.controller.report.model.ClientReportFootData;
 import kz.greetgo.sandbox.controller.report.model.ClientReportHeadData;
+import kz.greetgo.util.RND;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.Date;
 
 public class ClientReportViewPdf implements ClientReportView {
 
-  private OutputStream printStream;
+  private Document document;
 
-  private Document document = new Document();
+  private static final String FONT = "/home/ssailaubayev/IdeaProjects/greetgo.sandbox/sandbox.controller/src/kz/greetgo/sandbox/controller/report/fonts/FreeSans.ttf";
+  private Font cyrillicFont;
 
-  public ClientReportViewPdf(OutputStream printStream) {
-    this.printStream = printStream;
+  public ClientReportViewPdf(OutputStream printStream) throws Exception {
+
+    BaseFont baseFont = BaseFont.createFont(FONT, "cp1251", BaseFont.EMBEDDED);
+    cyrillicFont = new Font(baseFont, 12, Font.NORMAL);
+
+    this.document = new Document();
+
+    PdfWriter.getInstance(document, printStream);
+    document.open();
   }
 
   @Override
   public void start(ClientReportHeadData headData) throws Exception {
-    PdfWriter.getInstance(document, printStream);
-    document.open();
-
     PdfPTable table = new PdfPTable(7);
-    table.addCell("Id");
-    table.addCell("Full name");
-    table.addCell("Character");
-    table.addCell("Age");
-    table.addCell("Total balance");
-    table.addCell("Maximum balance");
-    table.addCell("Minimum balance");
+    table.addCell(new Paragraph("Id", cyrillicFont));
+    table.addCell(new Paragraph("Full name", cyrillicFont));
+    table.addCell(new Paragraph("Character", cyrillicFont));
+    table.addCell(new Paragraph("Age", cyrillicFont));
+    table.addCell(new Paragraph("Total balance", cyrillicFont));
+    table.addCell(new Paragraph("Maximum balance", cyrillicFont));
+    table.addCell(new Paragraph("Minimum balance", cyrillicFont));
     document.add(table);
   }
 
   @Override
   public void addRow(ClientRecord clientRecord) throws Exception {
     PdfPTable table = new PdfPTable(7);
-    table.addCell(String.valueOf(clientRecord.id));
-    table.addCell(clientRecord.fio);
-    table.addCell(clientRecord.character);
-    table.addCell(String.valueOf(clientRecord.age));
-    table.addCell(String.valueOf(clientRecord.balance));
-    table.addCell(String.valueOf(clientRecord.balanceMax));
-    table.addCell(String.valueOf(clientRecord.balanceMin));
+    table.addCell(new Paragraph(String.valueOf(clientRecord.id), cyrillicFont));
+    table.addCell(new Paragraph(String.valueOf(clientRecord.fio), cyrillicFont));
+    table.addCell(new Paragraph(String.valueOf(clientRecord.character), cyrillicFont));
+    table.addCell(new Paragraph(String.valueOf(clientRecord.age), cyrillicFont));
+    table.addCell(new Paragraph(String.valueOf(clientRecord.balance), cyrillicFont));
+    table.addCell(new Paragraph(String.valueOf(clientRecord.balanceMax), cyrillicFont));
+    table.addCell(new Paragraph(String.valueOf(clientRecord.balanceMin), cyrillicFont));
     document.add(table);
   }
 
   @Override
   public void finish(ClientReportFootData footData) throws Exception {
-    Paragraph paragraph = new Paragraph();
-    paragraph.add(String.format("Author: %s \n Created at: %s", String.valueOf(footData.generatedBy), String.valueOf(footData.generatedAt)));
+    Paragraph paragraph = new Paragraph(String.format("Author: %s \n Created at: %s", String.valueOf(footData.generatedBy), String.valueOf(footData.generatedAt)), cyrillicFont);
     document.add(paragraph);
 
     document.close();
@@ -66,7 +74,7 @@ public class ClientReportViewPdf implements ClientReportView {
     File file = new File("build/report/test_report.pdf");
     file.getParentFile().mkdir();
 
-    try (FileOutputStream printStream = new FileOutputStream(file)) {
+    try (PrintStream printStream = new PrintStream(new FileOutputStream(file), false, "UTF-8")) {
       ClientReportViewPdf viewPdf = new ClientReportViewPdf(printStream);
 
       ClientReportHeadData head = new ClientReportHeadData();
@@ -77,18 +85,21 @@ public class ClientReportViewPdf implements ClientReportView {
       for (int i = 0; i < 10; i++) {
         ClientRecord row = new ClientRecord();
         row.id = i;
-        row.fio = "fio of " + i;
-        row.character = "character of " + i;
-        row.age = i * 2;
-        row.balance = i * 2;
-        row.balanceMax = i * 2;
-        row.balanceMin = i * 2;
+        row.fio = RND.str(5) + " " + RND.str(5) + RND.str(5);
+        row.character = RND.str(7);
+        row.age = RND.plusInt(40);
+        row.balance = RND.plusInt(100000);
+        ;
+        row.balanceMax = RND.plusInt(10000000);
+        ;
+        row.balanceMin = RND.plusInt(10000);
+        ;
 
         viewPdf.addRow(row);
       }
 
       ClientReportFootData foot = new ClientReportFootData();
-      foot.generatedBy = "Desali";
+      foot.generatedBy = "De Sali";
       foot.generatedAt = new Date();
 
       viewPdf.finish(foot);

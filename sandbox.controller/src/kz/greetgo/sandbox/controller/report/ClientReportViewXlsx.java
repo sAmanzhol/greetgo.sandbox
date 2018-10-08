@@ -1,8 +1,8 @@
 package kz.greetgo.sandbox.controller.report;
 
+import kz.greetgo.sandbox.controller.model.ClientRecord;
 import kz.greetgo.sandbox.controller.report.model.ClientReportFootData;
 import kz.greetgo.sandbox.controller.report.model.ClientReportHeadData;
-import kz.greetgo.sandbox.controller.model.ClientRecord;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -18,19 +18,20 @@ public class ClientReportViewXlsx implements ClientReportView {
 
   private OutputStream printStream;
 
-  private Workbook workbook = new XSSFWorkbook();
+  private Workbook workbook;
   private Sheet sheet;
   private int rowNum = 0;
 
   public ClientReportViewXlsx(OutputStream printStream) {
     this.printStream = printStream;
+    this.workbook = new XSSFWorkbook();
   }
 
   @Override
   public void start(ClientReportHeadData headData) {
-    sheet = workbook.createSheet("Client Report");
+    this.sheet = this.workbook.createSheet("Client Report");
 
-    Row row = sheet.createRow(rowNum++);
+    Row row = this.sheet.createRow(rowNum++);
     row.createCell(0).setCellValue("Id");
     row.createCell(1).setCellValue("Full name");
     row.createCell(2).setCellValue("Character");
@@ -42,7 +43,7 @@ public class ClientReportViewXlsx implements ClientReportView {
 
   @Override
   public void addRow(ClientRecord clientRecord) {
-    Row row = sheet.createRow(rowNum++);
+    Row row = this.sheet.createRow(rowNum++);
     row.createCell(0).setCellValue(String.valueOf(clientRecord.id));
     row.createCell(1).setCellValue(String.valueOf(clientRecord.fio));
     row.createCell(2).setCellValue(String.valueOf(clientRecord.character));
@@ -54,11 +55,11 @@ public class ClientReportViewXlsx implements ClientReportView {
 
   @Override
   public void finish(ClientReportFootData footData) throws Exception {
-    Row rowAuthor = sheet.createRow(rowNum++);
+    Row rowAuthor = this.sheet.createRow(rowNum++);
     rowAuthor.createCell(0).setCellValue("Author: ");
     rowAuthor.createCell(1).setCellValue(String.valueOf(footData.generatedBy));
 
-    Row rowDate= sheet.createRow(rowNum++);
+    Row rowDate = this.sheet.createRow(rowNum++);
     rowDate.createCell(0).setCellValue("Generated at: ");
     rowDate.createCell(1).setCellValue(String.valueOf(footData.generatedAt));
 
@@ -67,7 +68,7 @@ public class ClientReportViewXlsx implements ClientReportView {
       sheet.autoSizeColumn(i);
     }
 
-    workbook.write(printStream);
+    this.workbook.write(this.printStream);
   }
 
   public static void main(String[] args) throws Exception {
