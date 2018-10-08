@@ -6,12 +6,10 @@ import java.util.List;
 
 // FIXME: 9/24/18 ClientDetails
 public class ClientDisplay {
-  // FIXME: 9/24/18 id везде должен быть числовым
   public int id;
   public String surname;
   public String name;
   public String patronymic;
-  // FIXME: 9/24/18 birthDate должен быть Date
   public Date birthDate;
   public int characterId;
   public String gender;
@@ -24,9 +22,7 @@ public class ClientDisplay {
 
   public List<PhoneDisplay> numbers = new ArrayList<>();
 
-  public ClientDisplay() {
-
-  }
+  public ClientDisplay() { }
 
   public ClientDisplay(int id, String surname, String name, String patronymic, Date birthDate, String gender, int characterId, String streetRegistration, String houseRegistration, String apartmentRegistration, String streetResidence, String houseResidence, String apartmentResidence, List<PhoneDisplay> numbers) {
     this.id = id;

@@ -39,6 +39,7 @@ public interface ClientTestDao {
     "on conflict (id) do update set actual = 1;")
   void insertClientAccountTransaction(Client_account_transaction client_account_transaction);
 
+  // FIXME: 10/8/18 checkClient название не соответсвует тому, что делает метод
   @Select("select actual from Client " +
     "where id = #{id}")
   int checkClient(@Param("id") int id);
