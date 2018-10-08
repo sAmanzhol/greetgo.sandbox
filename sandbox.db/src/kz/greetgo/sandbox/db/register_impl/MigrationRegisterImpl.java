@@ -31,10 +31,10 @@ public class MigrationRegisterImpl implements MigrationRegister {
 			public Void doInConnection(Connection connection) throws Exception {
 
 				switch (type) {
-					case "D:\\git Repositories\\greetgo.sandbox-1\\sandbox.db\\src_resources\\out_source_file\\from_frs_2018-02-21-154543-1-30009json.txt":
+					case "/home/nazar/IdeaProjects/greetgo.sandbox-1/sandbox.db/src_resources/out_source_file/from_frs_2018-02-21-154543-1-30009json.txt":
 						migration = new FrsMigration(connection, inFile, batchSize /*oufile*/);
 						break;
-					case "D:\\git Repositories\\greetgo.sandbox-1\\sandbox.db\\src_resources\\out_source_file\\from_cia_2018-02-21-154532-1-300.xml":
+					case "/home/nazar/IdeaProjects/greetgo.sandbox-1/sandbox.db/src_resources/out_source_file/from_cia_2018-02-21-154532-1-300.xml":
 						migration = new CiaMigration(connection, inFile, batchSize/*oufile*/);
 
 				}

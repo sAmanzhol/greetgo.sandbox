@@ -26,7 +26,7 @@
         gender varchar(255) not null,
         birth_date date,
         charm int,
-        cia_id varchar(255) not null unique,
+        cia_id varchar(255) unique,
         primary key(id),
         foreign key(charm) references charm(id)
       )

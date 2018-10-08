@@ -12,11 +12,11 @@ public class MigrationRegisterImplTest extends ParentTestNg {
 	@Test
 	public void testGetMigration() {
 
-		String type = "D:\\git Repositories\\greetgo.sandbox-1\\sandbox.db\\src_resources\\out_source_file\\from_frs_2018-02-21-154543-1-30009json.txt";
-		String type1 = "D:\\git Repositories\\greetgo.sandbox-1\\sandbox.db\\src_resources\\out_source_file\\from_cia_2018-02-21-154532-1-300.xml";
+		String xmls = "/home/nazar/IdeaProjects/greetgo.sandbox-1/sandbox.db/src_resources/out_source_file/from_cia_2018-02-21-154532-1-300.xml";
+		String txts = "/home/nazar/IdeaProjects/greetgo.sandbox-1/sandbox.db/src_resources/out_source_file/from_frs_2018-02-21-154543-1-30009json.txt";
 
-		migrationRegister.get().getMigration(type);
-		migrationRegister.get().getMigration(type1);
+		migrationRegister.get().getMigration(xmls);
+		migrationRegister.get().getMigration(txts);
 
 	}
 }

@@ -1,9 +1,11 @@
 package kz.greetgo.sandbox.db.dao;
 
 import kz.greetgo.sandbox.controller.model.model.*;
-import org.apache.ibatis.annotations.*;
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 public interface ClientDao {
@@ -72,7 +74,7 @@ public interface ClientDao {
             "  ca.totalAccountBalance\n" +
             "from client c left join charm ch on c.charm = ch.id\n" +
             "  left join (select\n" +
-            "               client,\n" +
+            "                   ,\n" +
             "               avg(money) as totalAccountBalance,\n" +
             "               max(money) as maximumBalance,\n" +
             "               min(money) as minimumBalance\n" +
