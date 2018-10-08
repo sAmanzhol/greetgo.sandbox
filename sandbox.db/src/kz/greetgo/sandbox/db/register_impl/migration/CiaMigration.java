@@ -199,3 +199,64 @@ order by id, created_at desc);
 select * from tmp_client
 where id = '0-B9N-HT-PU-04wolRBPzj'
 order by  created_at desc*/
+
+
+
+/*UPDATE tmp_client_phone SET status = 'Date is Error' FROM tmp_client
+WHERE tmp_client.status = 'Date is Error' and tmp_client.id = tmp_client_phone.client_id;
+
+UPDATE tmp_client_phone SET status ='Date is Error'
+WHERE client_id =(SELECT id FROM tmp_client WHERE status = 'Date is Error' and tmp_client_phone.client_id =tmp_client.id);
+
+
+update tmp_client_transaction c set
+                                    client_id =(select t.client_id from tmp_client_transaction t where t.client_id notnull and t.account_number= c.account_number);
+
+
+update tmp_client set stat=null;
+
+update tmp_client set stat ='Date is Error'
+where (birth_date <= '1018-01-01' or birth_date >= '2014-01-01' or birth_date isnull) and stat isnull;
+
+update tmp_client set stat ='Names are incorrect'
+where (firstname isnull  or firstname ='' or lastname ISNULL or lastname ='' ) and stat isnull;
+
+
+update tmp_client_phone c set stat =(select t.stat
+                                     from tmp_client t where c.client_id =t.id and (t.stat like 'Date is Error' or t.stat like 'Names are incorrect'));
+update tmp_client_addr c set stat =(select t.stat
+                                     from tmp_client t where c.client_id =t.id and (t.stat like 'Date is Error' or t.stat like 'Names are incorrect'));
+
+
+update tmp_client t set stat ='1' where CTID in(
+                                               select CTID from(
+                                                               select CTID, row_number() over (partition by id order by created_at desc) from tmp_client
+                                                               ) x where ROW_NUMBER=1 and stat isnull );
+
+
+update tmp_client t set stat ='2' where created_at =(
+                                                    select distinct on(id) created_at from tmp_client
+                                                    where id = t.id and t.stat isnull
+                                                    order by id, created_at desc);
+
+
+update tmp_client_addr t set stat ='3' where client_id in(
+    select id from tmp_client where t.client_id =id
+    );
+
+
+
+select id, CTID, row_number() over
+  (partition by id order by created_at desc ) as solo from tmp_client t where t.solo = 1;
+
+
+
+
+select  row_number() over (partition by id),* from tmp_client
+order by  id, stat
+
+select * from tmp_client
+where id = '0-B9N-HT-PU-04wolRBPzj'
+
+
+*/
