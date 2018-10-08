@@ -76,7 +76,7 @@ public class ClientController implements Controller {
 
   @ToJson
   @OnGet("/details")
-  public ClientDisplay details(@Par("id") int id) {
+  public ClientDetails details(@Par("id") int id) {
     return clientRegister.get().details(id);
   }
 

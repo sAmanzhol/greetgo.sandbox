@@ -1,22 +1,22 @@
 package kz.greetgo.sandbox.register.dao_model;
 
-public class Client_phone {
+public class ClientPhone {
   public int id;
   public int client;
   public String type;
   public String number;
 
-  public Client_phone() {
+  public ClientPhone() {
 
   }
 
-  public Client_phone(int client, String type, String number) {
+  public ClientPhone(int client, String type, String number) {
     this.client = client;
     this.type = type;
     this.number = number;
   }
 
-  public Client_phone(int id, int client, String type, String number) {
+  public ClientPhone(int id, int client, String type, String number) {
     this.id = id;
     this.client = client;
     this.type = type;

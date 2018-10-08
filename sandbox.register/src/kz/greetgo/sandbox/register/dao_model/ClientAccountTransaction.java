@@ -2,10 +2,10 @@ package kz.greetgo.sandbox.register.dao_model;
 
 import java.sql.Timestamp;
 
-public class Client_account {
+public class ClientAccountTransaction {
   public int id;
-  public int client;
+  public int account;
   public float money;
-  public String number;
-  public Timestamp registered_at;
+  public Timestamp finished_at;
+  public int type;
 }

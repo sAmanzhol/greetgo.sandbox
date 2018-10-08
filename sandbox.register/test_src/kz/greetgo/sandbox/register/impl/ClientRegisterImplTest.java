@@ -1,31 +1,17 @@
 package kz.greetgo.sandbox.register.impl;
 
 import kz.greetgo.depinject.core.BeanGetter;
-import kz.greetgo.sandbox.controller.model.ClientDisplay;
-import kz.greetgo.sandbox.controller.model.ClientRecord;
-import kz.greetgo.sandbox.controller.model.ClientToFilter;
-import kz.greetgo.sandbox.controller.model.ClientToSave;
-import kz.greetgo.sandbox.controller.model.PhoneDisplay;
+import kz.greetgo.sandbox.controller.model.*;
 import kz.greetgo.sandbox.controller.register.ClientRegister;
 import kz.greetgo.sandbox.register.dao_model.Character;
-import kz.greetgo.sandbox.register.dao_model.Client;
-import kz.greetgo.sandbox.register.dao_model.Client_account;
-import kz.greetgo.sandbox.register.dao_model.Client_account_transaction;
-import kz.greetgo.sandbox.register.dao_model.Client_addr;
-import kz.greetgo.sandbox.register.dao_model.Client_phone;
-import kz.greetgo.sandbox.register.dao_model.Transaction_type;
+import kz.greetgo.sandbox.register.dao_model.*;
 import kz.greetgo.sandbox.register.test.dao.CharacterTestDao;
 import kz.greetgo.sandbox.register.test.dao.ClientTestDao;
 import kz.greetgo.sandbox.register.test.util.ParentTestNg;
 import kz.greetgo.util.RND;
 import org.testng.annotations.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
+import java.util.*;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 
@@ -65,58 +51,58 @@ public class ClientRegisterImplTest extends ParentTestNg {
     return character;
   }
 
-  private Client_account insertClientAccountTest(int id, int client, float money, String number) {
-    Client_account client_account = new Client_account();
-    client_account.id = id;
-    client_account.client = client;
-    client_account.money = money;
-    client_account.number = number;
+  private ClientAccount insertClientAccountTest(int id, int client, float money, String number) {
+    ClientAccount clientAccount = new ClientAccount();
+    clientAccount.id = id;
+    clientAccount.client = client;
+    clientAccount.money = money;
+    clientAccount.number = number;
 
-    clientTestDao.get().insertClientAccount(client_account);
-    return client_account;
+    clientTestDao.get().insertClientAccount(clientAccount);
+    return clientAccount;
   }
 
-  private Transaction_type insertTransactionTypeTest(int id, String name, String code) {
-    Transaction_type transaction_type = new Transaction_type();
-    transaction_type.id = id;
-    transaction_type.name = name;
-    transaction_type.code = code;
+  private TransactionType insertTransactionTypeTest(int id, String name, String code) {
+    TransactionType transactionType = new TransactionType();
+    transactionType.id = id;
+    transactionType.name = name;
+    transactionType.code = code;
 
-    clientTestDao.get().insertTransactionType(transaction_type);
-    return transaction_type;
+    clientTestDao.get().insertTransactionType(transactionType);
+    return transactionType;
   }
 
-  private Client_account_transaction insertClientAccountTransactionTest(int id, int account, float money, int type) {
-    Client_account_transaction client_account_transaction = new Client_account_transaction();
-    client_account_transaction.id = id;
-    client_account_transaction.account = account;
-    client_account_transaction.money = money;
-    client_account_transaction.type = type;
+  private ClientAccountTransaction insertClientAccountTransactionTest(int id, int account, float money, int type) {
+    ClientAccountTransaction clientAccountTransaction = new ClientAccountTransaction();
+    clientAccountTransaction.id = id;
+    clientAccountTransaction.account = account;
+    clientAccountTransaction.money = money;
+    clientAccountTransaction.type = type;
 
-    clientTestDao.get().insertClientAccountTransaction(client_account_transaction);
-    return client_account_transaction;
+    clientTestDao.get().insertClientAccountTransaction(clientAccountTransaction);
+    return clientAccountTransaction;
   }
 
-  private Client_addr insertClientAddr(int client, String type, String street, String house, String flat) {
-    Client_addr client_addr = new Client_addr();
-    client_addr.client = client;
-    client_addr.type = type;
-    client_addr.street = street;
-    client_addr.house = house;
-    client_addr.flat = flat;
+  private ClientAddr insertClientAddr(int client, String type, String street, String house, String flat) {
+    ClientAddr clientAddr = new ClientAddr();
+    clientAddr.client = client;
+    clientAddr.type = type;
+    clientAddr.street = street;
+    clientAddr.house = house;
+    clientAddr.flat = flat;
 
-    clientTestDao.get().insertClientAddr(client_addr);
-    return client_addr;
+    clientTestDao.get().insertClientAddr(clientAddr);
+    return clientAddr;
   }
 
-  private Client_phone insertClientPhone(int client, String type, String number) {
-    Client_phone client_phone = new Client_phone();
-    client_phone.client = client;
-    client_phone.type = type;
-    client_phone.number = number;
+  private ClientPhone insertClientPhone(int client, String type, String number) {
+    ClientPhone clientPhone = new ClientPhone();
+    clientPhone.client = client;
+    clientPhone.type = type;
+    clientPhone.number = number;
 
-    clientTestDao.get().insertClientPhone(client_phone);
-    return client_phone;
+    clientTestDao.get().insertClientPhone(clientPhone);
+    return clientPhone;
   }
 
 
@@ -133,38 +119,38 @@ public class ClientRegisterImplTest extends ParentTestNg {
     // FIXME: 10/8/18 Сделай 5 клиента с разными значениями в аккаунте
     Client client = insertClient(101, "Колобова", "Розалия", "Наумовна", "FEMALE", new GregorianCalendar(1977, 4, 25).getTime(), charm.id);
 
-    Client_account client_account1 = insertClientAccountTest(101, client.id, 100, "000");
-    Client_account client_account2 = insertClientAccountTest(102, client.id, 150, "001");
+    ClientAccount clientAccount1 = insertClientAccountTest(101, client.id, 100, "000");
+    ClientAccount clientAccount2 = insertClientAccountTest(102, client.id, 150, "001");
 
-    Transaction_type transaction_type = insertTransactionTypeTest(101, "00001", "Payment");
+    TransactionType transactionType = insertTransactionTypeTest(101, "00001", "Payment");
 
-    Client_account_transaction client_account_transaction1 = insertClientAccountTransactionTest(101, client_account1.id, 20, transaction_type.id);
-    Client_account_transaction client_account_transaction2 = insertClientAccountTransactionTest(102, client_account2.id, -100, transaction_type.id);
+    ClientAccountTransaction clientAccountTransaction1 = insertClientAccountTransactionTest(101, clientAccount1.id, 20, transactionType.id);
+    ClientAccountTransaction clientAccountTransaction2 = insertClientAccountTransactionTest(102, clientAccount2.id, -100, transactionType.id);
 
     assertThat(charm.id).isNotNull().isEqualTo(client.charm);
     assertThat(charm.name).isNotNull().isEqualTo("Самовлюблённый");
     assertThat(charm.description).isNotNull().isEqualTo("Самовлюблённый Самовлюблённый");
     assertThat(charm.energy).isNotNull().isEqualTo(100);
 
-    assertThat(client.id).isNotNull().isEqualTo(client_account1.client).isEqualTo(client_account2.client);
+    assertThat(client.id).isNotNull().isEqualTo(clientAccount1.client).isEqualTo(clientAccount2.client);
     assertThat(client.surname).isNotNull().isEqualTo("Колобова");
     assertThat(client.name).isNotNull().isEqualTo("Розалия");
     assertThat(client.patronymic).isNotNull().isEqualTo("Наумовна");
     assertThat(client.gender).isNotNull().isEqualTo("FEMALE");
     assertThat(client.birth_date).isNotNull().isInThePast().isEqualTo("1977-5-25");
 
-    assertThat(client_account1.id).isNotNull().isEqualTo(client_account_transaction1.account);
-    assertThat(client_account1.money).isNotNull().isEqualTo(100);
-    assertThat(client_account1.number).isNotNull().isEqualTo("000");
+    assertThat(clientAccount1.id).isNotNull().isEqualTo(clientAccountTransaction1.account);
+    assertThat(clientAccount1.money).isNotNull().isEqualTo(100);
+    assertThat(clientAccount1.number).isNotNull().isEqualTo("000");
 
-    assertThat(client_account2.id).isNotNull().isEqualTo(client_account_transaction2.account);
-    assertThat(client_account2.money).isNotNull().isEqualTo(150);
-    assertThat(client_account2.number).isNotNull().isEqualTo("001");
+    assertThat(clientAccount2.id).isNotNull().isEqualTo(clientAccountTransaction2.account);
+    assertThat(clientAccount2.money).isNotNull().isEqualTo(150);
+    assertThat(clientAccount2.number).isNotNull().isEqualTo("001");
 
-    assertThat(client_account_transaction1.id).isNotNull();
-    assertThat(client_account_transaction1.money).isNotNull().isEqualTo(20);
-    assertThat(client_account_transaction2.id).isNotNull();
-    assertThat(client_account_transaction2.money).isNotNull().isEqualTo(-100);
+    assertThat(clientAccountTransaction1.id).isNotNull();
+    assertThat(clientAccountTransaction1.money).isNotNull().isEqualTo(20);
+    assertThat(clientAccountTransaction2.id).isNotNull();
+    assertThat(clientAccountTransaction2.money).isNotNull().isEqualTo(-100);
   }
 
 
@@ -745,22 +731,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
     Character charm = insertCharacterTest(RND.plusInt(999999), RND.str(10), RND.str(20), RND.plusInt(100));
 
     // FIXME: 10/8/18 если все пишешь в отдельную строчку, то лучше сделай присвоение каждого филда через =
-    ClientToSave clientToSave = new ClientToSave(
-      "",
-      RND.str(10),
-      RND.str(6),
-      "",
-      new GregorianCalendar(1977, 4, 25).getTime(),
-      "MALE",
-      charm.id,
-      RND.str(15),
-      RND.str(3),
-      RND.str(1),
-      "",
-      "",
-      "",
-      new ArrayList<>(Collections.singletonList(new PhoneDisplay(0, "HOME", RND.str(11))))
-    );
+    ClientToSave clientToSave = new ClientToSave(null, RND.str(10), RND.str(6), "", new GregorianCalendar(1977, 4, 25).getTime(), "MALE", charm.id, RND.str(15), RND.str(3), RND.str(1), "", "", "", new ArrayList<>(Collections.singletonList(new PhoneDisplay(0, "HOME", RND.str(11)))));
 
     //
     //
@@ -789,7 +760,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     insertClient(101, "Колобова", "Розалия", "Наумовна", "FEMALE", new GregorianCalendar(1977, 4, 25).getTime(), charm.id);
 
-    ClientToSave clientToSave = new ClientToSave("101", "Фамилия", "Имя", "Розалия", new GregorianCalendar(1976, 4, 25).getTime(), "FEMALE", newCharm.id, "Ломоносов Рег", "1", "10", "Lomonosov Фак", "2", "20", new ArrayList<>(Arrays.asList(new PhoneDisplay(0, "HOME", "77077070077"), new PhoneDisplay(0, "MOBILE", "77000000077"))));
+    ClientToSave clientToSave = new ClientToSave(101, "Фамилия", "Имя", "Розалия", new GregorianCalendar(1976, 4, 25).getTime(), "FEMALE", newCharm.id, "Ломоносов Рег", "1", "10", "Lomonosov Фак", "2", "20", new ArrayList<>(Arrays.asList(new PhoneDisplay(0, "HOME", "77077070077"), new PhoneDisplay(0, "MOBILE", "77000000077"))));
 
     //
     //
@@ -812,15 +783,15 @@ public class ClientRegisterImplTest extends ParentTestNg {
     Character charm = insertCharacterTest(101, "Самовлюблённый", "Самовлюблённый Самовлюблённый", 100);
     Client client = insertClient(201, "Колобова", "Розалия", "Наумовна", "FEMALE", new GregorianCalendar(1977, 4, 25).getTime(), charm.id);
 
-    Client_addr client_addr_reg = insertClientAddr(201, "REG", "Lomonosov", "1", "2");
-    Client_addr client_addr_fact = insertClientAddr(201, "FACT", "Lomonosova Fact", "10", "20");
+    ClientAddr clientAddrReg = insertClientAddr(201, "REG", "Lomonosov", "1", "2");
+    ClientAddr clientAddrFact = insertClientAddr(201, "FACT", "Lomonosova Fact", "10", "20");
 
-    Client_phone client_phone_home = insertClientPhone(201, "HOME", "87077070077");
-    Client_phone client_phone_mobile = insertClientPhone(201, "MOBILE", "12345678899");
+    ClientPhone clientPhoneHome = insertClientPhone(201, "HOME", "87077070077");
+    ClientPhone clientPhoneMobile = insertClientPhone(201, "MOBILE", "12345678899");
 
     //
     //
-    ClientDisplay clientDisplay = clientRegister.get().details(client.id);
+    ClientDetails clientDisplay = clientRegister.get().details(client.id);
     //
     //
 
@@ -831,20 +802,20 @@ public class ClientRegisterImplTest extends ParentTestNg {
     assertThat(clientDisplay.gender).isNotNull().isEqualTo(client.gender);
     assertThat(clientDisplay.birthDate).isNotNull().isInThePast().isEqualTo(client.birth_date);
     assertThat(clientDisplay.characterId).isNotNull().isEqualTo(charm.id);
-    assertThat(clientDisplay.streetRegistration).isNotNull().isEqualTo(client_addr_reg.street);
-    assertThat(clientDisplay.houseRegistration).isNotNull().isEqualTo(client_addr_reg.house);
-    assertThat(clientDisplay.apartmentRegistration).isNotNull().isEqualTo(client_addr_reg.flat);
-    assertThat(clientDisplay.streetResidence).isNotNull().isEqualTo(client_addr_fact.street);
-    assertThat(clientDisplay.houseResidence).isNotNull().isEqualTo(client_addr_fact.house);
-    assertThat(clientDisplay.apartmentResidence).isNotNull().isEqualTo(client_addr_fact.flat);
+    assertThat(clientDisplay.streetRegistration).isNotNull().isEqualTo(clientAddrReg.street);
+    assertThat(clientDisplay.houseRegistration).isNotNull().isEqualTo(clientAddrReg.house);
+    assertThat(clientDisplay.apartmentRegistration).isNotNull().isEqualTo(clientAddrReg.flat);
+    assertThat(clientDisplay.streetResidence).isNotNull().isEqualTo(clientAddrFact.street);
+    assertThat(clientDisplay.houseResidence).isNotNull().isEqualTo(clientAddrFact.house);
+    assertThat(clientDisplay.apartmentResidence).isNotNull().isEqualTo(clientAddrFact.flat);
 
     assertThat(clientDisplay.numbers).hasSize(2);
 
-    assertThat(clientDisplay.numbers.get(0).type).isEqualTo(client_phone_home.type);
-    assertThat(clientDisplay.numbers.get(0).number).isEqualTo(client_phone_home.number);
+    assertThat(clientDisplay.numbers.get(0).type).isEqualTo(clientPhoneHome.type);
+    assertThat(clientDisplay.numbers.get(0).number).isEqualTo(clientPhoneHome.number);
 
-    assertThat(clientDisplay.numbers.get(1).type).isEqualTo(client_phone_mobile.type);
-    assertThat(clientDisplay.numbers.get(1).number).isEqualTo(client_phone_mobile.number);
+    assertThat(clientDisplay.numbers.get(1).type).isEqualTo(clientPhoneMobile.type);
+    assertThat(clientDisplay.numbers.get(1).number).isEqualTo(clientPhoneMobile.number);
   }
 
   @Test
@@ -858,7 +829,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
     //
     //
 
-    int actual = clientTestDao.get().checkClient(client.id);
+    int actual = clientTestDao.get().getClientActual(client.id);
     assertThat(actual).isEqualTo(0);
   }
 }
