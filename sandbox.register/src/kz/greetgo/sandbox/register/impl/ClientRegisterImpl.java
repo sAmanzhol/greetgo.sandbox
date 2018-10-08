@@ -60,9 +60,8 @@ public class ClientRegisterImpl implements ClientRegister {
 
   @Override
   public ClientRecord save(ClientToSave clientToSave) {
+    // FIXME: 10/8/18 зачем тебе вторая проверка после первой?
     if (clientToSave.id.trim().isEmpty() || clientToSave.id.equalsIgnoreCase("")) {
-      // TODO: 10/4/18 sequence
-
       int newClientId = createClient(clientToSave);
       createClientAddr(newClientId, clientToSave);
       createClientPhone(newClientId, clientToSave);

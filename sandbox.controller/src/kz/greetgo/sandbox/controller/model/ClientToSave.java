@@ -3,6 +3,7 @@ package kz.greetgo.sandbox.controller.model;
 import java.util.*;
 
 public class ClientToSave {
+  // FIXME: 10/8/18 почему айди стринг?!
   public String id;
   public String surname;
   public String name;

@@ -1,17 +1,31 @@
 package kz.greetgo.sandbox.register.impl;
 
 import kz.greetgo.depinject.core.BeanGetter;
-import kz.greetgo.sandbox.controller.model.*;
+import kz.greetgo.sandbox.controller.model.ClientDisplay;
+import kz.greetgo.sandbox.controller.model.ClientRecord;
+import kz.greetgo.sandbox.controller.model.ClientToFilter;
+import kz.greetgo.sandbox.controller.model.ClientToSave;
+import kz.greetgo.sandbox.controller.model.PhoneDisplay;
 import kz.greetgo.sandbox.controller.register.ClientRegister;
 import kz.greetgo.sandbox.register.dao_model.Character;
-import kz.greetgo.sandbox.register.dao_model.*;
+import kz.greetgo.sandbox.register.dao_model.Client;
+import kz.greetgo.sandbox.register.dao_model.Client_account;
+import kz.greetgo.sandbox.register.dao_model.Client_account_transaction;
+import kz.greetgo.sandbox.register.dao_model.Client_addr;
+import kz.greetgo.sandbox.register.dao_model.Client_phone;
+import kz.greetgo.sandbox.register.dao_model.Transaction_type;
 import kz.greetgo.sandbox.register.test.dao.CharacterTestDao;
 import kz.greetgo.sandbox.register.test.dao.ClientTestDao;
 import kz.greetgo.sandbox.register.test.util.ParentTestNg;
 import kz.greetgo.util.RND;
 import org.testng.annotations.Test;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 
@@ -21,6 +35,9 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
   public BeanGetter<ClientTestDao> clientTestDao;
   public BeanGetter<CharacterTestDao> characterTestDao;
+
+
+  // FIXME: 10/8/18 Добавь тесты на count
 
 
   private Client insertClient(int id, String surname, String name, String patronymic, String gender, Date birth_date, int charm) {
@@ -105,11 +122,15 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
   @Test
   public void list_check_validity() {
+
+    // FIXME: 10/8/18 Должно валидироваться clientRegister.get().list(filter), а не тестовые инсерты
+
     clientTestDao.get().removeAll();
     characterTestDao.get().removeAll();
 
     Character charm = insertCharacterTest(101, "Самовлюблённый", "Самовлюблённый Самовлюблённый", 100);
 
+    // FIXME: 10/8/18 Сделай 5 клиента с разными значениями в аккаунте
     Client client = insertClient(101, "Колобова", "Розалия", "Наумовна", "FEMALE", new GregorianCalendar(1977, 4, 25).getTime(), charm.id);
 
     Client_account client_account1 = insertClientAccountTest(101, client.id, 100, "000");
@@ -721,6 +742,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     Character charm = insertCharacterTest(RND.plusInt(999999), RND.str(10), RND.str(20), RND.plusInt(100));
 
+    // FIXME: 10/8/18 если все пишешь в отдельную строчку, то лучше сделай присвоение каждого филда через =
     ClientToSave clientToSave = new ClientToSave(
       "",
       RND.str(10),
@@ -735,7 +757,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
       "",
       "",
       "",
-      new ArrayList<>(Collections.singletonList(new PhoneDisplay(0,"HOME", RND.str(11))))
+      new ArrayList<>(Collections.singletonList(new PhoneDisplay(0, "HOME", RND.str(11))))
     );
 
     //
@@ -744,6 +766,8 @@ public class ClientRegisterImplTest extends ParentTestNg {
     //
     //
 
+
+    // FIXME: 10/8/18 А как же остальные колонки в базе
     assertThat(clientRecord.id).isNotNull();
     assertThat(clientRecord.fio).isEqualTo(clientToSave.surname + " " + clientToSave.name + " " + clientToSave.patronymic);
     assertThat(clientRecord.character).isEqualTo(charm.name);
@@ -771,6 +795,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
     //
     //
 
+    // FIXME: 10/8/18 А как же остальные колонки в базе
     assertThat(clientRecord.id).isNotNull().isEqualTo(101);
     assertThat(clientRecord.fio).isNotNull().isEqualTo(clientToSave.surname + " " + clientToSave.name + " " + clientToSave.patronymic);
     assertThat(clientRecord.character).isNotNull().isEqualTo(newCharm.name);

@@ -1,6 +1,5 @@
 package kz.greetgo.sandbox.controller.model;
 
-// FIXME: 9/24/18 Приведи все переменные к положенному типу (age is int пр.). То же самое для клиента
 public class ClientRecord {
   public int id;
   public String fio;

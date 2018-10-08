@@ -13,15 +13,11 @@ import {PhoneDisplay} from "../../../model/PhoneDisplay";
   styleUrls: ['./client-save.component.css']
 })
 export class ClientSaveComponent implements OnInit {
-  // fixme .07. Из списка на форму редактирования должен передоваться только ИД клиента.
-  // fixme 1.07.1. ... а если осуществляется добавление клиента, то передаём null.
-
   @Input() inModalData: {};
   @Output() outModalData = new EventEmitter();
 
   closeResult: string;
   characterTypes = [];
-  // fixme название переменной вводит в заблуждение. на первый взгляд кажется, что это список номеров, а не их типы. То же самое для character
   phoneTypes = [];
   client = new ClientToSave();
 
@@ -91,7 +87,6 @@ export class ClientSaveComponent implements OnInit {
   }
 
   async getClient(id) {
-    //fixme Нужны ли везде эти трай кетчи?
     this.client.assign(await this.Service.getClient(id));
   }
 
