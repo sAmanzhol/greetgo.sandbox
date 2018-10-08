@@ -44,6 +44,7 @@ subprojects {
 
     testCompile 'org.testng:testng:6.5.1'
     compile 'org.easytesting:fest-assert-core:2.0M10'
+
   }
 
   tasks.withType(Javadoc) {

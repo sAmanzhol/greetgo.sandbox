@@ -8,7 +8,7 @@ export class ClientToFilter {
   public static createDefault(): ClientToFilter {
     return ClientToFilter.create({
       sortColumn: "id",
-      sortDirection: "asc",
+      sortDirection: "ASC",
       fio: "",
       page: 1,
       itemCount: 10

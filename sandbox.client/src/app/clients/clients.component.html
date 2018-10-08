@@ -27,8 +27,8 @@
             <div class="head-text">ФИО</div>
           </div>
           <div class="d-flex flex-column my-auto">
-            <div class="sort-arrow" (click)="sort('fio', 'asc')"><i class="fas fa-sort-up"></i></div>
-            <div class="sort-arrow" (click)="sort('fio', 'desc')"><i class="fas fa-sort-down"></i></div>
+            <div class="sort-arrow" (click)="sort('fio', 'ASC')"><i class="fas fa-sort-up"></i></div>
+            <div class="sort-arrow" (click)="sort('fio', 'DESC')"><i class="fas fa-sort-down"></i></div>
           </div>
         </div>
       </th>
@@ -45,8 +45,8 @@
             <div class="head-text">Возраст</div>
           </div>
           <div class="d-flex flex-column my-auto ml-3">
-            <div class="sort-arrow" (click)="sort('age', 'asc')"><i class="fas fa-sort-up"></i></div>
-            <div class="sort-arrow" (click)="sort('age', 'desc')"><i class="fas fa-sort-down"></i></div>
+            <div class="sort-arrow" (click)="sort('age', 'ASC')"><i class="fas fa-sort-up"></i></div>
+            <div class="sort-arrow" (click)="sort('age', 'DESC')"><i class="fas fa-sort-down"></i></div>
           </div>
         </div>
       </th>
@@ -56,8 +56,8 @@
             <div class="head-text">Общий остаток счетов</div>
           </div>
           <div class="d-flex flex-column my-auto ml-3">
-            <div class="sort-arrow" (click)="sort('balance', 'asc')"><i class="fas fa-sort-up"></i></div>
-            <div class="sort-arrow" (click)="sort('balance', 'desc')"><i class="fas fa-sort-down"></i></div>
+            <div class="sort-arrow" (click)="sort('balance', 'ASC')"><i class="fas fa-sort-up"></i></div>
+            <div class="sort-arrow" (click)="sort('balance', 'DESC')"><i class="fas fa-sort-down"></i></div>
           </div>
         </div>
       </th>
@@ -67,8 +67,8 @@
             <div class="head-text">Максимальный остаток</div>
           </div>
           <div class="d-flex flex-column my-auto ml-3">
-            <div class="sort-arrow" (click)="sort('balanceMax', 'asc')"><i class="fas fa-sort-up"></i></div>
-            <div class="sort-arrow" (click)="sort('balanceMax', 'desc')"><i class="fas fa-sort-down"></i></div>
+            <div class="sort-arrow" (click)="sort('balanceMax', 'ASC')"><i class="fas fa-sort-up"></i></div>
+            <div class="sort-arrow" (click)="sort('balanceMax', 'DESC')"><i class="fas fa-sort-down"></i></div>
           </div>
         </div>
       </th>
@@ -78,8 +78,8 @@
             <div class="head-text">Минимальный остаток</div>
           </div>
           <div class="d-flex flex-column my-auto ml-3">
-            <div class="sort-arrow" (click)="sort('balanceMin', 'asc')"><i class="fas fa-sort-up"></i></div>
-            <div class="sort-arrow" (click)="sort('balanceMin', 'desc')"><i class="fas fa-sort-down"></i></div>
+            <div class="sort-arrow" (click)="sort('balanceMin', 'ASC')"><i class="fas fa-sort-up"></i></div>
+            <div class="sort-arrow" (click)="sort('balanceMin', 'DESC')"><i class="fas fa-sort-down"></i></div>
           </div>
         </div>
       </th>
@@ -116,6 +116,8 @@
   <ngb-pagination [collectionSize]="count" [pageSize]=10 [(page)]="this.filter.page" [maxSize]="5" [rotate]="true"
                   [boundaryLinks]="true" (pageChange)="loadPage()"></ngb-pagination>
 
+  <button class="btn btn-warning" (click)="openReport('pdf')">Report(pdf)</button>
+  <button class="btn btn-success" (click)="openReport('xlsx')">Report(xlsx)</button>
 
   <app-client-info #modal *ngIf="this.modalOpen" [inModalData]="this.modalData"
                    (outModalData)="closeModal($event)"></app-client-info>

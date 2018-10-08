@@ -1,6 +1,6 @@
 export class CharacterRecord {
   public id: number;
-  public value: string;
+  public name: string;
 
   public static create(a: any): CharacterRecord {
     const ret = new CharacterRecord();
@@ -10,6 +10,6 @@ export class CharacterRecord {
 
   assign(a: any) {
     this.id = a.id;
-    this.value = a.value;
+    this.name = a.name;
   }
 }

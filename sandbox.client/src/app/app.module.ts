@@ -13,7 +13,7 @@ import {ClientListComponent} from './client-list/client-list.component';
 import {ClientListService} from "./client-list/client-list.service";
 import {AboutComponent} from './about/about.component';
 import {ClientsComponent} from './clients/clients.component';
-import {ClientInfoComponent} from './modals/client-info/client-info.component';
+import {ClientSaveComponent} from './modals/client-save/client-save.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +22,7 @@ import {ClientInfoComponent} from './modals/client-info/client-info.component';
     ClientListComponent,
     AboutComponent,
     ClientsComponent,
-    ClientInfoComponent
+    ClientSaveComponent
   ],
   imports: [
     BrowserModule, HttpClientModule, FormsModule, NgbModule, NgxMaskModule.forRoot()

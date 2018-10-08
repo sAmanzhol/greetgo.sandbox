@@ -1,7 +1,7 @@
 import {PhoneDisplay} from "./PhoneDisplay";
 
 export class ClientToSave {
-  public id: number;
+  public id: string;
   public surname: string;
   public name: string;
   public patronymic: string;
@@ -16,6 +16,7 @@ export class ClientToSave {
   public apartmentResidence: string;
 
   public numbers: PhoneDisplay[];
+  public numbersChange: {};
 
   public static of(a: any): ClientToSave {
     const ret = new ClientToSave();
@@ -24,7 +25,7 @@ export class ClientToSave {
   }
 
   constructor() {
-    this.id = null;
+    this.id = "";
     this.surname = "";
     this.name = "";
     this.patronymic = "";
@@ -37,8 +38,12 @@ export class ClientToSave {
     this.streetResidence = "";
     this.houseResidence = "";
     this.apartmentResidence = "";
-    this.numbers = [];
-    this.numbers.push(new PhoneDisplay())
+    this.numbers = [new PhoneDisplay()];
+    this.numbersChange = {
+      "created": [],
+      "updated": [],
+      "deleted": []
+    }
   }
 
   assign(a: any) {

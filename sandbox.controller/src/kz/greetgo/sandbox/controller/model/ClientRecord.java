@@ -6,15 +6,15 @@ public class ClientRecord {
   public String fio;
   public String character;
   public int age;
-  public int balance;
-  public int balanceMax;
-  public int balanceMin;
+  public float balance;
+  public float balanceMax;
+  public float balanceMin;
 
   public ClientRecord() {
 
   }
 
-  public ClientRecord(int id, String fio, String character, int age, int balance, int balanceMax, int balanceMin) {
+  public ClientRecord(int id, String fio, String character, int age, float balance, float balanceMax, float balanceMin) {
     this.id = id;
     this.fio = fio;
     this.character = character;

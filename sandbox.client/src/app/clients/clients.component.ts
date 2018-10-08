@@ -44,6 +44,10 @@ export class ClientsComponent implements OnInit {
     this.loadPage();
   }
 
+  openReport(type) {
+    this.Service.renderClientRecords(this.filter, type);
+  }
+
   async loadPage(filter = this.filter) {
     this.count = await this.Service.getCount(filter);
     this.list = await this.Service.getClients(filter);

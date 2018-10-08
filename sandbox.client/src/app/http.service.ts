@@ -190,10 +190,7 @@ export class HttpService {
 
     const response = await this.http.get(this.url(urlSuffix), ob.getBlob()).toPromise();
     const url = window.URL.createObjectURL(response.body);
-    const filename: string = response.headers.get('Content-Disposition')
-      .split(';')[1]
-      .split('=')[1]
-      .replace(/["]/g, '');
+    const filename: string = 'client_Report.pdf';
 
     var link = document.createElement('a');
     link.href = url;

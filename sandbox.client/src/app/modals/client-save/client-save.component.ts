@@ -1,6 +1,6 @@
 import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {ClientInfoService} from "./client-info.service";
+import {ClientSaveService} from "./client-save.service";
 import {PhonesService} from "../../phones/phones.service";
 import {CharactersService} from "../../characters/characters.service";
 import {ClientsComponent} from "../../clients/clients.component";
@@ -9,10 +9,10 @@ import {PhoneDisplay} from "../../../model/PhoneDisplay";
 
 @Component({
   selector: 'app-client-info',
-  templateUrl: './client-info.component.html',
-  styleUrls: ['./client-info.component.css']
+  templateUrl: './client-save.component.html',
+  styleUrls: ['./client-save.component.css']
 })
-export class ClientInfoComponent implements OnInit {
+export class ClientSaveComponent implements OnInit {
   // fixme .07. Из списка на форму редактирования должен передоваться только ИД клиента.
   // fixme 1.07.1. ... а если осуществляется добавление клиента, то передаём null.
 
@@ -27,7 +27,7 @@ export class ClientInfoComponent implements OnInit {
 
   @ViewChild('modal') modal: ElementRef;
 
-  constructor(public Service: ClientInfoService, public ClientsComponent: ClientsComponent, public PhonesService: PhonesService, public CharactersService: CharactersService, private modalService: NgbModal) {
+  constructor(public Service: ClientSaveService, public ClientsComponent: ClientsComponent, public PhonesService: PhonesService, public CharactersService: CharactersService, private modalService: NgbModal) {
   }
 
   ngOnInit() {
@@ -50,7 +50,19 @@ export class ClientInfoComponent implements OnInit {
   }
 
   onSubmit() {
-    this.crupdate(this.client);
+    this.prepareNumbersChange();
+
+    this.save(this.client);
+  }
+
+  prepareNumbersChange() {
+    for (let i = 0; i < this.client["numbers"].length; i++) {
+      if (this.client["numbers"][i].id == 0 ) {
+        this.client["numbersChange"]["created"].push(PhoneDisplay.create({"type": this.client["numbers"][i].type, "number": this.client["numbers"][i].number}));
+      } else {
+        this.client["numbersChange"]["updated"].push(PhoneDisplay.create({"id": this.client["numbers"][i].id, "type": this.client["numbers"][i].type, "number": this.client["numbers"][i].number}));
+      }
+    }
   }
 
   addPhone() {
@@ -61,8 +73,12 @@ export class ClientInfoComponent implements OnInit {
     phone.type = type;
   }
 
-  deletePhone(index) {
-    this.client["numbers"].splice(index, 1)
+  deletePhone(index, id) {
+    this.client["numbers"].splice(index, 1);
+
+    if (id != 0) {
+      this.client["numbersChange"]["deleted"].push(PhoneDisplay.create({"id": id}));
+    }
   }
 
   closeModal() {
@@ -76,12 +92,11 @@ export class ClientInfoComponent implements OnInit {
 
   async getClient(id) {
     //fixme Нужны ли везде эти трай кетчи?
-    this.client = await this.Service.getClient(id);
-    console.log(this.client);
+    this.client.assign(await this.Service.getClient(id));
   }
 
-  async crupdate(clientToSave) {
-    await this.Service.crupdateClient(clientToSave);
+  async save(clientToSave) {
+    await this.Service.saveClient(clientToSave);
     this.closeModal();
     this.ClientsComponent.loadPage();
   }

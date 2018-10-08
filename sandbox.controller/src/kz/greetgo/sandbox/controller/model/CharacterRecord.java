@@ -2,14 +2,14 @@ package kz.greetgo.sandbox.controller.model;
 
 public class CharacterRecord {
   public int id;
-  public String value;
+  public String name;
 
   public CharacterRecord() {
 
   }
 
-  public CharacterRecord(int id, String value) {
+  public CharacterRecord(int id, String name) {
     this.id = id;
-    this.value = value;
+    this.name = name;
   }
 }

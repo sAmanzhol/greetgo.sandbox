@@ -1,7 +1,7 @@
 import {PhoneDisplay} from "./PhoneDisplay";
 
 export class ClientDisplay {
-  public id: number;
+  public id: string;
   public surname: string;
   public name: string;
   public patronymic: string;
@@ -26,7 +26,7 @@ export class ClientDisplay {
   }
 
   constructor() {
-    this.id = null;
+    this.id = "";
     this.surname = "";
     this.name = "";
     this.patronymic = "";

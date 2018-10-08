@@ -24,8 +24,12 @@ export class ClientsService {
   }
 
   deleteClient(id): Promise<void> {
-    return this.http.delete("/client/", {id: id})
+    return this.http.delete("/client/delete", {id: id})
       .toPromise()
       .then(resp => resp.body);
+  }
+
+  renderClientRecords(filter, type){
+    this.http.downloadResource("/client/render", {filter: JSON.stringify(filter)});
   }
 }

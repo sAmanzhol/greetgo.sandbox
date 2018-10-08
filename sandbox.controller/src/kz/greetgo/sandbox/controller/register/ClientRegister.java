@@ -1,10 +1,9 @@
 package kz.greetgo.sandbox.controller.register;
 
-import kz.greetgo.sandbox.controller.model.ClientDisplay;
-import kz.greetgo.sandbox.controller.model.ClientRecord;
-import kz.greetgo.sandbox.controller.model.ClientToFilter;
-import kz.greetgo.sandbox.controller.model.ClientToSave;
+import kz.greetgo.sandbox.controller.model.*;
+import kz.greetgo.sandbox.controller.report.ClientReportView;
 
+import java.util.Date;
 import java.util.List;
 
 public interface ClientRegister {
@@ -20,4 +19,6 @@ public interface ClientRegister {
 
   // FIXME: 9/24/18 Не должен возвращать ничего
   void delete(int id);
+
+  void renderList(RenderFilter renderFilter) throws Exception;
 }

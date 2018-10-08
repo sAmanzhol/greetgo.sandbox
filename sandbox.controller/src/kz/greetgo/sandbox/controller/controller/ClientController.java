@@ -9,13 +9,19 @@ import kz.greetgo.mvc.annotations.on_methods.ControllerPrefix;
 import kz.greetgo.mvc.annotations.on_methods.OnDelete;
 import kz.greetgo.mvc.annotations.on_methods.OnGet;
 import kz.greetgo.mvc.annotations.on_methods.OnPost;
-import kz.greetgo.sandbox.controller.model.ClientDisplay;
-import kz.greetgo.sandbox.controller.model.ClientRecord;
-import kz.greetgo.sandbox.controller.model.ClientToFilter;
-import kz.greetgo.sandbox.controller.model.ClientToSave;
+import kz.greetgo.mvc.interfaces.BinResponse;
+import kz.greetgo.mvc.interfaces.RequestTunnel;
+import kz.greetgo.sandbox.controller.model.*;
+import kz.greetgo.sandbox.controller.report.ClientReportView;
+import kz.greetgo.sandbox.controller.report.ClientReportViewPdf;
+import kz.greetgo.sandbox.controller.report.ClientReportViewXlsx;
 import kz.greetgo.sandbox.controller.register.ClientRegister;
+import kz.greetgo.sandbox.controller.security.PublicAccess;
 import kz.greetgo.sandbox.controller.util.Controller;
 
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.util.Date;
 import java.util.List;
 
 @Bean
@@ -23,6 +29,34 @@ import java.util.List;
 public class ClientController implements Controller {
 
   public BeanGetter<ClientRegister> clientRegister;
+
+  @PublicAccess
+  @ToJson
+  @OnGet("/render")
+  public void render(@Json @Par("filter") ClientToFilter filter, BinResponse binResponse) throws Exception {
+    String userId = "User1"; // get it from session
+    String type = "pdf"; // get it from content type
+
+    binResponse.setFilename("report_client.pdf");
+    binResponse.setContentTypeByFilenameExtension();
+
+    ClientReportView view = getMyView(type, binResponse.out());
+
+    RenderFilter renderFilter = new RenderFilter(filter, userId, new Date(), view);
+    clientRegister.get().renderList(renderFilter);
+
+    binResponse.flushBuffers();
+  }
+
+  private ClientReportView getMyView(String type, OutputStream printStream) {
+    switch (type) {
+      case "pdf":
+        return new ClientReportViewPdf(printStream);
+      case "xlsx":
+        return new ClientReportViewXlsx(printStream);
+    }
+    throw new RuntimeException("Unknown type = " + type);
+  }
 
   @ToJson
   @OnGet("/list")
@@ -37,19 +71,19 @@ public class ClientController implements Controller {
   }
 
   @ToJson
-  @OnPost("/")
+  @OnPost("/save")
   public ClientRecord save(@Json @Par("clientToSave") ClientToSave clientToSave) {
     return clientRegister.get().save(clientToSave);
   }
 
   @ToJson
-  @OnGet("/")
+  @OnGet("/details")
   public ClientDisplay details(@Par("id") int id) {
     return clientRegister.get().details(id);
   }
 
   @ToJson
-  @OnDelete("/")
+  @OnDelete("/delete")
   public void delete(@Par("id") int id) {
     clientRegister.get().delete(id);
   }
