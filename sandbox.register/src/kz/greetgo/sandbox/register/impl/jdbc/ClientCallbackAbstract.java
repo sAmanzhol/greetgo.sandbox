@@ -14,7 +14,7 @@ import java.util.List;
 public abstract class ClientCallbackAbstract<T, R> implements ConnectionCallback<T> {
 
   protected final ClientToFilter filter;
-  protected StringBuilder sql = new StringBuilder("");
+  protected StringBuilder sql = new StringBuilder();
   protected List<Object> params = new ArrayList<>();
 
   public ClientCallbackAbstract(ClientToFilter filter) {

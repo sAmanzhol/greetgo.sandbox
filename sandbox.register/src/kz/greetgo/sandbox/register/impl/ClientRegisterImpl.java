@@ -20,6 +20,7 @@ import java.util.Objects;
 
 // FIXME: 9/24/18 Избавься от варнингов в коде
 
+@SuppressWarnings("WeakerAccess")
 @Bean
 public class ClientRegisterImpl implements ClientRegister {
   public BeanGetter<ClientDao> clientDao;
@@ -53,16 +54,16 @@ public class ClientRegisterImpl implements ClientRegister {
 
   @Override
   public ClientDetails details(int id) {
-    ClientDetails clientDisplay = clientDao.get().details(id);
-    clientDisplay.numbers = clientDao.get().getClientPhones(clientDisplay.id);
+    ClientDetails clientDetails = clientDao.get().details(id);
+    clientDetails.numbers = clientDao.get().getClientPhones(clientDetails.id);
 
-    return clientDisplay;
+    return clientDetails;
   }
 
   @Override
   public ClientRecord save(ClientToSave clientToSave) {
     // FIXME: 10/8/18 зачем тебе вторая проверка после первой?
-    if (!Objects.equals(clientToSave.id, null)) {
+    if (Objects.equals(clientToSave.id, null)) {
       int newClientId = createClient(clientToSave);
       createClientAddr(newClientId, clientToSave);
       createClientPhone(newClientId, clientToSave);

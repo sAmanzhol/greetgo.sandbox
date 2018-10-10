@@ -1,10 +1,14 @@
 package kz.greetgo.sandbox.register.test.dao;
 
+import kz.greetgo.sandbox.controller.model.ClientDetails;
+import kz.greetgo.sandbox.controller.model.PhoneDisplay;
 import kz.greetgo.sandbox.register.dao_model.*;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
+
+import java.util.List;
 
 public interface ClientTestDao {
 
@@ -24,8 +28,8 @@ public interface ClientTestDao {
   void insertClientAddr(ClientAddr clientAddr);
 
   @Insert("insert into Client_phone (id, client, type, number) " +
-    "values (nextval('id'), #{client}, #{type}::phone, #{number}) " +
-    "on conflict (client, number) do update set actual = 1;")
+    "values (#{id}, #{client}, #{type}::phone, #{number}) " +
+    "on conflict (id) do update set actual = 1;")
   void insertClientPhone(ClientPhone clientPhone);
 
   @Insert("insert into Transaction_type (id, code, name) " +
@@ -37,6 +41,23 @@ public interface ClientTestDao {
     "values (#{id}, #{account}, #{money}, #{type}) " +
     "on conflict (id) do update set actual = 1;")
   void insertClientAccountTransaction(ClientAccountTransaction clientAccountTransaction);
+
+  @Select("select cl.id, cl.surname, cl.name, cl.patronymic, cl.birth_date as birthDate, cl.charm as characterId, cl.gender, " +
+    "rA.street as streetRegistration, rA.house as houseRegistration, rA.flat as apartmentRegistration, " +
+    "fA.street as streetResidence, fA.house as houseResidence, fA.flat as apartmentResidence " +
+
+    "from Client as cl " +
+
+    "left join Client_addr as rA on cl.id = rA.client and rA.type = 'REG' " +
+    "left join Client_addr as fA on cl.id = fA.client and fA.type = 'FACT' " +
+
+    "where cl.id = #{id} and cl.actual = 1")
+  ClientDetails details(int id);
+
+  @Select("Select id, type, number " +
+    "from Client_phone " +
+    "where client = #{id} and actual = 1")
+  List<PhoneDisplay> getClientPhones(int id);
 
   // FIXME: 10/8/18 checkClient название не соответсвует тому, что делает метод
   @Select("select actual from Client " +

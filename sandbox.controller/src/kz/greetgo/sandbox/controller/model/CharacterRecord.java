@@ -1,5 +1,6 @@
 package kz.greetgo.sandbox.controller.model;
 
+@SuppressWarnings("unused")
 public class CharacterRecord {
   public int id;
   public String name;

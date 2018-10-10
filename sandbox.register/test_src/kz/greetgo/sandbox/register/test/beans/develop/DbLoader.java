@@ -17,6 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+@SuppressWarnings("WeakerAccess, unused, SameParameterValue")
 @Bean
 public class DbLoader {
   final Logger logger = Logger.getLogger(getClass());
@@ -207,17 +208,17 @@ public class DbLoader {
   private void loadClientsPhone() {
     logger.info("Start loading clients Phones...");
 
-    clientPhone(1,1, "HOME", "77077070071");
-    clientPhone(2,2, "HOME", "77077070072");
-    clientPhone(3,3, "HOME", "77077070073");
-    clientPhone(4,4, "HOME", "77077070074");
-    clientPhone(5,5, "HOME", "77077070075");
-    clientPhone(6,6, "HOME", "77077070076");
-    clientPhone(7,7, "HOME", "77077070077");
-    clientPhone(8,8, "HOME", "77077070078");
-    clientPhone(9,9, "HOME", "77077070079");
-    clientPhone(10,10, "HOME", "77077070080");
-    clientPhone(11,11, "HOME", "77077070081");
+    clientPhone(1, 1, "HOME", "77077070071");
+    clientPhone(2, 2, "HOME", "77077070072");
+    clientPhone(3, 3, "HOME", "77077070073");
+    clientPhone(4, 4, "HOME", "77077070074");
+    clientPhone(5, 5, "HOME", "77077070075");
+    clientPhone(6, 6, "HOME", "77077070076");
+    clientPhone(7, 7, "HOME", "77077070077");
+    clientPhone(8, 8, "HOME", "77077070078");
+    clientPhone(9, 9, "HOME", "77077070079");
+    clientPhone(10, 10, "HOME", "77077070080");
+    clientPhone(11, 11, "HOME", "77077070081");
 
     logger.info("Finish loading clients Phones!");
   }

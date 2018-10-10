@@ -17,6 +17,7 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.Date;
 
+@SuppressWarnings("ResultOfMethodCallIgnored")
 public class ClientReportViewPdf implements ClientReportView {
 
   private Document document;
@@ -89,11 +90,8 @@ public class ClientReportViewPdf implements ClientReportView {
         row.character = RND.str(7);
         row.age = RND.plusInt(40);
         row.balance = RND.plusInt(100000);
-        ;
         row.balanceMax = RND.plusInt(10000000);
-        ;
         row.balanceMin = RND.plusInt(10000);
-        ;
 
         viewPdf.addRow(row);
       }

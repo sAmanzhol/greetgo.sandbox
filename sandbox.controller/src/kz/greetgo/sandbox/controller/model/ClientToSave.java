@@ -2,6 +2,7 @@ package kz.greetgo.sandbox.controller.model;
 
 import java.util.*;
 
+@SuppressWarnings("unused")
 public class ClientToSave {
   // FIXME: 10/8/18 почему айди стринг?!
   public Integer id;
@@ -22,6 +23,7 @@ public class ClientToSave {
   public Map<String, List<PhoneDisplay>> numbersChange = new HashMap<>();
 
   public ClientToSave() {
+
   }
 
   public ClientToSave(Integer id, String surname, String name, String patronymic, Date birthDate, String gender, int characterId, String streetRegistration, String houseRegistration, String apartmentRegistration, String streetResidence, String houseResidence, String apartmentResidence, List<PhoneDisplay> numbers) {

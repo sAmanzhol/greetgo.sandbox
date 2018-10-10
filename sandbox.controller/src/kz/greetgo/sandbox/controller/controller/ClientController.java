@@ -23,6 +23,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+@SuppressWarnings("WeakerAccess, unused")
 @Bean
 @ControllerPrefix("/client")
 public class ClientController implements Controller {

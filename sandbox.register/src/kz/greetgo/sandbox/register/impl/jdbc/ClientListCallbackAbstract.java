@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+@SuppressWarnings("WeakerAccess")
 public abstract class ClientListCallbackAbstract<T> extends ClientCallbackAbstract<T, ClientRecord> {
 
   public ClientListCallbackAbstract(ClientToFilter filter) {

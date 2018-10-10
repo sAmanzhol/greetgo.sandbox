@@ -14,6 +14,7 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.Date;
 
+@SuppressWarnings("ResultOfMethodCallIgnored")
 public class ClientReportViewXlsx implements ClientReportView {
 
   private OutputStream printStream;
