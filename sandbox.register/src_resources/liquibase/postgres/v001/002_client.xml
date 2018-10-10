@@ -5,7 +5,7 @@
 
   <changeSet author="sultan" id="create-sequence-id">
     <sql endDelimiter=";;"><![CDATA[
-      create sequence id start 1
+      create sequence id start 10000
     ]]></sql>
   </changeSet>
 

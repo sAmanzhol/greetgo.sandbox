@@ -5,4 +5,8 @@ import java.util.Date;
 public class ClientReportFootData {
   public String generatedBy;
   public Date generatedAt;
+
+  public ClientReportFootData() {
+
+  }
 }

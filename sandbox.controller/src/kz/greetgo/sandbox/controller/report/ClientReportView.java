@@ -5,6 +5,7 @@ import kz.greetgo.sandbox.controller.report.model.ClientReportFootData;
 import kz.greetgo.sandbox.controller.report.model.ClientReportHeadData;
 
 public interface ClientReportView {
+
   void start(ClientReportHeadData headData) throws Exception;
 
   void addRow(ClientRecord row) throws Exception;

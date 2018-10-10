@@ -22,7 +22,7 @@ public class ClientReportViewPdf implements ClientReportView {
 
   private Document document;
 
-  private static final String FONT = "/home/ssailaubayev/IdeaProjects/greetgo.sandbox/sandbox.controller/src/kz/greetgo/sandbox/controller/report/fonts/FreeSans.ttf";
+  private static final String FONT = "kz/greetgo/sandbox/controller/report/fonts/FreeSans.ttf";
   private Font cyrillicFont;
 
   public ClientReportViewPdf(OutputStream printStream) throws Exception {
@@ -32,8 +32,8 @@ public class ClientReportViewPdf implements ClientReportView {
 
     this.document = new Document();
 
-    PdfWriter.getInstance(document, printStream);
-    document.open();
+    PdfWriter.getInstance(this.document, printStream);
+    this.document.open();
   }
 
   @Override
@@ -46,7 +46,7 @@ public class ClientReportViewPdf implements ClientReportView {
     table.addCell(new Paragraph("Total balance", cyrillicFont));
     table.addCell(new Paragraph("Maximum balance", cyrillicFont));
     table.addCell(new Paragraph("Minimum balance", cyrillicFont));
-    document.add(table);
+    this.document.add(table);
   }
 
   @Override
@@ -65,9 +65,9 @@ public class ClientReportViewPdf implements ClientReportView {
   @Override
   public void finish(ClientReportFootData footData) throws Exception {
     Paragraph paragraph = new Paragraph(String.format("Author: %s \n Created at: %s", String.valueOf(footData.generatedBy), String.valueOf(footData.generatedAt)), cyrillicFont);
-    document.add(paragraph);
+    this.document.add(paragraph);
 
-    document.close();
+    this.document.close();
   }
 
 

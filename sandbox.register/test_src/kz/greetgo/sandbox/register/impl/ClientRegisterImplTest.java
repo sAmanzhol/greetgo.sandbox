@@ -5,6 +5,7 @@ import kz.greetgo.sandbox.controller.model.*;
 import kz.greetgo.sandbox.controller.register.ClientRegister;
 import kz.greetgo.sandbox.register.dao_model.Character;
 import kz.greetgo.sandbox.register.dao_model.*;
+import kz.greetgo.sandbox.register.report.ClientReportViewTest;
 import kz.greetgo.sandbox.register.test.dao.CharacterTestDao;
 import kz.greetgo.sandbox.register.test.dao.ClientTestDao;
 import kz.greetgo.sandbox.register.test.util.ParentTestNg;
@@ -25,7 +26,6 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
 
   // FIXME: 10/8/18 Добавь тесты на count
-
 
   private Client insertClient(int id, String surname, String name, String patronymic, String gender, Date birth_date, int charm) {
     Client client = new Client();
@@ -114,12 +114,12 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     ClientAccount clientAccount5 = insertClientAccount(305, client4.id, 23434, "300444111");
 
-    ClientAccount clientAccount6 = insertClientAccount(306, client5.id, 453, "300555111");
-    ClientAccount clientAccount7 = insertClientAccount(307, client5.id, 4323, "300555222");
-    ClientAccount clientAccount8 = insertClientAccount(308, client5.id, -100, "300555333");
+    insertClientAccount(306, client5.id, 453, "300555111");
+    insertClientAccount(307, client5.id, 4323, "300555222");
+    insertClientAccount(308, client5.id, -100, "300555333");
 
 
-    ClientToFilter filter = new ClientToFilter("id", "ASC", "", 1, 5);
+    ClientToFilter filter = new ClientToFilter("id", "ASC", "", 1, 4);
 
     //
     //
@@ -127,7 +127,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
     //
     //
 
-    assertThat(clientRecords).hasSize(5);
+    assertThat(clientRecords).hasSize(4);
 
     assertThat(clientRecords.get(0).id).isEqualTo(client1.id);
     assertThat(clientRecords.get(0).fio).isEqualTo(client1.surname + " " + client1.name + " " + client1.patronymic);
@@ -160,19 +160,94 @@ public class ClientRegisterImplTest extends ParentTestNg {
     assertThat(clientRecords.get(3).balance).isEqualTo(clientAccount5.money);
     assertThat(clientRecords.get(3).balanceMax).isEqualTo(clientAccount5.money);
     assertThat(clientRecords.get(3).balanceMin).isEqualTo(clientAccount5.money);
+  }
 
-    assertThat(clientRecords.get(4).id).isEqualTo(client5.id);
-    assertThat(clientRecords.get(4).fio).isEqualTo(client5.surname + " " + client5.name + " " + client5.patronymic);
-    assertThat(clientRecords.get(4).character).isEqualTo(charm2.name);
-    assertThat(clientRecords.get(4).age).isEqualTo(44);
-    assertThat(clientRecords.get(4).balance).isEqualTo(clientAccount6.money + clientAccount7.money + clientAccount8.money);
-    assertThat(clientRecords.get(4).balanceMax).isEqualTo(clientAccount7.money);
-    assertThat(clientRecords.get(4).balanceMin).isEqualTo(clientAccount8.money);
+  @Test
+  public void render_check_validity() throws Exception {
+    clientTestDao.get().removeAll();
+    characterTestDao.get().removeAll();
+
+    Character charm1 = insertCharacter(301, "Самовлюблённый", "Самовлюблённый Описание", 100);
+    Character charm2 = insertCharacter(302, "Замкнутый", "Замкнутый Описание", 90);
+
+    Client client1 = insertClient(301, "Колобова", "Розалия", "Наумовна", "FEMALE", new GregorianCalendar(1977, 4, 25).getTime(), charm1.id);
+    Client client2 = insertClient(302, "Панова", "Алира", "Иосифовна", "FEMALE", new GregorianCalendar(1999, 7, 16).getTime(), charm1.id);
+    Client client3 = insertClient(303, "Крюков", "Игнатий", "Улебович", "MALE", new GregorianCalendar(1965, 2, 2).getTime(), charm2.id);
+    Client client4 = insertClient(304, "Киселёв", "Юлиан", "Романович", "MALE", new GregorianCalendar(2000, 4, 16).getTime(), charm2.id);
+    Client client5 = insertClient(305, "Исаева", "Ирина", "Сергеевна", "FEMALE", new GregorianCalendar(1974, 5, 11).getTime(), charm2.id);
+
+    ClientAccount clientAccount1 = insertClientAccount(301, client1.id, 3324, "300111111");
+
+    ClientAccount clientAccount2 = insertClientAccount(302, client2.id, 23425, "300222111");
+    ClientAccount clientAccount3 = insertClientAccount(303, client2.id, -342423, "300222222");
+
+    ClientAccount clientAccount4 = insertClientAccount(304, client3.id, 34, "300333111");
+
+    ClientAccount clientAccount5 = insertClientAccount(305, client4.id, 23434, "300444111");
+
+    ClientAccount clientAccount6 = insertClientAccount(306, client5.id, 453, "300555111");
+    ClientAccount clientAccount7 = insertClientAccount(307, client5.id, 4323, "300555222");
+    ClientAccount clientAccount8 = insertClientAccount(308, client5.id, -100, "300555333");
+
+
+    ClientToFilter filter = new ClientToFilter("id", "ASC", "", 1, 4);
+
+    ClientReportViewTest view = new ClientReportViewTest();
+
+    RenderFilter renderFilter = new RenderFilter(filter, "De Sali", new Date(), view);
+
+    //
+    //
+    clientRegister.get().render(renderFilter);
+    //
+    //
+
+    assertThat(view.clientRecordList).hasSize(5);
+
+    assertThat(view.clientRecordList.get(0).id).isEqualTo(client1.id);
+    assertThat(view.clientRecordList.get(0).fio).isEqualTo(client1.surname + " " + client1.name + " " + client1.patronymic);
+    assertThat(view.clientRecordList.get(0).character).isEqualTo(charm1.name);
+    assertThat(view.clientRecordList.get(0).age).isEqualTo(41);
+    assertThat(view.clientRecordList.get(0).balance).isEqualTo(clientAccount1.money);
+    assertThat(view.clientRecordList.get(0).balanceMax).isEqualTo(clientAccount1.money);
+    assertThat(view.clientRecordList.get(0).balanceMin).isEqualTo(clientAccount1.money);
+
+    assertThat(view.clientRecordList.get(1).id).isEqualTo(client2.id);
+    assertThat(view.clientRecordList.get(1).fio).isEqualTo(client2.surname + " " + client2.name + " " + client2.patronymic);
+    assertThat(view.clientRecordList.get(1).character).isEqualTo(charm1.name);
+    assertThat(view.clientRecordList.get(1).age).isEqualTo(19);
+    assertThat(view.clientRecordList.get(1).balance).isEqualTo(clientAccount2.money + clientAccount3.money);
+    assertThat(view.clientRecordList.get(1).balanceMax).isEqualTo(clientAccount2.money);
+    assertThat(view.clientRecordList.get(1).balanceMin).isEqualTo(clientAccount3.money);
+
+    assertThat(view.clientRecordList.get(2).id).isEqualTo(client3.id);
+    assertThat(view.clientRecordList.get(2).fio).isEqualTo(client3.surname + " " + client3.name + " " + client3.patronymic);
+    assertThat(view.clientRecordList.get(2).character).isEqualTo(charm2.name);
+    assertThat(view.clientRecordList.get(2).age).isEqualTo(53);
+    assertThat(view.clientRecordList.get(2).balance).isEqualTo(clientAccount4.money);
+    assertThat(view.clientRecordList.get(2).balanceMax).isEqualTo(clientAccount4.money);
+    assertThat(view.clientRecordList.get(2).balanceMin).isEqualTo(clientAccount4.money);
+
+    assertThat(view.clientRecordList.get(3).id).isEqualTo(client4.id);
+    assertThat(view.clientRecordList.get(3).fio).isEqualTo(client4.surname + " " + client4.name + " " + client4.patronymic);
+    assertThat(view.clientRecordList.get(3).character).isEqualTo(charm2.name);
+    assertThat(view.clientRecordList.get(3).age).isEqualTo(18);
+    assertThat(view.clientRecordList.get(3).balance).isEqualTo(clientAccount5.money);
+    assertThat(view.clientRecordList.get(3).balanceMax).isEqualTo(clientAccount5.money);
+    assertThat(view.clientRecordList.get(3).balanceMin).isEqualTo(clientAccount5.money);
+
+    assertThat(view.clientRecordList.get(4).id).isEqualTo(client5.id);
+    assertThat(view.clientRecordList.get(4).fio).isEqualTo(client5.surname + " " + client5.name + " " + client5.patronymic);
+    assertThat(view.clientRecordList.get(4).character).isEqualTo(charm2.name);
+    assertThat(view.clientRecordList.get(4).age).isEqualTo(44);
+    assertThat(view.clientRecordList.get(4).balance).isEqualTo(clientAccount6.money + clientAccount7.money + clientAccount8.money);
+    assertThat(view.clientRecordList.get(4).balanceMax).isEqualTo(clientAccount7.money);
+    assertThat(view.clientRecordList.get(4).balanceMin).isEqualTo(clientAccount8.money);
   }
 
 
   @Test
-  public void render_list_sortColumn_id_sortDirection_asc() {
+  public void render_list_sortColumn_id_sortDirection_asc() throws Exception {
     clientTestDao.get().removeAll();
     characterTestDao.get().removeAll();
 
@@ -184,21 +259,31 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     ClientToFilter filter = new ClientToFilter("id", "ASC", "", 1, 10);
 
+    ClientReportViewTest view = new ClientReportViewTest();
+
+    RenderFilter renderFilter = new RenderFilter(filter, "De Sali", new Date(), view);
+
     //
     //
     List<ClientRecord> list = clientRegister.get().list(filter);
+
+    clientRegister.get().render(renderFilter);
     //
     //
 
     assertThat(list).hasSize(3);
+    assertThat(view.clientRecordList).hasSize(3);
 
     assertThat(list.get(0).id).isEqualTo(101);
     assertThat(list.get(1).id).isEqualTo(102);
     assertThat(list.get(2).id).isEqualTo(103);
+    assertThat(view.clientRecordList.get(0).id).isEqualTo(101);
+    assertThat(view.clientRecordList.get(1).id).isEqualTo(102);
+    assertThat(view.clientRecordList.get(2).id).isEqualTo(103);
   }
 
   @Test
-  public void render_list_sortColumn_id_sortDirection_desc() {
+  public void render_list_sortColumn_id_sortDirection_desc() throws Exception {
     clientTestDao.get().removeAll();
     characterTestDao.get().removeAll();
 
@@ -210,21 +295,31 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     ClientToFilter filter = new ClientToFilter("id", "DESC", "", 1, 10);
 
+    ClientReportViewTest view = new ClientReportViewTest();
+
+    RenderFilter renderFilter = new RenderFilter(filter, "De Sali", new Date(), view);
+
     //
     //
     List<ClientRecord> list = clientRegister.get().list(filter);
+
+    clientRegister.get().render(renderFilter);
     //
     //
 
     assertThat(list).hasSize(3);
+    assertThat(view.clientRecordList).hasSize(3);
 
     assertThat(list.get(0).id).isEqualTo(103);
     assertThat(list.get(1).id).isEqualTo(102);
     assertThat(list.get(2).id).isEqualTo(101);
+    assertThat(view.clientRecordList.get(0).id).isEqualTo(103);
+    assertThat(view.clientRecordList.get(1).id).isEqualTo(102);
+    assertThat(view.clientRecordList.get(2).id).isEqualTo(101);
   }
 
   @Test
-  public void render_list_sortColumn_fio_sortDirection_asc() {
+  public void render_list_sortColumn_fio_sortDirection_asc() throws Exception {
     clientTestDao.get().removeAll();
     characterTestDao.get().removeAll();
 
@@ -236,21 +331,31 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     ClientToFilter filter = new ClientToFilter("fio", "ASC", "", 1, 10);
 
+    ClientReportViewTest view = new ClientReportViewTest();
+
+    RenderFilter renderFilter = new RenderFilter(filter, "De Sali", new Date(), view);
+
     //
     //
     List<ClientRecord> list = clientRegister.get().list(filter);
+
+    clientRegister.get().render(renderFilter);
     //
     //
 
     assertThat(list).hasSize(3);
+    assertThat(view.clientRecordList).hasSize(3);
 
     assertThat(list.get(0).id).isEqualTo(121);
     assertThat(list.get(1).id).isEqualTo(123);
     assertThat(list.get(2).id).isEqualTo(122);
+    assertThat(view.clientRecordList.get(0).id).isEqualTo(121);
+    assertThat(view.clientRecordList.get(1).id).isEqualTo(123);
+    assertThat(view.clientRecordList.get(2).id).isEqualTo(122);
   }
 
   @Test
-  public void render_list_sortColumn_fio_sortDirection_desc() {
+  public void render_list_sortColumn_fio_sortDirection_desc() throws Exception {
     clientTestDao.get().removeAll();
     characterTestDao.get().removeAll();
 
@@ -262,21 +367,31 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     ClientToFilter filter = new ClientToFilter("fio", "DESC", "", 1, 10);
 
+    ClientReportViewTest view = new ClientReportViewTest();
+
+    RenderFilter renderFilter = new RenderFilter(filter, "De Sali", new Date(), view);
+
     //
     //
     List<ClientRecord> list = clientRegister.get().list(filter);
+
+    clientRegister.get().render(renderFilter);
     //
     //
 
     assertThat(list).hasSize(3);
+    assertThat(view.clientRecordList).hasSize(3);
 
     assertThat(list.get(0).id).isEqualTo(112);
     assertThat(list.get(1).id).isEqualTo(113);
     assertThat(list.get(2).id).isEqualTo(111);
+    assertThat(view.clientRecordList.get(0).id).isEqualTo(112);
+    assertThat(view.clientRecordList.get(1).id).isEqualTo(113);
+    assertThat(view.clientRecordList.get(2).id).isEqualTo(111);
   }
 
   @Test
-  public void render_list_sortColumn_age_sortDirection_asc() {
+  public void render_list_sortColumn_age_sortDirection_asc() throws Exception {
     clientTestDao.get().removeAll();
     characterTestDao.get().removeAll();
 
@@ -288,21 +403,31 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     ClientToFilter filter = new ClientToFilter("age", "ASC", "", 1, 10);
 
+    ClientReportViewTest view = new ClientReportViewTest();
+
+    RenderFilter renderFilter = new RenderFilter(filter, "De Sali", new Date(), view);
+
     //
     //
     List<ClientRecord> list = clientRegister.get().list(filter);
+
+    clientRegister.get().render(renderFilter);
     //
     //
 
     assertThat(list).hasSize(3);
+    assertThat(view.clientRecordList).hasSize(3);
 
     assertThat(list.get(0).id).isEqualTo(102);
     assertThat(list.get(1).id).isEqualTo(101);
     assertThat(list.get(2).id).isEqualTo(103);
+    assertThat(view.clientRecordList.get(0).id).isEqualTo(102);
+    assertThat(view.clientRecordList.get(1).id).isEqualTo(101);
+    assertThat(view.clientRecordList.get(2).id).isEqualTo(103);
   }
 
   @Test
-  public void render_list_sortColumn_age_sortDirection_desc() {
+  public void render_list_sortColumn_age_sortDirection_desc() throws Exception {
     clientTestDao.get().removeAll();
     characterTestDao.get().removeAll();
 
@@ -314,21 +439,31 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     ClientToFilter filter = new ClientToFilter("age", "DESC", "", 1, 10);
 
+    ClientReportViewTest view = new ClientReportViewTest();
+
+    RenderFilter renderFilter = new RenderFilter(filter, "De Sali", new Date(), view);
+
     //
     //
     List<ClientRecord> list = clientRegister.get().list(filter);
+
+    clientRegister.get().render(renderFilter);
     //
     //
 
     assertThat(list).hasSize(3);
+    assertThat(view.clientRecordList).hasSize(3);
 
     assertThat(list.get(0).id).isEqualTo(103);
     assertThat(list.get(1).id).isEqualTo(101);
     assertThat(list.get(2).id).isEqualTo(102);
+    assertThat(view.clientRecordList.get(0).id).isEqualTo(103);
+    assertThat(view.clientRecordList.get(1).id).isEqualTo(101);
+    assertThat(view.clientRecordList.get(2).id).isEqualTo(102);
   }
 
   @Test
-  public void render_list_sortColumn_balance_sortDirection_asc() {
+  public void render_list_sortColumn_balance_sortDirection_asc() throws Exception {
     clientTestDao.get().removeAll();
     characterTestDao.get().removeAll();
 
@@ -349,21 +484,31 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     ClientToFilter filter = new ClientToFilter("balance", "ASC", "", 1, 10);
 
+    ClientReportViewTest view = new ClientReportViewTest();
+
+    RenderFilter renderFilter = new RenderFilter(filter, "De Sali", new Date(), view);
+
     //
     //
     List<ClientRecord> list = clientRegister.get().list(filter);
+
+    clientRegister.get().render(renderFilter);
     //
     //
 
     assertThat(list).hasSize(3);
+    assertThat(view.clientRecordList).hasSize(3);
 
     assertThat(list.get(0).id).isEqualTo(101);
     assertThat(list.get(1).id).isEqualTo(102);
     assertThat(list.get(2).id).isEqualTo(103);
+    assertThat(view.clientRecordList.get(0).id).isEqualTo(101);
+    assertThat(view.clientRecordList.get(1).id).isEqualTo(102);
+    assertThat(view.clientRecordList.get(2).id).isEqualTo(103);
   }
 
   @Test
-  public void render_list_sortColumn_balance_sortDirection_desc() {
+  public void render_list_sortColumn_balance_sortDirection_desc() throws Exception {
     clientTestDao.get().removeAll();
     characterTestDao.get().removeAll();
 
@@ -384,21 +529,31 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     ClientToFilter filter = new ClientToFilter("balance", "DESC", "", 1, 10);
 
+    ClientReportViewTest view = new ClientReportViewTest();
+
+    RenderFilter renderFilter = new RenderFilter(filter, "De Sali", new Date(), view);
+
     //
     //
     List<ClientRecord> list = clientRegister.get().list(filter);
+
+    clientRegister.get().render(renderFilter);
     //
     //
 
     assertThat(list).hasSize(3);
+    assertThat(view.clientRecordList).hasSize(3);
 
     assertThat(list.get(0).id).isEqualTo(103);
     assertThat(list.get(1).id).isEqualTo(102);
     assertThat(list.get(2).id).isEqualTo(101);
+    assertThat(view.clientRecordList.get(0).id).isEqualTo(103);
+    assertThat(view.clientRecordList.get(1).id).isEqualTo(102);
+    assertThat(view.clientRecordList.get(2).id).isEqualTo(101);
   }
 
   @Test
-  public void render_list_sortColumn_balanceMax_sortDirection_asc() {
+  public void render_list_sortColumn_balanceMax_sortDirection_asc() throws Exception {
     clientTestDao.get().removeAll();
     characterTestDao.get().removeAll();
 
@@ -419,21 +574,31 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     ClientToFilter filter = new ClientToFilter("balanceMax", "ASC", "", 1, 10);
 
+    ClientReportViewTest view = new ClientReportViewTest();
+
+    RenderFilter renderFilter = new RenderFilter(filter, "De Sali", new Date(), view);
+
     //
     //
     List<ClientRecord> list = clientRegister.get().list(filter);
+
+    clientRegister.get().render(renderFilter);
     //
     //
 
     assertThat(list).hasSize(3);
+    assertThat(view.clientRecordList).hasSize(3);
 
     assertThat(list.get(0).id).isEqualTo(101);
     assertThat(list.get(1).id).isEqualTo(102);
     assertThat(list.get(2).id).isEqualTo(103);
+    assertThat(view.clientRecordList.get(0).id).isEqualTo(101);
+    assertThat(view.clientRecordList.get(1).id).isEqualTo(102);
+    assertThat(view.clientRecordList.get(2).id).isEqualTo(103);
   }
 
   @Test
-  public void render_list_sortColumn_balanceMax_sortDirection_desc() {
+  public void render_list_sortColumn_balanceMax_sortDirection_desc() throws Exception {
     clientTestDao.get().removeAll();
     characterTestDao.get().removeAll();
 
@@ -454,21 +619,31 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     ClientToFilter filter = new ClientToFilter("balanceMax", "DESC", "", 1, 10);
 
+    ClientReportViewTest view = new ClientReportViewTest();
+
+    RenderFilter renderFilter = new RenderFilter(filter, "De Sali", new Date(), view);
+
     //
     //
     List<ClientRecord> list = clientRegister.get().list(filter);
+
+    clientRegister.get().render(renderFilter);
     //
     //
 
     assertThat(list).hasSize(3);
+    assertThat(view.clientRecordList).hasSize(3);
 
     assertThat(list.get(0).id).isEqualTo(103);
     assertThat(list.get(1).id).isEqualTo(102);
     assertThat(list.get(2).id).isEqualTo(101);
+    assertThat(view.clientRecordList.get(0).id).isEqualTo(103);
+    assertThat(view.clientRecordList.get(1).id).isEqualTo(102);
+    assertThat(view.clientRecordList.get(2).id).isEqualTo(101);
   }
 
   @Test
-  public void render_list_sortColumn_balanceMin_sortDirection_asc() {
+  public void render_list_sortColumn_balanceMin_sortDirection_asc() throws Exception {
     clientTestDao.get().removeAll();
     characterTestDao.get().removeAll();
 
@@ -489,21 +664,31 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     ClientToFilter filter = new ClientToFilter("balanceMin", "ASC", "", 1, 10);
 
+    ClientReportViewTest view = new ClientReportViewTest();
+
+    RenderFilter renderFilter = new RenderFilter(filter, "De Sali", new Date(), view);
+
     //
     //
     List<ClientRecord> list = clientRegister.get().list(filter);
+
+    clientRegister.get().render(renderFilter);
     //
     //
 
     assertThat(list).hasSize(3);
+    assertThat(view.clientRecordList).hasSize(3);
 
     assertThat(list.get(0).id).isEqualTo(102);
     assertThat(list.get(1).id).isEqualTo(101);
     assertThat(list.get(2).id).isEqualTo(103);
+    assertThat(view.clientRecordList.get(0).id).isEqualTo(102);
+    assertThat(view.clientRecordList.get(1).id).isEqualTo(101);
+    assertThat(view.clientRecordList.get(2).id).isEqualTo(103);
   }
 
   @Test
-  public void render_list_sortColumn_balanceMin_sortDirection_desc() {
+  public void render_list_sortColumn_balanceMin_sortDirection_desc() throws Exception {
     clientTestDao.get().removeAll();
     characterTestDao.get().removeAll();
 
@@ -524,22 +709,32 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     ClientToFilter filter = new ClientToFilter("balanceMin", "DESC", "", 1, 10);
 
+    ClientReportViewTest view = new ClientReportViewTest();
+
+    RenderFilter renderFilter = new RenderFilter(filter, "De Sali", new Date(), view);
+
     //
     //
     List<ClientRecord> list = clientRegister.get().list(filter);
+
+    clientRegister.get().render(renderFilter);
     //
     //
 
 
     assertThat(list).hasSize(3);
+    assertThat(view.clientRecordList).hasSize(3);
 
     assertThat(list.get(0).id).isEqualTo(103);
     assertThat(list.get(1).id).isEqualTo(101);
     assertThat(list.get(2).id).isEqualTo(102);
+    assertThat(view.clientRecordList.get(0).id).isEqualTo(103);
+    assertThat(view.clientRecordList.get(1).id).isEqualTo(101);
+    assertThat(view.clientRecordList.get(2).id).isEqualTo(102);
   }
 
   @Test
-  public void render_list_with_filter_fio_surname() {
+  public void render_list_with_filter_fio_surname() throws Exception {
     clientTestDao.get().removeAll();
     characterTestDao.get().removeAll();
 
@@ -551,20 +746,29 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     ClientToFilter filter = new ClientToFilter("id", "ASC", "К", 1, 10);
 
+    ClientReportViewTest view = new ClientReportViewTest();
+
+    RenderFilter renderFilter = new RenderFilter(filter, "De Sali", new Date(), view);
+
     //
     //
     List<ClientRecord> list = clientRegister.get().list(filter);
+
+    clientRegister.get().render(renderFilter);
     //
     //
 
     assertThat(list).hasSize(2);
+    assertThat(view.clientRecordList).hasSize(2);
 
     assertThat(list.get(0).id).isEqualTo(1010);
     assertThat(list.get(1).id).isEqualTo(1030);
+    assertThat(view.clientRecordList.get(0).id).isEqualTo(1010);
+    assertThat(view.clientRecordList.get(1).id).isEqualTo(1030);
   }
 
   @Test
-  public void render_list_with_filter_fio_name() {
+  public void render_list_with_filter_fio_name() throws Exception {
     clientTestDao.get().removeAll();
     characterTestDao.get().removeAll();
 
@@ -576,20 +780,29 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     ClientToFilter filter = new ClientToFilter("id", "ASC", "ли", 1, 10);
 
+    ClientReportViewTest view = new ClientReportViewTest();
+
+    RenderFilter renderFilter = new RenderFilter(filter, "De Sali", new Date(), view);
+
     //
     //
     List<ClientRecord> list = clientRegister.get().list(filter);
+
+    clientRegister.get().render(renderFilter);
     //
     //
 
     assertThat(list).hasSize(2);
+    assertThat(view.clientRecordList).hasSize(2);
 
     assertThat(list.get(0).id).isEqualTo(101);
     assertThat(list.get(1).id).isEqualTo(102);
+    assertThat(view.clientRecordList.get(0).id).isEqualTo(101);
+    assertThat(view.clientRecordList.get(1).id).isEqualTo(102);
   }
 
   @Test
-  public void render_list_with_filter_fio_patronymic() {
+  public void render_list_with_filter_fio_patronymic() throws Exception {
     clientTestDao.get().removeAll();
     characterTestDao.get().removeAll();
 
@@ -601,15 +814,23 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     ClientToFilter filter = new ClientToFilter("id", "ASC", "Уле", 1, 10);
 
+    ClientReportViewTest view = new ClientReportViewTest();
+
+    RenderFilter renderFilter = new RenderFilter(filter, "De Sali", new Date(), view);
+
     //
     //
     List<ClientRecord> list = clientRegister.get().list(filter);
+
+    clientRegister.get().render(renderFilter);
     //
     //
 
     assertThat(list).hasSize(1);
+    assertThat(view.clientRecordList).hasSize(1);
 
     assertThat(list.get(0).id).isEqualTo(103);
+    assertThat(view.clientRecordList.get(0).id).isEqualTo(103);
   }
 
 

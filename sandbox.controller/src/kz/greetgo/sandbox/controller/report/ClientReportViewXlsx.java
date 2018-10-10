@@ -66,7 +66,7 @@ public class ClientReportViewXlsx implements ClientReportView {
 
     // Resize all columns to fit the content size
     for (int i = 0; i < 7; i++) {
-      sheet.autoSizeColumn(i);
+      this.sheet.autoSizeColumn(i);
     }
 
     this.workbook.write(this.printStream);
