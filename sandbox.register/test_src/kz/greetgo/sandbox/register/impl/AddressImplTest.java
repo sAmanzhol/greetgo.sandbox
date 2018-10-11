@@ -89,7 +89,7 @@ public class AddressImplTest extends ParentTestNg{
 
 
         address.id = retAddress.id;
-        address.clientId = -2l;
+        address.client = -2l;
         address.street = RND.intStr(5);
         address.house = RND.intStr(3) + "DomU";
         address.flat = RND.intStr(3) + "KVu";
@@ -123,6 +123,30 @@ public class AddressImplTest extends ParentTestNg{
         assertThat(retAddress.street).isEqualTo(street);
         assertThat(retAddress.house).isEqualTo(house);
         assertThat(retAddress.flat).isEqualTo(flat);
+        assertThat(retAddress.client).isNotNull();
+    }
+
+    @Test
+    public void getAddressByClientId(){
+        Random rnd = new Random();
+
+        Long client = -1l;
+        String street = RND.intStr(5);
+        String house = rnd.nextInt(50) + "Dom";
+        String flat = rnd.nextInt(50) + "KV";
+
+        Address address = new Address(null,client,AddressType.REG,street,house,flat,true);
+        //
+        //
+        Long insRetId = addressRegister.get().insert(address);
+        List<Address> retAddress = addressRegister.get().getByClientId(client);
+        //
+        //
+        assertThat(insRetId).isNotNull();
+        assertThat(retAddress).isNotNull();
+        for(Address address1 : retAddress) {
+            assertThat(address1.client).isNotNull();
+        }
     }
 
     @Test(expectedExceptions = NullPointerException.class)

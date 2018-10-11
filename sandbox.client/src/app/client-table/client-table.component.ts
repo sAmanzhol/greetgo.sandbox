@@ -1,14 +1,10 @@
-import {Component, OnInit, ViewChild,ChangeDetectorRef} from '@angular/core';
-import {ClientRecord} from "../../model/ClientRecord";
-import {TableModule} from 'primeng/table';
-import {LazyLoadEvent, SortEvent} from "primeng/api";
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {LazyLoadEvent} from "primeng/api";
 import {LoginService} from "../login/login.service";
-import {ClientTableService} from "./client-table.service";
-import {forEach} from "@angular/router/src/utils/collection";
 import {ClientRepositoryService} from "../client-repository/client-repository.service";
-import {HttpService} from "../http.service";
-import {ClientTableInputComponent} from "../client-table-dialogs/client-table-input.component";
-import {BehaviorSubject} from "rxjs/BehaviorSubject";
+import {ClientTableInputFormsComponent} from "../client-table-inputForms/client-table-input-forms.component";
+import {ClientReqParams} from "../../model/ClientReqParams";
+import {ClientDisplay} from "../../model/ClientDisplay";
 
 @Component({
   selector: 'app-client-table',
@@ -17,29 +13,32 @@ import {BehaviorSubject} from "rxjs/BehaviorSubject";
 })
 
 export class ClientTableComponent implements OnInit {
+  private DEFAULT_TABLE_SIZE = 10;
+
   cols: any[];
-  clients: ClientItem[];
+  clients: ClientDisplay[];
+  nameFilterVal : string = "";
+  surnameFilterVal : string = "";
+  patronymicFilterVal : string = "";
   totalRecords: number;
+  tableSize:number;
+  lastParams:ClientReqParams;
 
-  @ViewChild(ClientTableInputComponent ) editDialog: ClientTableInputComponent ;
+  @ViewChild(ClientTableInputFormsComponent) editDialog: ClientTableInputFormsComponent;
 
-
-  constructor(public login: LoginService, public clientRepoService: ClientRepositoryService,private cdr: ChangeDetectorRef) {}
+  constructor(public login: LoginService, public clientRepoService: ClientRepositoryService) {}
 
   ngOnInit() {
-    this.totalRecords = this.clientRepoService.totalRecords;
     this.cols =
       [
         {field: 'fio', header: 'ФИО'},
-        {field: 'charm', header: 'Характер'},
-        {field: 'totalAccBal', header: 'общ.остаток счетов'},
-        {field: 'maxAccBal', header: 'макс. остаток'},
-        {field: 'minAccBal', header: 'мин. остаток'}
+        {field: 'charm_name', header: 'Характер'},
+        {field: 'age', header: 'Возраст'},
+        {field: 'sumbal', header: 'общ.остаток счетов'},
+        {field: 'maxbal', header: 'макс. остаток'},
+        {field: 'minbal', header: 'мин. остаток'}
       ];
-  }
-
-  ngAfterViewChecked(){
-    this.cdr.detectChanges();
+    this.tableSize = this.DEFAULT_TABLE_SIZE;
   }
 
   delete(id: number) {
@@ -50,42 +49,34 @@ export class ClientTableComponent implements OnInit {
     this.editDialog.invoke(id);
   }
 
-  add(){
+  add() {
+    this.tableSize++;
     this.editDialog.invoke(null);
   }
 
-  public onRowSelect(event: any) {
-
+  public async loadClientData(event: LazyLoadEvent) {
+    if(event == null && event == undefined) {
+      this.lastParams.nameFilterVal = this.nameFilterVal;
+      this.lastParams.surnameFilterVal = this.surnameFilterVal;
+      this.lastParams.patronymicFilterVal = this.patronymicFilterVal;
+    }
+    else {
+      this.lastParams = new ClientReqParams
+      (
+        this.nameFilterVal,
+        this.surnameFilterVal,
+        this.patronymicFilterVal,
+        event.first,
+        event.rows,
+        event.sortField,
+        event.sortOrder
+      );
+    }
+    this.totalRecords = await this.clientRepoService.loadClientsCount().then(body => {return body});
+    this.clients = await this.clientRepoService.getDispClientList(this.lastParams);
   }
-
-  public async loadData(event: LazyLoadEvent) {
-    await this.clientRepoService.getRecordsCount();
-    this.totalRecords = this.clientRepoService.totalRecords;
-    console.log(this.totalRecords);
-    this.clients = this.clientRepoService.getClientItem(event.rows,event.sortField,event.sortOrder);
-   // this.clients = this.getTestData()///Нужно сделать запрос с параметрами
-
-    //event.first = First row offset
-    //event.rows = Number of rows per page
-    //event.sortField = Field name to sort in single sort mode
-    //event.sortOrder = Sort order as number, 1 for asc and -1 for dec in single sort mode
-    //multiSortMeta: An array of SortMeta objects used in multiple columns sorting. Each SortMeta has field and order properties.
-    //filters: Filters object having field as key and filter value, filter matchMode as value
-    //globalFilter: Value of the global filter if available
-    //this.cars = //do a request to a remote datasource using a service and return the cars that match the lazy load criteria
-  }
-
-  }
-
-export interface ClientItem {
-  id;
-  fio;
-  charm;
-  age
-  totalAccBal;
-  maxAccBal;
-  minAccBal;
 }
+
 
 
 

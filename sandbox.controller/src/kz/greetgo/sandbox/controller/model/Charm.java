@@ -15,4 +15,17 @@ public class Charm {
         this.energy = energy;
         this.actual = actual;
     }
+
+    public Charm(){}
+
+    @Override
+    public String toString() {
+        return "Charm{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", energy=" + energy +
+                ", actual=" + actual +
+                '}';
+    }
 }

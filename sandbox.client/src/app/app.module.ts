@@ -15,7 +15,7 @@ import {TableModule} from 'primeng/table';
 import {ConfirmDialogModule} from 'primeng/confirmdialog';
 import {ConfirmationService} from 'primeng/api';
 import {MessagesModule} from 'primeng/messages'
-import {ClientTableInputComponent} from './client-table-dialogs/client-table-input.component';
+import {ClientTableInputFormsComponent} from './client-table-inputForms/client-table-input-forms.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ButtonModule} from 'primeng/button';
 import {DialogModule} from 'primeng/dialog';
@@ -23,6 +23,7 @@ import {InputTextModule} from 'primeng/inputtext';
 import {DropdownModule} from 'primeng/dropdown';
 import {RadioButtonModule} from 'primeng/radiobutton';
 import {InputMaskModule} from 'primeng/inputmask';
+import { LOCALE_ID } from '@angular/core';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,7 @@ import {InputMaskModule} from 'primeng/inputmask';
     ClientListComponent,
     AboutComponent,
     ClientTableComponent,
-    ClientTableInputComponent,
+    ClientTableInputFormsComponent,
 
   ],
   imports: [
@@ -51,7 +52,8 @@ import {InputMaskModule} from 'primeng/inputmask';
     InputMaskModule
   ],
 
-  providers: [HttpService, LoginService, ClientListService,ConfirmationService],
+providers: [HttpService, LoginService, ClientListService,ConfirmationService,
+  {provide: LOCALE_ID, useValue: "ru-RU" },],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

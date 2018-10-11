@@ -1,202 +1,166 @@
-import {Injectable,IterableDiffers, DoCheck } from "@angular/core";
+import {Injectable, OnInit} from "@angular/core";
 import {HttpService} from "../http.service";
-import {PersonRecord} from "../../model/PersonRecord";
 import {ClientRecord} from "../../model/ClientRecord";
-import {ClientItem} from "../client-table/client-table.component";
-import {Phone} from "../../model/Phone";
-import {GenderType} from "../../model/GenderType";
 import {Charm} from "../../model/Charm";
-import {Address} from "../../model/Address";
-import {BehaviorSubject} from "rxjs/BehaviorSubject";
-import {getRandomString} from "selenium-webdriver/safari";
-import {Account} from "../../model/Account";
+import {ClientReqParams} from "../../model/ClientReqParams";
+import {Observable} from "rxjs/Observable";
+import {HttpResponse} from "@angular/common/http";
+import {ClientDisplay} from "../../model/ClientDisplay";
+import {PhoneType} from "../../model/PhoneType";
+import {AddressType} from "../../model/AddressType";
 
 @Injectable({
   providedIn: 'root'
 })
-export class ClientRepositoryService  {
+export class ClientRepositoryService implements OnInit{
+
+  GET_BY_ID_URL = "/client/getById";
+  GET_CHARMS_URL = "/client/getCharms";
+  GET_COUNT_URL = "/client/getCount";
+  UPDATE_CLIENT_URL = "/client/update";
+  INSERT_CLIENT_URL = "/client/insert";
+  DELETE_CLIENT_URL = "/client/delete";
+  GET_ALL_CLIENT_URL = "/client/getAll";
+  phoneTypes   =   [{name: "Домашний", value:PhoneType.HOME}, {name: "Мобильный", value: PhoneType.MOBILE}, {name: "Рабочий", value: PhoneType.WORK}];
+  addressTypes =   [{name: "Фактический", value: AddressType.FACT }, {name: "Регистрации", value: AddressType.REG}];
+
+
 
   clientRecList  : ClientRecord[] = [];
-  clientItemList : ClientItem[] = []
-  totalRecords : number = 0;
+  clientItemList : ClientDisplay[] = [];
   charmList : Charm[] = [];
-  loading: boolean = false;
 
-  constructor(private http: HttpService) {
-    this.setTestCharms();
-    this.setTestData();
-  }
+  constructor(private http: HttpService) {}
 
-  public transformClientRecToClientItem(clientRecList:ClientRecord[]) : ClientItem[]
+  public transformClientRecToClientDisplay(clientRecList:ClientRecord[]) : ClientDisplay[]
   {
 
-    let result : ClientItem[] = [];
+    let result : ClientDisplay[] = [];
 
     for(let rec of clientRecList)
     {
-      result.push({
-        id:rec.id,
-        fio:rec.surname + " " + rec.name + " " + rec.patronomic,
-        age:rec.getAge(),
-        charm:rec.charm.name,
-        totalAccBal:rec.getTotalAccBal(),
-        maxAccBal:rec.getMaxAccBal(),
-        minAccBal:rec.getMinAccBal()
-      })
+        result.push(ClientDisplay.createFromClientRec(rec));
     }
     return result;
   }
 
-  loadRecords(param: any | any): Promise<ClientRecord[]> {
-    return this.http.get("/client/getAll")
-      .toPromise()
-      .then(resp => resp.body as Array<any>)
-      .then(body => body.map(r => ClientRecord.create(r)))
-  }
-
-  loadRecordsCount(): Promise<number> {
-    return this.http.get("/client/getCount")
-      .toPromise()
-      .then(resp => resp.body as number)
-  }
-
-  setTestCharms(){
-    this.charmList = [
-      Charm.create({id:1,name:"Строгий",description:"Бла бла бла",energy:100}),
-      Charm.create({id:2,name:"Няшка",description:"Бла бла бла",energy:50}),
-      Charm.create({id:3,name:"Говняшка",description:"Бла бла бла",energy:10})
-    ];
-  }
-
-   getRandomInt(max) {
-    return Math.floor(Math.random() * Math.floor(max));
-  }
-
-  getTestAccount() : Account[]{
-   let accounts : Account[] = [];
-   let account = new Account();
-
-   console.log(accounts);
-    for(let i = 0; i < 3;i++) {
-      let money = this.getRandomInt(100000)/this.getRandomInt(9);
-      let account = Account.create({id:0,client_id:0,money : money,number:86484646846874,
-        registered_at : "KZ ALMATY"});
-      accounts.push(account);
-    }
-
-    return accounts;
-  }
-
-  setTestData(){
-    this.clientRecList = [ClientRecord.create({
-      id: 1, surname: "Elgondy", name: "Ersultanbek",
-      patronomic: "Elgondy", birthDate: "04.12.1997",
-      gender: GenderType.FEMALE, charm: this.charmList[0], addressP: new Address(),
-      addressF:  new Address(), phoneH:  new Phone(), phoneW:  new Phone(), phoneM:  new Phone(),
-      account: this.getTestAccount()
-    }),
-      ClientRecord.create({
-        id: 2, surname: "Kanybek", name: "Tauke",
-        patronomic: "Bla bla", birthDate: "04.12.1997",
-        gender: GenderType.FEMALE, charm: this.charmList[0], addressP: new Address(),
-        addressF:  new Address(), phoneH:  new Phone(), phoneW:  new Phone(), phoneM:  new Phone(),
-        account: this.getTestAccount()
-      }),ClientRecord.create({
-        id: 3, surname: "Иванов", name: "Игорь",
-        patronomic: "Сергеевичь", birthDate: "04.12.1997",
-        gender: GenderType.FEMALE, charm: this.charmList[0], addressP: new Address(),
-        addressF:  new Address(), phoneH:  new Phone(), phoneW:  new Phone(), phoneM:  new Phone(),
-        account: this.getTestAccount()
-      }),ClientRecord.create({
-        id: 4, surname: "Красавчиков", name: "Красавчик",
-        patronomic: "Красавчиковичь", birthDate: "04.12.1997",
-        gender: GenderType.FEMALE, charm: this.charmList[0], addressP: new Address(),
-        addressF:  new Address(), phoneH:  new Phone(), phoneW:  new Phone(), phoneM:  new Phone(),
-        account: this.getTestAccount()
-      }),ClientRecord.create({
-        id: 5, surname: "Сахаров", name: "Пирожок",
-        patronomic: "Сладовичь", birthDate: "04.12.1997",
-        gender: GenderType.FEMALE, charm: this.charmList[0], addressP: new Address(),
-        addressF:  new Address(), phoneH:  new Phone(), phoneW:  new Phone(), phoneM:  new Phone(),
-        account: this.getTestAccount()
-      }),ClientRecord.create({
-        id: 6, surname: "Big", name: "JUICE",
-        patronomic: "ICE", birthDate: "04.12.1997",
-        gender: GenderType.FEMALE, charm: this.charmList[0], addressP: new Address(),
-        addressF:  new Address(), phoneH:  new Phone(), phoneW:  new Phone(), phoneM:  new Phone(),
-        account: this.getTestAccount()
-      }),ClientRecord.create({
-        id: 7, surname: "Elgondy1", name: "Ersultanbek1",
-        patronomic: "Elgondy1", birthDate: "04.12.1997",
-        gender: GenderType.FEMALE, charm: this.charmList[0], addressP: new Address(),
-        addressF:  new Address(), phoneH:  new Phone(), phoneW:  new Phone(), phoneM:  new Phone(),
-        account: this.getTestAccount()
-      })
-    ];
+  ngOnInit(){
 
   }
 
-  async getRecordsCount(){
-    this.totalRecords = await this.loadRecordsCount();
+  private transfClientRecToClientDisp(clientRec : ClientRecord) : ClientDisplay{
+    if(clientRec.charm.id != null)
+       clientRec.charm = this.getCharmById(clientRec.charm.id);
+
+      let clientDisp = ClientDisplay.createFromClientRec(clientRec);
+
+   return clientDisp;
   }
 
-  async getClientItem(nameFilter : string,
-                surnameFilter : string,
-                patronymicFilter : string,
-                page:number,
-                limit:number,
-                colName:string,
-                order:number)
-  {
-    await this.getAll({nameFilter,surnameFilter,patronymicFilter,page,limit,colName,order});
-    this.clientItemList = this.transformClientRecToClientItem(this.clientRecList);
-  }
-
-  getById(id:number){
-    return this.clientRecList.find(x => x.id === id);
-  }
-
-  async getAll(param: any){
-    try {
-      this.loading = true;
-
-      if (param != null) {
-        this.clientRecList = await this.loadRecords(param);
-      }
-      else
+  loadClientRecords(param: ClientReqParams): Observable<HttpResponse<any>> {
+    return this.http.get(this.GET_ALL_CLIENT_URL,
       {
-        this.clientRecList = await this.loadRecords(null);
-      }
+        "nameFilter":  param.nameFilterVal,
+        "surnameFilter": param.surnameFilterVal,
+        "patronymicFilter":param.patronymicFilterVal,
+        "offset":param.offset,
+        "rowSize":param.limit,
+        "sortCol":param.colName,//event.filters,
+        "order":param.order,
+      });
+  }
 
-      this.loading = false;
-    }
-    catch (e) {
-      this.loading = false;
-      console.error(e)
-    }
+  loadClientById(id:number){
+    return this.http.get(this.GET_BY_ID_URL,{"id":id});
+  }
+
+  loadCharms(): Observable<HttpResponse<any>> {
+    return this.http.get(this.GET_CHARMS_URL);
+  }
+
+  loadClientsCount(): Promise<number> {
+    return this.http.get(this.GET_COUNT_URL)
+      .toPromise()
+      .then(resp => resp.body as number);
+  }
+
+  updateClient(client:ClientRecord){
+    return this.http.post(this.UPDATE_CLIENT_URL,{'client':JSON.stringify(client)}).toPromise();
+  }
+
+  insertClient(client:ClientRecord){
+    return this.http.post(this.INSERT_CLIENT_URL,{'client':JSON.stringify(client)}).toPromise();
+  }
+  deleteClient(id){
+     this.http.post(this.DELETE_CLIENT_URL,{"id":id}).toPromise();
+  }
+
+  assingClientItem(from_item:ClientDisplay, to_item:ClientDisplay){
+    from_item.fio = to_item.fio;
+    from_item.minbal = to_item.minbal;
+    from_item.maxbal = to_item.maxbal;
+    from_item.age = to_item.age;
+    from_item.sumbal = to_item.sumbal;
+    from_item.charm_name = to_item.charm_name;
+  }
+
+  async getClientById(id:number){
+    let cl = await this.loadClientById(id).toPromise().then(resp=>resp.body as any).then(body=>{return ClientRecord.create(body)});
+    cl.charm = this.getCharmById(cl.charm.id);
+    return cl;
+  }
+
+  getCharmById(id:number){
+    return this.charmList.find(x=> x.id == id);
+  }
+
+  async getClientRecList(params:ClientReqParams){
+    this.clientRecList = await this.loadClientRecords(params).toPromise()
+      .then(resp => resp.body as Array<any>).then(body => body.map(r => ClientRecord.create(r)));
+
+    return this.clientRecList;
+  }
+
+  async getDispClientList(params:ClientReqParams){
+    await this.getClientRecList(params);
+    this.clientItemList = this.transformClientRecToClientDisplay(this.clientRecList);
+    return this.clientItemList;
+  }
+
+  async getCharmlist() {
+     this.charmList = await this.loadCharms().toPromise().then(resp=>resp.body as Array<any>).then(body=>body.map(r => Charm.create(r)));
+     return this.charmList;
   }
 
   async create(newClient : ClientRecord){
-    this.clientRecList.push(newClient);
-    /*
-    * Отправляешь запрос на контролер
-    * */
+    let prevFormat = newClient.birthDate;
+    newClient.birthDate =  Date.parse(newClient.birthDate);
+    await this.insertClient(newClient);
 
-    console.log(this.loadRecords("someting"));
+    newClient.birthDate = prevFormat;
+    this.clientRecList.splice(0,0,newClient);
+    this.clientItemList.splice(0,0,this.transfClientRecToClientDisp(newClient));
   }
 
   async update(client : ClientRecord){
-    this.clientRecList.find(x=>x.id === client.id).assign(client);
-    /*
-    * Отправляешь запрос на контролер
-    * */
+    let prevFormat = client.birthDate;
+    client.birthDate =  Date.parse(client.birthDate);
+    await this.updateClient(client);
+
+    client.birthDate =  prevFormat;
+    this.clientRecList.find(x=>x.id === client.id).copyAssign(client);
+    let clientItem:ClientDisplay = this.clientItemList.find(x=>x.id === client.id);
+    this.assingClientItem(clientItem,this.transfClientRecToClientDisp(client));
   }
 
   async delete(client : ClientRecord){
-    let indx = this.clientRecList.indexOf(client);
+
+    let localClient = this.clientRecList.find(x=>x.id == client.id);
+    let indx = this.clientRecList.indexOf(localClient);
+
     this.clientRecList.splice(indx,1);
-    /*
-    * Отправляешь запрос на контролер
-    * */
+    this.clientItemList.splice(indx,1);
+
+    this.deleteClient(client.id);
   }
 }

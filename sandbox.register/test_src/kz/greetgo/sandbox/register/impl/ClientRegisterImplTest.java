@@ -18,8 +18,68 @@ import java.util.Random;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 
-public class ClientImplTest extends ParentTestNg {
+public class ClientRegisterImplTest extends ParentTestNg {
     public BeanGetter<ClientRegister> clientRegister;
+
+
+    @Test
+    void clientFilterTest(){
+        List<Client> clientList;
+        String surname = "Л";
+        List<String> fio = new ArrayList<>();
+        fio.add("");
+        fio.add(surname);
+        fio.add("");
+
+        //
+        //
+        clientList = clientRegister.get().getListByParam(fio,10,0,"id",1);
+        //
+        //
+        assertThat(clientList).isNotNull();
+        assertThat(clientList).isNotEmpty();
+        assertThat(clientList.get(clientList.size()-1).id < clientList.get(0).id );
+        System.out.println(clientList);
+        for (Client client : clientList)
+        {
+            assertThat(client.surname.charAt(0)).isEqualTo(surname.charAt(0));
+        }
+
+    }
+
+    @Test
+    void clientMaxbalFilterTest(){
+        List<Client> clientList;
+        List<String> fio = new ArrayList<>();
+        fio.add("");
+        fio.add("");
+        fio.add("");
+        //
+        //
+        clientList = clientRegister.get().getListByParam(fio,10,0,"maxbal",1);
+        //
+        //
+        assertThat(clientList).isNotNull();
+        assertThat(clientList).isNotEmpty();
+        assertThat(clientList.get(clientList.size()-1).maxbal > clientList.get(0).maxbal);
+    }
+
+    @Test
+    void clientMinbalFilterTest(){
+        List<Client> clientList;
+        List<String> fio = new ArrayList<>();
+        fio.add("");
+        fio.add("");
+        fio.add("");
+        //
+        //
+        clientList = clientRegister.get().getListByParam(fio,10,0,"minbal",1);
+        //
+        //
+        assertThat(clientList).isNotNull();
+        assertThat(clientList).isNotEmpty();
+        assertThat(clientList.get(clientList.size()-1).minbal > clientList.get(0).minbal);
+    }
 
     @Test
     void insertClient(){
@@ -32,18 +92,13 @@ public class ClientImplTest extends ParentTestNg {
             Client retClient = clientRegister.get().getById(retId);
             //
             //
+
             assertThat(retId).isNotNull();
-
             assertThat(retClient).isNotNull();
-
             assertThat(retClient.surname).isEqualTo(client.surname);
-
             assertThat(retClient.name).isEqualTo(client.name);
-
             assertThat(retClient.patronymic).isEqualTo(client.patronymic);
-
             assertThat(retClient.gender).isEqualTo(client.gender);
-
             assertThat(retClient.birthDate).isEqualTo(client.birthDate);
         }
 
@@ -150,7 +205,7 @@ public class ClientImplTest extends ParentTestNg {
         Integer limit = 10;
         Integer offset = 0;
         String sortCol = "name";
-        String order = "ASC";
+        Integer order = 1;
         List<String> filters = new ArrayList<>();
         filters.add("Л");
         filters.add("");

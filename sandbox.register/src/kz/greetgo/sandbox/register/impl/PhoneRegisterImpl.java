@@ -19,7 +19,7 @@ public class PhoneRegisterImpl implements PhoneRegister {
 
     @Override
     public Long insert(Phone phone) {
-        if(phone == null||phone.number == null||phone.clientId == null)
+        if(phone == null||phone.number == null||phone.client == null)
             throw new NullPointerException("INSERTING PHONE IS NULL");
 
        return phoneDao.get().insert(phone);

@@ -3,8 +3,15 @@ package kz.greetgo.sandbox.register.impl;
 import kz.greetgo.db.Jdbc;
 import kz.greetgo.depinject.core.Bean;
 import kz.greetgo.depinject.core.BeanGetter;
+import kz.greetgo.sandbox.controller.model.Address;
 import kz.greetgo.sandbox.controller.model.Client;
+import kz.greetgo.sandbox.controller.model.Phone;
+import kz.greetgo.sandbox.controller.register.AccountRegister;
+import kz.greetgo.sandbox.controller.register.AddressRegister;
 import kz.greetgo.sandbox.controller.register.ClientRegister;
+import kz.greetgo.sandbox.controller.register.PhoneRegister;
+import kz.greetgo.sandbox.register.dao.AccountDao;
+import kz.greetgo.sandbox.register.dao.AddressDao;
 import kz.greetgo.sandbox.register.dao.ClientDao;
 
 import java.sql.BatchUpdateException;
@@ -17,19 +24,35 @@ import java.util.List;
 @Bean
 public class ClientRegistrImpl implements ClientRegister {
     public BeanGetter<ClientDao> clientDao;
+    public BeanGetter<AddressRegister> addressRegister;
+    public BeanGetter<AccountRegister> accountRegister;
+    public BeanGetter<PhoneRegister> phoneRegister;
     public BeanGetter<Jdbc> jdbcBean;
 
     private final String INSERT_STATEMENT = "insert into clients (id,surname,name,patronymic,gender,birth_date,charm,actual) VALUES (default,?,?,?,?::gender,?,?,true) ";
-    private final String SELECT_STATEMENT = "select c.id,c.surname,c.name,c.patronymic,c.gender,c.birth_date," +
-            "c.charm as charm_id, ch.name as charm_name,ch.description,ch.energy  from clients c,charms ch "+
-            "where c.actual = true and c.charm = ch.id";
+    private final String SELECT_STATEMENT = "select c.id,c.surname,c.name,c.patronymic,c.gender,c.birth_date,c.charm " +
+            "  as charm_id, ch.name as charm_name,ch.description,ch.energy " +
+            "  ,(SELECT max(acc.money) as maxbal " +
+            "    from client_account acc where acc.client = c.id) " +
+            "  ,(SELECT min(acc.money) as minbal " +
+            "    from client_account acc where acc.client = c.id) " +
+            "  ,(SELECT sum(acc.money) as sumbal " +
+            "   from client_account acc where acc.client = c.id) " +
+            " " +
+            "from clients c,charms ch " +
+            "where c.charm = ch.id and c.actual = true";
 
     @Override
     public Client getById(Long id) {
         if (id == null)
             throw new NullPointerException("ID IS NULL");
 
-        return clientDao.get().load(id);
+        Client client =  clientDao.get().load(id);
+        if(client != null) {
+            client.addresses = addressRegister.get().getByClientId(client.id);
+            client.phones = phoneRegister.get().getAllByClientId(client.id);
+        }
+        return client;
     }
 
     @Override
@@ -37,7 +60,32 @@ public class ClientRegistrImpl implements ClientRegister {
         if (client.id == null || hasNull(client))
             throw new NullPointerException("CLIENT HAS NULL DATA");
 
+        upsertClientDetail(client);
+
         return clientDao.get().update(client);
+    }
+
+    public void upsertClientDetail(Client client){
+        if(client.addresses == null)
+            return;
+
+        for (Address address:client.addresses) {
+            if(address.id != null)
+                addressRegister.get().update(address);
+            else{
+                address.client = client.id;
+                addressRegister.get().insert(address);
+            }
+        }
+
+        for(Phone phone : client.phones) {
+            if (phone.id != null)
+                phoneRegister.get().update(phone);
+            else {
+                phone.client = client.id;
+                phoneRegister.get().insert(phone);
+            }
+        }
     }
 
     @Override
@@ -67,7 +115,8 @@ public class ClientRegistrImpl implements ClientRegister {
             con.close();
             return id;
         });
-
+        client.id = resultId;
+        upsertClientDetail(client);
         return resultId;
     }
 
@@ -104,15 +153,14 @@ public class ClientRegistrImpl implements ClientRegister {
 //    c.id,c.surname,c.name,c.patronymic,c.gender,c.birth_date," +
 //            "c.charm as charm_id, ch.name as charm_name,ch.description,ch.energy
     @Override
-    public List<Client> getListByParam(List<String> FIO,Integer limit, Integer offset,  String sortCol,  String order) {
-        if(sortCol == null)
-            sortCol = "id";
-        if(order == null)
+    public List<Client> getListByParam(List<String> FIO,Integer limit, Integer offset,  String sortCol,  Integer orderI) {
+        String order = null;
+        if(orderI == null || orderI > 0)
             order = "ASC";
+        else if(orderI < 0)
+            order = "DESC";
 
         final String selectStmnt = getSelectStatement(FIO,limit,offset,sortCol,order);
-
-        System.out.println(selectStmnt);
 
         List<Client> clientList = new ArrayList<>();
         jdbcBean.get().execute(con ->
@@ -134,9 +182,13 @@ public class ClientRegistrImpl implements ClientRegister {
                                rs.getLong(7),
                                rs.getString(8),
                                rs.getString(9),
-                               rs.getDouble(10)
+                               rs.getDouble(10),
+                               rs.getDouble(11),
+                               rs.getDouble(12),
+                               rs.getDouble(13)
                        );
-
+                        client.addresses = addressRegister.get().getByClientId(client.id);
+                        client.phones = phoneRegister.get().getAllByClientId(client.id);
                        clientList.add(client);
                    }
                }
@@ -180,22 +232,21 @@ public class ClientRegistrImpl implements ClientRegister {
     String getSelectStatement(List<String> fio,Integer limit, Integer offset, String sortCol, String order){
         StringBuilder builder = new StringBuilder();
         builder.append(SELECT_STATEMENT);
-        if(fio.size() >= 0 && fio.get(0) != null) {
-            builder.append(" and c.surname like '");
+        if(fio.size() >= 1 && fio.get(0) != null) {
+            builder.append(" and c.name like '%");
             builder.append(fio.get(0));
             builder.append("%'");
         }
-        if(fio.size() >= 1 && fio.get(1) != null) {
-            builder.append(" and c.name like '");
+        if(fio.size() >= 2 && fio.get(1) != null) {
+            builder.append(" and c.surname like '%");
             builder.append(fio.get(1));
             builder.append("%'");
         }
-        if(fio.size() >= 2 && fio.get(1) != null) {
-            builder.append(" and c.patronymic like '");
+        if(fio.size() >= 3 && fio.get(2) != null) {
+            builder.append(" and c.patronymic like '%");
             builder.append(fio.get(2));
             builder.append("%'");
         }
-
         builder.append(" order by ");
         builder.append(sortCol);
         builder.append(" ");

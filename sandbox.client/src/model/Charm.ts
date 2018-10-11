@@ -6,6 +6,7 @@ export class Charm{
   public name : string;
   public description: string;
   public energy:number;
+  public actual;
 
   public static create(a : any): Charm {
     const ret = new Charm();
@@ -14,10 +15,12 @@ export class Charm{
   }
 
   assign(a : any){
+    console.log(a);
     this.id = a.id;
     this.name = a.name;
     this.description = a.description;
     this.energy = a.energy;
+    this.actual = a.actual;
   }
 
 }

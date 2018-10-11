@@ -1,0 +1,179 @@
+<p-dialog header="Редактирование" [(visible)]="displayDialog" [responsive]="true" showEffect="fade" [modal]="true"
+          [width]="512">
+  <div class="ui-g ui-fluid" *ngIf="client != null">
+    <div class="ui-g-12">
+      <div class="ui-g-4">
+        <label for="surname">*Фамилия</label>
+      </div>
+      <div class="ui-g-8">
+        <input required pInputText name="surname" id="surname" [(ngModel)]="client.surname"/>
+      </div>
+    </div>
+    <div class="ui-g-12">
+      <div class="ui-g-4">
+        <label for="name">*Имя</label>
+      </div>
+      <div class="ui-g-8">
+        <input required name="name" #name = "ngModel" pInputText id="name" [(ngModel)]="client.name"/>
+      </div>
+    </div>
+    <div class="ui-g-12">
+      <div class="ui-g-4">
+        <label for="patronomic">Отчество</label>
+      </div>
+      <div class="ui-g-8">
+        <input name="patronomic" pInputText id="patronomic" [(ngModel)]="client.patronymic"/>
+      </div>
+    </div>
+    <div class="ui-g-12">
+      <div class="ui-g-4">
+        <label for="gender">*Пол</label>
+      </div>
+      <div class="ui-g-8">
+        <p-radioButton  [required]="true" class="ui-md-1" id="gender" name="gender" value="{{genderType.MALE}}" label="МУЖ"
+                       [(ngModel)]="client.gender">
+        </p-radioButton>
+
+        <p-radioButton [required]="true" name="gender" label="ЖЕН" value="{{genderType.FEMALE}}"
+                       [(ngModel)]="client.gender"></p-radioButton>
+      </div>
+    </div>
+    <div class="ui-g-12">
+      <div class="ui-g-4">
+        <label for="birthDate">*Дата рождения</label>
+      </div>
+      <div class="ui-g-8">
+        <p-inputMask [required]="true" id="birthDate" name="birthDate" [required]="true" [(ngModel)]="client.birthDate"
+                     mask="99-99-9999"></p-inputMask>
+      </div>
+    </div>
+    <div class="ui-g-12">
+      <div class="ui-g-4">
+        <label for="charm">Характер</label>
+      </div>
+      <div class="ui-g-8">
+        <p-dropdown [required]="true" name="charm" id="charm" [options]="charmList" [(ngModel)]="client.charm"
+                    placeholder="Выберите характер"
+                    optionLabel="name" [showClear]="true"></p-dropdown>
+      </div>
+    </div>
+    <div *ngFor="let adr of client.addresses; let myIndex = index">
+      <div class="ui-g-12" *ngIf="client.addresses[myIndex].type == addressType.FACT">
+        <div class="ui-g-4">
+          <label>Адрес проживания (фактический)</label>
+        </div>
+        <div class="ui-g-8">
+
+          <input name="streetF"  pInputText placeholder="*Улица" id="streetF"
+                 [(ngModel)]="client.addresses[myIndex].street"/>
+
+          <input  name="houseNumF" required pInputText placeholder="*Дом" id="houseNumF"
+                 [(ngModel)]="client.addresses[myIndex].house"/>
+
+          <input  name="addressF" required pInputText placeholder="*Квартира" id="flatNumF"
+                 [(ngModel)]="client.addresses[myIndex].flat"/>
+        </div>
+      </div>
+
+      <div class="ui-g-12 " *ngIf="client.addresses[myIndex].type == addressType.REG">
+        <div class="ui-g-4">
+          <label>*Адрес регистрации</label>
+        </div>
+        <div class="ui-g-8">
+
+          <input [required]="true" pInputText placeholder="Улица" id="streetR" [(ngModel)]="client.addresses[myIndex].street"/>
+
+          <input [required]="true" pInputText placeholder="Дом" id="houseNumR" [(ngModel)]="client.addresses[myIndex].house"/>
+
+          <input [required]="true" pInputText placeholder="Квартира" id="flatNumR" [(ngModel)]="client.addresses[myIndex].flat"/>
+        </div>
+      </div>
+    </div>
+
+    <div class="ui-g-12">
+      <div class="ui-g-4">
+        <label>Добавить Адрес</label>
+      </div>
+      <div class="ui-g-8">
+          <p-dropdown class="ui-g-3" id="addressType" [options]="addressTypes" placeholder="Тип адреса" optionLabel="name" [showClear]="true" (onChange)="setNewAddressType($event);"></p-dropdown>
+          <button  pButton type="button" icon="pi pi-plus" (click)="addNewAddress()" label="Добавить"></button>
+      </div>
+      <br>
+      <br>
+    </div>
+
+    <div class="ui-g-12" *ngFor="let phn of client.phones; let myIndex = index">
+      <div class="ui-g-4">
+        <label>Телефон </label>
+      </div>
+      <div class="ui-g-8">
+        <div *ngIf="client.phones[myIndex].type === phoneType.HOME">
+          <div class="ui-g-4">
+            <label>Домашний</label>
+          </div>
+          <input [required]="true" pInputText placeholder="Домашний" id="homePhone" [(ngModel)]="client.phones[myIndex].number"/>
+        </div>
+
+        <div *ngIf="client.phones[myIndex].type == phoneType.WORK">
+          <div class="ui-g-4">
+            <label>Рабочий</label>
+          </div>
+          <input [required]="true" pInputText placeholder="Рабочий" id="workPhone" [(ngModel)]="client.phones[myIndex].number"/>
+        </div>
+
+        <div *ngIf="client.phones[myIndex].type == phoneType.MOBILE">
+          <div class="ui-g-4">
+            <label>Мобильный </label>
+          </div>
+          <input [required]="true" pInputText placeholder="Мобильный" [(ngModel)]="client.phones[myIndex].number"/>
+        </div>
+      </div>
+    </div>
+
+    <div class="ui-g-12" style="margin:2.0em auto">
+      <div class="ui-g-4">
+        <label>Добавить поле Телефон*</label>
+      </div>
+      <div class="ui-g-8">
+        <p-dropdown class="ui-g-3" id="phoneType" [options]="phoneTypes" placeholder="Тип телефона"
+                    optionLabel="name" [showClear]="true" (onChange)="setNewPhoneType($event);">
+        </p-dropdown>
+
+        <button type="button" pButton icon="pi pi-plus" (click)="addNewPhone()" label="Добавить">
+        </button>
+      </div>
+      <br>
+      <br>
+    </div>
+  </div>
+  <p-footer>
+    <div class="ui-dialog-buttonpane ui-helper-clearfix">
+      <button type="button" pButton icon="pi pi-times" (click)="cancel()" label="Отменить"></button>
+
+      <button  type="button" pButton icon="pi pi-check" (click)="save()" label="Сохранить"></button>
+    </div>
+  </p-footer>
+</p-dialog>
+
+<p-dialog header="Удалить клиента" [(visible)]="displayDeleteDialog" [responsive]="true" showEffect="fade"
+          [modal]="true"
+          [width]="312">
+  <button type="button" class="add-btn" pButton icon="pi pi-check" (click)="approveDelete(true)"
+          label="Да"></button>
+  <button type="button" pButton icon="pi pi-times" (click)="approveDelete(false)" label="Нет"></button>
+</p-dialog>
+
+
+<p-dialog header="Заполните требуемые поля" [(visible)]="displayNotificationDialog" [responsive]="true" showEffect="fade"
+          [modal]="true"
+          [width]="350">
+
+  <div>
+     <p>Нужно заполнить след. поля:
+       {{errorMes}}
+     </p>
+  </div>
+  <br/>
+  <button type="button" class="add-btn" pButton icon="pi pi-check" (click)="displayNotificationDialog = false"
+          label="OK"></button>
+</p-dialog>

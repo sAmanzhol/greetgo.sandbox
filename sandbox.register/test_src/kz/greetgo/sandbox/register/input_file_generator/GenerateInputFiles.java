@@ -747,7 +747,7 @@ public class GenerateInputFiles {
 
       List<String> pairs = new ArrayList<>();
       pairs.add("'type':'new_account'");
-      pairs.add("'clientId':'" + clientId + "'");
+      pairs.add("'client':'" + clientId + "'");
       pairs.add("'account_number':'" + number + "'");
       pairs.add("'registered_at':'" + sdf.format(registeredAt) + "'");
 

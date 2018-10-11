@@ -14,6 +14,12 @@ public class Client {
     public Timestamp birthDate;
     public Charm charm;
     public Boolean actual;
+    public Double maxbal;
+    public Double minbal;
+    public Double sumbal;
+
+    public List<Address> addresses;
+    public List<Phone> phones;
 
     public Client(Long id, String surname, String name, String patronymic, Object gender, Timestamp birthDate, Charm charm) {
         this.id = id;
@@ -26,7 +32,8 @@ public class Client {
     }
 
     public Client(Long id, String surname, String name, String patronymic, Object gender, Timestamp birthDate,
-                  Long charm_id,String charm_name,String charm_desc,Double charm_energy)
+                  Long charm_id,String charm_name,String charm_desc,Double charm_energy,
+                  Double maxbal,Double minbal,Double sumbal)
     {
         this.id = id;
         this.surname = surname;
@@ -34,11 +41,33 @@ public class Client {
         this.patronymic = patronymic;
         this.gender = Gender.valueOf(gender.toString());
         this.birthDate = birthDate;
+        this.maxbal = maxbal;
+        this.minbal = minbal;
+        this.sumbal = sumbal;
         this.charm = new Charm(charm_id,charm_name,charm_desc,charm_energy,actual);
         this.actual = true;
     }
 
-    public List<Address> addresses;
-    public List<Phone> phones;
-    public List<Account> accounts;
+    public Client(){
+
+    }
+
+    @Override
+    public String toString() {
+        return "Client{" +
+                "id=" + id +
+                ", surname='" + surname + '\'' +
+                ", name='" + name + '\'' +
+                ", patronymic='" + patronymic + '\'' +
+                ", gender=" + gender +
+                ", birthDate=" + birthDate +
+                ", charm=" + charm +
+                ", actual=" + actual +
+                ", maxbal=" + maxbal +
+                ", minbal=" + minbal +
+                ", sumbal=" + sumbal +
+                ", addresses=" + addresses +
+                ", phones=" + phones +
+                '}';
+    }
 }

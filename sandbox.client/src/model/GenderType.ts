@@ -1,5 +1,5 @@
 
-export class GenderType{
- public static MALE = "MALE"
- public static FEMALE = "FEMALE"
+export  enum GenderType{
+  MALE = 'MALE',
+  FEMALE = 'FEMALE',
 }

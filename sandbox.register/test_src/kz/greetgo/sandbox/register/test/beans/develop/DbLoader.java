@@ -3,11 +3,10 @@ package kz.greetgo.sandbox.register.test.beans.develop;
 import kz.greetgo.depinject.core.Bean;
 import kz.greetgo.depinject.core.BeanGetter;
 import kz.greetgo.sandbox.controller.model.*;
+import kz.greetgo.sandbox.controller.model.enums.AddressType;
 import kz.greetgo.sandbox.controller.model.enums.Gender;
-import kz.greetgo.sandbox.controller.register.AddressRegister;
-import kz.greetgo.sandbox.controller.register.CharmRegister;
-import kz.greetgo.sandbox.controller.register.ClientRegister;
-import kz.greetgo.sandbox.controller.register.PhoneRegister;
+import kz.greetgo.sandbox.controller.model.enums.PhoneType;
+import kz.greetgo.sandbox.controller.register.*;
 import kz.greetgo.sandbox.register.beans.all.IdGenerator;
 import kz.greetgo.sandbox.register.test.dao.AuthTestDao;
 import kz.greetgo.security.password.PasswordEncoder;
@@ -40,10 +39,10 @@ public class DbLoader {
   public BeanGetter <AddressRegister> addressRegister;
   public BeanGetter <ClientRegister> clientRegister;
   public BeanGetter <PhoneRegister> phoneRegister;
+  public BeanGetter <AccountRegister> accountRegister;
 
   public List<Charm> charmList;
-
-  public List<Charm> clientList;
+  public List<Long> clientList = new ArrayList<>();
 
   public void loadTestData() throws Exception {
 
@@ -52,37 +51,66 @@ public class DbLoader {
     loadClients();
     loadAddress();
     loadPhones();
+    loadAccounts();
 
     logger.info("FINISH");
   }
+  private void loadAccounts(){
+    for (Long id:clientList) {
+      accountRegister.get().insert(new Account(null,id,Double.valueOf(RND.intStr(5)),"KZ"+RND.str(16),new Timestamp(System.currentTimeMillis()),true));
+      accountRegister.get().insert(new Account(null,id,Double.valueOf(RND.intStr(3)),"KZ"+RND.str(16),new Timestamp(System.currentTimeMillis()),true));
+      accountRegister.get().insert(new Account(null,id,Double.valueOf(RND.intStr(4)),"KZ"+RND.str(16),new Timestamp(System.currentTimeMillis()),true));
+    }
+  }
+
 
   private void loadPhones() {
-
+    for (Long id:clientList) {
+      phoneRegister.get().insert(new Phone(null,id,RND.intStr(8),PhoneType.HOME,true));
+      phoneRegister.get().insert(new Phone(null,id,RND.intStr(8),PhoneType.WORK,true));
+      phoneRegister.get().insert(new Phone(null,id,RND.intStr(8),PhoneType.MOBILE,true));
+      phoneRegister.get().insert(new Phone(null,id,RND.intStr(8),PhoneType.MOBILE,true));
+    }
   }
 
   private void loadAddress() {
-
+    for (Long id:clientList) {
+      addressRegister.get().insert(new Address(null,id,AddressType.FACT,"Улица пушкина "+(id*6l) +" ","Дом кукушкина " +id,"Кв : " + id*3,true));
+      addressRegister.get().insert(new Address(null,id,AddressType.REG,"Улица Кукушкина "+(id*2l) +" ","Дом пушкина " +id*7,"Кв : " + id*5,true));
+    }
   }
 
   private void loadClients() {
-    clientRegister.get().insert(generateClient());
-    clientRegister.get().insert(generateClient());
-    clientRegister.get().insert(generateClient());
-    clientRegister.get().insert(generateClient());
-    clientRegister.get().insert(generateClient());
-    clientRegister.get().insert(generateClient());
-    clientRegister.get().insert(generateClient());
-    clientRegister.get().insert(generateClient());
-    clientRegister.get().insert(generateClient());
-    clientRegister.get().insert(generateClient());
-    clientRegister.get().insert(generateClient());
-    clientRegister.get().insert(generateClient());
-    clientRegister.get().insert(generateClient());
-    clientRegister.get().insert(generateClient());
-    clientRegister.get().insert(generateClient());
-    clientRegister.get().insert(generateClient());
-    clientRegister.get().insert(generateClient());
-    clientRegister.get().insert(generateClient());
+    clientList.add(clientRegister.get().insert(generateClient()));
+    clientList.add(clientRegister.get().insert(generateClient()));
+    clientList.add(clientRegister.get().insert(generateClient()));
+    clientList.add(clientRegister.get().insert(generateClient()));
+    clientList.add(clientRegister.get().insert(generateClient()));
+    clientList.add(clientRegister.get().insert(generateClient()));
+    clientList.add(clientRegister.get().insert(generateClient()));
+    clientList.add(clientRegister.get().insert(generateClient()));
+    clientList.add(clientRegister.get().insert(generateClient()));
+    clientList.add(clientRegister.get().insert(generateClient()));
+    clientList.add(clientRegister.get().insert(generateClient()));
+    clientList.add(clientRegister.get().insert(generateClient()));
+    clientList.add(clientRegister.get().insert(generateClient()));
+    clientList.add(clientRegister.get().insert(generateClient()));
+    clientList.add(clientRegister.get().insert(generateClient()));
+    clientList.add(clientRegister.get().insert(generateClient()));
+    clientList.add(clientRegister.get().insert(generateClient()));
+    clientList.add(clientRegister.get().insert(generateClient()));
+    clientList.add(clientRegister.get().insert(generateClient()));
+    clientList.add(clientRegister.get().insert(generateClient()));
+    clientList.add(clientRegister.get().insert(generateClient()));
+    clientList.add(clientRegister.get().insert(generateClient()));
+    clientList.add(clientRegister.get().insert(generateClient()));
+    clientList.add(clientRegister.get().insert(generateClient()));
+    clientList.add(clientRegister.get().insert(generateClient()));
+    clientList.add(clientRegister.get().insert(generateClient()));
+    clientList.add(clientRegister.get().insert(generateClient()));
+    clientList.add(clientRegister.get().insert(generateClient()));
+    clientList.add(clientRegister.get().insert(generateClient()));
+    clientList.add(clientRegister.get().insert(generateClient()));
   }
 
   private void loadCharms() {
@@ -131,7 +159,7 @@ public class DbLoader {
       int chl = charmList.size();
       Gender gender = RND.someEnum(Gender.FEMALE, Gender.MALE);
 
-      Timestamp birthDate = new Timestamp(RND.dateYears(1975,2015).getTime());
+      Timestamp birthDate = new Timestamp(new Date().getTime());
 
       Client client = new Client(null, surname[random.nextInt(sl)], name[random.nextInt(nl)], patronymic[random.nextInt(pl)], gender,
               birthDate,charmList.get(random.nextInt(chl)
