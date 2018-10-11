@@ -10,9 +10,9 @@ import kz.greetgo.sandbox.register.dao.ClientDao;
 import kz.greetgo.sandbox.register.dao_model.Client;
 import kz.greetgo.sandbox.register.dao_model.ClientAddr;
 import kz.greetgo.sandbox.register.dao_model.ClientPhone;
-import kz.greetgo.sandbox.register.impl.jdbc.ClientCountCallbackImpl;
-import kz.greetgo.sandbox.register.impl.jdbc.ClientListCallbackImpl;
-import kz.greetgo.sandbox.register.impl.jdbc.ClientListRenderCallbackImpl;
+import kz.greetgo.sandbox.register.impl.jdbc.client.ClientCountCallbackImpl;
+import kz.greetgo.sandbox.register.impl.jdbc.client.ClientListCallbackImpl;
+import kz.greetgo.sandbox.register.impl.jdbc.client.ClientListRenderCallbackImpl;
 import kz.greetgo.sandbox.register.util.JdbcSandbox;
 
 import java.util.List;

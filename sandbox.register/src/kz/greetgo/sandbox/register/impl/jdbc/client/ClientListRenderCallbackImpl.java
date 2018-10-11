@@ -1,4 +1,4 @@
-package kz.greetgo.sandbox.register.impl.jdbc;
+package kz.greetgo.sandbox.register.impl.jdbc.client;
 
 import kz.greetgo.sandbox.controller.model.ClientToFilter;
 import kz.greetgo.sandbox.controller.report.ClientReportView;
