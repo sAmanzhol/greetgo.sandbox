@@ -163,4 +163,16 @@ export class ClientRepositoryService implements OnInit{
 
     this.deleteClient(client.id);
   }
+
+  async getXlsx() {
+      return await this.http.get("/client/xlsx").toPromise().then().catch(
+        resp => {console.log(resp)}
+      );
+  }
+
+  downloadFile(data: Response){
+    let blob = new Blob([data], { type: 'text/csv' });
+    let url= window.URL.createObjectURL(blob);
+    window.open(url);
+  }
 }

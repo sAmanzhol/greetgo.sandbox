@@ -16,6 +16,10 @@ import {GenderType} from "../../model/GenderType";
 })
 
 export class ClientTableInputFormsComponent{
+
+  //TODO default value of address and phone не работает
+  //TODO валидация даты: Дата не может быть больше текущего дня
+
   displayDialog: boolean;
   displayDeleteDialog: boolean;
   client: ClientRecord;
@@ -58,6 +62,9 @@ export class ClientTableInputFormsComponent{
   }
 
   public save() {
+
+    //TODO сделать валидацию на номера телефонов
+
     this.errorMes = null;
     this.errorMes = this.client.checkRequiredFields();
 

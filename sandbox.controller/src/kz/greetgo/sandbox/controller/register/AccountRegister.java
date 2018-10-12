@@ -1,7 +1,6 @@
 package kz.greetgo.sandbox.controller.register;
 
 import kz.greetgo.sandbox.controller.model.Account;
-import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 

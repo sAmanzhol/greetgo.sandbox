@@ -75,6 +75,11 @@ export class ClientTableComponent implements OnInit {
     this.totalRecords = await this.clientRepoService.loadClientsCount().then(body => {return body});
     this.clients = await this.clientRepoService.getDispClientList(this.lastParams);
   }
+
+  getXlsx() {
+    console.log("HEllo");
+    this.clientRepoService.getXlsx();
+  }
 }
 
 

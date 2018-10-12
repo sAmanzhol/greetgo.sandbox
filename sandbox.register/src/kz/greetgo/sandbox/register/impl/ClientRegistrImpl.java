@@ -14,6 +14,9 @@ import kz.greetgo.sandbox.register.dao.AccountDao;
 import kz.greetgo.sandbox.register.dao.AddressDao;
 import kz.greetgo.sandbox.register.dao.ClientDao;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.sql.BatchUpdateException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -23,6 +26,15 @@ import java.util.List;
 
 @Bean
 public class ClientRegistrImpl implements ClientRegister {
+    public static final String COL_ID = "id";
+    public static final String COL_NAME = "name";
+    public static final String COL_SURNAME = "surname";
+    public static final String COL_PARTONYMIC = "patronymic";
+    public static final String COL_GENDER = "gender";
+    public static final String COL_BIRTH_DATE = "birth_date";
+    public static final String COL_CHARM = "charm";
+
+
     public BeanGetter<ClientDao> clientDao;
     public BeanGetter<AddressRegister> addressRegister;
     public BeanGetter<AccountRegister> accountRegister;
@@ -103,15 +115,20 @@ public class ClientRegistrImpl implements ClientRegister {
 
                 try (ResultSet rs = preparedStatement.getResultSet()) {
                     if (rs.next())
-                        id = rs.getLong(1);
+                        id = rs.getLong(1123);
                 }
+
+                //TODO "try with resources" catch block не нужен в ТВОЕМ СЛУЧАЕ. Потому что AutoClosable
                 catch (Exception e) {
+                    //TODO нельзя проглатывать ошибку!!!!!! Надо логировать.
                     e. printStackTrace();
                 }
+                //TODO "try with resources" catch block не нужен. Потому что AutoClosable
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
+            //TODO "try with resources" ты итак закрыл). Потому что AutoClosable
             con.close();
             return id;
         });
@@ -146,7 +163,10 @@ public class ClientRegistrImpl implements ClientRegister {
             catch(Exception e){
                 e.printStackTrace();
             }
-            con.close();
+
+             //TODO "try with resources" ты итак освободишь connection. Потому что AutoClosable
+
+             con.close();
             return 1;
         });
     }
@@ -154,6 +174,9 @@ public class ClientRegistrImpl implements ClientRegister {
 //            "c.charm as charm_id, ch.name as charm_name,ch.description,ch.energy
     @Override
     public List<Client> getListByParam(List<String> FIO,Integer limit, Integer offset,  String sortCol,  Integer orderI) {
+
+        //TODO Вынести 0 в переменную static ты ее уже используешь в одном методе
+        //TODO Создать enum для SORT
         String order = null;
         if(orderI == null || orderI > 0)
             order = "ASC";
@@ -205,8 +228,11 @@ public class ClientRegistrImpl implements ClientRegister {
 
     @Override
     public void delete(Long id) {
-        if (id == null)
+        if (id == null) {
+
+            //TODO этот text Exception ты уже исрользуешь несколько раз. Вынеси ее например в ExceptionStaticMessages
             throw new NullPointerException("ID IS NULL");
+        }
 
         clientDao.get().delete(id);
     }
@@ -229,6 +255,7 @@ public class ClientRegistrImpl implements ClientRegister {
         statement.setLong(6, client.charm.id);
     }
 
+    //TODO слишком много параметров принимает фнукция. Заверни в модель.
     String getSelectStatement(List<String> fio,Integer limit, Integer offset, String sortCol, String order){
         StringBuilder builder = new StringBuilder();
         builder.append(SELECT_STATEMENT);

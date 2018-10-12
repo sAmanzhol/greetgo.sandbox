@@ -83,7 +83,11 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     @Test
     void insertClient(){
-            Charm charm = new Charm(1L, "Strong as fuck", "Will everything moving ", 1110d,true);
+
+        //TODO НЕЛЬЗЯ писать маты. Это может всплыть при презентации проекта!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+        Charm charm = new Charm(1L, "Strong as fuck", "Will everything moving ", 1110d,true);
 
             Client client = new Client(null, "Elgondy", "Ersultanbek", "Konysbekuly", Gender.FEMALE, new Timestamp(System.currentTimeMillis()), charm);
             //
