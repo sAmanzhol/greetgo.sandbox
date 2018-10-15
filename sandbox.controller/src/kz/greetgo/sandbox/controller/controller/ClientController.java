@@ -10,7 +10,11 @@ import kz.greetgo.mvc.annotations.on_methods.OnDelete;
 import kz.greetgo.mvc.annotations.on_methods.OnGet;
 import kz.greetgo.mvc.annotations.on_methods.OnPost;
 import kz.greetgo.mvc.interfaces.BinResponse;
-import kz.greetgo.sandbox.controller.model.*;
+import kz.greetgo.sandbox.controller.model.ClientDetails;
+import kz.greetgo.sandbox.controller.model.ClientRecord;
+import kz.greetgo.sandbox.controller.model.ClientToFilter;
+import kz.greetgo.sandbox.controller.model.ClientToSave;
+import kz.greetgo.sandbox.controller.model.RenderFilter;
 import kz.greetgo.sandbox.controller.register.ClientRegister;
 import kz.greetgo.sandbox.controller.report.ClientReportView;
 import kz.greetgo.sandbox.controller.report.ClientReportViewPdf;
@@ -47,6 +51,7 @@ public class ClientController implements Controller {
     binResponse.flushBuffers();
   }
 
+  // FIXME: 10/15/18 Переименуй принтСтримы в аутпутСтрим !везде где надо!
   private ClientReportView getMyView(String type, OutputStream printStream) throws Exception {
     switch (type) {
       case "pdf":

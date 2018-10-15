@@ -18,8 +18,6 @@ import kz.greetgo.sandbox.register.util.JdbcSandbox;
 import java.util.List;
 import java.util.Objects;
 
-// FIXME: 9/24/18 Избавься от варнингов в коде
-
 @SuppressWarnings("WeakerAccess")
 @Bean
 public class ClientRegisterImpl implements ClientRegister {
@@ -62,8 +60,7 @@ public class ClientRegisterImpl implements ClientRegister {
 
   @Override
   public ClientRecord save(ClientToSave clientToSave) {
-    // FIXME: 10/8/18 зачем тебе вторая проверка после первой?
-    if (Objects.equals(clientToSave.id, null)) {
+    if (Objects.isNull(clientToSave.id)) {
       int newClientId = createClient(clientToSave);
       createClientAddr(newClientId, clientToSave);
       createClientPhone(newClientId, clientToSave);
