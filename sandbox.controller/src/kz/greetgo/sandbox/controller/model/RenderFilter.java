@@ -1,7 +1,5 @@
 package kz.greetgo.sandbox.controller.model;
 
-import kz.greetgo.sandbox.controller.report.ClientReportView;
-
 import java.util.Date;
 
 @SuppressWarnings("unused")

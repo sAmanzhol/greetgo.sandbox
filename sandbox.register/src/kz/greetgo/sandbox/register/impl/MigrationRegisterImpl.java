@@ -17,11 +17,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.io.FileInputStream;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Scanner;
 
 
@@ -63,22 +60,22 @@ public class MigrationRegisterImpl implements MigrationRegister {
         ciaClient.id = curClientElement.getAttribute("id");
       }
       if (curClientElement.getElementsByTagName("surname").item(0) != null) {
-        ciaClient.surname = ((Element)curClientElement.getElementsByTagName("surname").item(0)).getAttribute("value");
+        ciaClient.surname = ((Element) curClientElement.getElementsByTagName("surname").item(0)).getAttribute("value");
       }
       if (curClientElement.getElementsByTagName("name").item(0) != null) {
-        ciaClient.name = ((Element)curClientElement.getElementsByTagName("name").item(0)).getAttribute("value");
+        ciaClient.name = ((Element) curClientElement.getElementsByTagName("name").item(0)).getAttribute("value");
       }
       if ((curClientElement.getElementsByTagName("patronymic").item(0)) != null) {
-        ciaClient.patronymic = ((Element)curClientElement.getElementsByTagName("patronymic").item(0)).getAttribute("value");
+        ciaClient.patronymic = ((Element) curClientElement.getElementsByTagName("patronymic").item(0)).getAttribute("value");
       }
       if (curClientElement.getElementsByTagName("gender").item(0) != null) {
-        ciaClient.gender = ((Element)curClientElement.getElementsByTagName("gender").item(0)).getAttribute("value");
+        ciaClient.gender = ((Element) curClientElement.getElementsByTagName("gender").item(0)).getAttribute("value");
       }
       if (curClientElement.getElementsByTagName("charm").item(0) != null) {
-        ciaClient.charm = ((Element)curClientElement.getElementsByTagName("charm").item(0)).getAttribute("value");
+        ciaClient.charm = ((Element) curClientElement.getElementsByTagName("charm").item(0)).getAttribute("value");
       }
       if (curClientElement.getElementsByTagName("birth").item(0) != null) {
-        ciaClient.birth = ((Element)curClientElement.getElementsByTagName("birth").item(0)).getAttribute("value");
+        ciaClient.birth = ((Element) curClientElement.getElementsByTagName("birth").item(0)).getAttribute("value");
       }
 
       ciaClient.addresses = new ArrayList<>();
@@ -114,7 +111,7 @@ public class MigrationRegisterImpl implements MigrationRegister {
   }
 
   private void parseCiaClientAddresses(List<CiaAddress> addresses, Element curClientElement, String addressType) {
-    Element curAddressElement = (Element)curClientElement.getElementsByTagName(addressType).item(0);
+    Element curAddressElement = (Element) curClientElement.getElementsByTagName(addressType).item(0);
 
     CiaAddress ciaAddress = new CiaAddress();
     ciaAddress.type = addressType;

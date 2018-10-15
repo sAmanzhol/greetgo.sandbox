@@ -1,7 +1,5 @@
 package kz.greetgo.sandbox.register.test.dao;
 
-import kz.greetgo.sandbox.controller.model.ClientDetails;
-import kz.greetgo.sandbox.controller.model.PhoneDisplay;
 import kz.greetgo.sandbox.register.dao_model.*;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;

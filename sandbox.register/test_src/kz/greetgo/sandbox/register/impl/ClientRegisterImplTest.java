@@ -1,18 +1,10 @@
 package kz.greetgo.sandbox.register.impl;
 
 import kz.greetgo.depinject.core.BeanGetter;
-import kz.greetgo.sandbox.controller.model.ClientDetails;
-import kz.greetgo.sandbox.controller.model.ClientRecord;
-import kz.greetgo.sandbox.controller.model.ClientToFilter;
-import kz.greetgo.sandbox.controller.model.ClientToSave;
-import kz.greetgo.sandbox.controller.model.PhoneDisplay;
-import kz.greetgo.sandbox.controller.model.RenderFilter;
+import kz.greetgo.sandbox.controller.model.*;
 import kz.greetgo.sandbox.controller.register.ClientRegister;
 import kz.greetgo.sandbox.register.dao_model.Character;
-import kz.greetgo.sandbox.register.dao_model.Client;
-import kz.greetgo.sandbox.register.dao_model.ClientAccount;
-import kz.greetgo.sandbox.register.dao_model.ClientAddress;
-import kz.greetgo.sandbox.register.dao_model.ClientPhone;
+import kz.greetgo.sandbox.register.dao_model.*;
 import kz.greetgo.sandbox.register.report.ClientReportViewTest;
 import kz.greetgo.sandbox.register.test.dao.CharacterTestDao;
 import kz.greetgo.sandbox.register.test.dao.ClientTestDao;
@@ -20,11 +12,7 @@ import kz.greetgo.sandbox.register.test.util.ParentTestNg;
 import kz.greetgo.util.RND;
 import org.testng.annotations.Test;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
+import java.util.*;
 
 import static kz.greetgo.util.RND.str;
 import static org.fest.assertions.api.Assertions.assertThat;
