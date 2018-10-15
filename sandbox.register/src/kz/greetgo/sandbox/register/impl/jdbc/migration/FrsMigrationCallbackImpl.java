@@ -14,6 +14,8 @@ public class FrsMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
     super(connection);
   }
 
+  public FrsMigrationCallbackImpl(Frs frsData) {}
+
   @Override
   public Void doInConnection(Connection con) {
     return null;
