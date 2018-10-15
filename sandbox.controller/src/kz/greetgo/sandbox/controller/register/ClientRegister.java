@@ -2,6 +2,7 @@ package kz.greetgo.sandbox.controller.register;
 
 import kz.greetgo.sandbox.controller.model.Charm;
 import kz.greetgo.sandbox.controller.model.Client;
+import kz.greetgo.sandbox.controller.model.ClientReqParams;
 
 import java.util.List;
 
@@ -16,7 +17,7 @@ public interface ClientRegister {
 
     void insertBatch(List<Client> clientList);
 
-    List<Client> getListByParam(List<String> filters,Integer limit,Integer offset,String sortCol,Integer order);
+    List<Client> getListByParam(ClientReqParams params);
 
     Long getCount();
 

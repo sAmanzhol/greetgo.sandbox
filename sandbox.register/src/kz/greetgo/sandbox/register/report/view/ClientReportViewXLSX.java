@@ -6,10 +6,12 @@ import kz.greetgo.sandbox.controller.model.report_models.ClientReportFootData;
 import kz.greetgo.sandbox.controller.model.report_models.ClientReportHeadData;
 import kz.greetgo.sandbox.controller.model.report_models.ClientReportRow;
 
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Date;
 
-//TODO
 public class ClientReportViewXLSX implements ReportView  {
 
     OutputStream outputStream;
@@ -27,7 +29,6 @@ public class ClientReportViewXLSX implements ReportView  {
         String workDir = headData.header;
         sheet.skipRows(3);
         sheet.style().alignment().horizontalCenter();
-
     }
 
     @Override
@@ -42,7 +43,6 @@ public class ClientReportViewXLSX implements ReportView  {
             sheet.cellDouble(6,row.minbal);
             sheet.cellDouble(7,row.maxbal);
         sheet.row().finish();
-        outputStream.flush();
     }
 
     @Override
@@ -56,8 +56,24 @@ public class ClientReportViewXLSX implements ReportView  {
              sheet.cellStr(5,"Дата и время :");
              sheet.cellDMY(6,footData.generateTime);
         sheet.row().finish();
-        outputStream.flush();
         f.complete(outputStream);
+        outputStream.flush();
+    }
+
+    public static void main(String[] args) {
+        try {
+            String tmpDir = System.getProperty("user.home") + "/trans/tmp";
+            FileOutputStream fOut = new FileOutputStream(tmpDir + "/generated.xlsx");
+            ClientReportViewXLSX clientReportViewXLSX = new ClientReportViewXLSX(fOut);
+            clientReportViewXLSX.start(new ClientReportHeadData("HELLO"));
+            clientReportViewXLSX.finish(new ClientReportFootData("Finis",new Date()));
+            fOut.flush();
+            fOut.close();
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
     }
 
 }

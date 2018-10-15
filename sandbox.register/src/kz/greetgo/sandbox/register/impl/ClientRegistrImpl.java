@@ -5,6 +5,8 @@ import kz.greetgo.depinject.core.Bean;
 import kz.greetgo.depinject.core.BeanGetter;
 import kz.greetgo.sandbox.controller.model.Address;
 import kz.greetgo.sandbox.controller.model.Client;
+import kz.greetgo.sandbox.controller.model.ClientReqParams;
+import kz.greetgo.sandbox.controller.model.Exceptions.ExceptionStaticMessages;
 import kz.greetgo.sandbox.controller.model.Phone;
 import kz.greetgo.sandbox.controller.register.AccountRegister;
 import kz.greetgo.sandbox.controller.register.AddressRegister;
@@ -13,6 +15,7 @@ import kz.greetgo.sandbox.controller.register.PhoneRegister;
 import kz.greetgo.sandbox.register.dao.AccountDao;
 import kz.greetgo.sandbox.register.dao.AddressDao;
 import kz.greetgo.sandbox.register.dao.ClientDao;
+import org.apache.log4j.Logger;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -34,6 +37,7 @@ public class ClientRegistrImpl implements ClientRegister {
     public static final String COL_BIRTH_DATE = "birth_date";
     public static final String COL_CHARM = "charm";
 
+    final Logger logger = Logger.getLogger(getClass());
 
     public BeanGetter<ClientDao> clientDao;
     public BeanGetter<AddressRegister> addressRegister;
@@ -57,13 +61,18 @@ public class ClientRegistrImpl implements ClientRegister {
     @Override
     public Client getById(Long id) {
         if (id == null)
-            throw new NullPointerException("ID IS NULL");
+            throw new NullPointerException(ExceptionStaticMessages.ID_NULL);
 
         Client client =  clientDao.get().load(id);
         if(client != null) {
             client.addresses = addressRegister.get().getByClientId(client.id);
             client.phones = phoneRegister.get().getAllByClientId(client.id);
         }
+
+        if(logger.isInfoEnabled()) {
+            logger.info("Get Client by id :  " + id + " RESULT " + client);
+        }
+
         return client;
     }
 
@@ -74,20 +83,34 @@ public class ClientRegistrImpl implements ClientRegister {
 
         upsertClientDetail(client);
 
+        if(logger.isInfoEnabled()) {
+            logger.info("Update Client Values : " + client);
+        }
+
         return clientDao.get().update(client);
     }
 
     public void upsertClientDetail(Client client){
+
         if(client.addresses == null)
             return;
 
+        if(logger.isInfoEnabled()) {
+            logger.info("Upserting Client Address Values : " + client.addresses);
+        }
+
         for (Address address:client.addresses) {
+
             if(address.id != null)
                 addressRegister.get().update(address);
             else{
                 address.client = client.id;
                 addressRegister.get().insert(address);
             }
+        }
+
+        if(logger.isInfoEnabled()) {
+            logger.info("Upserting Client Phone Values : " + client.addresses);
         }
 
         for(Phone phone : client.phones) {
@@ -102,6 +125,8 @@ public class ClientRegistrImpl implements ClientRegister {
 
     @Override
     public Long insert(Client client) {
+
+
         if(hasNull(client))
             throw new NullPointerException("CLIENT IS NULL");
 
@@ -115,24 +140,17 @@ public class ClientRegistrImpl implements ClientRegister {
 
                 try (ResultSet rs = preparedStatement.getResultSet()) {
                     if (rs.next())
-                        id = rs.getLong(1123);
+                        id = rs.getLong(1);
                 }
-
-                //TODO "try with resources" catch block не нужен в ТВОЕМ СЛУЧАЕ. Потому что AutoClosable
-                catch (Exception e) {
-                    //TODO нельзя проглатывать ошибку!!!!!! Надо логировать.
-                    e. printStackTrace();
-                }
-                //TODO "try with resources" catch block не нужен. Потому что AutoClosable
-            } catch (Exception e) {
-                e.printStackTrace();
             }
-
-            //TODO "try with resources" ты итак закрыл). Потому что AutoClosable
-            con.close();
             return id;
         });
         client.id = resultId;
+
+        if(logger.isInfoEnabled()) {
+            logger.info("Inserting new Client  : " + client);
+        }
+
         upsertClientDetail(client);
         return resultId;
     }
@@ -153,7 +171,6 @@ public class ClientRegistrImpl implements ClientRegister {
                 {
                     if(resultSet[i] > 0) {
                         //console log
-
                     }
                 }
             }
@@ -164,27 +181,17 @@ public class ClientRegistrImpl implements ClientRegister {
                 e.printStackTrace();
             }
 
-             //TODO "try with resources" ты итак освободишь connection. Потому что AutoClosable
-
-             con.close();
             return 1;
         });
     }
-//    c.id,c.surname,c.name,c.patronymic,c.gender,c.birth_date," +
-//            "c.charm as charm_id, ch.name as charm_name,ch.description,ch.energy
+
+
     @Override
-    public List<Client> getListByParam(List<String> FIO,Integer limit, Integer offset,  String sortCol,  Integer orderI) {
+    public List<Client> getListByParam(ClientReqParams params) {
 
-        //TODO Вынести 0 в переменную static ты ее уже используешь в одном методе
-        //TODO Создать enum для SORT
-        String order = null;
-        if(orderI == null || orderI > 0)
-            order = "ASC";
-        else if(orderI < 0)
-            order = "DESC";
+        final String selectStmnt = getSelectStatement(params);
 
-        final String selectStmnt = getSelectStatement(FIO,limit,offset,sortCol,order);
-
+        System.out.println(selectStmnt);
         List<Client> clientList = new ArrayList<>();
         jdbcBean.get().execute(con ->
         {
@@ -216,6 +223,9 @@ public class ClientRegistrImpl implements ClientRegister {
                    }
                }
             }
+            if(logger.isInfoEnabled()) {
+                logger.info("Get Client list by Filter  : " + params + " Result : " + clientList);
+            }
          return !clientList.isEmpty();
         });
         return clientList;
@@ -229,9 +239,11 @@ public class ClientRegistrImpl implements ClientRegister {
     @Override
     public void delete(Long id) {
         if (id == null) {
+            throw new NullPointerException(ExceptionStaticMessages.ID_NULL);
+        }
 
-            //TODO этот text Exception ты уже исрользуешь несколько раз. Вынеси ее например в ExceptionStaticMessages
-            throw new NullPointerException("ID IS NULL");
+        if(logger.isInfoEnabled()) {
+            logger.info("Delete Client by id : " + id);
         }
 
         clientDao.get().delete(id);
@@ -255,36 +267,36 @@ public class ClientRegistrImpl implements ClientRegister {
         statement.setLong(6, client.charm.id);
     }
 
-    //TODO слишком много параметров принимает фнукция. Заверни в модель.
-    String getSelectStatement(List<String> fio,Integer limit, Integer offset, String sortCol, String order){
+    String getSelectStatement(ClientReqParams params){
         StringBuilder builder = new StringBuilder();
         builder.append(SELECT_STATEMENT);
-        if(fio.size() >= 1 && fio.get(0) != null) {
+        if(params.nameFilterVal != null) {
             builder.append(" and c.name like '%");
-            builder.append(fio.get(0));
+            builder.append(params.nameFilterVal);
             builder.append("%'");
         }
-        if(fio.size() >= 2 && fio.get(1) != null) {
+        if(params.surnameFilterVal != null) {
             builder.append(" and c.surname like '%");
-            builder.append(fio.get(1));
+            builder.append(params.surnameFilterVal);
             builder.append("%'");
         }
-        if(fio.size() >= 3 && fio.get(2) != null) {
+        if(params.patronymicFilterVal != null) {
             builder.append(" and c.patronymic like '%");
-            builder.append(fio.get(2));
+            builder.append(params.patronymicFilterVal);
             builder.append("%'");
         }
+        if(params.colName == null)
+            params.colName = "id";
+
         builder.append(" order by ");
-        builder.append(sortCol);
+        builder.append(params.colName);
         builder.append(" ");
-        builder.append(order);
+        builder.append(params.order);
         builder.append(" limit ");
-        builder.append(limit);
+        builder.append(params.limit);
         builder.append(" offset ");
-        builder.append(offset);
+        builder.append(params.offset);
 
         return builder.toString();
     }
-
-
 }

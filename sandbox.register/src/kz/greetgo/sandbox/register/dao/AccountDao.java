@@ -21,7 +21,6 @@ public interface AccountDao {
     @Select("Select * from client_account where client = #{client_id} and actual = true")
     List<Account> getByClientId(Long client_id);
 
-   //TODO
     Account update(Account account);
 
     @Select("update client_account set actual = false where id = #{id} and actual = true")

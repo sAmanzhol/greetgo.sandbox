@@ -59,15 +59,7 @@ export class ClientRepositoryService implements OnInit{
 
   loadClientRecords(param: ClientReqParams): Observable<HttpResponse<any>> {
     return this.http.get(this.GET_ALL_CLIENT_URL,
-      {
-        "nameFilter":  param.nameFilterVal,
-        "surnameFilter": param.surnameFilterVal,
-        "patronymicFilter":param.patronymicFilterVal,
-        "offset":param.offset,
-        "rowSize":param.limit,
-        "sortCol":param.colName,//event.filters,
-        "order":param.order,
-      });
+      {"params" : JSON.stringify(param)});
   }
 
   loadClientById(id:number){

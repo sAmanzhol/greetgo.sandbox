@@ -3,7 +3,9 @@ package kz.greetgo.sandbox.register.impl;
 import kz.greetgo.depinject.core.BeanGetter;
 import kz.greetgo.sandbox.controller.model.Charm;
 import kz.greetgo.sandbox.controller.model.Client;
+import kz.greetgo.sandbox.controller.model.ClientReqParams;
 import kz.greetgo.sandbox.controller.model.enums.Gender;
+import kz.greetgo.sandbox.controller.model.enums.Sort;
 import kz.greetgo.sandbox.controller.register.ClientRegister;
 import kz.greetgo.sandbox.register.dao.ClientDao;
 import kz.greetgo.sandbox.register.test.util.ParentTestNg;
@@ -24,16 +26,17 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     @Test
     void clientFilterTest(){
-        List<Client> clientList;
-        String surname = "Л";
-        List<String> fio = new ArrayList<>();
-        fio.add("");
-        fio.add(surname);
-        fio.add("");
-
+        ClientReqParams params = new ClientReqParams();
+        params.limit = 10l;
+        params.offset = 0l;
+        params.colName = "maxbal";
+        params.order = Sort.ASC;
+        params.patronymicFilterVal = "";
+        params.nameFilterVal = "";
+        params.surnameFilterVal = "Л";
         //
         //
-        clientList = clientRegister.get().getListByParam(fio,10,0,"id",1);
+        List<Client> clientList = clientRegister.get().getListByParam(params);
         //
         //
         assertThat(clientList).isNotNull();
@@ -42,21 +45,24 @@ public class ClientRegisterImplTest extends ParentTestNg {
         System.out.println(clientList);
         for (Client client : clientList)
         {
-            assertThat(client.surname.charAt(0)).isEqualTo(surname.charAt(0));
+            assertThat(client.surname.charAt(0)).isEqualTo(params.surnameFilterVal.charAt(0));
         }
 
     }
 
     @Test
     void clientMaxbalFilterTest(){
-        List<Client> clientList;
-        List<String> fio = new ArrayList<>();
-        fio.add("");
-        fio.add("");
-        fio.add("");
+        ClientReqParams params = new ClientReqParams();
+        params.limit = 10l;
+        params.offset = 0l;
+        params.colName = "maxbal";
+        params.order = Sort.ASC;
+        params.patronymicFilterVal = "";
+        params.nameFilterVal = "";
+        params.surnameFilterVal = "";
         //
         //
-        clientList = clientRegister.get().getListByParam(fio,10,0,"maxbal",1);
+        List<Client> clientList = clientRegister.get().getListByParam(params);
         //
         //
         assertThat(clientList).isNotNull();
@@ -66,14 +72,17 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     @Test
     void clientMinbalFilterTest(){
-        List<Client> clientList;
-        List<String> fio = new ArrayList<>();
-        fio.add("");
-        fio.add("");
-        fio.add("");
+        ClientReqParams params = new ClientReqParams();
+        params.limit = 10l;
+        params.offset = 0l;
+        params.colName = "minbal";
+        params.order = Sort.ASC;
+        params.patronymicFilterVal = "";
+        params.nameFilterVal = "";
+        params.surnameFilterVal = "";
         //
         //
-        clientList = clientRegister.get().getListByParam(fio,10,0,"minbal",1);
+        List<Client> clientList = clientRegister.get().getListByParam(params);
         //
         //
         assertThat(clientList).isNotNull();
@@ -84,10 +93,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
     @Test
     void insertClient(){
 
-        //TODO НЕЛЬЗЯ писать маты. Это может всплыть при презентации проекта!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-
-        Charm charm = new Charm(1L, "Strong as fuck", "Will everything moving ", 1110d,true);
+        Charm charm = new Charm(1L, "Strong", "with big power comes big responsibility", 1110d,true);
 
             Client client = new Client(null, "Elgondy", "Ersultanbek", "Konysbekuly", Gender.FEMALE, new Timestamp(System.currentTimeMillis()), charm);
             //
@@ -109,7 +115,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
     @Test(expectedExceptions = NullPointerException.class)
     void insertClientWithNullGender(){
 
-        Charm charm = new Charm(1L, "Strong as fuck", "Will everything moving ", 1110d,true);
+        Charm charm = new Charm(1L, "Strong", "with big power comes big responsibility", 1110d,true);
 
         Client client = new Client(null, "Elgondy", "Ersultanbek", "Konysbekuly", null, new Timestamp(System.currentTimeMillis()), charm);
         //
@@ -160,7 +166,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     @Test
     void  loadClient(){
-        Charm charm = new Charm(1L, "Strong as fuck", "Will everything moving ", 1110d,true);
+        Charm charm = new Charm(1L, "Strong", "Will everything moving ", 1110d,true);
 
         Client client = new Client(null, "Elgondy", "Ersultanbek", "Konysbekuly", Gender.FEMALE, new Timestamp(System.currentTimeMillis()), charm);
         //
@@ -185,7 +191,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     @Test(expectedExceptions = NullPointerException.class)
     void loadClientWithNullId(){
-        Charm charm = new Charm(1L, "Strong as fuck", "Will everything moving ", 1110d,true);
+        Charm charm = new Charm(1L, "Strong", "with big power comes big responsibility", 1110d,true);
         //
         //
         Client retClient = clientRegister.get().getById(null);
@@ -206,17 +212,14 @@ public class ClientRegisterImplTest extends ParentTestNg {
     }
 
     @Test void getClientWithParams(){
-        Integer limit = 10;
-        Integer offset = 0;
-        String sortCol = "name";
-        Integer order = 1;
-        List<String> filters = new ArrayList<>();
-        filters.add("Л");
-        filters.add("");
-        filters.add("");
+        ClientReqParams params = new ClientReqParams();
+        params.limit = 10l;
+        params.offset = 0l;
+        params.colName = "name";
+        params.order = Sort.ASC;
         //
         //
-        List<Client> clientList = clientRegister.get().getListByParam(filters,limit,offset,sortCol,order);
+        List<Client> clientList = clientRegister.get().getListByParam(params);
         //
         //
         assertThat(clientList).isNotNull();

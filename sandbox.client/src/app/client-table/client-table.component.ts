@@ -68,8 +68,8 @@ export class ClientTableComponent implements OnInit {
         this.patronymicFilterVal,
         event.first,
         event.rows,
-        event.sortField,
-        event.sortOrder
+        event.sortField == "fio" ? "surname" : event.sortField,
+        event.sortOrder == -1 ? 0 : 1
       );
     }
     this.totalRecords = await this.clientRepoService.loadClientsCount().then(body => {return body});

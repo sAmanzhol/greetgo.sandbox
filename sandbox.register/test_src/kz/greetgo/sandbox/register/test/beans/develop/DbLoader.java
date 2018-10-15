@@ -114,7 +114,7 @@ public class DbLoader {
   }
 
   private void loadCharms() {
-    charmRegister.get().insert(new Charm(null,"Балабол","Балаболит как може",40.0,true));
+    charmRegister.get().insert(new Charm(null,"Глупый","Глупый",40.0,true));
     charmRegister.get().insert(new Charm(null,"Строгий","Строгий",40.0,true));
     charmRegister.get().insert(new Charm(null,"Безумец","Безумец",40.0,true));
     charmRegister.get().insert(new Charm(null,"Хороший","Хороший",40.0,true));
