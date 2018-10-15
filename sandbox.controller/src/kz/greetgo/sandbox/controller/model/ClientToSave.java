@@ -4,7 +4,6 @@ import java.util.*;
 
 @SuppressWarnings("unused")
 public class ClientToSave {
-  // FIXME: 10/8/18 почему айди стринг?!
   public Integer id;
   public String surname;
   public String name;

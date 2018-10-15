@@ -59,7 +59,6 @@ public interface ClientTestDao {
     "where client = #{id} and actual = 1")
   List<PhoneDisplay> getClientPhones(int id);
 
-  // FIXME: 10/8/18 checkClient название не соответсвует тому, что делает метод
   @Select("select actual from Client " +
     "where id = #{id}")
   int getClientActual(@Param("id") int id);

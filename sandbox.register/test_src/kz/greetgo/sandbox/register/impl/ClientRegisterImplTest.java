@@ -1,10 +1,18 @@
 package kz.greetgo.sandbox.register.impl;
 
 import kz.greetgo.depinject.core.BeanGetter;
-import kz.greetgo.sandbox.controller.model.*;
+import kz.greetgo.sandbox.controller.model.ClientDetails;
+import kz.greetgo.sandbox.controller.model.ClientRecord;
+import kz.greetgo.sandbox.controller.model.ClientToFilter;
+import kz.greetgo.sandbox.controller.model.ClientToSave;
+import kz.greetgo.sandbox.controller.model.PhoneDisplay;
+import kz.greetgo.sandbox.controller.model.RenderFilter;
 import kz.greetgo.sandbox.controller.register.ClientRegister;
 import kz.greetgo.sandbox.register.dao_model.Character;
-import kz.greetgo.sandbox.register.dao_model.*;
+import kz.greetgo.sandbox.register.dao_model.Client;
+import kz.greetgo.sandbox.register.dao_model.ClientAccount;
+import kz.greetgo.sandbox.register.dao_model.ClientAddr;
+import kz.greetgo.sandbox.register.dao_model.ClientPhone;
 import kz.greetgo.sandbox.register.report.ClientReportViewTest;
 import kz.greetgo.sandbox.register.test.dao.CharacterTestDao;
 import kz.greetgo.sandbox.register.test.dao.ClientTestDao;
@@ -12,7 +20,11 @@ import kz.greetgo.sandbox.register.test.util.ParentTestNg;
 import kz.greetgo.util.RND;
 import org.testng.annotations.Test;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 
@@ -23,9 +35,6 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
   public BeanGetter<ClientTestDao> clientTestDao;
   public BeanGetter<CharacterTestDao> characterTestDao;
-
-
-  // FIXME: 10/8/18 Добавь тесты на count
 
   private Client insertClient(int id, String surname, String name, String patronymic, String gender, Date birth_date, int charm) {
     Client client = new Client();
@@ -90,15 +99,12 @@ public class ClientRegisterImplTest extends ParentTestNg {
   @Test
   public void list_check_validity() {
 
-    // FIXME: 10/8/18 Должно валидироваться clientRegister.get().list(filter), а не тестовые инсерты
-
     clientTestDao.get().removeAll();
     characterTestDao.get().removeAll();
 
     Character charm1 = insertCharacter(301, "Самовлюблённый", "Самовлюблённый Описание", 100);
     Character charm2 = insertCharacter(302, "Замкнутый", "Замкнутый Описание", 90);
 
-    // FIXME: 10/8/18 Сделай 5 клиента с разными значениями в аккаунте
     Client client1 = insertClient(301, "Колобова", "Розалия", "Наумовна", "FEMALE", new GregorianCalendar(1977, 4, 25).getTime(), charm1.id);
     Client client2 = insertClient(302, "Панова", "Алира", "Иосифовна", "FEMALE", new GregorianCalendar(1999, 7, 16).getTime(), charm1.id);
     Client client3 = insertClient(303, "Крюков", "Игнатий", "Улебович", "MALE", new GregorianCalendar(1965, 2, 2).getTime(), charm2.id);
@@ -1070,6 +1076,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
     insertClient(109, "Фёдорова", "Эмбер", "Руслановна", "FEMALE", new GregorianCalendar(1977, 2, 8).getTime(), charmId);
     insertClient(110, "Баранова", "Габриэлла", "Романовна", "FEMALE", new GregorianCalendar(2002, 1, 28).getTime(), charmId);
 
+    // FIXME: 10/15/18 передавай itemsCount поменьше, чтобы знать что лимит не используется
     ClientToFilter filter = new ClientToFilter("id", "ASC", "вич", 1, 5);
 
     //
@@ -1089,7 +1096,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     Character charm = insertCharacter(RND.plusInt(999999), RND.str(10), RND.str(20), RND.plusInt(100));
 
-    // FIXME: 10/8/18 если все пишешь в отдельную строчку, то лучше сделай присвоение каждого филда через =
+    // FIXME: 10/15/18 строка слишком длинная. надо скролить долго
     ClientToSave clientToSave = new ClientToSave(null, RND.str(10), RND.str(6), "", new GregorianCalendar(1977, 4, 25).getTime(), "MALE", charm.id, RND.str(15), RND.str(3), RND.str(1), "", "", "", new ArrayList<>(Collections.singletonList(new PhoneDisplay(0, "HOME", RND.str(11)))));
 
     //
@@ -1102,7 +1109,6 @@ public class ClientRegisterImplTest extends ParentTestNg {
     clientDetails.numbers = clientTestDao.get().getClientPhones(clientDetails.id);
 
 
-    // FIXME: 10/8/18 А как же остальные колонки в базе
     assertThat(clientRecord.id).isNotNull();
     assertThat(clientRecord.fio).isEqualTo(clientDetails.surname + " " + clientDetails.name + " " + clientDetails.patronymic);
     assertThat(clientRecord.character).isEqualTo(charm.name);
@@ -1111,7 +1117,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
     assertThat(clientRecord.balanceMax).isEqualTo(0);
     assertThat(clientRecord.balanceMin).isEqualTo(0);
 
-
+    // FIXME: 10/15/18 Вытаскивай не детейлс, а целую строку
     assertThat(clientDetails.id).isNotNull().isEqualTo(clientRecord.id);
     assertThat(clientDetails.surname).isNotNull().isEqualTo(clientToSave.surname);
     assertThat(clientDetails.name).isNotNull().isEqualTo(clientToSave.name);
@@ -1163,7 +1169,6 @@ public class ClientRegisterImplTest extends ParentTestNg {
     //
     //
 
-    // FIXME: 10/8/18 А как же остальные колонки в базе
     assertThat(clientRecord.id).isNotNull().isEqualTo(clientToSave.id);
     assertThat(clientRecord.fio).isNotNull().isEqualTo(clientToSave.surname + " " + clientToSave.name + " " + clientToSave.patronymic);
     assertThat(clientRecord.character).isNotNull().isEqualTo(newCharm.name);
@@ -1176,6 +1181,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
     ClientDetails clientDetails = clientTestDao.get().details(clientRecord.id);
     clientDetails.numbers = clientTestDao.get().getClientPhones(clientDetails.id);
 
+    // FIXME: 10/15/18 Вытаскивай не детейлс, а целую строку
     assertThat(clientDetails.id).isNotNull().isEqualTo(clientRecord.id);
     assertThat(clientDetails.surname).isNotNull().isEqualTo(clientToSave.surname);
     assertThat(clientDetails.name).isNotNull().isEqualTo(clientToSave.name);

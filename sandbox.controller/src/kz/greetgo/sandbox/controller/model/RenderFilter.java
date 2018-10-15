@@ -9,6 +9,8 @@ public class RenderFilter {
   public ClientToFilter clientToFilter;
   public String author;
   public Date createdAt;
+
+  // FIXME: 10/15/18 вьюшка не относиться к фильтру, не должна быть в этом классе
   public ClientReportView view;
 
   public RenderFilter() {
