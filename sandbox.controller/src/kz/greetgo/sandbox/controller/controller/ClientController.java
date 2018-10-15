@@ -45,19 +45,19 @@ public class ClientController implements Controller {
 
     ClientReportView view = getMyView(type, binResponse.out());
 
-    RenderFilter renderFilter = new RenderFilter(filter, author, generatedAt, view);
-    clientRegister.get().render(renderFilter);
+    RenderFilter renderFilter = new RenderFilter(filter, author, generatedAt);
+    clientRegister.get().render(renderFilter, view);
 
     binResponse.flushBuffers();
   }
 
   // FIXME: 10/15/18 Переименуй принтСтримы в аутпутСтрим !везде где надо!
-  private ClientReportView getMyView(String type, OutputStream printStream) throws Exception {
+  private ClientReportView getMyView(String type, OutputStream outputStream) throws Exception {
     switch (type) {
       case "pdf":
-        return new ClientReportViewPdf(printStream);
+        return new ClientReportViewPdf(outputStream);
       case "xlsx":
-        return new ClientReportViewXlsx(printStream);
+        return new ClientReportViewXlsx(outputStream);
     }
     throw new RuntimeException("Unknown type = " + type);
   }

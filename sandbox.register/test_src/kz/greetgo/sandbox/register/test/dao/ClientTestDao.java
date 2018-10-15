@@ -13,7 +13,7 @@ import java.util.List;
 public interface ClientTestDao {
 
   @Insert("insert into Client (id, surname, name, patronymic, gender, birth_date, charm) " +
-    "values (#{id}, #{surname}, #{name}, #{patronymic}, #{gender}::gender, #{birth_date}, #{charm}) " +
+    "values (#{id}, #{surname}, #{name}, #{patronymic}, #{gender}::gender, #{birthDate}, #{charm}) " +
     "on conflict (id) do update set actual = 1;")
   void insertClient(Client client);
 
@@ -25,7 +25,7 @@ public interface ClientTestDao {
   @Insert("insert into Client_addr (client, type, street, house, flat) " +
     "values (#{client}, #{type}::addr, #{street}, #{house}, #{flat}) " +
     "on conflict (client, type) do update set actual = 1;")
-  void insertClientAddr(ClientAddr clientAddr);
+  void insertClientAddress(ClientAddress clientAddress);
 
   @Insert("insert into Client_phone (id, client, type, number) " +
     "values (#{id}, #{client}, #{type}::phone, #{number}) " +
@@ -42,22 +42,20 @@ public interface ClientTestDao {
     "on conflict (id) do update set actual = 1;")
   void insertClientAccountTransaction(ClientAccountTransaction clientAccountTransaction);
 
-  @Select("select cl.id, cl.surname, cl.name, cl.patronymic, cl.birth_date as birthDate, cl.charm as characterId, cl.gender, " +
-    "rA.street as streetRegistration, rA.house as houseRegistration, rA.flat as apartmentRegistration, " +
-    "fA.street as streetResidence, fA.house as houseResidence, fA.flat as apartmentResidence " +
+  @Select("select * " +
+    "from Client " +
+    "where id = #{id} and actual = 1")
+  Client getClient(int id);
 
-    "from Client as cl " +
+  @Select("select * " +
+    "from Client_addr " +
+    "where client = #{id} and type in ('REG', 'FACT') and actual = 1")
+  List<ClientAddress> getClientAddress(int id);
 
-    "left join Client_addr as rA on cl.id = rA.client and rA.type = 'REG' " +
-    "left join Client_addr as fA on cl.id = fA.client and fA.type = 'FACT' " +
-
-    "where cl.id = #{id} and cl.actual = 1")
-  ClientDetails details(int id);
-
-  @Select("Select id, type, number " +
+  @Select("Select * " +
     "from Client_phone " +
     "where client = #{id} and actual = 1")
-  List<PhoneDisplay> getClientPhones(int id);
+  List<ClientPhone> getClientPhones(int id);
 
   @Select("select actual from Client " +
     "where id = #{id}")

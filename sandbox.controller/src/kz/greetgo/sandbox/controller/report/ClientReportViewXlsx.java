@@ -17,14 +17,14 @@ import java.util.Date;
 @SuppressWarnings("ResultOfMethodCallIgnored")
 public class ClientReportViewXlsx implements ClientReportView {
 
-  private OutputStream printStream;
+  private OutputStream outputStream;
 
   private Workbook workbook;
   private Sheet sheet;
   private int rowNum = 0;
 
-  public ClientReportViewXlsx(OutputStream printStream) {
-    this.printStream = printStream;
+  public ClientReportViewXlsx(OutputStream outputStream) {
+    this.outputStream = outputStream;
     this.workbook = new XSSFWorkbook();
   }
 
@@ -69,7 +69,7 @@ public class ClientReportViewXlsx implements ClientReportView {
       this.sheet.autoSizeColumn(i);
     }
 
-    this.workbook.write(this.printStream);
+    this.workbook.write(this.outputStream);
   }
 
   public static void main(String[] args) throws Exception {
@@ -77,8 +77,8 @@ public class ClientReportViewXlsx implements ClientReportView {
     file.getParentFile().mkdir();
 
     try (FileOutputStream fileOutputStream = new FileOutputStream(file)) {
-      try (PrintStream printStream = new PrintStream(fileOutputStream, false, "UTF-8")) {
-        ClientReportViewXlsx viewXlsx = new ClientReportViewXlsx(printStream);
+      try (OutputStream outputStream = new PrintStream(fileOutputStream, false, "UTF-8")) {
+        ClientReportViewXlsx viewXlsx = new ClientReportViewXlsx(outputStream);
 
         ClientReportHeadData head = new ClientReportHeadData();
         head.title = "Отчет:";

@@ -11,7 +11,7 @@ import kz.greetgo.sandbox.controller.register.ClientRegister;
 import kz.greetgo.sandbox.register.dao_model.Character;
 import kz.greetgo.sandbox.register.dao_model.Client;
 import kz.greetgo.sandbox.register.dao_model.ClientAccount;
-import kz.greetgo.sandbox.register.dao_model.ClientAddr;
+import kz.greetgo.sandbox.register.dao_model.ClientAddress;
 import kz.greetgo.sandbox.register.dao_model.ClientPhone;
 import kz.greetgo.sandbox.register.report.ClientReportViewTest;
 import kz.greetgo.sandbox.register.test.dao.CharacterTestDao;
@@ -26,6 +26,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import static kz.greetgo.util.RND.str;
 import static org.fest.assertions.api.Assertions.assertThat;
 
 @SuppressWarnings("WeakerAccess")
@@ -43,7 +44,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
     client.name = name;
     client.patronymic = patronymic;
     client.gender = gender;
-    client.birth_date = birth_date;
+    client.birthDate = birth_date;
     client.charm = charm;
 
     clientTestDao.get().insertClient(client);
@@ -72,16 +73,16 @@ public class ClientRegisterImplTest extends ParentTestNg {
     return clientAccount;
   }
 
-  private ClientAddr insertClientAddr(int client, String type, String street, String house, String flat) {
-    ClientAddr clientAddr = new ClientAddr();
-    clientAddr.client = client;
-    clientAddr.type = type;
-    clientAddr.street = street;
-    clientAddr.house = house;
-    clientAddr.flat = flat;
+  private ClientAddress insertClientAddress(int client, String type, String street, String house, String flat) {
+    ClientAddress clientAddress = new ClientAddress();
+    clientAddress.client = client;
+    clientAddress.type = type;
+    clientAddress.street = street;
+    clientAddress.house = house;
+    clientAddress.flat = flat;
 
-    clientTestDao.get().insertClientAddr(clientAddr);
-    return clientAddr;
+    clientTestDao.get().insertClientAddress(clientAddress);
+    return clientAddress;
   }
 
   private ClientPhone insertClientPhone(int id, int client, String type, String number) {
@@ -200,11 +201,11 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     ClientReportViewTest view = new ClientReportViewTest();
 
-    RenderFilter renderFilter = new RenderFilter(filter, "De Sali", new Date(), view);
+    RenderFilter renderFilter = new RenderFilter(filter, "De Sali", new Date());
 
     //
     //
-    clientRegister.get().render(renderFilter);
+    clientRegister.get().render(renderFilter, view);
     //
     //
 
@@ -267,13 +268,13 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     ClientReportViewTest view = new ClientReportViewTest();
 
-    RenderFilter renderFilter = new RenderFilter(filter, "De Sali", new Date(), view);
+    RenderFilter renderFilter = new RenderFilter(filter, "De Sali", new Date());
 
     //
     //
     List<ClientRecord> list = clientRegister.get().list(filter);
 
-    clientRegister.get().render(renderFilter);
+    clientRegister.get().render(renderFilter, view);
     //
     //
 
@@ -303,13 +304,13 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     ClientReportViewTest view = new ClientReportViewTest();
 
-    RenderFilter renderFilter = new RenderFilter(filter, "De Sali", new Date(), view);
+    RenderFilter renderFilter = new RenderFilter(filter, "De Sali", new Date());
 
     //
     //
     List<ClientRecord> list = clientRegister.get().list(filter);
 
-    clientRegister.get().render(renderFilter);
+    clientRegister.get().render(renderFilter, view);
     //
     //
 
@@ -339,13 +340,13 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     ClientReportViewTest view = new ClientReportViewTest();
 
-    RenderFilter renderFilter = new RenderFilter(filter, "De Sali", new Date(), view);
+    RenderFilter renderFilter = new RenderFilter(filter, "De Sali", new Date());
 
     //
     //
     List<ClientRecord> list = clientRegister.get().list(filter);
 
-    clientRegister.get().render(renderFilter);
+    clientRegister.get().render(renderFilter, view);
     //
     //
 
@@ -375,13 +376,13 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     ClientReportViewTest view = new ClientReportViewTest();
 
-    RenderFilter renderFilter = new RenderFilter(filter, "De Sali", new Date(), view);
+    RenderFilter renderFilter = new RenderFilter(filter, "De Sali", new Date());
 
     //
     //
     List<ClientRecord> list = clientRegister.get().list(filter);
 
-    clientRegister.get().render(renderFilter);
+    clientRegister.get().render(renderFilter, view);
     //
     //
 
@@ -411,13 +412,13 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     ClientReportViewTest view = new ClientReportViewTest();
 
-    RenderFilter renderFilter = new RenderFilter(filter, "De Sali", new Date(), view);
+    RenderFilter renderFilter = new RenderFilter(filter, "De Sali", new Date());
 
     //
     //
     List<ClientRecord> list = clientRegister.get().list(filter);
 
-    clientRegister.get().render(renderFilter);
+    clientRegister.get().render(renderFilter, view);
     //
     //
 
@@ -447,13 +448,13 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     ClientReportViewTest view = new ClientReportViewTest();
 
-    RenderFilter renderFilter = new RenderFilter(filter, "De Sali", new Date(), view);
+    RenderFilter renderFilter = new RenderFilter(filter, "De Sali", new Date());
 
     //
     //
     List<ClientRecord> list = clientRegister.get().list(filter);
 
-    clientRegister.get().render(renderFilter);
+    clientRegister.get().render(renderFilter, view);
     //
     //
 
@@ -492,13 +493,13 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     ClientReportViewTest view = new ClientReportViewTest();
 
-    RenderFilter renderFilter = new RenderFilter(filter, "De Sali", new Date(), view);
+    RenderFilter renderFilter = new RenderFilter(filter, "De Sali", new Date());
 
     //
     //
     List<ClientRecord> list = clientRegister.get().list(filter);
 
-    clientRegister.get().render(renderFilter);
+    clientRegister.get().render(renderFilter, view);
     //
     //
 
@@ -537,13 +538,13 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     ClientReportViewTest view = new ClientReportViewTest();
 
-    RenderFilter renderFilter = new RenderFilter(filter, "De Sali", new Date(), view);
+    RenderFilter renderFilter = new RenderFilter(filter, "De Sali", new Date());
 
     //
     //
     List<ClientRecord> list = clientRegister.get().list(filter);
 
-    clientRegister.get().render(renderFilter);
+    clientRegister.get().render(renderFilter, view);
     //
     //
 
@@ -582,13 +583,13 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     ClientReportViewTest view = new ClientReportViewTest();
 
-    RenderFilter renderFilter = new RenderFilter(filter, "De Sali", new Date(), view);
+    RenderFilter renderFilter = new RenderFilter(filter, "De Sali", new Date());
 
     //
     //
     List<ClientRecord> list = clientRegister.get().list(filter);
 
-    clientRegister.get().render(renderFilter);
+    clientRegister.get().render(renderFilter, view);
     //
     //
 
@@ -627,13 +628,13 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     ClientReportViewTest view = new ClientReportViewTest();
 
-    RenderFilter renderFilter = new RenderFilter(filter, "De Sali", new Date(), view);
+    RenderFilter renderFilter = new RenderFilter(filter, "De Sali", new Date());
 
     //
     //
     List<ClientRecord> list = clientRegister.get().list(filter);
 
-    clientRegister.get().render(renderFilter);
+    clientRegister.get().render(renderFilter, view);
     //
     //
 
@@ -672,13 +673,13 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     ClientReportViewTest view = new ClientReportViewTest();
 
-    RenderFilter renderFilter = new RenderFilter(filter, "De Sali", new Date(), view);
+    RenderFilter renderFilter = new RenderFilter(filter, "De Sali", new Date());
 
     //
     //
     List<ClientRecord> list = clientRegister.get().list(filter);
 
-    clientRegister.get().render(renderFilter);
+    clientRegister.get().render(renderFilter, view);
     //
     //
 
@@ -717,13 +718,13 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     ClientReportViewTest view = new ClientReportViewTest();
 
-    RenderFilter renderFilter = new RenderFilter(filter, "De Sali", new Date(), view);
+    RenderFilter renderFilter = new RenderFilter(filter, "De Sali", new Date());
 
     //
     //
     List<ClientRecord> list = clientRegister.get().list(filter);
 
-    clientRegister.get().render(renderFilter);
+    clientRegister.get().render(renderFilter, view);
     //
     //
 
@@ -754,13 +755,13 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     ClientReportViewTest view = new ClientReportViewTest();
 
-    RenderFilter renderFilter = new RenderFilter(filter, "De Sali", new Date(), view);
+    RenderFilter renderFilter = new RenderFilter(filter, "De Sali", new Date());
 
     //
     //
     List<ClientRecord> list = clientRegister.get().list(filter);
 
-    clientRegister.get().render(renderFilter);
+    clientRegister.get().render(renderFilter, view);
     //
     //
 
@@ -788,13 +789,13 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     ClientReportViewTest view = new ClientReportViewTest();
 
-    RenderFilter renderFilter = new RenderFilter(filter, "De Sali", new Date(), view);
+    RenderFilter renderFilter = new RenderFilter(filter, "De Sali", new Date());
 
     //
     //
     List<ClientRecord> list = clientRegister.get().list(filter);
 
-    clientRegister.get().render(renderFilter);
+    clientRegister.get().render(renderFilter, view);
     //
     //
 
@@ -822,13 +823,13 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     ClientReportViewTest view = new ClientReportViewTest();
 
-    RenderFilter renderFilter = new RenderFilter(filter, "De Sali", new Date(), view);
+    RenderFilter renderFilter = new RenderFilter(filter, "De Sali", new Date());
 
     //
     //
     List<ClientRecord> list = clientRegister.get().list(filter);
 
-    clientRegister.get().render(renderFilter);
+    clientRegister.get().render(renderFilter, view);
     //
     //
 
@@ -1077,7 +1078,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
     insertClient(110, "Баранова", "Габриэлла", "Романовна", "FEMALE", new GregorianCalendar(2002, 1, 28).getTime(), charmId);
 
     // FIXME: 10/15/18 передавай itemsCount поменьше, чтобы знать что лимит не используется
-    ClientToFilter filter = new ClientToFilter("id", "ASC", "вич", 1, 5);
+    ClientToFilter filter = new ClientToFilter("id", "ASC", "вич", 1, 3);
 
     //
     //
@@ -1094,10 +1095,25 @@ public class ClientRegisterImplTest extends ParentTestNg {
     clientTestDao.get().removeAll();
     characterTestDao.get().removeAll();
 
-    Character charm = insertCharacter(RND.plusInt(999999), RND.str(10), RND.str(20), RND.plusInt(100));
+    Character charm = insertCharacter(RND.plusInt(999999), str(10), str(20), RND.plusInt(100));
 
     // FIXME: 10/15/18 строка слишком длинная. надо скролить долго
-    ClientToSave clientToSave = new ClientToSave(null, RND.str(10), RND.str(6), "", new GregorianCalendar(1977, 4, 25).getTime(), "MALE", charm.id, RND.str(15), RND.str(3), RND.str(1), "", "", "", new ArrayList<>(Collections.singletonList(new PhoneDisplay(0, "HOME", RND.str(11)))));
+    ClientToSave clientToSave = new ClientToSave();
+    clientToSave.id = null;
+    clientToSave.surname = RND.str(10);
+    clientToSave.name = RND.str(6);
+    clientToSave.patronymic = "";
+    clientToSave.birthDate = new GregorianCalendar(1977, 4, 25).getTime();
+    clientToSave.gender = "MALE";
+    clientToSave.characterId = charm.id;
+    clientToSave.streetRegistration = RND.str(15);
+    clientToSave.houseRegistration = RND.str(3);
+    clientToSave.apartmentRegistration = RND.str(2);
+    clientToSave.streetResidence = "";
+    clientToSave.houseResidence = "";
+    clientToSave.apartmentResidence = "";
+
+    clientToSave.numbers = new ArrayList<>(Collections.singletonList(new PhoneDisplay(0, "HOME", RND.str(11))));
 
     //
     //
@@ -1105,12 +1121,8 @@ public class ClientRegisterImplTest extends ParentTestNg {
     //
     //
 
-    ClientDetails clientDetails = clientTestDao.get().details(clientRecord.id);
-    clientDetails.numbers = clientTestDao.get().getClientPhones(clientDetails.id);
-
-
     assertThat(clientRecord.id).isNotNull();
-    assertThat(clientRecord.fio).isEqualTo(clientDetails.surname + " " + clientDetails.name + " " + clientDetails.patronymic);
+    assertThat(clientRecord.fio).isEqualTo(clientToSave.surname + " " + clientToSave.name + " " + clientToSave.patronymic);
     assertThat(clientRecord.character).isEqualTo(charm.name);
     assertThat(clientRecord.age).isEqualTo(41);
     assertThat(clientRecord.balance).isNotNull().isEqualTo(0);
@@ -1118,24 +1130,28 @@ public class ClientRegisterImplTest extends ParentTestNg {
     assertThat(clientRecord.balanceMin).isEqualTo(0);
 
     // FIXME: 10/15/18 Вытаскивай не детейлс, а целую строку
-    assertThat(clientDetails.id).isNotNull().isEqualTo(clientRecord.id);
-    assertThat(clientDetails.surname).isNotNull().isEqualTo(clientToSave.surname);
-    assertThat(clientDetails.name).isNotNull().isEqualTo(clientToSave.name);
-    assertThat(clientDetails.patronymic).isNotNull().isEqualTo(clientToSave.patronymic);
-    assertThat(clientDetails.gender).isNotNull().isEqualTo(clientToSave.gender);
-    assertThat(clientDetails.birthDate).isNotNull().isInThePast().isEqualTo(clientToSave.birthDate);
-    assertThat(clientDetails.characterId).isNotNull().isEqualTo(charm.id);
-    assertThat(clientDetails.streetRegistration).isNotNull().isEqualTo(clientToSave.streetRegistration);
-    assertThat(clientDetails.houseRegistration).isNotNull().isEqualTo(clientToSave.houseRegistration);
-    assertThat(clientDetails.apartmentRegistration).isNotNull().isEqualTo(clientToSave.apartmentRegistration);
-    assertThat(clientDetails.streetResidence).isNotNull().isEqualTo(clientToSave.streetResidence);
-    assertThat(clientDetails.houseResidence).isNotNull().isEqualTo(clientToSave.houseResidence);
-    assertThat(clientDetails.apartmentResidence).isNotNull().isEqualTo(clientToSave.apartmentResidence);
+    Client clientRow = clientTestDao.get().getClient(clientRecord.id);
+    assertThat(clientRow.id).isNotNull().isEqualTo(clientRecord.id);
+    assertThat(clientRow.surname).isNotNull().isEqualTo(clientToSave.surname);
+    assertThat(clientRow.name).isNotNull().isEqualTo(clientToSave.name);
+    assertThat(clientRow.patronymic).isNotNull().isEqualTo(clientToSave.patronymic);
+    assertThat(clientRow.gender).isNotNull().isEqualTo(clientToSave.gender);
+    assertThat(clientRow.birthDate).isNotNull().isInThePast().isEqualTo(clientToSave.birthDate);
+    assertThat(clientRow.charm).isNotNull().isEqualTo(charm.id);
 
-    assertThat(clientDetails.numbers).hasSize(1);
+    List<ClientAddress> clientAddresses = clientTestDao.get().getClientAddress(clientRecord.id);
+    assertThat(clientAddresses.get(0).street).isNotNull().isEqualTo(clientToSave.streetResidence);
+    assertThat(clientAddresses.get(0).house).isNotNull().isEqualTo(clientToSave.houseResidence);
+    assertThat(clientAddresses.get(0).flat).isNotNull().isEqualTo(clientToSave.apartmentResidence);
+    assertThat(clientAddresses.get(1).street).isNotNull().isEqualTo(clientToSave.streetRegistration);
+    assertThat(clientAddresses.get(1).house).isNotNull().isEqualTo(clientToSave.houseRegistration);
+    assertThat(clientAddresses.get(1).flat).isNotNull().isEqualTo(clientToSave.apartmentRegistration);
 
-    assertThat(clientDetails.numbers.get(0).type).isEqualTo(clientToSave.numbers.get(0).type);
-    assertThat(clientDetails.numbers.get(0).number).isEqualTo(clientToSave.numbers.get(0).number);
+    List<ClientPhone> clientPhones = clientTestDao.get().getClientPhones(clientRecord.id);
+    assertThat(clientPhones).hasSize(1);
+
+    assertThat(clientPhones.get(0).type).isEqualTo(clientToSave.numbers.get(0).type);
+    assertThat(clientPhones.get(0).number).isEqualTo(clientToSave.numbers.get(0).number);
   }
 
   @Test
@@ -1148,8 +1164,8 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     Client client = insertClient(7001, "Колобова", "Розалия", "Наумовна", "FEMALE", new GregorianCalendar(1950, 1, 1).getTime(), charm.id);
 
-    insertClientAddr(client.id, "REG", "Lomonosov", "10", "1");
-    insertClientAddr(client.id, "FACT", "Lomonosov Fact", "20", "2");
+    insertClientAddress(client.id, "REG", "Lomonosov", "10", "1");
+    insertClientAddress(client.id, "FACT", "Lomonosov Fact", "20", "2");
 
     insertClientPhone(7001, client.id, "HOME", "87077070077");
     insertClientPhone(7002, client.id, "MOBILE", "77007007070");
@@ -1177,35 +1193,33 @@ public class ClientRegisterImplTest extends ParentTestNg {
     assertThat(clientRecord.balanceMax).isNotNull();
     assertThat(clientRecord.balanceMin).isNotNull();
 
-
-    ClientDetails clientDetails = clientTestDao.get().details(clientRecord.id);
-    clientDetails.numbers = clientTestDao.get().getClientPhones(clientDetails.id);
-
     // FIXME: 10/15/18 Вытаскивай не детейлс, а целую строку
-    assertThat(clientDetails.id).isNotNull().isEqualTo(clientRecord.id);
-    assertThat(clientDetails.surname).isNotNull().isEqualTo(clientToSave.surname);
-    assertThat(clientDetails.name).isNotNull().isEqualTo(clientToSave.name);
-    assertThat(clientDetails.patronymic).isNotNull().isEqualTo(clientToSave.patronymic);
-    assertThat(clientDetails.gender).isNotNull().isEqualTo(clientToSave.gender);
-    assertThat(clientDetails.birthDate).isNotNull().isInThePast().isEqualTo(clientToSave.birthDate);
-    assertThat(clientDetails.characterId).isNotNull().isEqualTo(newCharm.id);
-    assertThat(clientDetails.streetRegistration).isNotNull().isEqualTo(clientToSave.streetRegistration);
-    assertThat(clientDetails.houseRegistration).isNotNull().isEqualTo(clientToSave.houseRegistration);
-    assertThat(clientDetails.apartmentRegistration).isNotNull().isEqualTo(clientToSave.apartmentRegistration);
-    assertThat(clientDetails.streetResidence).isNotNull().isEqualTo(clientToSave.streetResidence);
-    assertThat(clientDetails.houseResidence).isNotNull().isEqualTo(clientToSave.houseResidence);
-    assertThat(clientDetails.apartmentResidence).isNotNull().isEqualTo(clientToSave.apartmentResidence);
+    Client clientRow = clientTestDao.get().getClient(clientRecord.id);
+    assertThat(clientRow.id).isNotNull().isEqualTo(clientRecord.id);
+    assertThat(clientRow.surname).isNotNull().isEqualTo(clientToSave.surname);
+    assertThat(clientRow.name).isNotNull().isEqualTo(clientToSave.name);
+    assertThat(clientRow.patronymic).isNotNull().isEqualTo(clientToSave.patronymic);
+    assertThat(clientRow.gender).isNotNull().isEqualTo(clientToSave.gender);
+    assertThat(clientRow.birthDate).isNotNull().isInThePast().isEqualTo(clientToSave.birthDate);
+    assertThat(clientRow.charm).isNotNull().isEqualTo(newCharm.id);
 
-    assertThat(clientDetails.numbers).hasSize(2);
+    List<ClientAddress> clientAddresses = clientTestDao.get().getClientAddress(clientRecord.id);
+    assertThat(clientAddresses.get(0).street).isNotNull().isEqualTo(clientToSave.streetResidence);
+    assertThat(clientAddresses.get(0).house).isNotNull().isEqualTo(clientToSave.houseResidence);
+    assertThat(clientAddresses.get(0).flat).isNotNull().isEqualTo(clientToSave.apartmentResidence);
+    assertThat(clientAddresses.get(1).street).isNotNull().isEqualTo(clientToSave.streetRegistration);
+    assertThat(clientAddresses.get(1).house).isNotNull().isEqualTo(clientToSave.houseRegistration);
+    assertThat(clientAddresses.get(1).flat).isNotNull().isEqualTo(clientToSave.apartmentRegistration);
 
-    System.out.println(clientDetails.numbers);
+    List<ClientPhone> clientPhones = clientTestDao.get().getClientPhones(clientRecord.id);
+    assertThat(clientPhones).hasSize(2);
 
-    assertThat(clientDetails.numbers.get(0).type).isEqualTo("WORK");
-    assertThat(clientDetails.numbers.get(0).number).isEqualTo("11001010011");
+    assertThat(clientPhones.get(0).type).isEqualTo("WORK");
+    assertThat(clientPhones.get(0).number).isEqualTo("11001010011");
 
-    assertThat(clientDetails.numbers.get(1).id).isEqualTo(7001);
-    assertThat(clientDetails.numbers.get(1).type).isEqualTo("MOBILE");
-    assertThat(clientDetails.numbers.get(1).number).isEqualTo("87077070066");
+    assertThat(clientPhones.get(1).id).isEqualTo(7001);
+    assertThat(clientPhones.get(1).type).isEqualTo("MOBILE");
+    assertThat(clientPhones.get(1).number).isEqualTo("87077070066");
   }
 
   @Test
@@ -1213,8 +1227,8 @@ public class ClientRegisterImplTest extends ParentTestNg {
     Character charm = insertCharacter(101, "Самовлюблённый", "Самовлюблённый Самовлюблённый", 100);
     Client client = insertClient(201, "Колобова", "Розалия", "Наумовна", "FEMALE", new GregorianCalendar(1977, 4, 25).getTime(), charm.id);
 
-    ClientAddr clientAddrReg = insertClientAddr(201, "REG", "Lomonosov", "1", "2");
-    ClientAddr clientAddrFact = insertClientAddr(201, "FACT", "Lomonosova Fact", "10", "20");
+    ClientAddress clientAddressReg = insertClientAddress(201, "REG", "Lomonosov", "1", "2");
+    ClientAddress clientAddressFact = insertClientAddress(201, "FACT", "Lomonosova Fact", "10", "20");
 
     ClientPhone clientPhoneHome = insertClientPhone(900, 201, "HOME", "87077070077");
     ClientPhone clientPhoneMobile = insertClientPhone(901, 201, "MOBILE", "12345678899");
@@ -1230,14 +1244,14 @@ public class ClientRegisterImplTest extends ParentTestNg {
     assertThat(clientDetails.name).isNotNull().isEqualTo(client.name);
     assertThat(clientDetails.patronymic).isNotNull().isEqualTo(client.patronymic);
     assertThat(clientDetails.gender).isNotNull().isEqualTo(client.gender);
-    assertThat(clientDetails.birthDate).isNotNull().isInThePast().isEqualTo(client.birth_date);
+    assertThat(clientDetails.birthDate).isNotNull().isInThePast().isEqualTo(client.birthDate);
     assertThat(clientDetails.characterId).isNotNull().isEqualTo(charm.id);
-    assertThat(clientDetails.streetRegistration).isNotNull().isEqualTo(clientAddrReg.street);
-    assertThat(clientDetails.houseRegistration).isNotNull().isEqualTo(clientAddrReg.house);
-    assertThat(clientDetails.apartmentRegistration).isNotNull().isEqualTo(clientAddrReg.flat);
-    assertThat(clientDetails.streetResidence).isNotNull().isEqualTo(clientAddrFact.street);
-    assertThat(clientDetails.houseResidence).isNotNull().isEqualTo(clientAddrFact.house);
-    assertThat(clientDetails.apartmentResidence).isNotNull().isEqualTo(clientAddrFact.flat);
+    assertThat(clientDetails.streetRegistration).isNotNull().isEqualTo(clientAddressReg.street);
+    assertThat(clientDetails.houseRegistration).isNotNull().isEqualTo(clientAddressReg.house);
+    assertThat(clientDetails.apartmentRegistration).isNotNull().isEqualTo(clientAddressReg.flat);
+    assertThat(clientDetails.streetResidence).isNotNull().isEqualTo(clientAddressFact.street);
+    assertThat(clientDetails.houseResidence).isNotNull().isEqualTo(clientAddressFact.house);
+    assertThat(clientDetails.apartmentResidence).isNotNull().isEqualTo(clientAddressFact.flat);
 
     assertThat(clientDetails.numbers).hasSize(2);
 

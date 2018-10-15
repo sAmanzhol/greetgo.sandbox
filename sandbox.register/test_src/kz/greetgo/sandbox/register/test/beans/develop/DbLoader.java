@@ -132,7 +132,7 @@ public class DbLoader {
     client.name = name;
     client.patronymic = patronymic;
     client.gender = gender;
-    client.birth_date = birth_date;
+    client.birthDate = birth_date;
     client.charm = charm;
 
     clientTestDao.get().insertClient(client);
@@ -156,42 +156,42 @@ public class DbLoader {
     logger.info("Finish loading clients!");
   }
 
-  private void clientAddr(int client, String type, String street, String house, String flat) {
-    ClientAddr clientAddr = new ClientAddr();
-    clientAddr.client = client;
-    clientAddr.type = type;
-    clientAddr.street = street;
-    clientAddr.house = house;
-    clientAddr.flat = flat;
+  private void clientAddress(int client, String type, String street, String house, String flat) {
+    ClientAddress clientAddress = new ClientAddress();
+    clientAddress.client = client;
+    clientAddress.type = type;
+    clientAddress.street = street;
+    clientAddress.house = house;
+    clientAddress.flat = flat;
 
-    clientTestDao.get().insertClientAddr(clientAddr);
+    clientTestDao.get().insertClientAddress(clientAddress);
   }
 
   private void loadClientsAddr() {
     logger.info("Start loading clients Addresses...");
 
-    clientAddr(1, "REG", "Ломоносова", "11", "1");
-    clientAddr(1, "FACT", "Факт адрес", "1", "89");
-    clientAddr(2, "REG", "Пр.абылай Хана", "22", "2");
-    clientAddr(2, "FACT", "", "", "");
-    clientAddr(3, "REG", "Ломоносова", "99", "4");
-    clientAddr(3, "FACT", "", "", "");
-    clientAddr(4, "REG", "Пр.абылай Хана", "33", "5");
-    clientAddr(4, "FACT", "", "", "");
-    clientAddr(5, "REG", "Ломоносова", "88", "2");
-    clientAddr(5, "FACT", "", "", "");
-    clientAddr(6, "REG", "Пр.абылай Хана", "44", "1");
-    clientAddr(6, "FACT", "", "", "");
-    clientAddr(7, "REG", "Ломоносова", "34", "1");
-    clientAddr(7, "FACT", "", "", "");
-    clientAddr(8, "REG", "Пр.абылай Хана", "55", "2");
-    clientAddr(8, "FACT", "", "", "");
-    clientAddr(9, "REG", "Ломоносова", "77", "4");
-    clientAddr(9, "FACT", "", "", "");
-    clientAddr(10, "REG", "Пр.абылай Хана", "66", "3");
-    clientAddr(10, "FACT", "", "", "");
-    clientAddr(11, "REG", "Ломоносова", "27", "3");
-    clientAddr(11, "FACT", "", "", "");
+    clientAddress(1, "REG", "Ломоносова", "11", "1");
+    clientAddress(1, "FACT", "Факт адрес", "1", "89");
+    clientAddress(2, "REG", "Пр.абылай Хана", "22", "2");
+    clientAddress(2, "FACT", "", "", "");
+    clientAddress(3, "REG", "Ломоносова", "99", "4");
+    clientAddress(3, "FACT", "", "", "");
+    clientAddress(4, "REG", "Пр.абылай Хана", "33", "5");
+    clientAddress(4, "FACT", "", "", "");
+    clientAddress(5, "REG", "Ломоносова", "88", "2");
+    clientAddress(5, "FACT", "", "", "");
+    clientAddress(6, "REG", "Пр.абылай Хана", "44", "1");
+    clientAddress(6, "FACT", "", "", "");
+    clientAddress(7, "REG", "Ломоносова", "34", "1");
+    clientAddress(7, "FACT", "", "", "");
+    clientAddress(8, "REG", "Пр.абылай Хана", "55", "2");
+    clientAddress(8, "FACT", "", "", "");
+    clientAddress(9, "REG", "Ломоносова", "77", "4");
+    clientAddress(9, "FACT", "", "", "");
+    clientAddress(10, "REG", "Пр.абылай Хана", "66", "3");
+    clientAddress(10, "FACT", "", "", "");
+    clientAddress(11, "REG", "Ломоносова", "27", "3");
+    clientAddress(11, "FACT", "", "", "");
 
     logger.info("Finish loading clients Addresses!");
   }
