@@ -13,6 +13,8 @@ public abstract class MigrationCallbackAbstract<T> implements ConnectionCallback
     this.connection = connection;
   }
 
+  public MigrationCallbackAbstract() {}
+
   @Override
   public abstract T doInConnection(Connection con) throws Exception;
 }

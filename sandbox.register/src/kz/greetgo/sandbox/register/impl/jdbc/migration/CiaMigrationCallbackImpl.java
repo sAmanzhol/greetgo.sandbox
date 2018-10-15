@@ -14,6 +14,8 @@ public class CiaMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
     super(connection);
   }
 
+  public CiaMigrationCallbackImpl(Cia ciaData) {}
+
   @Override
   public Void doInConnection(Connection con) {
     return null;

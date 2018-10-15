@@ -25,14 +25,14 @@ public class ClientReportViewPdf implements ClientReportView {
   private static final String FONT = "kz/greetgo/sandbox/controller/report/fonts/FreeSans.ttf";
   private Font cyrillicFont;
 
-  public ClientReportViewPdf(OutputStream printStream) throws Exception {
+  public ClientReportViewPdf(OutputStream outputStream) throws Exception {
 
     BaseFont baseFont = BaseFont.createFont(FONT, "cp1251", BaseFont.EMBEDDED);
     cyrillicFont = new Font(baseFont, 12, Font.NORMAL);
 
     this.document = new Document();
 
-    PdfWriter.getInstance(this.document, printStream);
+    PdfWriter.getInstance(this.document, outputStream);
     this.document.open();
   }
 
@@ -75,8 +75,8 @@ public class ClientReportViewPdf implements ClientReportView {
     File file = new File("build/report/test_report.pdf");
     file.getParentFile().mkdir();
 
-    try (PrintStream printStream = new PrintStream(new FileOutputStream(file), false, "UTF-8")) {
-      ClientReportViewPdf viewPdf = new ClientReportViewPdf(printStream);
+    try (OutputStream outputStream = new PrintStream(new FileOutputStream(file), false, "UTF-8")) {
+      ClientReportViewPdf viewPdf = new ClientReportViewPdf(outputStream);
 
       ClientReportHeadData head = new ClientReportHeadData();
       head.title = "Отчет:";

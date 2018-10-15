@@ -1,6 +1,7 @@
 package kz.greetgo.sandbox.controller.register;
 
 import kz.greetgo.sandbox.controller.model.*;
+import kz.greetgo.sandbox.controller.report.ClientReportView;
 
 import java.util.List;
 
@@ -15,5 +16,5 @@ public interface ClientRegister {
 
   void delete(int id);
 
-  void render(RenderFilter renderFilter) throws Exception;
+  void render(RenderFilter renderFilter, ClientReportView view) throws Exception;
 }

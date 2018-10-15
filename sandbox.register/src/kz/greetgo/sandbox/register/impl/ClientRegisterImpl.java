@@ -4,11 +4,12 @@ import kz.greetgo.depinject.core.Bean;
 import kz.greetgo.depinject.core.BeanGetter;
 import kz.greetgo.sandbox.controller.model.*;
 import kz.greetgo.sandbox.controller.register.ClientRegister;
+import kz.greetgo.sandbox.controller.report.ClientReportView;
 import kz.greetgo.sandbox.controller.report.model.ClientReportFootData;
 import kz.greetgo.sandbox.controller.report.model.ClientReportHeadData;
 import kz.greetgo.sandbox.register.dao.ClientDao;
 import kz.greetgo.sandbox.register.dao_model.Client;
-import kz.greetgo.sandbox.register.dao_model.ClientAddr;
+import kz.greetgo.sandbox.register.dao_model.ClientAddress;
 import kz.greetgo.sandbox.register.dao_model.ClientPhone;
 import kz.greetgo.sandbox.register.impl.jdbc.client.ClientCountCallbackImpl;
 import kz.greetgo.sandbox.register.impl.jdbc.client.ClientListCallbackImpl;
@@ -25,19 +26,19 @@ public class ClientRegisterImpl implements ClientRegister {
   public BeanGetter<JdbcSandbox> jdbc;
 
   @Override
-  public void render(RenderFilter renderFilter) throws Exception {
+  public void render(RenderFilter renderFilter, ClientReportView view) throws Exception {
     ClientReportHeadData head = new ClientReportHeadData();
     head.title = "Отчет:";
 
-    renderFilter.view.start(head);
+    view.start(head);
 
-    jdbc.get().execute(new ClientListRenderCallbackImpl(renderFilter.clientToFilter, renderFilter.view));
+    jdbc.get().execute(new ClientListRenderCallbackImpl(renderFilter.clientToFilter, view));
 
     ClientReportFootData foot = new ClientReportFootData();
     foot.generatedBy = renderFilter.author;
     foot.generatedAt = renderFilter.createdAt;
 
-    renderFilter.view.finish(foot);
+    view.finish(foot);
   }
 
   @Override
@@ -62,7 +63,7 @@ public class ClientRegisterImpl implements ClientRegister {
   public ClientRecord save(ClientToSave clientToSave) {
     if (Objects.isNull(clientToSave.id)) {
       int newClientId = createClient(clientToSave);
-      createClientAddr(newClientId, clientToSave);
+      createClientAddress(newClientId, clientToSave);
       createClientPhone(newClientId, clientToSave);
 
       return clientDao.get().getClientRecord(newClientId);
@@ -89,12 +90,12 @@ public class ClientRegisterImpl implements ClientRegister {
     return clientDao.get().getId();
   }
 
-  private void createClientAddr(int clientId, ClientToSave clientToSave) {
-    ClientAddr clientAddrReg = new ClientAddr(clientId, "REG", clientToSave.streetRegistration, clientToSave.houseRegistration, clientToSave.apartmentRegistration);
-    clientDao.get().insertClientAddr(clientAddrReg);
+  private void createClientAddress(int clientId, ClientToSave clientToSave) {
+    ClientAddress clientAddressReg = new ClientAddress(clientId, "REG", clientToSave.streetRegistration, clientToSave.houseRegistration, clientToSave.apartmentRegistration);
+    clientDao.get().insertClientAddress(clientAddressReg);
 
-    ClientAddr clientAddrFact = new ClientAddr(clientId, "FACT", clientToSave.streetResidence, clientToSave.houseResidence, clientToSave.apartmentResidence);
-    clientDao.get().insertClientAddr(clientAddrFact);
+    ClientAddress clientAddressFact = new ClientAddress(clientId, "FACT", clientToSave.streetResidence, clientToSave.houseResidence, clientToSave.apartmentResidence);
+    clientDao.get().insertClientAddress(clientAddressFact);
   }
 
   private void createClientPhone(int clientId, ClientToSave clientToSave) {
@@ -132,10 +133,10 @@ public class ClientRegisterImpl implements ClientRegister {
   }
 
   private void updateClientAddr(int clientId, ClientToSave clientToSave) {
-    ClientAddr clientAddrReg = new ClientAddr(clientId, "REG", clientToSave.streetRegistration, clientToSave.houseRegistration, clientToSave.apartmentRegistration);
-    clientDao.get().updateClientAddr(clientAddrReg);
+    ClientAddress clientAddressReg = new ClientAddress(clientId, "REG", clientToSave.streetRegistration, clientToSave.houseRegistration, clientToSave.apartmentRegistration);
+    clientDao.get().updateClientAddress(clientAddressReg);
 
-    ClientAddr clientAddrFact = new ClientAddr(clientId, "FACT", clientToSave.streetResidence, clientToSave.houseResidence, clientToSave.apartmentResidence);
-    clientDao.get().updateClientAddr(clientAddrFact);
+    ClientAddress clientAddressFact = new ClientAddress(clientId, "FACT", clientToSave.streetResidence, clientToSave.houseResidence, clientToSave.apartmentResidence);
+    clientDao.get().updateClientAddress(clientAddressFact);
   }
 }
