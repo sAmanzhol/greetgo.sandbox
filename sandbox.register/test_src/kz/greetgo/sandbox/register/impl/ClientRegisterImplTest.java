@@ -1065,7 +1065,6 @@ public class ClientRegisterImplTest extends ParentTestNg {
     insertClient(109, "Фёдорова", "Эмбер", "Руслановна", "FEMALE", new GregorianCalendar(1977, 2, 8).getTime(), charmId);
     insertClient(110, "Баранова", "Габриэлла", "Романовна", "FEMALE", new GregorianCalendar(2002, 1, 28).getTime(), charmId);
 
-    // FIXME: 10/15/18 передавай itemsCount поменьше, чтобы знать что лимит не используется
     ClientToFilter filter = new ClientToFilter("id", "ASC", "вич", 1, 3);
 
     //
@@ -1085,7 +1084,6 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     Character charm = insertCharacter(RND.plusInt(999999), str(10), str(20), RND.plusInt(100));
 
-    // FIXME: 10/15/18 строка слишком длинная. надо скролить долго
     ClientToSave clientToSave = new ClientToSave();
     clientToSave.id = null;
     clientToSave.surname = RND.str(10);
@@ -1117,7 +1115,6 @@ public class ClientRegisterImplTest extends ParentTestNg {
     assertThat(clientRecord.balanceMax).isEqualTo(0);
     assertThat(clientRecord.balanceMin).isEqualTo(0);
 
-    // FIXME: 10/15/18 Вытаскивай не детейлс, а целую строку
     Client clientRow = clientTestDao.get().getClient(clientRecord.id);
     assertThat(clientRow.id).isNotNull().isEqualTo(clientRecord.id);
     assertThat(clientRow.surname).isNotNull().isEqualTo(clientToSave.surname);
@@ -1181,7 +1178,6 @@ public class ClientRegisterImplTest extends ParentTestNg {
     assertThat(clientRecord.balanceMax).isNotNull();
     assertThat(clientRecord.balanceMin).isNotNull();
 
-    // FIXME: 10/15/18 Вытаскивай не детейлс, а целую строку
     Client clientRow = clientTestDao.get().getClient(clientRecord.id);
     assertThat(clientRow.id).isNotNull().isEqualTo(clientRecord.id);
     assertThat(clientRow.surname).isNotNull().isEqualTo(clientToSave.surname);

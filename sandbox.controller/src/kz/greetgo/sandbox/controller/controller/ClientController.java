@@ -47,7 +47,6 @@ public class ClientController implements Controller {
     binResponse.flushBuffers();
   }
 
-  // FIXME: 10/15/18 Переименуй принтСтримы в аутпутСтрим !везде где надо!
   private ClientReportView getMyView(String type, OutputStream outputStream) throws Exception {
     switch (type) {
       case "pdf":

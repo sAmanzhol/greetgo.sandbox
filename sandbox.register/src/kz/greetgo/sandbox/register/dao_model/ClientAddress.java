@@ -1,6 +1,5 @@
 package kz.greetgo.sandbox.register.dao_model;
 
-//FIXME: 10/8/18 Нельзя сделать ClientAddress?
 public class ClientAddress {
   public int client;
   public String type;

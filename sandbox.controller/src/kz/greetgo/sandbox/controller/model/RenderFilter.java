@@ -8,10 +8,7 @@ public class RenderFilter {
   public String author;
   public Date createdAt;
 
-  // FIXME: 10/15/18 вьюшка не относиться к фильтру, не должна быть в этом классе
-
   public RenderFilter() {
-
   }
 
   public RenderFilter(ClientToFilter clientToFilter, String author, Date createdAt) {
