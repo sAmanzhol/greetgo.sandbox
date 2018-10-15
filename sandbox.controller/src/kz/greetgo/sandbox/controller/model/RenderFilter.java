@@ -9,6 +9,7 @@ public class RenderFilter {
   public Date createdAt;
 
   public RenderFilter() {
+
   }
 
   public RenderFilter(ClientToFilter clientToFilter, String author, Date createdAt) {

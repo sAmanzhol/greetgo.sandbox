@@ -13,8 +13,30 @@ public abstract class MigrationCallbackAbstract<T> implements ConnectionCallback
     this.connection = connection;
   }
 
-  public MigrationCallbackAbstract() {}
+  public MigrationCallbackAbstract() {
+  }
 
   @Override
-  public abstract T doInConnection(Connection con) throws Exception;
+  public T doInConnection(Connection con) throws Exception {
+    this.connection = con;
+
+
+    createTempTables();
+
+    parseAndFillData();
+
+    validateAndMigrateData();
+
+    dropTemplateTables();
+
+    return null;
+  }
+
+  public abstract void createTempTables() throws Exception;
+
+  public abstract void parseAndFillData() throws Exception;
+
+  public abstract void validateAndMigrateData() throws Exception;
+
+  public abstract void dropTemplateTables() throws Exception;
 }
