@@ -1,7 +1,7 @@
 import {PhoneDisplay} from "./PhoneDisplay";
 
 export class ClientToSave {
-  public id: string;
+  public id: number;
   public surname: string;
   public name: string;
   public patronymic: string;
@@ -25,7 +25,7 @@ export class ClientToSave {
   }
 
   constructor() {
-    this.id = "";
+    this.id = null;
     this.surname = "";
     this.name = "";
     this.patronymic = "";

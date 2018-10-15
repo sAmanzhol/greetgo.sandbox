@@ -4,6 +4,7 @@ import kz.greetgo.sandbox.controller.report.ClientReportView;
 
 import java.util.Date;
 
+@SuppressWarnings("unused")
 public class RenderFilter {
   public ClientToFilter clientToFilter;
   public String author;

@@ -8,24 +8,26 @@ import kz.greetgo.sandbox.controller.report.model.ClientReportFootData;
 import kz.greetgo.sandbox.controller.report.model.ClientReportHeadData;
 import kz.greetgo.sandbox.register.dao.ClientDao;
 import kz.greetgo.sandbox.register.dao_model.Client;
-import kz.greetgo.sandbox.register.dao_model.Client_addr;
-import kz.greetgo.sandbox.register.dao_model.Client_phone;
-import kz.greetgo.sandbox.register.impl.jdbc.ClientCountCallbackImpl;
-import kz.greetgo.sandbox.register.impl.jdbc.ClientListCallbackImpl;
-import kz.greetgo.sandbox.register.impl.jdbc.ClientListRenderCallbackImpl;
+import kz.greetgo.sandbox.register.dao_model.ClientAddr;
+import kz.greetgo.sandbox.register.dao_model.ClientPhone;
+import kz.greetgo.sandbox.register.impl.jdbc.client.ClientCountCallbackImpl;
+import kz.greetgo.sandbox.register.impl.jdbc.client.ClientListCallbackImpl;
+import kz.greetgo.sandbox.register.impl.jdbc.client.ClientListRenderCallbackImpl;
 import kz.greetgo.sandbox.register.util.JdbcSandbox;
 
 import java.util.List;
+import java.util.Objects;
 
 // FIXME: 9/24/18 Избавься от варнингов в коде
 
+@SuppressWarnings("WeakerAccess")
 @Bean
 public class ClientRegisterImpl implements ClientRegister {
   public BeanGetter<ClientDao> clientDao;
   public BeanGetter<JdbcSandbox> jdbc;
 
   @Override
-  public void renderList(RenderFilter renderFilter) throws Exception {
+  public void render(RenderFilter renderFilter) throws Exception {
     ClientReportHeadData head = new ClientReportHeadData();
     head.title = "Отчет:";
 
@@ -51,24 +53,24 @@ public class ClientRegisterImpl implements ClientRegister {
   }
 
   @Override
-  public ClientDisplay details(int id) {
-    ClientDisplay clientDisplay = clientDao.get().details(id);
-    clientDisplay.numbers = clientDao.get().getClientPhones(clientDisplay.id);
+  public ClientDetails details(int id) {
+    ClientDetails clientDetails = clientDao.get().details(id);
+    clientDetails.numbers = clientDao.get().getClientPhones(clientDetails.id);
 
-    return clientDisplay;
+    return clientDetails;
   }
 
   @Override
   public ClientRecord save(ClientToSave clientToSave) {
     // FIXME: 10/8/18 зачем тебе вторая проверка после первой?
-    if (clientToSave.id.trim().isEmpty() || clientToSave.id.equalsIgnoreCase("")) {
+    if (Objects.equals(clientToSave.id, null)) {
       int newClientId = createClient(clientToSave);
       createClientAddr(newClientId, clientToSave);
       createClientPhone(newClientId, clientToSave);
 
       return clientDao.get().getClientRecord(newClientId);
     } else {
-      int clientId = Integer.parseInt(clientToSave.id);
+      int clientId = clientToSave.id;
 
       updateClient(clientId, clientToSave);
       updateClientAddr(clientId, clientToSave);
@@ -91,18 +93,18 @@ public class ClientRegisterImpl implements ClientRegister {
   }
 
   private void createClientAddr(int clientId, ClientToSave clientToSave) {
-    Client_addr client_addr_reg = new Client_addr(clientId, "REG", clientToSave.streetRegistration, clientToSave.houseRegistration, clientToSave.apartmentRegistration);
-    clientDao.get().insertClientAddr(client_addr_reg);
+    ClientAddr clientAddrReg = new ClientAddr(clientId, "REG", clientToSave.streetRegistration, clientToSave.houseRegistration, clientToSave.apartmentRegistration);
+    clientDao.get().insertClientAddr(clientAddrReg);
 
-    Client_addr client_addr_fact = new Client_addr(clientId, "FACT", clientToSave.streetResidence, clientToSave.houseResidence, clientToSave.apartmentResidence);
-    clientDao.get().insertClientAddr(client_addr_fact);
+    ClientAddr clientAddrFact = new ClientAddr(clientId, "FACT", clientToSave.streetResidence, clientToSave.houseResidence, clientToSave.apartmentResidence);
+    clientDao.get().insertClientAddr(clientAddrFact);
   }
 
   private void createClientPhone(int clientId, ClientToSave clientToSave) {
     for (int i = 0; i < clientToSave.numbers.size(); i++) {
       PhoneDisplay phoneDisplay = clientToSave.numbers.get(i);
-      Client_phone client_phone = new Client_phone(clientId, phoneDisplay.type, phoneDisplay.number);
-      clientDao.get().insertClientPhone(client_phone);
+      ClientPhone clientPhone = new ClientPhone(clientId, phoneDisplay.type, phoneDisplay.number);
+      clientDao.get().insertClientPhone(clientPhone);
     }
   }
 
@@ -114,16 +116,16 @@ public class ClientRegisterImpl implements ClientRegister {
   private void updateClientPhone(int clientId, ClientToSave clientToSave) {
     for (int i = 0; i < clientToSave.numbersChange.get("created").size(); i++) {
       PhoneDisplay phoneDisplay = clientToSave.numbersChange.get("created").get(i);
-      Client_phone client_phone = new Client_phone(clientId, phoneDisplay.type, phoneDisplay.number);
+      ClientPhone clientPhone = new ClientPhone(clientId, phoneDisplay.type, phoneDisplay.number);
 
-      clientDao.get().insertClientPhone(client_phone);
+      clientDao.get().insertClientPhone(clientPhone);
     }
 
     for (int i = 0; i < clientToSave.numbersChange.get("updated").size(); i++) {
       PhoneDisplay phoneDisplay = clientToSave.numbersChange.get("updated").get(i);
-      Client_phone client_phone = new Client_phone(phoneDisplay.id, clientId, phoneDisplay.type, phoneDisplay.number);
+      ClientPhone clientPhone = new ClientPhone(phoneDisplay.id, clientId, phoneDisplay.type, phoneDisplay.number);
 
-      clientDao.get().updateClientPhone(client_phone);
+      clientDao.get().updateClientPhone(clientPhone);
     }
 
     for (int i = 0; i < clientToSave.numbersChange.get("deleted").size(); i++) {
@@ -133,10 +135,10 @@ public class ClientRegisterImpl implements ClientRegister {
   }
 
   private void updateClientAddr(int clientId, ClientToSave clientToSave) {
-    Client_addr client_addr_reg = new Client_addr(clientId, "REG", clientToSave.streetRegistration, clientToSave.houseRegistration, clientToSave.apartmentRegistration);
-    clientDao.get().updateClientAddr(client_addr_reg);
+    ClientAddr clientAddrReg = new ClientAddr(clientId, "REG", clientToSave.streetRegistration, clientToSave.houseRegistration, clientToSave.apartmentRegistration);
+    clientDao.get().updateClientAddr(clientAddrReg);
 
-    Client_addr client_addr_fact = new Client_addr(clientId, "FACT", clientToSave.streetResidence, clientToSave.houseResidence, clientToSave.apartmentResidence);
-    clientDao.get().updateClientAddr(client_addr_fact);
+    ClientAddr clientAddrFact = new ClientAddr(clientId, "FACT", clientToSave.streetResidence, clientToSave.houseResidence, clientToSave.apartmentResidence);
+    clientDao.get().updateClientAddr(clientAddrFact);
   }
 }

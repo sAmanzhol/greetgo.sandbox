@@ -1,5 +1,6 @@
 package kz.greetgo.sandbox.controller.model;
 
+@SuppressWarnings("unused")
 public class PhoneDisplay {
   public int id;
   public String type;

@@ -1,11 +1,11 @@
 package kz.greetgo.sandbox.register.dao;
 
-import kz.greetgo.sandbox.controller.model.ClientDisplay;
+import kz.greetgo.sandbox.controller.model.ClientDetails;
 import kz.greetgo.sandbox.controller.model.ClientRecord;
 import kz.greetgo.sandbox.controller.model.PhoneDisplay;
 import kz.greetgo.sandbox.register.dao_model.Client;
-import kz.greetgo.sandbox.register.dao_model.Client_addr;
-import kz.greetgo.sandbox.register.dao_model.Client_phone;
+import kz.greetgo.sandbox.register.dao_model.ClientAddr;
+import kz.greetgo.sandbox.register.dao_model.ClientPhone;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
@@ -20,12 +20,12 @@ public interface ClientDao {
   @Insert("insert into Client_addr (client, type, street, house, flat) " +
     "values (#{client}, #{type}::addr, #{street}, #{house}, #{flat}) " +
     "on conflict (client, type) do update set actual = 1;")
-  void insertClientAddr(Client_addr client_addr);
+  void insertClientAddr(ClientAddr clientAddr);
 
   @Insert("insert into Client_phone (id, client, type, number) " +
     "values (nextval('id'), #{client}, #{type}::phone, #{number}) " +
     "on conflict (client, number) do update set actual = 1;")
-  void insertClientPhone(Client_phone client_phone);
+  void insertClientPhone(ClientPhone clientPhone);
 
 
   @Select("select currval('id')")
@@ -50,7 +50,7 @@ public interface ClientDao {
     "left join Client_addr as fA on cl.id = fA.client and fA.type = 'FACT' " +
 
     "where cl.id = #{id} and cl.actual = 1")
-  ClientDisplay details(int id);
+  ClientDetails details(int id);
 
   @Select("Select id, type, number " +
     "from Client_phone " +
@@ -65,12 +65,12 @@ public interface ClientDao {
   @Update("update Client_addr " +
     "set street = #{street}, house = #{house}, flat = #{flat} " +
     "where client = #{client} and type = #{type}::addr and actual = 1")
-  void updateClientAddr(Client_addr client_addr);
+  void updateClientAddr(ClientAddr clientAddr);
 
   @Update("update Client_phone " +
     "set number = #{number}, type = #{type}::phone " +
     "where id = #{id} and actual = 1")
-  void updateClientPhone(Client_phone client_phone);
+  void updateClientPhone(ClientPhone clientPhone);
 
   @Update("update Client_phone " +
     "set actual = 0 " +

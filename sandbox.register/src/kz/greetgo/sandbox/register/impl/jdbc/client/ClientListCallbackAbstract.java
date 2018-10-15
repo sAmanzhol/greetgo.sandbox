@@ -1,4 +1,4 @@
-package kz.greetgo.sandbox.register.impl.jdbc;
+package kz.greetgo.sandbox.register.impl.jdbc.client;
 
 import kz.greetgo.sandbox.controller.model.ClientRecord;
 import kz.greetgo.sandbox.controller.model.ClientToFilter;
@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+@SuppressWarnings("WeakerAccess")
 public abstract class ClientListCallbackAbstract<T> extends ClientCallbackAbstract<T, ClientRecord> {
 
   public ClientListCallbackAbstract(ClientToFilter filter) {

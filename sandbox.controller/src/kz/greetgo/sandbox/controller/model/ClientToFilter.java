@@ -1,7 +1,6 @@
 package kz.greetgo.sandbox.controller.model;
 
-import java.util.Date;
-
+@SuppressWarnings("unused")
 public class ClientToFilter {
   public SortColumn sortColumn;
   public SortDirection sortDirection;
@@ -12,6 +11,7 @@ public class ClientToFilter {
   public String author;
 
   public ClientToFilter() {
+
   }
 
   public ClientToFilter(String sortColumn, String sortDirection, String fio, int page, int itemCount) {

@@ -17,6 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+@SuppressWarnings("WeakerAccess, unused, SameParameterValue")
 @Bean
 public class DbLoader {
   final Logger logger = Logger.getLogger(getClass());
@@ -155,152 +156,152 @@ public class DbLoader {
     logger.info("Finish loading clients!");
   }
 
-  private void client_addr(int client, String type, String street, String house, String flat) {
-    Client_addr client_addr = new Client_addr();
-    client_addr.client = client;
-    client_addr.type = type;
-    client_addr.street = street;
-    client_addr.house = house;
-    client_addr.flat = flat;
+  private void clientAddr(int client, String type, String street, String house, String flat) {
+    ClientAddr clientAddr = new ClientAddr();
+    clientAddr.client = client;
+    clientAddr.type = type;
+    clientAddr.street = street;
+    clientAddr.house = house;
+    clientAddr.flat = flat;
 
-    clientTestDao.get().insertClientAddr(client_addr);
+    clientTestDao.get().insertClientAddr(clientAddr);
   }
 
   private void loadClientsAddr() {
     logger.info("Start loading clients Addresses...");
 
-    client_addr(1, "REG", "Ломоносова", "11", "1");
-    client_addr(1, "FACT", "Факт адрес", "1", "89");
-    client_addr(2, "REG", "Пр.абылай Хана", "22", "2");
-    client_addr(2, "FACT", "", "", "");
-    client_addr(3, "REG", "Ломоносова", "99", "4");
-    client_addr(3, "FACT", "", "", "");
-    client_addr(4, "REG", "Пр.абылай Хана", "33", "5");
-    client_addr(4, "FACT", "", "", "");
-    client_addr(5, "REG", "Ломоносова", "88", "2");
-    client_addr(5, "FACT", "", "", "");
-    client_addr(6, "REG", "Пр.абылай Хана", "44", "1");
-    client_addr(6, "FACT", "", "", "");
-    client_addr(7, "REG", "Ломоносова", "34", "1");
-    client_addr(7, "FACT", "", "", "");
-    client_addr(8, "REG", "Пр.абылай Хана", "55", "2");
-    client_addr(8, "FACT", "", "", "");
-    client_addr(9, "REG", "Ломоносова", "77", "4");
-    client_addr(9, "FACT", "", "", "");
-    client_addr(10, "REG", "Пр.абылай Хана", "66", "3");
-    client_addr(10, "FACT", "", "", "");
-    client_addr(11, "REG", "Ломоносова", "27", "3");
-    client_addr(11, "FACT", "", "", "");
+    clientAddr(1, "REG", "Ломоносова", "11", "1");
+    clientAddr(1, "FACT", "Факт адрес", "1", "89");
+    clientAddr(2, "REG", "Пр.абылай Хана", "22", "2");
+    clientAddr(2, "FACT", "", "", "");
+    clientAddr(3, "REG", "Ломоносова", "99", "4");
+    clientAddr(3, "FACT", "", "", "");
+    clientAddr(4, "REG", "Пр.абылай Хана", "33", "5");
+    clientAddr(4, "FACT", "", "", "");
+    clientAddr(5, "REG", "Ломоносова", "88", "2");
+    clientAddr(5, "FACT", "", "", "");
+    clientAddr(6, "REG", "Пр.абылай Хана", "44", "1");
+    clientAddr(6, "FACT", "", "", "");
+    clientAddr(7, "REG", "Ломоносова", "34", "1");
+    clientAddr(7, "FACT", "", "", "");
+    clientAddr(8, "REG", "Пр.абылай Хана", "55", "2");
+    clientAddr(8, "FACT", "", "", "");
+    clientAddr(9, "REG", "Ломоносова", "77", "4");
+    clientAddr(9, "FACT", "", "", "");
+    clientAddr(10, "REG", "Пр.абылай Хана", "66", "3");
+    clientAddr(10, "FACT", "", "", "");
+    clientAddr(11, "REG", "Ломоносова", "27", "3");
+    clientAddr(11, "FACT", "", "", "");
 
     logger.info("Finish loading clients Addresses!");
   }
 
-  private void client_phone(int id, int client, String type, String number) {
-    Client_phone client_phone = new Client_phone();
-    client_phone.client = client;
-    client_phone.type = type;
-    client_phone.number = number;
+  private void clientPhone(int id, int client, String type, String number) {
+    ClientPhone clientPhone = new ClientPhone();
+    clientPhone.client = client;
+    clientPhone.type = type;
+    clientPhone.number = number;
 
-    clientTestDao.get().insertClientPhone(client_phone);
+    clientTestDao.get().insertClientPhone(clientPhone);
   }
 
   private void loadClientsPhone() {
     logger.info("Start loading clients Phones...");
 
-    client_phone(1,1, "HOME", "77077070071");
-    client_phone(2,2, "HOME", "77077070072");
-    client_phone(3,3, "HOME", "77077070073");
-    client_phone(4,4, "HOME", "77077070074");
-    client_phone(5,5, "HOME", "77077070075");
-    client_phone(6,6, "HOME", "77077070076");
-    client_phone(7,7, "HOME", "77077070077");
-    client_phone(8,8, "HOME", "77077070078");
-    client_phone(9,9, "HOME", "77077070079");
-    client_phone(10,10, "HOME", "77077070080");
-    client_phone(11,11, "HOME", "77077070081");
+    clientPhone(1, 1, "HOME", "77077070071");
+    clientPhone(2, 2, "HOME", "77077070072");
+    clientPhone(3, 3, "HOME", "77077070073");
+    clientPhone(4, 4, "HOME", "77077070074");
+    clientPhone(5, 5, "HOME", "77077070075");
+    clientPhone(6, 6, "HOME", "77077070076");
+    clientPhone(7, 7, "HOME", "77077070077");
+    clientPhone(8, 8, "HOME", "77077070078");
+    clientPhone(9, 9, "HOME", "77077070079");
+    clientPhone(10, 10, "HOME", "77077070080");
+    clientPhone(11, 11, "HOME", "77077070081");
 
     logger.info("Finish loading clients Phones!");
   }
 
-  private void client_account(int id, int client, int money, String number) {
-    Client_account client_account = new Client_account();
-    client_account.id = id;
-    client_account.client = client;
-    client_account.money = money;
-    client_account.number = number;
+  private void clientAccount(int id, int client, int money, String number) {
+    ClientAccount clientAccount = new ClientAccount();
+    clientAccount.id = id;
+    clientAccount.client = client;
+    clientAccount.money = money;
+    clientAccount.number = number;
 
-    clientTestDao.get().insertClientAccount(client_account);
+    clientTestDao.get().insertClientAccount(clientAccount);
   }
 
   private void loadClientsAccounts() {
     logger.info("Start loading clients Accounts...");
 
-    client_account(1, 1, 3324, "1111111111");
-    client_account(2, 2, 23425, "1111111112");
-    client_account(3, 2, -342423, "1111111122");
-    client_account(4, 3, 34, "1111111113");
-    client_account(5, 4, 23434, "1111111114");
-    client_account(6, 5, 453, "1111111115");
-    client_account(7, 5, 4323, "1111111125");
-    client_account(8, 5, -100, "1111111135");
-    client_account(9, 6, 543, "1111111116");
-    client_account(10, 7, 324, "1111111117");
-    client_account(11, 8, 435, "1111111118");
-    client_account(12, 9, 3424, "1111111119");
-    client_account(13, 10, 231, "1111111120");
-    client_account(14, 10, 10000, "1111111130");
-    client_account(15, 11, 21, "1111111121");
-    client_account(16, 11, -100, "1111111131");
+    clientAccount(1, 1, 3324, "1111111111");
+    clientAccount(2, 2, 23425, "1111111112");
+    clientAccount(3, 2, -342423, "1111111122");
+    clientAccount(4, 3, 34, "1111111113");
+    clientAccount(5, 4, 23434, "1111111114");
+    clientAccount(6, 5, 453, "1111111115");
+    clientAccount(7, 5, 4323, "1111111125");
+    clientAccount(8, 5, -100, "1111111135");
+    clientAccount(9, 6, 543, "1111111116");
+    clientAccount(10, 7, 324, "1111111117");
+    clientAccount(11, 8, 435, "1111111118");
+    clientAccount(12, 9, 3424, "1111111119");
+    clientAccount(13, 10, 231, "1111111120");
+    clientAccount(14, 10, 10000, "1111111130");
+    clientAccount(15, 11, 21, "1111111121");
+    clientAccount(16, 11, -100, "1111111131");
 
     logger.info("Finish loading clients Accounts!");
   }
 
-  private void transaction_type(int id, String code, String name) {
-    Transaction_type transaction_type = new Transaction_type();
-    transaction_type.id = id;
-    transaction_type.name = name;
-    transaction_type.code = code;
+  private void transactionType(int id, String code, String name) {
+    TransactionType transactionType = new TransactionType();
+    transactionType.id = id;
+    transactionType.name = name;
+    transactionType.code = code;
 
-    clientTestDao.get().insertTransactionType(transaction_type);
+    clientTestDao.get().insertTransactionType(transactionType);
   }
 
   private void loadTransactionTypes() {
     logger.info("Start loading transaction types...");
 
-    transaction_type(1, "00001", "Payment");
-    transaction_type(2, "00002", "Abort");
-    transaction_type(3, "00003", "Repeat");
-    transaction_type(4, "00004", "Refund");
-    transaction_type(5, "00005", "Void");
+    transactionType(1, "00001", "Payment");
+    transactionType(2, "00002", "Abort");
+    transactionType(3, "00003", "Repeat");
+    transactionType(4, "00004", "Refund");
+    transactionType(5, "00005", "Void");
 
     logger.info("Finish loading transaction types!");
   }
 
-  private void client_account_transaction(int id, int account, float money, int type) {
-    Client_account_transaction client_account_transaction = new Client_account_transaction();
-    client_account_transaction.id = id;
-    client_account_transaction.account = account;
-    client_account_transaction.money = money;
-    client_account_transaction.type = type;
+  private void clientAccountTransaction(int id, int account, float money, int type) {
+    ClientAccountTransaction clientAccountTransaction = new ClientAccountTransaction();
+    clientAccountTransaction.id = id;
+    clientAccountTransaction.account = account;
+    clientAccountTransaction.money = money;
+    clientAccountTransaction.type = type;
 
-    clientTestDao.get().insertClientAccountTransaction(client_account_transaction);
+    clientTestDao.get().insertClientAccountTransaction(clientAccountTransaction);
   }
 
   private void loadClientsAccountTransactions() {
     logger.info("Start loading clients Account Transactions...");
 
-    client_account_transaction(1, 1, -10, 1);
-    client_account_transaction(2, 1, 100, 4);
-    client_account_transaction(3, 2, -10, 1);
-    client_account_transaction(4, 3, -10, 1);
-    client_account_transaction(5, 4, -10, 1);
-    client_account_transaction(6, 5, -10, 1);
-    client_account_transaction(7, 6, -10, 1);
-    client_account_transaction(8, 7, -10, 1);
-    client_account_transaction(9, 8, -10, 1);
-    client_account_transaction(10, 9, -10, 1);
-    client_account_transaction(11, 10, -10, 1);
-    client_account_transaction(12, 11, -10, 1);
+    clientAccountTransaction(1, 1, -10, 1);
+    clientAccountTransaction(2, 1, 100, 4);
+    clientAccountTransaction(3, 2, -10, 1);
+    clientAccountTransaction(4, 3, -10, 1);
+    clientAccountTransaction(5, 4, -10, 1);
+    clientAccountTransaction(6, 5, -10, 1);
+    clientAccountTransaction(7, 6, -10, 1);
+    clientAccountTransaction(8, 7, -10, 1);
+    clientAccountTransaction(9, 8, -10, 1);
+    clientAccountTransaction(10, 9, -10, 1);
+    clientAccountTransaction(11, 10, -10, 1);
+    clientAccountTransaction(12, 11, -10, 1);
 
     logger.info("Finish loading clients Account Transactions!");
   }

@@ -11,6 +11,7 @@ import kz.greetgo.sandbox.controller.util.Controller;
 
 import java.util.List;
 
+@SuppressWarnings("WeakerAccess")
 @Bean
 @ControllerPrefix("/character")
 public class CharacterController implements Controller {

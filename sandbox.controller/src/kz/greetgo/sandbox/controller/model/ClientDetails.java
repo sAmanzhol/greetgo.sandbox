@@ -5,7 +5,8 @@ import java.util.Date;
 import java.util.List;
 
 // FIXME: 9/24/18 ClientDetails
-public class ClientDisplay {
+@SuppressWarnings("unused")
+public class ClientDetails {
   public int id;
   public String surname;
   public String name;
@@ -22,9 +23,11 @@ public class ClientDisplay {
 
   public List<PhoneDisplay> numbers = new ArrayList<>();
 
-  public ClientDisplay() { }
+  public ClientDetails() {
+    
+  }
 
-  public ClientDisplay(int id, String surname, String name, String patronymic, Date birthDate, String gender, int characterId, String streetRegistration, String houseRegistration, String apartmentRegistration, String streetResidence, String houseResidence, String apartmentResidence, List<PhoneDisplay> numbers) {
+  public ClientDetails(int id, String surname, String name, String patronymic, Date birthDate, String gender, int characterId, String streetRegistration, String houseRegistration, String apartmentRegistration, String streetResidence, String houseResidence, String apartmentResidence, List<PhoneDisplay> numbers) {
     this.id = id;
     this.surname = surname;
     this.name = name;

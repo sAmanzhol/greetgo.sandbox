@@ -1,6 +1,6 @@
 import {PhoneDisplay} from "./PhoneDisplay";
 
-export class ClientDisplay {
+export class ClientDetails {
   public id: string;
   public surname: string;
   public name: string;
@@ -18,8 +18,8 @@ export class ClientDisplay {
 
   public numbers: PhoneDisplay[];
 
-  public static of(a: any): ClientDisplay {
-    const ret = new ClientDisplay();
+  public static of(a: any): ClientDetails {
+    const ret = new ClientDetails();
     ret.assign(a);
     return ret;
   }
