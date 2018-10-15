@@ -1,6 +1,6 @@
 package kz.greetgo.sandbox.register.dao_model;
 
-//FIXME: 10/8/18 Названия классов должно соотвествовать Java coding convention
+//FIXME: 10/8/18 Нельзя сделать ClientAddress?
 public class ClientAddr {
   public int client;
   public String type;
