@@ -43,7 +43,7 @@
         <label for="birthDate">*Дата рождения</label>
       </div>
       <div class="ui-g-8">
-        <p-inputMask [required]="true" id="birthDate" name="birthDate" [required]="true" [(ngModel)]="client.birthDate"
+        <p-inputMask [required]="true" id="birthDate" placeholder="mm-dd-YYYY" name="birthDate" [(ngModel)]="client.birthDate"
                      mask="99-99-9999"></p-inputMask>
       </div>
     </div>
@@ -111,21 +111,21 @@
           <div class="ui-g-4">
             <label>Домашний</label>
           </div>
-          <input [required]="true" pInputText placeholder="Домашний" id="homePhone" [(ngModel)]="client.phones[myIndex].number"/>
+          <input [required]="true"  type="number" pInputText placeholder="Домашний" id="homePhone" [(ngModel)]="client.phones[myIndex].number"/>
         </div>
 
         <div *ngIf="client.phones[myIndex].type == phoneType.WORK">
           <div class="ui-g-4">
             <label>Рабочий</label>
           </div>
-          <input [required]="true" pInputText placeholder="Рабочий" id="workPhone" [(ngModel)]="client.phones[myIndex].number"/>
+          <input [required]="true"  type="number"  pInputText placeholder="Рабочий" id="workPhone" [(ngModel)]="client.phones[myIndex].number"/>
         </div>
 
         <div *ngIf="client.phones[myIndex].type == phoneType.MOBILE">
           <div class="ui-g-4">
             <label>Мобильный </label>
           </div>
-          <input [required]="true" pInputText placeholder="Мобильный" [(ngModel)]="client.phones[myIndex].number"/>
+          <input [required]="true" type="number" pInputText placeholder="Мобильный" [(ngModel)]="client.phones[myIndex].number"/>
         </div>
       </div>
     </div>

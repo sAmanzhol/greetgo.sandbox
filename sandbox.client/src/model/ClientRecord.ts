@@ -88,6 +88,8 @@ export class ClientRecord {
   }
 
   public checkRequiredFields(): string {
+    let bd = new Date(this.birthDate).getTime();
+
     let msg = "";
 
     if (!this.surname)
@@ -96,12 +98,42 @@ export class ClientRecord {
       msg += "Имя,";
     if(!this.birthDate)
       msg += "Дата рождения,";
+    else if(bd > Date.now()  || isNaN(bd))
+      msg += "Неверная дата рождения,";
     if (!this.charm)
       msg += "Характер,";
+
     if (!this.addresses || this.addresses.length == 0)
       msg += "Адрес,";
+    else
+      {
+        this.addresses.forEach(adr => {
+          if(!adr.street || adr.street.length <= 1)
+          {
+            msg += "заполните улицу,";
+          }
+          if(!adr.house || adr.house.length <= 1)
+          {
+            msg += "заполните дом,";
+          }
+          if(!adr.flat || adr.flat.length <= 1)
+          {
+            msg += "заполните квартиру,";
+          }
+        })
+      }
+
     if (!this.phones || this.phones.length == 0)
-      msg += "Телефон,";
+      msg += "Телефон";
+    else
+    {
+      this.phones.forEach(phn => {
+        if(!phn.number || !(phn.number.toString().length >= 11 && phn.number.toString().length <= 12))
+        {
+          msg += "Некоректный номер тел. " + phn.type + " ,";
+        }
+      })
+    }
 
     return (msg.length != 0?msg:null);
   }

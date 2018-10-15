@@ -77,7 +77,6 @@ export class ClientTableComponent implements OnInit {
   }
 
   getXlsx() {
-    console.log("HEllo");
     this.clientRepoService.getXlsx();
   }
 }
