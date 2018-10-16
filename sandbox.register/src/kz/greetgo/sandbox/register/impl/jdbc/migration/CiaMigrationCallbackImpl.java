@@ -56,6 +56,13 @@ public class CiaMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
         " status int default 1" +
         ")";
 
+    final String clientTableAlter =
+      "alter table client " +
+        "add column migration_id varchar(50)";
+
+    final String clientTableAlterIndex =
+      "alter table client add constraint migration_id unique (migration_id)";
+
     try (PreparedStatement ps = connection.prepareStatement(clientTempTableCreate)) {
       ps.executeUpdate();
     }
@@ -65,6 +72,14 @@ public class CiaMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
     }
 
     try (PreparedStatement ps = connection.prepareStatement(clientAddressTempTableCreate)) {
+      ps.executeUpdate();
+    }
+
+    try (PreparedStatement ps = connection.prepareStatement(clientTableAlter)) {
+      ps.executeUpdate();
+    }
+
+   try (PreparedStatement ps = connection.prepareStatement(clientTableAlterIndex)) {
       ps.executeUpdate();
     }
   }
@@ -194,29 +209,67 @@ public class CiaMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
   }
 
   @Override
-  public void validateAndMigrateData() {
+  public void validateAndMigrateData() throws Exception {
+    // First part getting rid of records with error.
+    // Set status = 2 (Records with errors)
+
+    String clientTempTableUpdateError =
+      "update client_temp set status = 2 " +
+        " where surname = '' or name = '' or gender = '' or charm = '' or birth_date = '' " +
+        " or birth_date not like '%-%-%' " +
+        " or (extract(year from age(to_timestamp(birth_date, 'YYYY-MM-DD')))) < 3 " +
+        " or (extract(year from age(to_timestamp(birth_date, 'YYYY-MM-DD')))) > 3000";
+
+    try (PreparedStatement ps = connection.prepareStatement(clientTempTableUpdateError)) {
+      ps.executeUpdate();
+    }
+
+    // Migrate valid clients without phone and address
+    // Set status = 3 (Migrated without phones and addresses)
+
+    // There sending charm 1 by default
+    // And there is just insert, because problems with upsert
+    String clientTempTableUpdateMigrate =
+      "insert into client (id, surname, name, patronymic, gender, birth_date, charm, migration_id) " +
+        "   select nextval('id') as id, surname, name, patronymic, gender::gender as gender, to_date(birth_date, 'YYYY-MM-DD') as birth_date, 1 as charm, id as migration_id " +
+        "   from client_temp " +
+        "   where status = 1 " +
+        " on conflict on constraint migration_id " +
+        " do nothing";
+//        " do update set " +
+//        "  surname = excluded.surname," +
+//        "  name = excluded.name, " +
+//        "  patronymic = excluded.patronymic, " +
+//        "  gender = excluded.gender::gender, " +
+//        "  birth_date = excluded.birth_date, " +
+//        "  charm = excluded.charm";
+
+    try (PreparedStatement ps = connection.prepareStatement(clientTempTableUpdateMigrate)) {
+      ps.executeUpdate();
+    }
+
 
   }
 
   @Override
-  public void dropTemplateTables() throws Exception {
+  public void dropTemplateTables() {
 
-    final String clientTempTableDrop = "drop table client_temp";
-
-    final String clientPhoneTempTableDrop = "drop table client_phone_temp";
-
-    final String clientAddressTempTableDrop = "drop table client_addr_temp";
-
-    try (PreparedStatement ps = connection.prepareStatement(clientTempTableDrop)) {
-      ps.executeUpdate();
-    }
-
-    try (PreparedStatement ps = connection.prepareStatement(clientPhoneTempTableDrop)) {
-      ps.executeUpdate();
-    }
-
-    try (PreparedStatement ps = connection.prepareStatement(clientAddressTempTableDrop)) {
-      ps.executeUpdate();
-    }
+//    final String clientTempTableDrop = "drop table client_temp";
+//
+//    final String clientPhoneTempTableDrop = "drop table client_phone_temp";
+//
+//    final String clientAddressTempTableDrop = "drop table client_addr_temp";
+//
+//    try (PreparedStatement ps = connection.prepareStatement(clientTempTableDrop)) {
+//      ps.executeUpdate();
+//    }
+//
+//    try (PreparedStatement ps = connection.prepareStatement(clientPhoneTempTableDrop)) {
+//      ps.executeUpdate();
+//    }
+//
+//    try (PreparedStatement ps = connection.prepareStatement(clientAddressTempTableDrop)) {
+//      ps.executeUpdate();
+//    }
   }
 }
