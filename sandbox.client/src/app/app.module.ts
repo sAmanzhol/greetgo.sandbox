@@ -33,7 +33,6 @@ import { LOCALE_ID } from '@angular/core';
     AboutComponent,
     ClientTableComponent,
     ClientTableInputFormsComponent,
-
   ],
   imports: [
     BrowserAnimationsModule,
@@ -49,7 +48,7 @@ import { LOCALE_ID } from '@angular/core';
     InputTextModule,
     DropdownModule,
     RadioButtonModule,
-    InputMaskModule
+    InputMaskModule,
   ],
 
 providers: [HttpService, LoginService, ClientListService,ConfirmationService,

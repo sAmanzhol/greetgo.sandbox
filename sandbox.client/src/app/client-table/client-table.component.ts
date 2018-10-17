@@ -16,6 +16,7 @@ export class ClientTableComponent implements OnInit {
   private DEFAULT_TABLE_SIZE = 10;
 
   cols: any[];
+  reportTypes : any[];
   clients: ClientDisplay[];
   nameFilterVal : string = "";
   surnameFilterVal : string = "";
@@ -38,6 +39,7 @@ export class ClientTableComponent implements OnInit {
         {field: 'maxbal', header: 'макс. остаток'},
         {field: 'minbal', header: 'мин. остаток'}
       ];
+
     this.tableSize = this.DEFAULT_TABLE_SIZE;
   }
 
@@ -76,8 +78,12 @@ export class ClientTableComponent implements OnInit {
     this.clients = await this.clientRepoService.getDispClientList(this.lastParams);
   }
 
-  getXlsx() {
-    this.clientRepoService.getXlsx();
+  getReportPDF() {
+    console.log(this.login);
+    this.clientRepoService.getReport(this.clientRepoService.REPORT_PDF,this.login.personDisplay.username)
+  }
+  getReportXLSX() {
+    this.clientRepoService.getReport(this.clientRepoService.REPORT_XLSX,this.login.personDisplay.username)
   }
 }
 

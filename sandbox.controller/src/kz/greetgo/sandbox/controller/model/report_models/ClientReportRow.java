@@ -16,7 +16,7 @@ public class ClientReportRow {
     public double minbal;
     public double sumbal;
 
-    public ClientReportRow(Long id, String name, String surname, String patronymic,
+    public ClientReportRow(Long id, String surname, String name, String patronymic,
                            String charmName, Long age,
                            double maxbal, double minbal, double sumbal)
     {

@@ -286,7 +286,9 @@ public class ClientRegistrImpl implements ClientRegister {
             builder.append("%'");
         }
         if(params.colName == null)
-            params.colName = "id";
+            params.colName = COL_ID;
+        else if (params.colName.equalsIgnoreCase("age"))
+            params.colName = COL_BIRTH_DATE;
 
         builder.append(" order by ");
         builder.append(params.colName);

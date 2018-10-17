@@ -26,8 +26,18 @@ public class ClientReportViewXLSX implements ReportView  {
 
     @Override
     public void start(ClientReportHeadData headData) {
-        String workDir = headData.header;
-        sheet.skipRows(3);
+        sheet.row().start();
+        sheet.cellStr(1,headData.header);
+        sheet.row().finish();
+        sheet.row().start();
+        sheet.cellStr(1,"ID");
+        sheet.cellStr(2,"ФИО");
+        sheet.cellStr(3,"ХАРАКТЕР");
+        sheet.cellStr(4,"ВОЗРАСТ");
+        sheet.cellStr(5,"Общ.остаток");
+        sheet.cellStr(6,"Мин.остаток");
+        sheet.cellStr(7,"Мак.остаток");
+
         sheet.style().alignment().horizontalCenter();
     }
 

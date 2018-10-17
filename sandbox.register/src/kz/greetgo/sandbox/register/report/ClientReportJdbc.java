@@ -61,8 +61,9 @@ public class ClientReportJdbc implements ConnectionCallback<Void> {
     public static Long calculateAge(Date date) {
         LocalDate birthDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         LocalDate currentDate =  LocalDate.now();
+
         if ((birthDate != null)) {
-            return (long) Period.between(birthDate, currentDate).getYears();
+            return (long) Period.between(birthDate,currentDate).getYears();
         } else {
             return 0l;
         }

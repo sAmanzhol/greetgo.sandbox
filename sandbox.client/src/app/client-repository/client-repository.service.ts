@@ -13,7 +13,8 @@ import {AddressType} from "../../model/AddressType";
   providedIn: 'root'
 })
 export class ClientRepositoryService implements OnInit{
-
+  REPORT_XLSX = "xlsx";
+  REPORT_PDF  = "pdf";
   GET_BY_ID_URL = "/client/getById";
   GET_CHARMS_URL = "/client/getCharms";
   GET_COUNT_URL = "/client/getCount";
@@ -156,7 +157,8 @@ export class ClientRepositoryService implements OnInit{
     this.deleteClient(client.id);
   }
 
-  async getXlsx() {
-      return await this.http.downloadResource("/client/report/pdf",{"username":"user"});
+  async getReport(type : string,user : any) {
+      return await this.http.downloadResource("/client/report/"+type,{"username":JSON.stringify(user)});
   }
+
 }

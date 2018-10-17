@@ -1,21 +1,24 @@
 <div id="clientsTable">
   <h3 class="first">Список клиентов</h3>
   <p-table [columns]="cols" selectionMode="single"
-           [value]="clientRepoService.clientItemList" [lazy]="true" (onLazyLoad)="loadClientData($event)" [paginator]="true" [rows]="tableSize"
+           [value]="clientRepoService.clientItemList" [lazy]="true" (onLazyLoad)="loadClientData($event)"
+           [paginator]="true" [rows]="tableSize"
            [totalRecords]="totalRecords">
     <ng-template pTemplate="header" let-columns>
 
       <tr>
         <th>
-          <input class="ui-g-12" pInputText placeholder="Фамилия" (input)="loadClientData()" [(ngModel)]="surnameFilterVal"/>
+          <input class="ui-g-12" pInputText placeholder="Фамилия" (input)="loadClientData()"
+                 [(ngModel)]="surnameFilterVal"/>
         </th>
         <th>
-          <div >
+          <div>
             <input class="ui-g-12" pInputText placeholder="Имя" (input)="loadClientData()" [(ngModel)]="nameFilterVal"/>
           </div>
         </th>
         <th>
-          <input class="ui-g-12" pInputText placeholder="Отчество" (input)="loadClientData()" [(ngModel)]="patronymicFilterVal"/>
+          <input class="ui-g-12" pInputText placeholder="Отчество" (input)="loadClientData()"
+                 [(ngModel)]="patronymicFilterVal"/>
         </th>
         <th>
         </th>
@@ -44,16 +47,20 @@
                   style="margin: auto "></button>
           <button type="button" pButton icon="pi pi-times" (click)="delete(rowData['id'])"
                   style="margin: auto 0.5em"></button>
-          <button type="button" pButton icon="pi pi-times" (click)="getXlsx()"
-                  style="margin: auto 0.5em"></button>
         </td>
       </tr>
     </ng-template>
 
     <ng-template pTemplate="summary" let-rowData>
+
       <div style="text-align:left">
         <button type="button" pButton icon="pi pi-plus" (click)="add()" label="Добавить"></button>
+
+        <button class="reportBtn"  label="Отчет XLSX" pButton (click)="getReportXLSX()" icon="pi pi-cloud-download"></button>
+
+        <button class="reportBtn"  label="Отчет PDF" pButton (click)="getReportPDF()" icon="pi pi-cloud-download"></button>
       </div>
+
     </ng-template>
 
   </p-table>
