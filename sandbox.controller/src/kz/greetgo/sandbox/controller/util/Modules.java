@@ -13,7 +13,7 @@ public class Modules {
       return new File("..");
     }
 
-    throw new RuntimeException("Cannot find sandbox.parent dir");
+    throw new RuntimeException("Cannot find sandbox.root dir");
   }
 
   private static File findDir(String moduleName) {

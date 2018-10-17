@@ -1,0 +1,8 @@
+<div class="main">
+  <h1>
+    Добро пожаловать на {{ title }}!
+  </h1>
+  <app-login></app-login>
+  <app-client-table  *ngIf="login.canViewUsers"></app-client-table>
+
+</div>

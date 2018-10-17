@@ -4,6 +4,8 @@ webAppDirName = 'webapps'
 dependencies {
   compile project(':sandbox.server')
 
+  testCompile "kz.greetgo.depinject:greetgo.depinject.gen:$depinjectVersion"
+
   compile 'jstl:jstl:1.2'
 
 }

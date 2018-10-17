@@ -1,9 +1,9 @@
 export class PersonRecord {
-  public id!: string;
-  public fio!: string;
-  public username!: string;
-  public birthDate!: string;
-  public cans!: string;
+  public id: string;
+  public fio: string;
+  public username: string;
+  public birthDate: string;
+  public cans: string;
 
   public static create(a: any): PersonRecord {
     const ret = new PersonRecord();

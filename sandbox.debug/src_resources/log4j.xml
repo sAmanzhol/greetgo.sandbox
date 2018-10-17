@@ -14,7 +14,7 @@
   </appender>
 
   <appender name="SERVER" class="org.apache.log4j.RollingFileAppender">
-    <param name="File" value="${user.home}/access.d/logs/server.log"/>
+    <param name="File" value="${user.home}/sandbox.d/logs/server.log"/>
     <param name="Threshold" value="INFO"/>
     <param name="Append" value="true"/>
     <param name="MaxFileSize" value="100MB"/>
@@ -27,6 +27,15 @@
 
   <category name="org.apache">
     <priority value="INFO"/>
+  </category>
+
+  <category name="kz.greetgo.sandbox.register.impl" additivity="true">
+    <priority value="INFO"/>
+  </category>
+
+  <category name="kz.greetgo.sandbox.register.impl" additivity="true">
+    <priority value="INFO"/>
+    <appender-ref ref="CONSOLE"/>
   </category>
 
   <root>

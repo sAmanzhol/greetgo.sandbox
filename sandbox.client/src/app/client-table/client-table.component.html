@@ -1,0 +1,69 @@
+<div id="clientsTable">
+  <h3 class="first">Список клиентов</h3>
+  <p-table [columns]="cols" selectionMode="single"
+           [value]="clientRepoService.clientItemList" [lazy]="true" (onLazyLoad)="loadClientData($event)"
+           [paginator]="true" [rows]="tableSize"
+           [totalRecords]="totalRecords">
+    <ng-template pTemplate="header" let-columns>
+
+      <tr>
+        <th>
+          <input class="ui-g-12" pInputText placeholder="Фамилия" (input)="loadClientData()"
+                 [(ngModel)]="surnameFilterVal"/>
+        </th>
+        <th>
+          <div>
+            <input class="ui-g-12" pInputText placeholder="Имя" (input)="loadClientData()" [(ngModel)]="nameFilterVal"/>
+          </div>
+        </th>
+        <th>
+          <input class="ui-g-12" pInputText placeholder="Отчество" (input)="loadClientData()"
+                 [(ngModel)]="patronymicFilterVal"/>
+        </th>
+        <th>
+        </th>
+        <th>
+        </th>
+      </tr>
+      <tr>
+        <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+          {{col.header}}
+          <p-sortIcon [field]="col.field" ariaLabel="Activate to sort"
+                      ariaLabelDesc="Activate to sort in descending order"
+                      ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+        </th>
+        <th>
+          ACTIONS
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+      <tr>
+        <td *ngFor="let col of columns">
+          {{rowData[col.field]}}
+        </td>
+        <td>
+          <button type="button" pButton icon="pi pi-ellipsis-h" (click)="edit(rowData['id'])"
+                  style="margin: auto "></button>
+          <button type="button" pButton icon="pi pi-times" (click)="delete(rowData['id'])"
+                  style="margin: auto 0.5em"></button>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="summary" let-rowData>
+
+      <div style="text-align:left">
+        <button type="button" pButton icon="pi pi-plus" (click)="add()" label="Добавить"></button>
+
+        <button class="reportBtn"  label="Отчет XLSX" pButton (click)="getReportXLSX()" icon="pi pi-cloud-download"></button>
+
+        <button class="reportBtn"  label="Отчет PDF" pButton (click)="getReportPDF()" icon="pi pi-cloud-download"></button>
+      </div>
+
+    </ng-template>
+
+  </p-table>
+</div>
+
+<app-client-table-input></app-client-table-input>

@@ -1,0 +1,13 @@
+#clientsTable {
+  alignment: center;
+  margin: auto;
+  width: 80%;
+}
+
+.reportBtn {
+  margin:auto 0.5em;
+  text-align: right;
+  float:right;
+
+}
+
