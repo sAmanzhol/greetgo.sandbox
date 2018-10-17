@@ -2,7 +2,7 @@ package kz.greetgo.sandbox.register.report;
 
 import kz.greetgo.db.ConnectionCallback;
 import kz.greetgo.sandbox.controller.model.report_models.ClientReportRow;
-import kz.greetgo.sandbox.register.report.view.ReportView;
+import kz.greetgo.sandbox.controller.register.report.ReportView;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

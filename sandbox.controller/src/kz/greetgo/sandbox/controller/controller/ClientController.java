@@ -16,13 +16,12 @@ import kz.greetgo.sandbox.controller.model.ClientReqParams;
 import kz.greetgo.sandbox.controller.register.CharmRegister;
 import kz.greetgo.sandbox.controller.register.ClientRegister;
 import kz.greetgo.sandbox.controller.register.ReportRegister;
+import kz.greetgo.sandbox.controller.register.model.ReportParam;
+import kz.greetgo.sandbox.controller.register.report.ReportType;
 import kz.greetgo.sandbox.controller.util.Controller;
-import kz.greetgo.sandbox.register.report.view.ClientReportViewPDF;
-import kz.greetgo.sandbox.register.report.view.ClientReportViewXLSX;
-import kz.greetgo.sandbox.register.report.view.ReportView;
+import kz.greetgo.sandbox.controller.register.report.ReportView;
 
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -80,17 +79,17 @@ public class ClientController implements Controller {
 
         OutputStream out = tunnel.getResponseOutputStream();
 
-        ReportView view = null;
+        ReportType reportType = null;
 
         switch (type){
-            case ReportView.TYPE_XLSX: {view = new ClientReportViewXLSX(out);break;}
-            case ReportView.TYPE_PDF:  {view = new ClientReportViewPDF(out);break;}
+            case ReportView.TYPE_XLSX: {reportType = ReportType.XLSX;break;}
+            case ReportView.TYPE_PDF:  {reportType = ReportType.PDF;break;}
         }
 
-        if(view == null)
+        if(reportType == null)
             throw new RuntimeException("Неизвестный тип документа");
 
-        reportRegister.get().generate(username,new Date(),view);
+        reportRegister.get().generate(new ReportParam(username,new Date(),reportType,out));
         tunnel.flushBuffer();
     }
 }
