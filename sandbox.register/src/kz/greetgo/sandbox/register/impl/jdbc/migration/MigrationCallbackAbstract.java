@@ -9,6 +9,8 @@ public abstract class MigrationCallbackAbstract<T> implements ConnectionCallback
 
   public Connection connection;
 
+//  public BeanGetter<DbConfig> dbConfig;
+
   public MigrationCallbackAbstract(Connection connection) {
     this.connection = connection;
   }
@@ -18,15 +20,25 @@ public abstract class MigrationCallbackAbstract<T> implements ConnectionCallback
 
   @Override
   public T doInConnection(Connection con) throws Exception {
+//    this.connection = DriverManager.getConnection(
+//      dbConfig.get().url(),
+//      dbConfig.get().username(),
+//      dbConfig.get().password()
+//    );
+
     this.connection = con;
 
-//    createTempTables();
+    createTempTables();
 
     parseAndFillData();
 
     validateAndMigrateData();
 
-//    dropTemplateTables();
+    System.out.println("check tables");
+
+    dropTemplateTables();
+
+    checkForLateUpdates();
 
     return null;
   }
@@ -38,4 +50,6 @@ public abstract class MigrationCallbackAbstract<T> implements ConnectionCallback
   public abstract void validateAndMigrateData() throws Exception;
 
   public abstract void dropTemplateTables() throws Exception;
+
+  public abstract void checkForLateUpdates() throws Exception;
 }

@@ -56,13 +56,6 @@ public class CiaMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
         " status int default 1" +
         ")";
 
-    final String clientTableAlter =
-      "alter table client " +
-        "add column migration_id varchar(50)";
-
-    final String clientTableAlterIndex =
-      "alter table client add constraint migration_id unique (migration_id)";
-
     try (PreparedStatement ps = connection.prepareStatement(clientTempTableCreate)) {
       ps.executeUpdate();
     }
@@ -72,14 +65,6 @@ public class CiaMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
     }
 
     try (PreparedStatement ps = connection.prepareStatement(clientAddressTempTableCreate)) {
-      ps.executeUpdate();
-    }
-
-    try (PreparedStatement ps = connection.prepareStatement(clientTableAlter)) {
-      ps.executeUpdate();
-    }
-
-   try (PreparedStatement ps = connection.prepareStatement(clientTableAlterIndex)) {
       ps.executeUpdate();
     }
   }
@@ -189,7 +174,14 @@ public class CiaMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
       Element curHomePhoneElement = (Element) curHomePhoneNode;
 
       CiaPhone ciaPhone = new CiaPhone();
-      ciaPhone.type = curHomePhoneElement.getNodeName();
+
+      if (curHomePhoneElement.getNodeName().equals("homePhone")) {
+        ciaPhone.type = "HOME";
+      } else if (curHomePhoneElement.getNodeName().equals("workPhone")) {
+        ciaPhone.type = "WORK";
+      } else if (curHomePhoneElement.getNodeName().equals("mobilePhone")) {
+        ciaPhone.type = "MOBILE";
+      }
       ciaPhone.number = curHomePhoneElement.getTextContent();
 
       phones.add(ciaPhone);
@@ -210,9 +202,79 @@ public class CiaMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
 
   @Override
   public void validateAndMigrateData() throws Exception {
+
     // First part getting rid of records with error.
     // Set status = 2 (Records with errors)
 
+    this.checkForValidness();
+
+    // Migrate valid clients without phone and address
+    // Set status = 3 (Migrated without phones and addresses)
+
+    // There sending charm 1 by default
+    // And there is just insert, because problems with upsert
+    String clientTableUpdateMigrate =
+      "insert into client (id, surname, name, patronymic, gender, birth_date, charm, migration_id) " +
+        "   select nextval('id') as id, surname, name, patronymic, gender::gender as gender, to_date(birth_date, 'YYYY-MM-DD') as birth_date, 1 as charm, id as migration_id " +
+        "   from client_temp " +
+        "   where status = 1 " +
+        " on conflict on constraint migration_id " +
+        " do nothing";
+//        " do update set " +
+//        "  surname = excluded.surname," +
+//        "  name = excluded.name, " +
+//        "  patronymic = excluded.patronymic, " +
+//        "  gender = excluded.gender, " +
+//        "  birth_date = excluded.birth_date, " +
+//        "  charm = excluded.charm";
+
+    try (PreparedStatement ps = connection.prepareStatement(clientTableUpdateMigrate)) {
+      ps.executeUpdate();
+    }
+
+    String clientTempTableUpdateMigrate =
+      "update client_temp " +
+        "set status = 3 " +
+        "where id in (select distinct migration_id from client)";
+
+    try (PreparedStatement ps = connection.prepareStatement(clientTempTableUpdateMigrate)) {
+      ps.executeUpdate();
+    }
+
+    // Check phone and address for client existence
+    // If not set status 3
+//    String clientPhoneTempTableUpdateClient =
+//      "update client_phone_temp " +
+//        "set status = 3 " +
+//        "from client "
+
+
+//    String clientPhoneTableUpdateMigrate =
+//      "insert into client_phone (id, client, type, number) " +
+//        "   select nextval('id') as id, (select id from client where migration_id = client) as client, type::phone, number " +
+//        "   from client_phone_temp " +
+//        "   where status = 1 and client notnull";
+//
+//    try (PreparedStatement ps = connection.prepareStatement(clientPhoneTableUpdateMigrate)) {
+//      ps.executeUpdate();
+//    }
+//
+//    String clientAddrTableUpdateMigrate =
+//      "insert into client_addr (client, type, street, house, flat) " +
+//        "   select (select id from client where migration_id = client) as client, type, street, house, flat " +
+//        "   from client_addr_temp " +
+//        "   where status = 1 ";
+//
+//    try (PreparedStatement ps = connection.prepareStatement(clientAddrTableUpdateMigrate)) {
+//      ps.executeUpdate();
+//    }
+  }
+
+
+  /*
+    Function for checking records for validness, if there some error than changes it`s status to 2
+  */
+  private void checkForValidness() throws Exception {
     String clientTempTableUpdateError =
       "update client_temp set status = 2 " +
         " where surname = '' or name = '' or gender = '' or charm = '' or birth_date = '' " +
@@ -224,52 +286,47 @@ public class CiaMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
       ps.executeUpdate();
     }
 
-    // Migrate valid clients without phone and address
-    // Set status = 3 (Migrated without phones and addresses)
+    String clientPhoneTempTableUpdateError =
+      "update client_phone_temp set status = 2 " +
+        " where type = '' or client = '' or number = ''";
 
-    // There sending charm 1 by default
-    // And there is just insert, because problems with upsert
-    String clientTempTableUpdateMigrate =
-      "insert into client (id, surname, name, patronymic, gender, birth_date, charm, migration_id) " +
-        "   select nextval('id') as id, surname, name, patronymic, gender::gender as gender, to_date(birth_date, 'YYYY-MM-DD') as birth_date, 1 as charm, id as migration_id " +
-        "   from client_temp " +
-        "   where status = 1 " +
-        " on conflict on constraint migration_id " +
-        " do nothing";
-//        " do update set " +
-//        "  surname = excluded.surname," +
-//        "  name = excluded.name, " +
-//        "  patronymic = excluded.patronymic, " +
-//        "  gender = excluded.gender::gender, " +
-//        "  birth_date = excluded.birth_date, " +
-//        "  charm = excluded.charm";
-
-    try (PreparedStatement ps = connection.prepareStatement(clientTempTableUpdateMigrate)) {
+    try (PreparedStatement ps = connection.prepareStatement(clientPhoneTempTableUpdateError)) {
       ps.executeUpdate();
     }
 
+    String clientAddrTempTableUpdateError =
+      "update client_addr_temp set status = 2 " +
+        " where type = '' or client = '' or street = '' or house = '' or flat = ''";
 
+    try (PreparedStatement ps = connection.prepareStatement(clientAddrTempTableUpdateError)) {
+      ps.executeUpdate();
+    }
   }
 
   @Override
-  public void dropTemplateTables() {
+  public void dropTemplateTables() throws Exception {
 
-//    final String clientTempTableDrop = "drop table client_temp";
-//
-//    final String clientPhoneTempTableDrop = "drop table client_phone_temp";
-//
-//    final String clientAddressTempTableDrop = "drop table client_addr_temp";
-//
-//    try (PreparedStatement ps = connection.prepareStatement(clientTempTableDrop)) {
-//      ps.executeUpdate();
-//    }
-//
-//    try (PreparedStatement ps = connection.prepareStatement(clientPhoneTempTableDrop)) {
-//      ps.executeUpdate();
-//    }
-//
-//    try (PreparedStatement ps = connection.prepareStatement(clientAddressTempTableDrop)) {
-//      ps.executeUpdate();
-//    }
+    final String clientTempTableDrop = "drop table client_temp";
+
+    final String clientPhoneTempTableDrop = "drop table client_phone_temp";
+
+    final String clientAddressTempTableDrop = "drop table client_addr_temp";
+
+    try (PreparedStatement ps = connection.prepareStatement(clientTempTableDrop)) {
+      ps.executeUpdate();
+    }
+
+    try (PreparedStatement ps = connection.prepareStatement(clientPhoneTempTableDrop)) {
+      ps.executeUpdate();
+    }
+
+    try (PreparedStatement ps = connection.prepareStatement(clientAddressTempTableDrop)) {
+      ps.executeUpdate();
+    }
+  }
+
+  @Override
+  public void checkForLateUpdates() throws Exception {
+
   }
 }

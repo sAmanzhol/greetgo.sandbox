@@ -20,30 +20,6 @@ public class MigrationController implements Controller {
 
   @OnGet("")
   public void migrate() throws Exception {
-
-    String currentFileType;
-    String currentFileLink;
-
-    // Temporary files in local directory
-    File migrationFolder = new File("/home/ssailaubayev/migration");
-
-    ArrayList<File> ciaFiles = new ArrayList<>(Arrays.asList(Objects.requireNonNull(migrationFolder.listFiles((file, name) -> name.toLowerCase().endsWith(".xml")))));
-    ArrayList<File> frsFiles = new ArrayList<>(Arrays.asList(Objects.requireNonNull(migrationFolder.listFiles((file, name) -> name.toLowerCase().endsWith(".json_row")))));
-
-    while (ciaFiles.size() > 0 || frsFiles.size() > 0) {
-      if (ciaFiles.size() > 0) {
-        currentFileLink = ciaFiles.get(0).getPath();
-        currentFileType = "cia";
-        migrationRegister.get().migrate(currentFileType, currentFileLink);
-        ciaFiles.remove(0);
-      }
-
-      if (frsFiles.size() > 0) {
-        currentFileLink = frsFiles.get(0).getPath();
-        currentFileType = "frs";
-        migrationRegister.get().migrate(currentFileType, currentFileLink);
-        frsFiles.remove(0);
-      }
-    }
+    migrationRegister.get().migrate();
   }
 }

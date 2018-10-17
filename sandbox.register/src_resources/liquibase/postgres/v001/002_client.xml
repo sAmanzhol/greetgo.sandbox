@@ -74,7 +74,7 @@
         id serial not null unique,
         client int references client,
         type phone not null,
-        number varchar(11) not null,
+        number varchar(100) not null,
         actual int not null default 1,
         primary key(client, number)
       )
@@ -87,7 +87,7 @@
         id serial primary key,
         client int references client,
         money float default 0,
-        number varchar(10) not null unique,
+        number varchar(50) not null unique,
         registered_at timestamp default current_timestamp,
         actual int not null default 1
       )
@@ -115,6 +115,14 @@
         type int references transaction_type,
         actual int not null default 1
       )
+    ]]></sql>
+  </changeSet>
+
+
+  <changeSet author="sultan" id="alter-table-client-migration_id">
+    <sql endDelimiter=";;"><![CDATA[
+      alter table client add column migration_id varchar(50);
+      alter table client add constraint migration_id unique (migration_id);
     ]]></sql>
   </changeSet>
 
