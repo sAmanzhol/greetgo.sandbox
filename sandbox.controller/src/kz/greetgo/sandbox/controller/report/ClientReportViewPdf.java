@@ -73,7 +73,7 @@ public class ClientReportViewPdf implements ClientReportView {
 
   public static void main(String[] args) throws Exception {
     File file = new File("build/report/test_report.pdf");
-    file.getParentFile().mkdir();
+    file.getParentFile().mkdirs();
 
     try (OutputStream outputStream = new PrintStream(new FileOutputStream(file), false, "UTF-8")) {
       ClientReportViewPdf viewPdf = new ClientReportViewPdf(outputStream);
@@ -83,7 +83,7 @@ public class ClientReportViewPdf implements ClientReportView {
 
       viewPdf.start(head);
 
-      for (int i = 0; i < 10; i++) {
+      for (int i = 0; i < 1_000_000; i++) {
         ClientRecord row = new ClientRecord();
         row.id = i;
         row.fio = RND.str(5) + " " + RND.str(5) + RND.str(5);
