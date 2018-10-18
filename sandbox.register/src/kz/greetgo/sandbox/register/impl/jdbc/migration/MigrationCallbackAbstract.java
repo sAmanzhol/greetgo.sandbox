@@ -38,6 +38,8 @@ public abstract class MigrationCallbackAbstract<T> implements ConnectionCallback
 
     dropTemplateTables();
 
+    disableUnusedRecords();
+
     checkForLateUpdates();
 
     return null;
@@ -50,6 +52,8 @@ public abstract class MigrationCallbackAbstract<T> implements ConnectionCallback
   public abstract void validateAndMigrateData() throws Exception;
 
   public abstract void dropTemplateTables() throws Exception;
+
+  public abstract void disableUnusedRecords() throws Exception;
 
   public abstract void checkForLateUpdates() throws Exception;
 }

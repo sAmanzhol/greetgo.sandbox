@@ -326,6 +326,11 @@ public class CiaMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
   }
 
   @Override
+  public void disableUnusedRecords() throws Exception {
+
+  }
+
+  @Override
   public void checkForLateUpdates() throws Exception {
 
   }

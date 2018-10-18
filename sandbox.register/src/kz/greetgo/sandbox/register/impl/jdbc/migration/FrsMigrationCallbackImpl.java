@@ -67,7 +67,7 @@ public class FrsMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
 
       if (rowJson.get("type").equals("transaction")) {
         FrsTransaction frsTransaction = new FrsTransaction();
-        frsTransaction.money = (String) rowJson.get("money");
+        frsTransaction.money = ((String) rowJson.get("money")).replace("_", "");
         frsTransaction.finished_at = (String) rowJson.get("finished_at");
         frsTransaction.transaction_type = (String) rowJson.get("transaction_type");
         frsTransaction.account_number = (String) rowJson.get("account_number");
@@ -108,63 +108,65 @@ public class FrsMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
 
     this.checkForValidness();
 
+
+    // Adding new transaction types
+
+    String clientAccountTransactionTypeInsert =
+      "insert into transaction_type (name, id, code) " +
+        " select " +
+        "   distinct transaction_type as name, " +
+        "   nextval('id') as id, " +
+        "   nextval('code') as code " +
+        " from client_account_transaction_temp " +
+        " where transaction_type notnull and status = 1" +
+        " group by name " +
+        "on conflict (name) do nothing";
+
+    try (PreparedStatement ps = connection.prepareStatement(clientAccountTransactionTypeInsert)) {
+      ps.executeUpdate();
+    }
+
+
     // Migrate valid accounts and transactions with actual 1
-    // Else set actual 0, to late update
 
-    this.validateAndMigrateAccountData();
-    this.validateAndMigrateTransactionData();
-
-
-  }
-
-  private void validateAndMigrateAccountData() throws Exception {
-
-    // no upsert errss
+    // no (update insert) need to fix
     String clientAccountTableUpdateMigrate =
       "insert into client_account (id, client, number, registered_at) " +
-        " select nextval('id') as id, (select id from client where migration_id = client) as client, account_number as number, to_timestamp(registered_at, 'YYYY-MM-DD hh24:mi:ss') as registered_at " +
+        "  select nextval('id') as id, " +
+        "  (select id from client where migration_id = client) as client, " +
+        "  account_number as number, " +
+        "  to_timestamp(registered_at, 'YYYY-MM-DD hh24:mi:ss') as registered_at " +
         " from client_account_temp " +
         " where status = 1" +
         " on conflict (number) " +
         " do nothing";
 
-    String clientAccountTableUpdateMigrateCheck =
-      "update client_account " +
-        "set actual = 0 " +
-        "where client not in (select distinct id from client)";
-
-
     try (PreparedStatement ps = connection.prepareStatement(clientAccountTableUpdateMigrate)) {
       ps.executeUpdate();
     }
 
-    try (PreparedStatement ps = connection.prepareStatement(clientAccountTableUpdateMigrateCheck)) {
-      ps.executeUpdate();
-    }
-  }
 
-  private void validateAndMigrateTransactionData() throws Exception {
-
-    // Need to change account number to int (remove 1)
-    // Need to change money to double (remove 1)
-    // Need to change type to int (remove 1)
     String clientAccountTransactionTableUpdateMigrate =
       "insert into client_account_transaction (id, account, money, finished_at, type) " +
-        " select nextval('id') as id, 1 as account, 1 as money, to_timestamp(finished_at, 'YYYY-MM-DD hh24:mi:ss') as finished_at, 1 as type " +
+        " select nextval('id') as id, " +
+        "   (select id from client_account where number = account_number) as account, " +
+        "   cast(money as double precision) as money, " +
+        "   to_timestamp(finished_at, 'YYYY-MM-DD hh24:mi:ss') as finished_at, " +
+        "   (select id from transaction_type where name = transaction_type) as type " +
         " from client_account_transaction_temp " +
         " where status = 1";
-
-    String clientAccountTransactionTableUpdateMigrateCheck =
-      "update client_account_transaction " +
-        "set actual = 0 " +
-        "where account not in (select distinct number from client_account)";
-
 
     try (PreparedStatement ps = connection.prepareStatement(clientAccountTransactionTableUpdateMigrate)) {
       ps.executeUpdate();
     }
 
-    try (PreparedStatement ps = connection.prepareStatement(clientAccountTransactionTableUpdateMigrateCheck)) {
+
+    String clientAccountTableUpdateMigrateMoney =
+      "update client_account " +
+        "set money = (select sum(money) from client_account_transaction where account = client_account.id and type notnull) " +
+        "where client notnull and actual = 1";
+
+    try (PreparedStatement ps = connection.prepareStatement(clientAccountTableUpdateMigrateMoney)) {
       ps.executeUpdate();
     }
   }
@@ -173,6 +175,7 @@ public class FrsMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
    Function for checking records for validness, if there some error than changes it`s status to 2
  */
   private void checkForValidness() throws Exception {
+
     String clientAccountTempTableUpdateError =
       "update client_account_temp set status = 2 " +
         " where client = '' or account_number = '' or registered_at = ''";
@@ -180,6 +183,7 @@ public class FrsMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
     try (PreparedStatement ps = connection.prepareStatement(clientAccountTempTableUpdateError)) {
       ps.executeUpdate();
     }
+
 
     String clientAccountTransactionTempTableUpdateError =
       "update client_account_transaction_temp set status = 2 " +
@@ -192,19 +196,50 @@ public class FrsMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
 
   @Override
   public void dropTemplateTables() throws Exception {
-    final String clientAccountTableDrop = "drop table client_account_temp";
 
-    final String clientAccountTransactionTableDrop = "drop table client_account_transaction_temp";
+    final String clientAccountTableDrop = "drop table client_account_temp";
 
     try (PreparedStatement ps = connection.prepareStatement(clientAccountTableDrop)) {
       ps.executeUpdate();
     }
+
+
+    final String clientAccountTransactionTableDrop = "drop table client_account_transaction_temp";
 
     try (PreparedStatement ps = connection.prepareStatement(clientAccountTransactionTableDrop)) {
       ps.executeUpdate();
     }
   }
 
+  /*
+   Function for checking records for dependencies, if there some error than changes it`s actual to 0 until there will be valid dependency
+ */
+  @Override
+  public void disableUnusedRecords() throws Exception {
+
+    String clientAccountTableUpdateDisable =
+      "update client_account " +
+        "set actual = 0 " +
+        "where client isnull and actual = 1";
+
+    try (PreparedStatement ps = connection.prepareStatement(clientAccountTableUpdateDisable)) {
+      ps.executeUpdate();
+    }
+
+
+    String clientAccountTransactionTableUpdateDisable =
+      "update client_account_transaction " +
+        "set actual = 0 " +
+        "where account not in (select distinct id from client_account where actual = 1)";
+
+    try (PreparedStatement ps = connection.prepareStatement(clientAccountTransactionTableUpdateDisable)) {
+      ps.executeUpdate();
+    }
+  }
+
+  /*
+   Function for checking new records that needed for disabled data, if there exists than we enable disabled records
+ */
   @Override
   public void checkForLateUpdates() throws Exception {
 

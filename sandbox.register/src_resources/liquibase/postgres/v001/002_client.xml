@@ -99,9 +99,15 @@
       create table transaction_type (
         id serial primary key,
         code varchar(10) not null,
-        name varchar(100) not null,
+        name varchar(100) not null unique,
         actual int not null default 1
       )
+    ]]></sql>
+  </changeSet>
+
+  <changeSet author="sultan" id="create-sequence-code">
+    <sql endDelimiter=";;"><![CDATA[
+      create sequence code start 1
     ]]></sql>
   </changeSet>
 
