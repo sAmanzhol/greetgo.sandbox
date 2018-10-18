@@ -24,6 +24,10 @@ import java.util.List;
 
 @Bean
 public class ClientRegistrImpl implements ClientRegister {
+
+  //TODO ты не используешь все созданные переменные, тем более они у тебя статичные.
+  //TODO удали мертвый код
+
   public static final String COL_ID = "id";
   public static final String COL_NAME = "name";
   public static final String COL_SURNAME = "surname";
