@@ -19,7 +19,7 @@
     <sql endDelimiter=";;"><![CDATA[
       create table charm (
         id serial primary key,
-        name varchar(100) not null,
+        name varchar(100) not null unique,
         description varchar(200) not null,
         energy float not null,
         actual int not null default 1
@@ -51,7 +51,7 @@
   <changeSet author="sultan" id="create-table-client_addr">
     <sql endDelimiter=";;"><![CDATA[
       create table client_addr (
-        client int references client,
+        client int,
         type addr not null,
         street varchar(255),
         house varchar(255),
@@ -72,11 +72,10 @@
     <sql endDelimiter=";;"><![CDATA[
       create table client_phone (
         id serial not null unique,
-        client int references client,
+        client int,
         type phone not null,
-        number varchar(100) not null,
-        actual int not null default 1,
-        primary key(client, number)
+        number varchar(100) not null unique,
+        actual int not null default 1
       )
     ]]></sql>
   </changeSet>

@@ -192,7 +192,11 @@ public class CiaMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
     Element curAddressElement = (Element) curClientElement.getElementsByTagName(addressType).item(0);
 
     CiaAddress ciaAddress = new CiaAddress();
-    ciaAddress.type = addressType;
+    if ("fact".equals(addressType)) {
+      ciaAddress.type = "FACT";
+    } else if ("register".equals(addressType)) {
+      ciaAddress.type = "REG";
+    }
     ciaAddress.street = curAddressElement.getAttribute("street");
     ciaAddress.house = curAddressElement.getAttribute("house");
     ciaAddress.flat = curAddressElement.getAttribute("flat");
@@ -208,14 +212,40 @@ public class CiaMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
 
     this.checkForValidness();
 
-    // Migrate valid clients without phone and address
-    // Set status = 3 (Migrated without phones and addresses)
 
-    // There sending charm 1 by default
-    // And there is just insert, because problems with upsert
+    // Adding new charms
+
+    String CharmTableInsert =
+      "insert into charm (name, id, description, energy) " +
+        " select " +
+        "   distinct charm as name, " +
+        "   nextval('id') as id, " +
+        "   'Description' as description, " +
+        "   100 as energy " +
+        " from client_temp " +
+        " where charm notnull and status = 1" +
+        " group by charm " +
+        "on conflict (name) do nothing";
+
+    try (PreparedStatement ps = connection.prepareStatement(CharmTableInsert)) {
+      ps.executeUpdate();
+    }
+
+
+    // Migrate valid clients without phone and address
+
+    // And there is just insert, because problems with update-insert
     String clientTableUpdateMigrate =
       "insert into client (id, surname, name, patronymic, gender, birth_date, charm, migration_id) " +
-        "   select nextval('id') as id, surname, name, patronymic, gender::gender as gender, to_date(birth_date, 'YYYY-MM-DD') as birth_date, 1 as charm, id as migration_id " +
+        "   select " +
+        "     nextval('id') as id, " +
+        "     surname, " +
+        "     name, " +
+        "     patronymic, " +
+        "     gender::gender as gender, " +
+        "     to_date(birth_date, 'YYYY-MM-DD') as birth_date, " +
+        "     (select id from charm where name = client_temp.charm) as charm, " +
+        "     id as migration_id " +
         "   from client_temp " +
         "   where status = 1 " +
         " on conflict on constraint migration_id " +
@@ -232,49 +262,45 @@ public class CiaMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
       ps.executeUpdate();
     }
 
-    String clientTempTableUpdateMigrate =
-      "update client_temp " +
-        "set status = 3 " +
-        "where id in (select distinct migration_id from client)";
 
-    try (PreparedStatement ps = connection.prepareStatement(clientTempTableUpdateMigrate)) {
+    String clientPhoneTableUpdateMigrate =
+      "insert into client_phone (id, client, type, number) " +
+        "   select " +
+        "     nextval('id') as id, " +
+        "     (select id from client where migration_id = client_phone_temp.client) as client, " +
+        "     type::phone as type, " +
+        "     number as number " +
+        "   from client_phone_temp " +
+        "   where status = 1 and client notnull " +
+        "on conflict (number) do nothing";
+
+    try (PreparedStatement ps = connection.prepareStatement(clientPhoneTableUpdateMigrate)) {
       ps.executeUpdate();
     }
 
-    // Check phone and address for client existence
-    // If not set status 3
-//    String clientPhoneTempTableUpdateClient =
-//      "update client_phone_temp " +
-//        "set status = 3 " +
-//        "from client "
 
+    String clientAddrTableUpdateMigrate =
+      "insert into client_addr (client, type, street, house, flat) " +
+        "   select " +
+        "     coalesce( nullif((select id from client where migration_id = client_addr_temp.client and actual = 1), null), -1), " +
+        "     type::addr as type, " +
+        "     street as street, " +
+        "     house as house, " +
+        "     flat as flat " +
+        "   from client_addr_temp " +
+        "   where status = 1 and client notnull " +
+        "on conflict (client, type) do nothing";
 
-//    String clientPhoneTableUpdateMigrate =
-//      "insert into client_phone (id, client, type, number) " +
-//        "   select nextval('id') as id, (select id from client where migration_id = client) as client, type::phone, number " +
-//        "   from client_phone_temp " +
-//        "   where status = 1 and client notnull";
-//
-//    try (PreparedStatement ps = connection.prepareStatement(clientPhoneTableUpdateMigrate)) {
-//      ps.executeUpdate();
-//    }
-//
-//    String clientAddrTableUpdateMigrate =
-//      "insert into client_addr (client, type, street, house, flat) " +
-//        "   select (select id from client where migration_id = client) as client, type, street, house, flat " +
-//        "   from client_addr_temp " +
-//        "   where status = 1 ";
-//
-//    try (PreparedStatement ps = connection.prepareStatement(clientAddrTableUpdateMigrate)) {
-//      ps.executeUpdate();
-//    }
+    try (PreparedStatement ps = connection.prepareStatement(clientAddrTableUpdateMigrate)) {
+      ps.executeUpdate();
+    }
   }
-
 
   /*
     Function for checking records for validness, if there some error than changes it`s status to 2
   */
   private void checkForValidness() throws Exception {
+
     String clientTempTableUpdateError =
       "update client_temp set status = 2 " +
         " where surname = '' or name = '' or gender = '' or charm = '' or birth_date = '' " +
@@ -286,6 +312,7 @@ public class CiaMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
       ps.executeUpdate();
     }
 
+
     String clientPhoneTempTableUpdateError =
       "update client_phone_temp set status = 2 " +
         " where type = '' or client = '' or number = ''";
@@ -293,6 +320,7 @@ public class CiaMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
     try (PreparedStatement ps = connection.prepareStatement(clientPhoneTempTableUpdateError)) {
       ps.executeUpdate();
     }
+
 
     String clientAddrTempTableUpdateError =
       "update client_addr_temp set status = 2 " +
@@ -325,11 +353,35 @@ public class CiaMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
     }
   }
 
+  /*
+   Function for checking records for dependencies, if there some error than changes it`s actual to 0 until there will be valid dependency
+ */
   @Override
   public void disableUnusedRecords() throws Exception {
 
+    String clientPhoneTableUpdateDisable =
+      "update client_phone " +
+        "set actual = 0 " +
+        "where client isnull and actual = 1";
+
+    try (PreparedStatement ps = connection.prepareStatement(clientPhoneTableUpdateDisable)) {
+      ps.executeUpdate();
+    }
+
+
+    String clientAddrTableUpdateDisable =
+      "update client_addr " +
+        "set actual = 0 " +
+        "where client = -1 and actual = 1";
+
+    try (PreparedStatement ps = connection.prepareStatement(clientAddrTableUpdateDisable)) {
+      ps.executeUpdate();
+    }
   }
 
+  /*
+   Function for checking new records that needed for disabled data, if there exists than we enable disabled records
+ */
   @Override
   public void checkForLateUpdates() throws Exception {
 
