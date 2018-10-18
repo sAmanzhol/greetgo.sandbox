@@ -36,7 +36,12 @@ public class ClientReportViewPDF implements ReportView {
             //подключаем файл шрифта, который поддерживает кириллицу
             font = new Font(bf, FONT_SIZE);
 
+            //TODO зачем здесь 2 catch?
+
         } catch (IOException ex) {
+
+            //TODO Обрабатывай ошибки!!!
+
             ex.printStackTrace();
         } catch (DocumentException ex) {
             ex.printStackTrace();
@@ -57,6 +62,8 @@ public class ClientReportViewPDF implements ReportView {
             document.addHeader("Header",headData.header);
             document.add(table);
         } catch (Exception e) {
+            //TODO Обрабатывай ошибки!!!
+
             e.printStackTrace();
         }
     }
@@ -88,6 +95,8 @@ public class ClientReportViewPDF implements ReportView {
             outputStream.flush();
             document.close();
         } catch (Exception e) {
+            //TODO Обрабатывай ошибки!!!
+
             e.printStackTrace();
         }
     }

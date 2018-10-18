@@ -67,6 +67,8 @@ public class ClientReportViewXLSX implements ReportView {
         sheet.row().finish();
         f.complete(outputStream);
         outputStream.flush();
+
+        //TODO outputStream Close?
     }
 
     public static void main(String[] args) {

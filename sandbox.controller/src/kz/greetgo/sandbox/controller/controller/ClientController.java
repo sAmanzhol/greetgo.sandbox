@@ -18,8 +18,8 @@ import kz.greetgo.sandbox.controller.register.ClientRegister;
 import kz.greetgo.sandbox.controller.register.ReportRegister;
 import kz.greetgo.sandbox.controller.register.model.ReportParam;
 import kz.greetgo.sandbox.controller.register.report.ReportType;
-import kz.greetgo.sandbox.controller.util.Controller;
 import kz.greetgo.sandbox.controller.register.report.ReportView;
+import kz.greetgo.sandbox.controller.util.Controller;
 
 import java.io.OutputStream;
 import java.util.Date;
@@ -28,68 +28,78 @@ import java.util.List;
 @Bean
 @ControllerPrefix("/client")
 public class ClientController implements Controller {
-    public BeanGetter<ClientRegister> clientRegister;
+  public BeanGetter<ClientRegister> clientRegister;
 
-    public BeanGetter<CharmRegister> charmRegister;
+  public BeanGetter<CharmRegister> charmRegister;
 
-    public BeanGetter<ReportRegister> reportRegister;
+  public BeanGetter<ReportRegister> reportRegister;
 
-    @ToJson
-    @OnGet("/getAll")
-    public List<Client> getAll(@Par("params") @Json ClientReqParams params) {
-            return clientRegister.get().getListByParam(params);
+  @ToJson
+  @OnGet("/getAll")
+  public List<Client> getAll(@Par("params") @Json ClientReqParams params) {
+    return clientRegister.get().getListByParam(params);
+  }
+
+  @ToJson
+  @OnGet("/getCount")
+  public Long getCount() {
+    return clientRegister.get().getCount();
+  }
+
+  @ToJson
+  @OnGet("/getById")
+  public Client getById(@Par("id") Long id) {
+    return clientRegister.get().getById(id);
+  }
+
+  @ToJson
+  @OnGet("/getCharms")
+  public List<Charm> getCharms() {
+    return charmRegister.get().list();
+  }
+
+  @OnPost("/update")
+  public void update(@Par("client") @Json Client client) { clientRegister.get().update(client);}
+
+  @OnPost("/insert")
+  public void insert(@Par("client") @Json Client client) {
+    clientRegister.get().insert(client);
+  }
+
+  @OnPost("/delete")
+  public void delete(@Par("id") Long id) {
+    clientRegister.get().delete(id);
+  }
+
+  @OnGet("/report/{type}")
+  public void getClientsReport(@ParPath("type") String type, @Par("username") String username, RequestTunnel tunnel) throws Exception {
+    tunnel.setResponseContentType(type);
+    tunnel.setResponseHeader("Content-Disposition", "attachment;filename=ClientsReport." + type);
+
+    //TODO освободи ресурс!!!
+    //TODO Убери логику
+    OutputStream out = tunnel.getResponseOutputStream();
+
+    ReportType reportType = null;
+
+    switch (type) {
+      case ReportView.TYPE_XLSX: {
+        reportType = ReportType.XLSX;
+        break;
+      }
+      case ReportView.TYPE_PDF: {
+        reportType = ReportType.PDF;
+        break;
+      }
     }
 
-    @ToJson
-    @OnGet("/getCount")
-    public Long getCount() {
-        return clientRegister.get().getCount();
-    }
+    if (reportType == null)
+      throw new RuntimeException("Неизвестный тип документа");
 
-    @ToJson
-    @OnGet("/getById")
-    public Client getById(@Par("id") Long id){
-        return clientRegister.get().getById(id);
-    }
+    reportRegister.get().generate(new ReportParam(username, new Date(), reportType, out));
+    tunnel.flushBuffer();
 
-    @ToJson
-    @OnGet("/getCharms")
-    public List<Charm> getCharms() {
-        return charmRegister.get().list();
-    }
+    //TODO Если не try-with-resources, тогда Где происходит out.close() ?
 
-    @OnPost("/update")
-    public void update(@Par("client") @Json Client client){ clientRegister.get().update(client);}
-
-    @OnPost("/insert")
-    public void insert(@Par("client") @Json Client client){
-        clientRegister.get().insert(client);
-    }
-
-    @OnPost("/delete")
-    public void delete(@Par("id") Long id) {
-        clientRegister.get().delete(id);
-    }
-
-    @OnGet("/report/{type}")
-    public void getClientsReport(@ParPath("type")String type,@Par("username") String username, RequestTunnel tunnel) throws Exception
-    {
-        tunnel.setResponseContentType(type);
-        tunnel.setResponseHeader("Content-Disposition","attachment;filename=ClientsReport."+type);
-
-        OutputStream out = tunnel.getResponseOutputStream();
-
-        ReportType reportType = null;
-
-        switch (type){
-            case ReportView.TYPE_XLSX: {reportType = ReportType.XLSX;break;}
-            case ReportView.TYPE_PDF:  {reportType = ReportType.PDF;break;}
-        }
-
-        if(reportType == null)
-            throw new RuntimeException("Неизвестный тип документа");
-
-        reportRegister.get().generate(new ReportParam(username,new Date(),reportType,out));
-        tunnel.flushBuffer();
-    }
+  }
 }
