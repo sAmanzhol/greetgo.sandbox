@@ -5,14 +5,13 @@ import kz.greetgo.msoffice.xlsx.gen.Xlsx;
 import kz.greetgo.sandbox.controller.model.report_models.ClientReportFootData;
 import kz.greetgo.sandbox.controller.model.report_models.ClientReportHeadData;
 import kz.greetgo.sandbox.controller.model.report_models.ClientReportRow;
+import kz.greetgo.sandbox.controller.register.report.ReportView;
 
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Date;
 
-public class ClientReportViewXLSX implements ReportView  {
+public class ClientReportViewXLSX implements ReportView {
 
     OutputStream outputStream;
     Xlsx f;

@@ -5,6 +5,7 @@ import com.itextpdf.text.pdf.*;
 import kz.greetgo.sandbox.controller.model.report_models.ClientReportFootData;
 import kz.greetgo.sandbox.controller.model.report_models.ClientReportHeadData;
 import kz.greetgo.sandbox.controller.model.report_models.ClientReportRow;
+import kz.greetgo.sandbox.controller.register.report.ReportView;
 
 
 import java.io.FileOutputStream;
