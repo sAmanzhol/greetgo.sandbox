@@ -32,6 +32,8 @@ public abstract class MigrationCallbackAbstract<T> implements ConnectionCallback
 
     parseAndFillData();
 
+    checkForValidness();
+
     validateAndMigrateData();
 
     System.out.println("check tables");
@@ -48,6 +50,8 @@ public abstract class MigrationCallbackAbstract<T> implements ConnectionCallback
   public abstract void createTempTables() throws Exception;
 
   public abstract void parseAndFillData() throws Exception;
+
+  public abstract void checkForValidness() throws Exception;
 
   public abstract void validateAndMigrateData() throws Exception;
 

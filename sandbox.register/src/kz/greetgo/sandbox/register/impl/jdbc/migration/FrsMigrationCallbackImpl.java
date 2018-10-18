@@ -100,14 +100,32 @@ public class FrsMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
     fileReader.close();
   }
 
+  /*
+   Function for checking records for validness, if there some error than changes it`s status to 2
+ */
+  @Override
+  public void checkForValidness() throws Exception {
+
+    String clientAccountTempTableUpdateError =
+      "update client_account_temp set status = 2 " +
+        " where client = '' or account_number = '' or registered_at = ''";
+
+    try (PreparedStatement ps = connection.prepareStatement(clientAccountTempTableUpdateError)) {
+      ps.executeUpdate();
+    }
+
+
+    String clientAccountTransactionTempTableUpdateError =
+      "update client_account_transaction_temp set status = 2 " +
+        " where transaction_type = '' or account_number = '' or finished_at = '' or money = ''";
+
+    try (PreparedStatement ps = connection.prepareStatement(clientAccountTransactionTempTableUpdateError)) {
+      ps.executeUpdate();
+    }
+  }
+
   @Override
   public void validateAndMigrateData() throws Exception {
-
-    // First part getting rid of records with error.
-    // Set status = 2 (Records with errors)
-
-    this.checkForValidness();
-
 
     // Adding new transaction types
 
@@ -167,29 +185,6 @@ public class FrsMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
         "where client notnull and actual = 1";
 
     try (PreparedStatement ps = connection.prepareStatement(clientAccountTableUpdateMigrateMoney)) {
-      ps.executeUpdate();
-    }
-  }
-
-  /*
-   Function for checking records for validness, if there some error than changes it`s status to 2
- */
-  private void checkForValidness() throws Exception {
-
-    String clientAccountTempTableUpdateError =
-      "update client_account_temp set status = 2 " +
-        " where client = '' or account_number = '' or registered_at = ''";
-
-    try (PreparedStatement ps = connection.prepareStatement(clientAccountTempTableUpdateError)) {
-      ps.executeUpdate();
-    }
-
-
-    String clientAccountTransactionTempTableUpdateError =
-      "update client_account_transaction_temp set status = 2 " +
-        " where transaction_type = '' or account_number = '' or finished_at = '' or money = ''";
-
-    try (PreparedStatement ps = connection.prepareStatement(clientAccountTransactionTempTableUpdateError)) {
       ps.executeUpdate();
     }
   }

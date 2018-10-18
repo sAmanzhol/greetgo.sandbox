@@ -204,14 +204,44 @@ public class CiaMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
     addresses.add(ciaAddress);
   }
 
+  /*
+    Function for checking records for validness, if there some error than changes it`s status to 2
+  */
+  @Override
+  public void checkForValidness() throws Exception {
+
+    String clientTempTableUpdateError =
+      "update client_temp set status = 2 " +
+        " where surname = '' or name = '' or gender = '' or charm = '' or birth_date = '' " +
+        " or birth_date not like '%-%-%' " +
+        " or (extract(year from age(to_timestamp(birth_date, 'YYYY-MM-DD')))) < 3 " +
+        " or (extract(year from age(to_timestamp(birth_date, 'YYYY-MM-DD')))) > 3000";
+
+    try (PreparedStatement ps = connection.prepareStatement(clientTempTableUpdateError)) {
+      ps.executeUpdate();
+    }
+
+
+    String clientPhoneTempTableUpdateError =
+      "update client_phone_temp set status = 2 " +
+        " where type = '' or client = '' or number = ''";
+
+    try (PreparedStatement ps = connection.prepareStatement(clientPhoneTempTableUpdateError)) {
+      ps.executeUpdate();
+    }
+
+
+    String clientAddrTempTableUpdateError =
+      "update client_addr_temp set status = 2 " +
+        " where type = '' or client = '' or street = '' or house = '' or flat = ''";
+
+    try (PreparedStatement ps = connection.prepareStatement(clientAddrTempTableUpdateError)) {
+      ps.executeUpdate();
+    }
+  }
+
   @Override
   public void validateAndMigrateData() throws Exception {
-
-    // First part getting rid of records with error.
-    // Set status = 2 (Records with errors)
-
-    this.checkForValidness();
-
 
     // Adding new charms
 
@@ -292,41 +322,6 @@ public class CiaMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
         "on conflict (client, type) do nothing";
 
     try (PreparedStatement ps = connection.prepareStatement(clientAddrTableUpdateMigrate)) {
-      ps.executeUpdate();
-    }
-  }
-
-  /*
-    Function for checking records for validness, if there some error than changes it`s status to 2
-  */
-  private void checkForValidness() throws Exception {
-
-    String clientTempTableUpdateError =
-      "update client_temp set status = 2 " +
-        " where surname = '' or name = '' or gender = '' or charm = '' or birth_date = '' " +
-        " or birth_date not like '%-%-%' " +
-        " or (extract(year from age(to_timestamp(birth_date, 'YYYY-MM-DD')))) < 3 " +
-        " or (extract(year from age(to_timestamp(birth_date, 'YYYY-MM-DD')))) > 3000";
-
-    try (PreparedStatement ps = connection.prepareStatement(clientTempTableUpdateError)) {
-      ps.executeUpdate();
-    }
-
-
-    String clientPhoneTempTableUpdateError =
-      "update client_phone_temp set status = 2 " +
-        " where type = '' or client = '' or number = ''";
-
-    try (PreparedStatement ps = connection.prepareStatement(clientPhoneTempTableUpdateError)) {
-      ps.executeUpdate();
-    }
-
-
-    String clientAddrTempTableUpdateError =
-      "update client_addr_temp set status = 2 " +
-        " where type = '' or client = '' or street = '' or house = '' or flat = ''";
-
-    try (PreparedStatement ps = connection.prepareStatement(clientAddrTempTableUpdateError)) {
       ps.executeUpdate();
     }
   }
