@@ -6,6 +6,5 @@ import kz.greetgo.sandbox.controller.report.report.ReportView;
 
 public interface ReportRegister {
 
-	 void genReport(ReportView view, ClientFilter clientFilter) throws DocumentException;
-
+	void genReport(ReportView view, ClientFilter clientFilter) throws DocumentException;
 }

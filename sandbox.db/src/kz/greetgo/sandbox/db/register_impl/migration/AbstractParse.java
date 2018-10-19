@@ -1,0 +1,25 @@
+package kz.greetgo.sandbox.db.register_impl.migration;
+
+import java.sql.SQLException;
+
+public abstract class AbstractParse {
+
+	public void migrate() throws Exception {
+		dropTable();
+		createTable();
+		insertTable();
+		updateTable();
+		addIntoCurrentTable();
+	}
+	protected abstract void executed(String sql) throws SQLException;
+
+	protected abstract void dropTable() throws SQLException;
+
+	protected abstract void insertTable() throws Exception;
+
+	protected abstract void createTable() throws SQLException;
+
+	protected abstract void updateTable() throws SQLException;
+
+	protected abstract void addIntoCurrentTable();
+}

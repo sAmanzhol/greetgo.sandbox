@@ -53,7 +53,7 @@ export class ClientListComponent implements OnInit {
   getReport(type: string) {
     let self = this;
     let clientFilter = JSON.stringify(self.clientFilter )
-    window.open(self.http.url("/report/report-"+type+"?clientFilter="+clientFilter));
+    window.open(self.http.url("/report/"+type+"?clientFilter="+clientFilter));
   }
 
 

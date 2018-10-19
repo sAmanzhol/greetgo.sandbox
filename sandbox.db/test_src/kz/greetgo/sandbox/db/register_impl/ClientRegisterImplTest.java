@@ -742,4 +742,5 @@ public class ClientRegisterImplTest extends ParentTestNg {
         //
         assertThat(clientFilter.recordTotal).isEqualTo(2);
     }
+
 }

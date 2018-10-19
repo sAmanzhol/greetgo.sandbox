@@ -8,8 +8,8 @@ import kz.greetgo.sandbox.controller.model.model.ClientFilter;
 import kz.greetgo.sandbox.controller.register.ReportRegister;
 import kz.greetgo.sandbox.controller.report.model.MyReportFootData;
 import kz.greetgo.sandbox.controller.report.model.MyReportHeadData;
-import kz.greetgo.sandbox.controller.report.model.MyReportRow;
 import kz.greetgo.sandbox.controller.report.report.ReportView;
+import kz.greetgo.sandbox.db.dao.AuthDao;
 import kz.greetgo.sandbox.db.register_impl.jdbc.ClientReportSql;
 
 import java.util.Date;
@@ -18,6 +18,7 @@ import java.util.Date;
 public class ReportRegisterImpl implements ReportRegister {
 
     public BeanGetter<Jdbc> jdbc;
+public BeanGetter<AuthDao> authDao;
 
     @Override
     public void genReport(ReportView view, ClientFilter clientFilter) throws DocumentException {
@@ -30,8 +31,7 @@ public class ReportRegisterImpl implements ReportRegister {
         jdbc.get().execute(new ClientReportSql(view, clientFilter));
 
         MyReportFootData myReportFootData = new MyReportFootData();
-        // TODO: asset 9/30/18  generatedBy vsegda Nazar?
-        myReportFootData.generatedBy = "Nazar";
+        myReportFootData.generatedBy = authDao.get().accountNameByPersonId("p1");
         myReportFootData.generatedAt = new Date();
         view.finish(myReportFootData);
     }

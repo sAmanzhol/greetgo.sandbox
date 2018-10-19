@@ -26,6 +26,7 @@
         gender varchar(255) not null,
         birth_date date,
         charm int,
+        cia_id varchar(255) unique,
         primary key(id),
         foreign key(charm) references charm(id)
       )
@@ -66,6 +67,8 @@
         money real,
         number varchar(255),
         registered_at timestamp,
+        frs_client_id varchar(255),
+        frs_account_number varchar(255),
         foreign key(client) references client(id)
       )
     ]]></sql>
@@ -89,6 +92,7 @@
       money real,
       finished_at timestamp,
       type int,
+      frs_account_number varchar(255),
       primary key(id),
       foreign key(account) references client_account(id),
       foreign key(type) references transaction_type(id)
@@ -96,6 +100,15 @@
       )
     ]]></sql>
     </changeSet>
+
+    <changeSet author="anazar" id="002_client-008">
+        <sql endDelimiter=";;"><![CDATA[
+      CREATE SEQUENCE serial START 1000;
+      CREATE SEQUENCE cia_id_seq START 1000;
+    ]]></sql>
+    </changeSet>
+
+
 
 
 </databaseChangeLog>
