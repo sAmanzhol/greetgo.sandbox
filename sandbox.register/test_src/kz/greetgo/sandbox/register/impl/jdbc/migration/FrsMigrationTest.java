@@ -6,59 +6,42 @@ import kz.greetgo.sandbox.register.impl.jdbc.migration.model.FrsAccount;
 import kz.greetgo.sandbox.register.impl.jdbc.migration.model.FrsTransaction;
 import kz.greetgo.sandbox.register.test.dao.MigrationTestDao;
 import kz.greetgo.sandbox.register.test.util.ParentTestNg;
-import kz.greetgo.sandbox.register.util.JdbcSandbox;
 import org.testng.annotations.Test;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 
 @SuppressWarnings("WeakerAccess")
 public class FrsMigrationTest extends ParentTestNg {
 
+  // NEED TO REWRITE ALL TEST WITH DIFFERENT ID
+
   public BeanGetter<MigrationConfig> migrationConfig;
   public BeanGetter<MigrationTestDao> migrationTestDao;
 
   private FrsMigrationCallbackImpl frsMigration;
 
-  private void parseAndFillData() throws Exception {
+  private void prepareTempTables() throws Exception {
     frsMigration = new FrsMigrationCallbackImpl("");
     frsMigration.dropTemplateTables();
     frsMigration.createTempTables();
-
-    File migrationFolder = new File(migrationConfig.get().directoryTest());
-    ArrayList<File> frsFiles = new ArrayList<>(Arrays.asList(Objects.requireNonNull(migrationFolder.listFiles((file, name) -> name.toLowerCase().endsWith(".json_row")))));
-
-    while (frsFiles.size() > 0) {
-      //
-      //
-      frsMigration = new FrsMigrationCallbackImpl(frsFiles.get(0).getPath());
-      frsMigration.parseAndFillData();
-      //
-      //
-      frsFiles.remove(0);
-    }
-  }
-
-  private void checkValidity() throws Exception {
-
-    this.parseAndFillData();
-
-    //
-    //
-    frsMigration.checkForValidness();
-    //
-    //
   }
 
   @Test
   public void parseAndFillData_account() throws Exception {
 
-    this.parseAndFillData();
+    this.prepareTempTables();
+
+    String fileName = "from_frs_2018-02-21-154543-1-30009.json_row";
+    String filePath = String.format("%s/%s", migrationConfig.get().directoryTest(), fileName);
+
+    //
+    //
+    frsMigration = new FrsMigrationCallbackImpl(filePath);
+    frsMigration.parseAndFillData();
+    //
+    //
 
     List<FrsAccount> accounts = migrationTestDao.get().getAccounts();
 
@@ -66,21 +49,31 @@ public class FrsMigrationTest extends ParentTestNg {
 
     assertThat(accounts.get(0).client).isEqualTo("1-A69-QA-PJ-G6hRzbEf2W");
     assertThat(accounts.get(0).accountNumber).isEqualTo("19382KZ865-20725-98987-8267359");
-    assertThat(accounts.get(0).registeredAt).isEqualTo("2001-02-21T15:51:14.991");
+    assertThat(accounts.get(0).registeredAt).isEqualTo("2001-02-21T15:51:14.111");
 
     assertThat(accounts.get(1).client).isEqualTo("");
     assertThat(accounts.get(1).accountNumber).isEqualTo("22382KZ865");
-    assertThat(accounts.get(1).registeredAt).isEqualTo("2001-02-21T15:51:14.992");
+    assertThat(accounts.get(1).registeredAt).isEqualTo("2001-02-21T15:51:14.111");
 
     assertThat(accounts.get(2).client).isEqualTo("10-A69-QA-PJ-G6hRzbEf2W");
     assertThat(accounts.get(2).accountNumber).isEqualTo("19382KZ865-20725-11111-8267359");
-    assertThat(accounts.get(2).registeredAt).isEqualTo("2001-02-21T15:66:11.991");
+    assertThat(accounts.get(2).registeredAt).isEqualTo("2001-02-21T15:11:11.111");
   }
 
   @Test
   public void parseAndFillData_account_transaction() throws Exception {
 
-    this.parseAndFillData();
+    this.prepareTempTables();
+
+    String fileName = "from_frs_2018-02-21-154543-1-30009.json_row";
+    String filePath = String.format("%s/%s", migrationConfig.get().directoryTest(), fileName);
+
+    //
+    //
+    frsMigration = new FrsMigrationCallbackImpl(filePath);
+    frsMigration.parseAndFillData();
+    //
+    //
 
     List<FrsTransaction> transactions = migrationTestDao.get().getAccountTransactions();
 
@@ -116,7 +109,18 @@ public class FrsMigrationTest extends ParentTestNg {
   @Test
   public void checkForValidness_account_client() throws Exception {
 
-    this.checkValidity();
+    this.prepareTempTables();
+
+    String fileName = "from_frs_2018-02-21-154543-1-30009.json_row";
+    String filePath = String.format("%s/%s", migrationConfig.get().directoryTest(), fileName);
+
+    //
+    //
+    frsMigration = new FrsMigrationCallbackImpl(filePath);
+    frsMigration.parseAndFillData();
+    frsMigration.checkForValidness();
+    //
+    //
 
     List<Integer> statuses = migrationTestDao.get().getAccountsWithoutClients();
 
@@ -130,7 +134,18 @@ public class FrsMigrationTest extends ParentTestNg {
   @Test
   public void checkForValidness_account_transaction_account_number() throws Exception {
 
-    this.checkValidity();
+    this.prepareTempTables();
+
+    String fileName = "from_frs_2018-02-21-154543-1-30009.json_row";
+    String filePath = String.format("%s/%s", migrationConfig.get().directoryTest(), fileName);
+
+    //
+    //
+    frsMigration = new FrsMigrationCallbackImpl(filePath);
+    frsMigration.parseAndFillData();
+    frsMigration.checkForValidness();
+    //
+    //
 
     List<Integer> statuses = migrationTestDao.get().getTransactionsWithoutAccounts();
 
@@ -142,22 +157,62 @@ public class FrsMigrationTest extends ParentTestNg {
   }
 
   @Test
-  public void validateAndMigrateData() {
-    assertThat(1).isEqualTo(2);
+  public void validateAndMigrateData_duplicate_account() throws Exception {
+    this.prepareTempTables();
+
+    String fileName = "from_frs_2018-02-21-154543-1-30009.json_row";
+    String filePath = String.format("%s/duplicate_account/%s", migrationConfig.get().directoryTest(), fileName);
+
+    //
+    //
+    frsMigration = new FrsMigrationCallbackImpl(filePath);
+    frsMigration.parseAndFillData();
+    frsMigration.checkForValidness();
+    frsMigration.validateAndMigrateData();
+    //
+    //
+
+    // Need to write here: duplicate account
+    // First change files then write asserts
   }
 
   @Test
-  public void validateAndMigrateData_duplicate_account() {
-    assertThat(1).isEqualTo(2);
+  public void validateAndMigrateData_duplicate_transaction() throws Exception {
+    this.prepareTempTables();
+
+    String fileName = "from_frs_2018-02-21-154543-1-30009.json_row";
+    String filePath = String.format("%s/duplicate_transaction/%s", migrationConfig.get().directoryTest(), fileName);
+
+    //
+    //
+    frsMigration = new FrsMigrationCallbackImpl(filePath);
+    frsMigration.parseAndFillData();
+    frsMigration.checkForValidness();
+    frsMigration.validateAndMigrateData();
+    //
+    //
+
+    // Need to write here: duplicate transaction
+    // First change files then write asserts
   }
 
   @Test
-  public void validateAndMigrateData_duplicate_transaction() {
-    assertThat(1).isEqualTo(2);
-  }
+  public void validateAndMigrateData() throws Exception {
+    this.prepareTempTables();
 
-  @Test
-  public void migrate() {
-    assertThat(1).isEqualTo(2);
+    String fileName = "from_frs_2018-02-21-154543-1-30009.json_row";
+    String filePath = String.format("%s/%s", migrationConfig.get().directoryTest(), fileName);
+
+    //
+    //
+    frsMigration = new FrsMigrationCallbackImpl(filePath);
+    frsMigration.parseAndFillData();
+    frsMigration.checkForValidness();
+    frsMigration.validateAndMigrateData();
+    //
+    //
+
+    // Need to write here: full sample migrate on frs
+    // First change files then write asserts (include max all)
   }
 }

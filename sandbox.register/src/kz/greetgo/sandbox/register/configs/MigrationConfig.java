@@ -14,7 +14,6 @@ public interface MigrationConfig {
   @DefaultStrValue("/home/ssailaubayev/migration/test")
   String directoryTest();
 
-
   @Description("URL доступа к БД")
   @DefaultStrValue("jdbc:postgresql://localhost/ssailaubayev_sandbox")
   String dbUrl();

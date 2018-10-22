@@ -9,58 +9,41 @@ import kz.greetgo.sandbox.register.test.dao.MigrationTestDao;
 import kz.greetgo.sandbox.register.test.util.ParentTestNg;
 import org.testng.annotations.Test;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
-
-import static org.testng.Assert.*;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 
 @SuppressWarnings("WeakerAccess")
 public class CiaMigrationTest extends ParentTestNg {
 
+  // NEED TO REWRITE ALL TEST WITH DIFFERENT ID
+
   public BeanGetter<MigrationConfig> migrationConfig;
   public BeanGetter<MigrationTestDao> migrationTestDao;
 
   private CiaMigrationCallbackImpl ciaMigration;
 
-  private void parseAndFillData() throws Exception {
+  private void prepareTempTables() throws Exception {
     ciaMigration = new CiaMigrationCallbackImpl("");
+
     ciaMigration.dropTemplateTables();
     ciaMigration.createTempTables();
-
-    File migrationFolder = new File(migrationConfig.get().directoryTest());
-    ArrayList<File> ciaFiles = new ArrayList<>(Arrays.asList(Objects.requireNonNull(migrationFolder.listFiles((file, name) -> name.toLowerCase().endsWith(".xml")))));
-
-    while (ciaFiles.size() > 0) {
-      //
-      CiaMigrationCallbackImpl
-      ciaMigration = new CiaMigrationCallbackImpl(ciaFiles.get(0).getPath());
-      ciaMigration.parseAndFillData();
-      //
-      //
-      ciaFiles.remove(0);
-    }
-  }
-
-  private void checkValidity() throws Exception {
-
-    this.parseAndFillData();
-
-    //
-    //
-    ciaMigration.checkForValidness();
-    //
-    //
   }
 
   @Test
   public void parseAndFillData_client() throws Exception {
 
-    this.parseAndFillData();
+    prepareTempTables();
+
+    String fileName = "from_cia_2018-02-21-154532-1-300.xml";
+    String filePath = String.format("%s/%s", migrationConfig.get().directoryTest(), fileName);
+
+    //
+    //
+    ciaMigration = new CiaMigrationCallbackImpl(filePath);
+    ciaMigration.parseAndFillData();
+    //
+    //
 
     List<CiaClient> clients = migrationTestDao.get().getClients();
 
@@ -102,7 +85,17 @@ public class CiaMigrationTest extends ParentTestNg {
   @Test
   public void parseAndFillData_client_phone() throws Exception {
 
-    this.parseAndFillData();
+    prepareTempTables();
+
+    String fileName = "from_cia_2018-02-21-154532-1-300.xml";
+    String filePath = String.format("%s/%s", migrationConfig.get().directoryTest(), fileName);
+
+    //
+    //
+    ciaMigration = new CiaMigrationCallbackImpl(filePath);
+    ciaMigration.parseAndFillData();
+    //
+    //
 
     List<CiaPhone> phones = migrationTestDao.get().getClientPhones();
 
@@ -123,7 +116,18 @@ public class CiaMigrationTest extends ParentTestNg {
 
   @Test
   public void parseAndFillData_client_address() throws Exception {
-    this.parseAndFillData();
+
+    prepareTempTables();
+
+    String fileName = "from_cia_2018-02-21-154532-1-300.xml";
+    String filePath = String.format("%s/%s", migrationConfig.get().directoryTest(), fileName);
+
+    //
+    //
+    ciaMigration = new CiaMigrationCallbackImpl(filePath);
+    ciaMigration.parseAndFillData();
+    //
+    //
 
     List<CiaAddress> addresses = migrationTestDao.get().getClientAddresses();
 
@@ -148,9 +152,22 @@ public class CiaMigrationTest extends ParentTestNg {
     assertThat(addresses.get(7).flat).isEqualTo("дЙ");
   }
 
+
   @Test
   public void checkForValidness_client_surname() throws Exception {
-    this.checkValidity();
+
+    prepareTempTables();
+
+    String fileName = "from_cia_2018-02-21-154532-1-300.xml";
+    String filePath = String.format("%s/%s", migrationConfig.get().directoryTest(), fileName);
+
+    //
+    //
+    ciaMigration = new CiaMigrationCallbackImpl(filePath);
+    ciaMigration.parseAndFillData();
+    ciaMigration.checkForValidness();
+    //
+    //
 
     List<Integer> statuses = migrationTestDao.get().getClientsWithoutSurname();
 
@@ -163,7 +180,19 @@ public class CiaMigrationTest extends ParentTestNg {
 
   @Test
   public void checkForValidness_client_name() throws Exception {
-    this.checkValidity();
+
+    prepareTempTables();
+
+    String fileName = "from_cia_2018-02-21-154532-1-300.xml";
+    String filePath = String.format("%s/%s", migrationConfig.get().directoryTest(), fileName);
+
+    //
+    //
+    ciaMigration = new CiaMigrationCallbackImpl(filePath);
+    ciaMigration.parseAndFillData();
+    ciaMigration.checkForValidness();
+    //
+    //
 
     List<Integer> statuses = migrationTestDao.get().getClientsWithoutName();
 
@@ -176,7 +205,19 @@ public class CiaMigrationTest extends ParentTestNg {
 
   @Test
   public void checkForValidness_client_birth_date() throws Exception {
-    this.checkValidity();
+
+    prepareTempTables();
+
+    String fileName = "from_cia_2018-02-21-154532-1-300.xml";
+    String filePath = String.format("%s/%s", migrationConfig.get().directoryTest(), fileName);
+
+    //
+    //
+    ciaMigration = new CiaMigrationCallbackImpl(filePath);
+    ciaMigration.parseAndFillData();
+    ciaMigration.checkForValidness();
+    //
+    //
 
     List<Integer> statuses = migrationTestDao.get().getClientsWithoutBirthDate();
 
@@ -187,48 +228,229 @@ public class CiaMigrationTest extends ParentTestNg {
     }
   }
 
+
   @Test
-  public void validateAndMigrateData() {
-    assertThat(1).isEqualTo(2);
+  public void validateAndMigrateData_insert_client() throws Exception {
+
+    prepareTempTables();
+    prepareTempTables();
+    String fileName = "from_cia_2018-02-21-154532-1-300.xml";
+    String filePath = String.format("%s/insert_client/%s", migrationConfig.get().directoryTest(), fileName);
+
+    //
+    //
+    ciaMigration = new CiaMigrationCallbackImpl(filePath);
+    ciaMigration.parseAndFillData();
+    ciaMigration.checkForValidness();
+    ciaMigration.validateAndMigrateData();
+    //
+    //
+
+    String migrationId = "0-B9N-HT-PU-04wolRBPzj";
+
+    CiaClient client = migrationTestDao.get().getClientByMigrationId(migrationId);
+    client.addresses = migrationTestDao.get().getClientAddressesById(Integer.parseInt(client.id));
+    client.phones = migrationTestDao.get().getClientPhonesById(Integer.parseInt(client.id));
+
+    assertThat(client.surname).isEqualTo("Лолололо");
+    assertThat(client.name).isEqualTo("WCИTБЯ7щАо");
+    assertThat(client.patronymic).isEqualTo("");
+//    assertThat(client.charm).isEqualTo("10000");
+    assertThat(client.birthDate).isEqualTo("1995-07-07");
+    assertThat(client.gender).isEqualTo("FEMALE");
+
+    assertThat(client.addresses.get(0).type).isEqualTo("FACT");
+    assertThat(client.addresses.get(0).street).isEqualTo("RцВWAаEkMкёнkOзДfжГк");
+    assertThat(client.addresses.get(0).house).isEqualTo("RП");
+    assertThat(client.addresses.get(0).flat).isEqualTo("hИ");
+
+    assertThat(client.addresses.get(1).type).isEqualTo("REG");
+    assertThat(client.addresses.get(1).street).isEqualTo("ХfАИKлFщсiхДЗрPгWЗdЭ");
+    assertThat(client.addresses.get(1).house).isEqualTo("оz");
+    assertThat(client.addresses.get(1).flat).isEqualTo("РБ");
+
+    assertThat(client.phones).hasSize(3);
   }
 
   @Test
-  public void validateAndMigrateData_duplicate_client() {
-    assertThat(1).isEqualTo(2);
+  public void validateAndMigrateData_update_duplicate_client() throws Exception {
+
+    prepareTempTables();
+
+    String fileName = "from_cia_2018-02-21-154532-1-300.xml";
+    String filePath = String.format("%s/update_duplicate_client/%s", migrationConfig.get().directoryTest(), fileName);
+
+    //
+    //
+    ciaMigration = new CiaMigrationCallbackImpl(filePath);
+    ciaMigration.parseAndFillData();
+    ciaMigration.checkForValidness();
+    ciaMigration.validateAndMigrateData();
+    //
+    //
+
+    String migrationId = "0-B9N-HT-PU-04wolRBPzj";
+
+    CiaClient client = migrationTestDao.get().getClientByMigrationId(migrationId);
+    client.addresses = migrationTestDao.get().getClientAddressesById(Integer.parseInt(client.id));
+    client.phones = migrationTestDao.get().getClientPhonesById(Integer.parseInt(client.id));
+
+    assertThat(client.surname).isEqualTo("ЕDфзEуЧь57");
+    assertThat(client.name).isEqualTo("NIfТDтуЯkТ");
+    assertThat(client.patronymic).isEqualTo("УДтЮцКp5ЁЛайl");
+    assertThat(client.charm).isEqualTo("10000");
+    assertThat(client.birthDate).isEqualTo("1966-03-10");
+    assertThat(client.gender).isEqualTo("MALE");
+
+    assertThat(client.addresses.get(0).type).isEqualTo("FACT");
+    assertThat(client.addresses.get(0).street).isEqualTo("SйбByЁvEЁzоnYмuGIюрХ");
+    assertThat(client.addresses.get(0).house).isEqualTo("Ph");
+    assertThat(client.addresses.get(0).flat).isEqualTo("оы");
+
+    assertThat(client.addresses.get(1).type).isEqualTo("REG");
+    assertThat(client.addresses.get(1).street).isEqualTo("wвlogБgЧЩfР4zkсRbDжж");
+    assertThat(client.addresses.get(1).house).isEqualTo("Sц");
+    assertThat(client.addresses.get(1).flat).isEqualTo("Ще");
+
+    assertThat(client.phones).hasSize(7);
+  }
+
+
+  @Test
+  public void validateAndMigrateData_insert_address() throws Exception {
+
+    prepareTempTables();
+
+    String fileName = "from_cia_2018-02-21-154532-1-300.xml";
+    String filePath = String.format("%s/insert_address/%s", migrationConfig.get().directoryTest(), fileName);
+
+    //
+    //
+    ciaMigration = new CiaMigrationCallbackImpl(filePath);
+    ciaMigration.parseAndFillData();
+    ciaMigration.checkForValidness();
+    ciaMigration.validateAndMigrateData();
+    //
+    //
+
+    String migrationId = "0-B9N-HT-PU-04wolRBPzj";
+
+    CiaClient client = migrationTestDao.get().getClientByMigrationId(migrationId);
+    client.addresses = migrationTestDao.get().getClientAddressesById(Integer.parseInt(client.id));
+
+    assertThat(client.addresses.get(0).type).isEqualTo("FACT");
+    assertThat(client.addresses.get(0).street).isEqualTo("Ломоносов");
+    assertThat(client.addresses.get(0).house).isEqualTo("100");
+    assertThat(client.addresses.get(0).flat).isEqualTo("1");
+
+    assertThat(client.addresses.get(1).type).isEqualTo("REG");
+    assertThat(client.addresses.get(1).street).isEqualTo("Абая");
+    assertThat(client.addresses.get(1).house).isEqualTo("12");
+    assertThat(client.addresses.get(1).flat).isEqualTo("2");
   }
 
   @Test
-  public void validateAndMigrateData_duplicate_client_phone() {
-    assertThat(1).isEqualTo(2);
+  public void validateAndMigrateData_update_duplicate_address() throws Exception {
+
+    prepareTempTables();
+
+    String fileName = "from_cia_2018-02-21-154532-1-300.xml";
+    String filePath = String.format("%s/update_duplicate_address/%s", migrationConfig.get().directoryTest(), fileName);
+
+    //
+    //
+    ciaMigration = new CiaMigrationCallbackImpl(filePath);
+    ciaMigration.parseAndFillData();
+    ciaMigration.checkForValidness();
+    ciaMigration.validateAndMigrateData();
+    //
+    //
+
+    String migrationId = "0-B9N-HT-PU-04wolRBPzj";
+
+    CiaClient client = migrationTestDao.get().getClientByMigrationId(migrationId);
+    client.addresses = migrationTestDao.get().getClientAddressesById(Integer.parseInt(client.id));
+
+    assertThat(client.addresses.get(0).type).isEqualTo("FACT");
+    assertThat(client.addresses.get(0).street).isEqualTo("Новый Факт");
+    assertThat(client.addresses.get(0).house).isEqualTo("1");
+    assertThat(client.addresses.get(0).flat).isEqualTo("4");
+
+    assertThat(client.addresses.get(1).type).isEqualTo("REG");
+    assertThat(client.addresses.get(1).street).isEqualTo("Новый Рег");
+    assertThat(client.addresses.get(1).house).isEqualTo("1");
+    assertThat(client.addresses.get(1).flat).isEqualTo("4");
+  }
+
+
+  @Test
+  public void validateAndMigrateData_insert_phone() throws Exception {
+
+    prepareTempTables();
+
+    String fileName = "from_cia_2018-02-21-154532-1-300.xml";
+    String filePath = String.format("%s/insert_phone/%s", migrationConfig.get().directoryTest(), fileName);
+
+    //
+    //
+    ciaMigration = new CiaMigrationCallbackImpl(filePath);
+    ciaMigration.parseAndFillData();
+    ciaMigration.checkForValidness();
+    ciaMigration.validateAndMigrateData();
+    //
+    //
+
+    String migrationId = "0-B9N-HT-PU-04wolRBPzj";
+
+    CiaClient client = migrationTestDao.get().getClientByMigrationId(migrationId);
+    client.phones = migrationTestDao.get().getClientPhonesById(Integer.parseInt(client.id));
+
+    assertThat(client.phones).hasSize(3);
   }
 
   @Test
-  public void validateAndMigrateData_duplicate_client_address() {
-    assertThat(1).isEqualTo(2);
+  public void validateAndMigrateData_duplicate_phone() throws Exception {
+
+    prepareTempTables();
+
+    String fileName = "from_cia_2018-02-21-154532-1-300.xml";
+    String filePath = String.format("%s/duplicate_phone/%s", migrationConfig.get().directoryTest(), fileName);
+
+    //
+    //
+    ciaMigration = new CiaMigrationCallbackImpl(filePath);
+    ciaMigration.parseAndFillData();
+    ciaMigration.checkForValidness();
+    ciaMigration.validateAndMigrateData();
+    //
+    //
+
+    String migrationId = "0-B9N-HT-PU-04wolRBPzj";
+
+    CiaClient client = migrationTestDao.get().getClientByMigrationId(migrationId);
+    client.phones = migrationTestDao.get().getClientPhonesById(Integer.parseInt(client.id));
+
+    assertThat(client.phones).hasSize(3);
   }
 
-  @Test
-  public void validateAndMigrateData_insert_client() {
-    assertThat(1).isEqualTo(2);
-  }
 
   @Test
-  public void validateAndMigrateData_update_client() {
-    assertThat(1).isEqualTo(2);
-  }
+  public void validateAndMigrateData() throws Exception {
 
-  @Test
-  public void validateAndMigrateData_insert_address() {
-    assertThat(1).isEqualTo(2);
-  }
+    prepareTempTables();
 
-  @Test
-  public void validateAndMigrateData_update_address() {
-    assertThat(1).isEqualTo(2);
-  }
+    String fileName = "from_cia_2018-02-21-154532-1-300.xml";
+    String filePath = String.format("%s/%s", migrationConfig.get().directoryTest(), fileName);
 
-  @Test
-  public void migrate() {
-    assertThat(1).isEqualTo(2);
+    //
+    //
+    ciaMigration = new CiaMigrationCallbackImpl(filePath);
+    ciaMigration.parseAndFillData();
+    ciaMigration.checkForValidness();
+    ciaMigration.validateAndMigrateData();
+    //
+    //
+
+    // Check there everything
   }
 }

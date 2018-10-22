@@ -59,4 +59,19 @@ public interface MigrationTestDao {
     "from Client_addr_temp " +
     "where status = 1")
   List<CiaAddress> getClientAddresses();
+
+  @Select("select * " +
+    "from Client " +
+    "where migration_id = #{id}")
+  CiaClient getClientByMigrationId(String id);
+
+  @Select("select type, number " +
+    "from Client_phone " +
+    "where client = #{id}")
+  List<CiaPhone> getClientPhonesById(int id);
+
+  @Select("select type, street, house, flat " +
+    "from Client_addr " +
+    "where client = #{id}")
+  List<CiaAddress> getClientAddressesById(int id);
 }
