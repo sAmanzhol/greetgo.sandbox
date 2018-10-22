@@ -25,6 +25,7 @@ public class CiaMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
 
   @Override
   public void createTempTables() throws Exception {
+    super.createTempTables();
 
     final String clientTempTableCreate =
       "create table client_temp (" +
@@ -71,6 +72,7 @@ public class CiaMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
 
   @Override
   public void parseAndFillData() throws Exception {
+    super.parseAndFillData();
 
     String clientTempTableInsert =
       "insert into client_temp (id, surname, name, patronymic, gender, birth_date, charm) " +
@@ -107,7 +109,7 @@ public class CiaMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
         ciaClient.name = ((Element) curClientElement.getElementsByTagName("name").item(0)).getAttribute("value");
       }
       if ((curClientElement.getElementsByTagName("patronymic").item(0)) != null) {
-        ciaClient.patronymic = ((Element) curClientElement.getElementsByTagName("patronymic").item(0)).getAttribute("value");
+        ciaClient.patronymic = ((Element) curClientElement.getElementsByTagName("patronymic").item(0)).getAttribute("value").trim();
       }
       if (curClientElement.getElementsByTagName("gender").item(0) != null) {
         ciaClient.gender = ((Element) curClientElement.getElementsByTagName("gender").item(0)).getAttribute("value");
@@ -116,7 +118,7 @@ public class CiaMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
         ciaClient.charm = ((Element) curClientElement.getElementsByTagName("charm").item(0)).getAttribute("value");
       }
       if (curClientElement.getElementsByTagName("birth").item(0) != null) {
-        ciaClient.birth = ((Element) curClientElement.getElementsByTagName("birth").item(0)).getAttribute("value");
+        ciaClient.birthDate = ((Element) curClientElement.getElementsByTagName("birth").item(0)).getAttribute("value");
       }
 
       try (PreparedStatement ps = connection.prepareStatement(clientTempTableInsert)) {
@@ -125,7 +127,7 @@ public class CiaMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
         ps.setObject(3, ciaClient.name);
         ps.setObject(4, ciaClient.patronymic);
         ps.setObject(5, ciaClient.gender);
-        ps.setObject(6, ciaClient.birth);
+        ps.setObject(6, ciaClient.birthDate);
         ps.setObject(7, ciaClient.charm);
 
         ps.executeUpdate();
@@ -328,12 +330,13 @@ public class CiaMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
 
   @Override
   public void dropTemplateTables() throws Exception {
+    super.dropTemplateTables();
 
-    final String clientTempTableDrop = "drop table client_temp";
+    final String clientTempTableDrop = "drop table if exists client_temp";
 
-    final String clientPhoneTempTableDrop = "drop table client_phone_temp";
+    final String clientPhoneTempTableDrop = "drop table if exists client_phone_temp";
 
-    final String clientAddressTempTableDrop = "drop table client_addr_temp";
+    final String clientAddressTempTableDrop = "drop table if exists client_addr_temp";
 
     try (PreparedStatement ps = connection.prepareStatement(clientTempTableDrop)) {
       ps.executeUpdate();
@@ -378,7 +381,7 @@ public class CiaMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
    Function for checking new records that needed for disabled data, if there exists than we enable disabled records
  */
   @Override
-  public void checkForLateUpdates() throws Exception {
+  public void checkForLateUpdates() {
 
   }
 }

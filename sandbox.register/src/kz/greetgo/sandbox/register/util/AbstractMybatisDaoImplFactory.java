@@ -43,6 +43,7 @@ public abstract class AbstractMybatisDaoImplFactory implements BeanFactory {
   private Object createBean0(Class<?> beanClass) {
     Configuration configuration = getConfiguration();
     configuration.addMapper(beanClass);
+    configuration.setMapUnderscoreToCamelCase(true);
 
     {
       MapperAnnotationBuilder parser = new MapperAnnotationBuilder(configuration, beanClass);

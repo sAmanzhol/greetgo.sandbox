@@ -5,6 +5,18 @@ import java.util.List;
 
 public class CiaClient {
 
+  public String id;
+  public String surname;
+  public String name;
+  public String patronymic;
+  public String gender;
+  public String charm;
+  public String birthDate;
+
+  public List<CiaAddress> addresses;
+
+  public List<CiaPhone> phones;
+
   public CiaClient() {
     id = "";
     surname = "";
@@ -12,22 +24,9 @@ public class CiaClient {
     patronymic = "";
     gender = "";
     charm = "";
-    birth = "";
+    birthDate = "";
 
     addresses = new ArrayList<>();
     phones = new ArrayList<>();
   }
-
-  public String id;
-
-  public String surname;
-  public String name;
-  public String patronymic;
-  public String gender;
-  public String charm;
-  public String birth;
-
-  public List<CiaAddress> addresses;
-
-  public List<CiaPhone> phones;
 }

@@ -18,6 +18,7 @@ public class FrsMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
 
   @Override
   public void createTempTables() throws Exception {
+    super.createTempTables();
 
     final String clientAccountTableCreate =
       "create table client_account_temp (" +
@@ -47,6 +48,7 @@ public class FrsMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
 
   @Override
   public void parseAndFillData() throws Exception {
+    super.parseAndFillData();
 
     String clientAccountTempTableInsert =
       "insert into client_account_temp (client, account_number, registered_at) " +
@@ -68,28 +70,29 @@ public class FrsMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
       if (rowJson.get("type").equals("transaction")) {
         FrsTransaction frsTransaction = new FrsTransaction();
         frsTransaction.money = ((String) rowJson.get("money")).replace("_", "");
-        frsTransaction.finished_at = (String) rowJson.get("finished_at");
-        frsTransaction.transaction_type = (String) rowJson.get("transaction_type");
-        frsTransaction.account_number = (String) rowJson.get("account_number");
+        frsTransaction.finishedAt = (String) rowJson.get("finished_at");
+        frsTransaction.transactionType = (String) rowJson.get("transaction_type");
+        frsTransaction.accountNumber = (String) rowJson.get("account_number");
+
 
         try (PreparedStatement ps = connection.prepareStatement(clientAccountTransactionTempTableInsert)) {
-          ps.setObject(1, frsTransaction.account_number);
-          ps.setObject(2, frsTransaction.transaction_type);
+          ps.setObject(1, frsTransaction.accountNumber);
+          ps.setObject(2, frsTransaction.transactionType);
           ps.setObject(3, frsTransaction.money);
-          ps.setObject(4, frsTransaction.finished_at);
+          ps.setObject(4, frsTransaction.finishedAt);
 
           ps.executeUpdate();
         }
       } else if (rowJson.get("type").equals("new_account")) {
         FrsAccount frsAccount = new FrsAccount();
-        frsAccount.client_id = (String) rowJson.get("client_id");
-        frsAccount.account_number = (String) rowJson.get("account_number");
-        frsAccount.registered_at = (String) rowJson.get("registered_at");
+        frsAccount.client = (String) rowJson.get("client_id");
+        frsAccount.accountNumber = (String) rowJson.get("account_number");
+        frsAccount.registeredAt = (String) rowJson.get("registered_at");
 
         try (PreparedStatement ps = connection.prepareStatement(clientAccountTempTableInsert)) {
-          ps.setObject(1, frsAccount.client_id);
-          ps.setObject(2, frsAccount.account_number);
-          ps.setObject(3, frsAccount.registered_at);
+          ps.setObject(1, frsAccount.client);
+          ps.setObject(2, frsAccount.accountNumber);
+          ps.setObject(3, frsAccount.registeredAt);
 
           ps.executeUpdate();
         }
@@ -108,7 +111,9 @@ public class FrsMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
 
     String clientAccountTempTableUpdateError =
       "update client_account_temp set status = 2 " +
-        " where client = '' or account_number = '' or registered_at = ''";
+        " where client = '' or client = 'null' " +
+        "    or account_number = '' or account_number = 'null' " +
+        "    or registered_at = '' or registered_at = 'null'";
 
     try (PreparedStatement ps = connection.prepareStatement(clientAccountTempTableUpdateError)) {
       ps.executeUpdate();
@@ -117,7 +122,10 @@ public class FrsMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
 
     String clientAccountTransactionTempTableUpdateError =
       "update client_account_transaction_temp set status = 2 " +
-        " where transaction_type = '' or account_number = '' or finished_at = '' or money = ''";
+        " where transaction_type = '' or transaction_type = 'null' " +
+        "    or account_number = '' or account_number = 'null' " +
+        "    or finished_at = '' or finished_at = 'null' " +
+        "    or money = '' or money = 'null'";
 
     try (PreparedStatement ps = connection.prepareStatement(clientAccountTransactionTempTableUpdateError)) {
       ps.executeUpdate();
@@ -191,15 +199,16 @@ public class FrsMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
 
   @Override
   public void dropTemplateTables() throws Exception {
+    super.dropTemplateTables();
 
-    final String clientAccountTableDrop = "drop table client_account_temp";
+    final String clientAccountTableDrop = "drop table if exists client_account_temp";
 
     try (PreparedStatement ps = connection.prepareStatement(clientAccountTableDrop)) {
       ps.executeUpdate();
     }
 
 
-    final String clientAccountTransactionTableDrop = "drop table client_account_transaction_temp";
+    final String clientAccountTransactionTableDrop = "drop table if exists client_account_transaction_temp";
 
     try (PreparedStatement ps = connection.prepareStatement(clientAccountTransactionTableDrop)) {
       ps.executeUpdate();
@@ -236,7 +245,7 @@ public class FrsMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
    Function for checking new records that needed for disabled data, if there exists than we enable disabled records
  */
   @Override
-  public void checkForLateUpdates() throws Exception {
+  public void checkForLateUpdates() {
 
   }
 }
