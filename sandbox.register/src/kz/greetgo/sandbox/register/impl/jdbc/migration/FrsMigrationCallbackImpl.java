@@ -12,13 +12,12 @@ public class FrsMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
 
   private String filePath;
 
-  public FrsMigrationCallbackImpl(String filePath) {
+  public FrsMigrationCallbackImpl(String filePath) throws Exception {
     this.filePath = filePath;
   }
 
   @Override
   public void createTempTables() throws Exception {
-    super.createTempTables();
 
     final String clientAccountTableCreate =
       "create table client_account_temp (" +
@@ -48,7 +47,6 @@ public class FrsMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
 
   @Override
   public void parseAndFillData() throws Exception {
-    super.parseAndFillData();
 
     String clientAccountTempTableInsert =
       "insert into client_account_temp (client, account_number, registered_at) " +
@@ -201,7 +199,6 @@ public class FrsMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
 
   @Override
   public void dropTemplateTables() throws Exception {
-    super.dropTemplateTables();
 
     final String clientAccountTableDrop = "drop table if exists client_account_temp";
 

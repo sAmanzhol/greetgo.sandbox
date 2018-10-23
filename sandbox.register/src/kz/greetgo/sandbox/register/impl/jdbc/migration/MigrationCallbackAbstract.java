@@ -1,10 +1,7 @@
 package kz.greetgo.sandbox.register.impl.jdbc.migration;
 
 import kz.greetgo.db.ConnectionCallback;
-import kz.greetgo.depinject.core.BeanGetter;
-import kz.greetgo.sandbox.register.configs.DbConfig;
 
-import kz.greetgo.sandbox.register.configs.MigrationConfig;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
@@ -15,11 +12,12 @@ public abstract class MigrationCallbackAbstract<T> implements ConnectionCallback
 
 //  public BeanGetter<MigrationConfig> migrationConfig;
 
-  public MigrationCallbackAbstract(Connection connection) {
-    this.connection = connection;
-  }
-
-  public MigrationCallbackAbstract() {
+  public MigrationCallbackAbstract() throws Exception {
+    this.connection = DriverManager.getConnection(
+      "jdbc:postgresql://localhost/ssailaubayev_sandbox",
+      "ssailaubayev_sandbox",
+      "111"
+    );
   }
 
   @Override
@@ -29,10 +27,6 @@ public abstract class MigrationCallbackAbstract<T> implements ConnectionCallback
 //      migrationConfig.get().dbUsername(),
 //      migrationConfig.get().dbPassword()
 //    );
-
-
-
-    this.connection = con;
 
     createTempTables();
 
@@ -53,31 +47,17 @@ public abstract class MigrationCallbackAbstract<T> implements ConnectionCallback
     return null;
   }
 
-  public void createTempTables() throws Exception {
-    this.connection = this.getConnection();
-  }
+  public abstract void createTempTables() throws Exception;
 
-  public void parseAndFillData() throws Exception {
-    this.connection = this.getConnection();
-  }
+  public abstract void parseAndFillData() throws Exception;
 
   public abstract void checkForValidness() throws Exception;
 
   public abstract void validateAndMigrateData() throws Exception;
 
-  public void dropTemplateTables() throws Exception {
-    this.connection = this.getConnection();
-  }
+  public abstract void dropTemplateTables() throws Exception;
 
   public abstract void disableUnusedRecords() throws Exception;
 
   public abstract void checkForLateUpdates() throws Exception;
-
-  public Connection getConnection() throws Exception {
-    return DriverManager.getConnection(
-      "jdbc:postgresql://localhost/ssailaubayev_sandbox",
-      "ssailaubayev_sandbox",
-      "111"
-    );
-  }
 }

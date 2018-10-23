@@ -22,7 +22,7 @@ public class MigrationRegisterImpl implements MigrationRegister {
 
 
   @Override
-  public void migrate() {
+  public void migrate() throws Exception {
     // Temporary files in local directory from config
     File migrationFolder = new File(migrationConfig.get().directory());
 

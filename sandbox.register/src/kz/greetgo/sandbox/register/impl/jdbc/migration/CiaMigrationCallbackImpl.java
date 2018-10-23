@@ -19,13 +19,12 @@ public class CiaMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
 
   private String filePath;
 
-  public CiaMigrationCallbackImpl(String filePath) {
+  public CiaMigrationCallbackImpl(String filePath) throws Exception {
     this.filePath = filePath;
   }
 
   @Override
   public void createTempTables() throws Exception {
-    super.createTempTables();
 
     final String clientTempTableCreate =
       "create table client_temp (" +
@@ -72,7 +71,6 @@ public class CiaMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
 
   @Override
   public void parseAndFillData() throws Exception {
-    super.parseAndFillData();
 
     String clientTempTableInsert =
       "insert into client_temp (id, surname, name, patronymic, gender, birth_date, charm) " +
@@ -330,7 +328,6 @@ public class CiaMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
 
   @Override
   public void dropTemplateTables() throws Exception {
-    super.dropTemplateTables();
 
     final String clientTempTableDrop = "drop table if exists client_temp";
 
