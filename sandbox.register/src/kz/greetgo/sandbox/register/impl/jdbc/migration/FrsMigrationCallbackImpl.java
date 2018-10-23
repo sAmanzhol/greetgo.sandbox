@@ -173,14 +173,16 @@ public class FrsMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
 
 
     String clientAccountTransactionTableUpdateMigrate =
-      "insert into client_account_transaction (id, account, money, finished_at, type) " +
+      "insert into client_account_transaction (id, account, money, finished_at, type, migration_account) " +
         " select nextval('id') as id, " +
         "   (select id from client_account where number = account_number) as account, " +
         "   cast(money as double precision) as money, " +
         "   to_timestamp(finished_at, 'YYYY-MM-DD hh24:mi:ss') as finished_at, " +
-        "   (select id from transaction_type where name = transaction_type) as type " +
+        "   (select id from transaction_type where name = transaction_type) as type, " +
+        "   account_number as migration_account " +
         " from client_account_transaction_temp " +
-        " where status = 1";
+        " where status = 1 " +
+        "on conflict (migration_account, money, finished_at) do nothing";
 
     try (PreparedStatement ps = connection.prepareStatement(clientAccountTransactionTableUpdateMigrate)) {
       ps.executeUpdate();

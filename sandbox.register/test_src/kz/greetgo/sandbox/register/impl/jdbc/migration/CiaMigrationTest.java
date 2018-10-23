@@ -2,6 +2,9 @@ package kz.greetgo.sandbox.register.impl.jdbc.migration;
 
 import kz.greetgo.depinject.core.BeanGetter;
 import kz.greetgo.sandbox.register.configs.MigrationConfig;
+import kz.greetgo.sandbox.register.dao_model.Client;
+import kz.greetgo.sandbox.register.dao_model.ClientAddress;
+import kz.greetgo.sandbox.register.dao_model.ClientPhone;
 import kz.greetgo.sandbox.register.impl.jdbc.migration.model.CiaAddress;
 import kz.greetgo.sandbox.register.impl.jdbc.migration.model.CiaClient;
 import kz.greetgo.sandbox.register.impl.jdbc.migration.model.CiaPhone;
@@ -15,8 +18,6 @@ import static org.fest.assertions.api.Assertions.assertThat;
 
 @SuppressWarnings("WeakerAccess")
 public class CiaMigrationTest extends ParentTestNg {
-
-  // NEED TO REWRITE ALL TEST WITH DIFFERENT ID
 
   public BeanGetter<MigrationConfig> migrationConfig;
   public BeanGetter<MigrationTestDao> migrationTestDao;
@@ -233,7 +234,7 @@ public class CiaMigrationTest extends ParentTestNg {
   public void validateAndMigrateData_insert_client() throws Exception {
 
     prepareTempTables();
-    prepareTempTables();
+
     String fileName = "from_cia_2018-02-21-154532-1-300.xml";
     String filePath = String.format("%s/insert_client/%s", migrationConfig.get().directoryTest(), fileName);
 
@@ -246,30 +247,23 @@ public class CiaMigrationTest extends ParentTestNg {
     //
     //
 
-    String migrationId = "0-B9N-HT-PU-04wolRBPzj";
+    String migrationId = "0-B9N-ic-PU-04wolRBPzj";
 
-    CiaClient client = migrationTestDao.get().getClientByMigrationId(migrationId);
-    client.addresses = migrationTestDao.get().getClientAddressesById(Integer.parseInt(client.id));
-    client.phones = migrationTestDao.get().getClientPhonesById(Integer.parseInt(client.id));
+    Client client = migrationTestDao.get().getClientByMigrationId(migrationId);
+    List<ClientAddress> addresses = migrationTestDao.get().getClientAddressesById(client.id);
+    List<ClientPhone> phones = migrationTestDao.get().getClientPhonesById(client.id);
+    String charm = migrationTestDao.get().getCharmById(client.charm).name;
 
     assertThat(client.surname).isEqualTo("Лолололо");
     assertThat(client.name).isEqualTo("WCИTБЯ7щАо");
     assertThat(client.patronymic).isEqualTo("");
-//    assertThat(client.charm).isEqualTo("10000");
+    assertThat(charm).isEqualTo("ЩlВOpФpЪИШ");
     assertThat(client.birthDate).isEqualTo("1995-07-07");
     assertThat(client.gender).isEqualTo("FEMALE");
 
-    assertThat(client.addresses.get(0).type).isEqualTo("FACT");
-    assertThat(client.addresses.get(0).street).isEqualTo("RцВWAаEkMкёнkOзДfжГк");
-    assertThat(client.addresses.get(0).house).isEqualTo("RП");
-    assertThat(client.addresses.get(0).flat).isEqualTo("hИ");
+    assertThat(addresses).hasSize(2);
 
-    assertThat(client.addresses.get(1).type).isEqualTo("REG");
-    assertThat(client.addresses.get(1).street).isEqualTo("ХfАИKлFщсiхДЗрPгWЗdЭ");
-    assertThat(client.addresses.get(1).house).isEqualTo("оz");
-    assertThat(client.addresses.get(1).flat).isEqualTo("РБ");
-
-    assertThat(client.phones).hasSize(3);
+    assertThat(phones).hasSize(3);
   }
 
   @Test
@@ -289,30 +283,23 @@ public class CiaMigrationTest extends ParentTestNg {
     //
     //
 
-    String migrationId = "0-B9N-HT-PU-04wolRBPzj";
+    String migrationId = "0-B9N-uc-PU-04wolRBPzj";
 
-    CiaClient client = migrationTestDao.get().getClientByMigrationId(migrationId);
-    client.addresses = migrationTestDao.get().getClientAddressesById(Integer.parseInt(client.id));
-    client.phones = migrationTestDao.get().getClientPhonesById(Integer.parseInt(client.id));
+    Client client = migrationTestDao.get().getClientByMigrationId(migrationId);
+    List<ClientAddress> addresses = migrationTestDao.get().getClientAddressesById(client.id);
+    List<ClientPhone> phones = migrationTestDao.get().getClientPhonesById(client.id);
+    String charm = migrationTestDao.get().getCharmById(client.charm).name;
 
-    assertThat(client.surname).isEqualTo("ЕDфзEуЧь57");
-    assertThat(client.name).isEqualTo("NIfТDтуЯkТ");
-    assertThat(client.patronymic).isEqualTo("УДтЮцКp5ЁЛайl");
-    assertThat(client.charm).isEqualTo("10000");
-    assertThat(client.birthDate).isEqualTo("1966-03-10");
+    assertThat(client.surname).isEqualTo("Фамилия");
+    assertThat(client.name).isEqualTo("Имя");
+    assertThat(client.patronymic).isEqualTo("Отчество");
+    assertThat(charm).isEqualTo("Характер");
+    assertThat(client.birthDate).isEqualTo("2000-10-07");
     assertThat(client.gender).isEqualTo("MALE");
 
-    assertThat(client.addresses.get(0).type).isEqualTo("FACT");
-    assertThat(client.addresses.get(0).street).isEqualTo("SйбByЁvEЁzоnYмuGIюрХ");
-    assertThat(client.addresses.get(0).house).isEqualTo("Ph");
-    assertThat(client.addresses.get(0).flat).isEqualTo("оы");
+    assertThat(addresses).hasSize(2);
 
-    assertThat(client.addresses.get(1).type).isEqualTo("REG");
-    assertThat(client.addresses.get(1).street).isEqualTo("wвlogБgЧЩfР4zkсRbDжж");
-    assertThat(client.addresses.get(1).house).isEqualTo("Sц");
-    assertThat(client.addresses.get(1).flat).isEqualTo("Ще");
-
-    assertThat(client.phones).hasSize(7);
+    assertThat(phones).hasSize(3);
   }
 
 
@@ -333,20 +320,20 @@ public class CiaMigrationTest extends ParentTestNg {
     //
     //
 
-    String migrationId = "0-B9N-HT-PU-04wolRBPzj";
+    String migrationId = "0-B9N-ia-PU-04wolRBPzj";
 
-    CiaClient client = migrationTestDao.get().getClientByMigrationId(migrationId);
-    client.addresses = migrationTestDao.get().getClientAddressesById(Integer.parseInt(client.id));
+    Client client = migrationTestDao.get().getClientByMigrationId(migrationId);
+    List<ClientAddress> addresses = migrationTestDao.get().getClientAddressesById(client.id);
 
-    assertThat(client.addresses.get(0).type).isEqualTo("FACT");
-    assertThat(client.addresses.get(0).street).isEqualTo("Ломоносов");
-    assertThat(client.addresses.get(0).house).isEqualTo("100");
-    assertThat(client.addresses.get(0).flat).isEqualTo("1");
+    assertThat(addresses.get(0).type).isEqualTo("FACT");
+    assertThat(addresses.get(0).street).isEqualTo("Ломоносов");
+    assertThat(addresses.get(0).house).isEqualTo("100");
+    assertThat(addresses.get(0).flat).isEqualTo("1");
 
-    assertThat(client.addresses.get(1).type).isEqualTo("REG");
-    assertThat(client.addresses.get(1).street).isEqualTo("Абая");
-    assertThat(client.addresses.get(1).house).isEqualTo("12");
-    assertThat(client.addresses.get(1).flat).isEqualTo("2");
+    assertThat(addresses.get(1).type).isEqualTo("REG");
+    assertThat(addresses.get(1).street).isEqualTo("Абая");
+    assertThat(addresses.get(1).house).isEqualTo("12");
+    assertThat(addresses.get(1).flat).isEqualTo("2");
   }
 
   @Test
@@ -366,20 +353,20 @@ public class CiaMigrationTest extends ParentTestNg {
     //
     //
 
-    String migrationId = "0-B9N-HT-PU-04wolRBPzj";
+    String migrationId = "0-B9N-ua-PU-04wolRBPzj";
 
-    CiaClient client = migrationTestDao.get().getClientByMigrationId(migrationId);
-    client.addresses = migrationTestDao.get().getClientAddressesById(Integer.parseInt(client.id));
+    Client client = migrationTestDao.get().getClientByMigrationId(migrationId);
+    List<ClientAddress> addresses = migrationTestDao.get().getClientAddressesById(client.id);
 
-    assertThat(client.addresses.get(0).type).isEqualTo("FACT");
-    assertThat(client.addresses.get(0).street).isEqualTo("Новый Факт");
-    assertThat(client.addresses.get(0).house).isEqualTo("1");
-    assertThat(client.addresses.get(0).flat).isEqualTo("4");
+    assertThat(addresses.get(0).type).isEqualTo("FACT");
+    assertThat(addresses.get(0).street).isEqualTo("Новый Факт");
+    assertThat(addresses.get(0).house).isEqualTo("1");
+    assertThat(addresses.get(0).flat).isEqualTo("4");
 
-    assertThat(client.addresses.get(1).type).isEqualTo("REG");
-    assertThat(client.addresses.get(1).street).isEqualTo("Новый Рег");
-    assertThat(client.addresses.get(1).house).isEqualTo("1");
-    assertThat(client.addresses.get(1).flat).isEqualTo("4");
+    assertThat(addresses.get(1).type).isEqualTo("REG");
+    assertThat(addresses.get(1).street).isEqualTo("Новый Рег");
+    assertThat(addresses.get(1).house).isEqualTo("1");
+    assertThat(addresses.get(1).flat).isEqualTo("4");
   }
 
 
@@ -400,12 +387,21 @@ public class CiaMigrationTest extends ParentTestNg {
     //
     //
 
-    String migrationId = "0-B9N-HT-PU-04wolRBPzj";
+    String migrationId = "0-B9N-ip-PU-04wolRBPzj";
 
-    CiaClient client = migrationTestDao.get().getClientByMigrationId(migrationId);
-    client.phones = migrationTestDao.get().getClientPhonesById(Integer.parseInt(client.id));
+    Client client = migrationTestDao.get().getClientByMigrationId(migrationId);
+    List<ClientPhone> phones = migrationTestDao.get().getClientPhonesById(client.id);
 
-    assertThat(client.phones).hasSize(3);
+    assertThat(phones).hasSize(3);
+
+    assertThat(phones.get(0).type).isEqualTo("HOME");
+    assertThat(phones.get(0).number).isEqualTo("+7-878-241-63-94");
+
+    assertThat(phones.get(1).type).isEqualTo("WORK");
+    assertThat(phones.get(1).number).isEqualTo("+7-385-253-53-56");
+
+    assertThat(phones.get(2).type).isEqualTo("MOBILE");
+    assertThat(phones.get(2).number).isEqualTo("+7-418-204-55-17");
   }
 
   @Test
@@ -425,12 +421,24 @@ public class CiaMigrationTest extends ParentTestNg {
     //
     //
 
-    String migrationId = "0-B9N-HT-PU-04wolRBPzj";
+    String migrationId = "0-B9N-up-PU-04wolRBPzj";
 
-    CiaClient client = migrationTestDao.get().getClientByMigrationId(migrationId);
-    client.phones = migrationTestDao.get().getClientPhonesById(Integer.parseInt(client.id));
+    Client client = migrationTestDao.get().getClientByMigrationId(migrationId);
+    List<ClientPhone> phones = migrationTestDao.get().getClientPhonesById(client.id);
 
-    assertThat(client.phones).hasSize(3);
+    assertThat(phones).hasSize(4);
+
+    assertThat(phones.get(0).type).isEqualTo("HOME");
+    assertThat(phones.get(0).number).isEqualTo("+7-878-241-63-94");
+
+    assertThat(phones.get(1).type).isEqualTo("WORK");
+    assertThat(phones.get(1).number).isEqualTo("+7-385-253-53-56");
+
+    assertThat(phones.get(2).type).isEqualTo("MOBILE");
+    assertThat(phones.get(2).number).isEqualTo("+7-418-204-55-17");
+
+    assertThat(phones.get(3).type).isEqualTo("MOBILE");
+    assertThat(phones.get(3).number).isEqualTo("+7-555-204-55-17");
   }
 
 
@@ -440,7 +448,7 @@ public class CiaMigrationTest extends ParentTestNg {
     prepareTempTables();
 
     String fileName = "from_cia_2018-02-21-154532-1-300.xml";
-    String filePath = String.format("%s/%s", migrationConfig.get().directoryTest(), fileName);
+    String filePath = String.format("%s/full/%s", migrationConfig.get().directoryTest(), fileName);
 
     //
     //
@@ -451,6 +459,81 @@ public class CiaMigrationTest extends ParentTestNg {
     //
     //
 
-    // Check there everything
+    String migrationId1 = "1-B9N-vv-PU-04wolRBPzj";
+    String migrationId2 = "2-B9N-vv-PU-04wolRBPzj";
+
+    Client client1 = migrationTestDao.get().getClientByMigrationId(migrationId1);
+    List<ClientAddress> addresses1 = migrationTestDao.get().getClientAddressesById(client1.id);
+    List<ClientPhone> phones1 = migrationTestDao.get().getClientPhonesById(client1.id);
+    String charm1 = migrationTestDao.get().getCharmById(client1.charm).name;
+
+    assertThat(client1.surname).isEqualTo("Лолололо");
+    assertThat(client1.name).isEqualTo("WCИTБЯ7щАо");
+    assertThat(client1.patronymic).isEqualTo("");
+    assertThat(charm1).isEqualTo("ЩlВOpФpЪИШ");
+    assertThat(client1.birthDate).isEqualTo("1995-07-07");
+    assertThat(client1.gender).isEqualTo("FEMALE");
+
+    assertThat(addresses1).hasSize(2);
+
+    assertThat(addresses1.get(0).type).isEqualTo("FACT");
+    assertThat(addresses1.get(0).street).isEqualTo("RцВWAаEkMкёнkOзДfжГк");
+    assertThat(addresses1.get(0).house).isEqualTo("RП");
+    assertThat(addresses1.get(0).flat).isEqualTo("hИ");
+
+    assertThat(addresses1.get(1).type).isEqualTo("REG");
+    assertThat(addresses1.get(1).street).isEqualTo("ХfАИKлFщсiхДЗрPгWЗdЭ");
+    assertThat(addresses1.get(1).house).isEqualTo("оz");
+    assertThat(addresses1.get(1).flat).isEqualTo("РБ");
+
+    assertThat(phones1).hasSize(3);
+
+    assertThat(phones1.get(0).type).isEqualTo("HOME");
+    assertThat(phones1.get(0).number).isEqualTo("+7-878-241-63-94");
+
+    assertThat(phones1.get(1).type).isEqualTo("WORK");
+    assertThat(phones1.get(1).number).isEqualTo("+7-385-253-53-56");
+
+    assertThat(phones1.get(2).type).isEqualTo("MOBILE");
+    assertThat(phones1.get(2).number).isEqualTo("+7-418-204-55-17");
+
+
+    Client client2 = migrationTestDao.get().getClientByMigrationId(migrationId2);
+    List<ClientAddress> addresses2 = migrationTestDao.get().getClientAddressesById(client2.id);
+    List<ClientPhone> phones2 = migrationTestDao.get().getClientPhonesById(client2.id);
+    String charm2 = migrationTestDao.get().getCharmById(client2.charm).name;
+
+    assertThat(client1.surname).isEqualTo("Фамилия");
+    assertThat(client1.name).isEqualTo("Имя");
+    assertThat(client1.patronymic).isEqualTo("Отчество");
+    assertThat(charm2).isEqualTo("Характерный");
+    assertThat(client1.birthDate).isEqualTo("1910-10-10");
+    assertThat(client1.gender).isEqualTo("FEMALE");
+
+    assertThat(addresses2).hasSize(2);
+
+    assertThat(addresses2.get(0).type).isEqualTo("FACT");
+    assertThat(addresses2.get(0).street).isEqualTo("Новый аддрес");
+    assertThat(addresses2.get(0).house).isEqualTo("100 дом");
+    assertThat(addresses2.get(0).flat).isEqualTo("12");
+
+    assertThat(addresses2.get(1).type).isEqualTo("REG");
+    assertThat(addresses2.get(1).street).isEqualTo("Новый аддрес рег");
+    assertThat(addresses2.get(1).house).isEqualTo("119");
+    assertThat(addresses2.get(1).flat).isEqualTo("90");
+
+    assertThat(phones2).hasSize(4);
+
+    assertThat(phones2.get(0).type).isEqualTo("HOME");
+    assertThat(phones2.get(0).number).isEqualTo("+7-878-241-63-94");
+
+    assertThat(phones2.get(1).type).isEqualTo("WORK");
+    assertThat(phones2.get(1).number).isEqualTo("+7-385-253-53-56");
+
+    assertThat(phones2.get(2).type).isEqualTo("MOBILE");
+    assertThat(phones2.get(2).number).isEqualTo("+7-418-204-55-17");
+
+    assertThat(phones2.get(3).type).isEqualTo("HOME");
+    assertThat(phones2.get(3).number).isEqualTo("+7-111-111-11-11");
   }
 }

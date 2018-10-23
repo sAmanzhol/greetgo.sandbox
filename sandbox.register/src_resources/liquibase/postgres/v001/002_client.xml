@@ -131,4 +131,11 @@
     ]]></sql>
   </changeSet>
 
+  <changeSet author="sultan" id="alter-table-client_account_transaction-migration_account">
+    <sql endDelimiter=";;"><![CDATA[
+      alter table client_account_transaction add column migration_account varchar(50);
+      alter table client_account_transaction add constraint migration_account unique (migration_account, money, finished_at);
+    ]]></sql>
+  </changeSet>
+
 </databaseChangeLog>

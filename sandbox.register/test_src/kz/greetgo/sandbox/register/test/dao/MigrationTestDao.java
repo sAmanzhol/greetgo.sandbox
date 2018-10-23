@@ -1,6 +1,9 @@
 package kz.greetgo.sandbox.register.test.dao;
 
+import kz.greetgo.sandbox.register.dao_model.Character;
+import kz.greetgo.sandbox.register.dao_model.*;
 import kz.greetgo.sandbox.register.impl.jdbc.migration.model.*;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -62,16 +65,41 @@ public interface MigrationTestDao {
 
   @Select("select * " +
     "from Client " +
-    "where migration_id = #{id}")
-  CiaClient getClientByMigrationId(String id);
+    "where migration_id = #{migration_id}")
+  Client getClientByMigrationId(String migration_id);
+
+  @Select("select * " +
+    "from Transaction_type " +
+    "where id = #{id}")
+  TransactionType getTransactionTypeById(int id);
 
   @Select("select type, number " +
     "from Client_phone " +
     "where client = #{id}")
-  List<CiaPhone> getClientPhonesById(int id);
+  List<ClientPhone> getClientPhonesById(int id);
 
   @Select("select type, street, house, flat " +
     "from Client_addr " +
     "where client = #{id}")
-  List<CiaAddress> getClientAddressesById(int id);
+  List<ClientAddress> getClientAddressesById(int id);
+
+  @Select("select * " +
+    "from Charm " +
+    "where id = #{id}")
+  Character getCharmById(int id);
+
+  @Select("select * " +
+    "from Charm " +
+    "where name = #{name}")
+  Character getCharmByName(String name);
+
+  @Select("select * " +
+    "from Client_account " +
+    "where number = #{account_number}")
+  ClientAccount getAccountByAccountNumber(String account_number);
+
+  @Select("select * " +
+    "from Client_account_transaction " +
+    "where money = #{money} and finished_at = to_timestamp(#{finished_at}, 'YYYY-MM-DD hh24:mi:ss') and account = #{account}")
+  ClientAccountTransaction getTransaction(@Param("money") Double money, @Param("finished_at") String finished_at, @Param("account") int account);
 }
