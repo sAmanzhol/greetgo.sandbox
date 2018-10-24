@@ -36,8 +36,6 @@ public abstract class MigrationCallbackAbstract<T> implements ConnectionCallback
 
     validateAndMigrateData();
 
-    System.out.println("check tables");
-
     dropTemplateTables();
 
     disableUnusedRecords();

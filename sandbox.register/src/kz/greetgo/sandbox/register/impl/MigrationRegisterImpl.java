@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 
-
+@SuppressWarnings("WeakerAccess")
 @Bean
 public class MigrationRegisterImpl implements MigrationRegister {
 

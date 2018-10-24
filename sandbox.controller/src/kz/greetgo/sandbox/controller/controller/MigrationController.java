@@ -7,11 +7,6 @@ import kz.greetgo.mvc.annotations.on_methods.OnGet;
 import kz.greetgo.sandbox.controller.register.MigrationRegister;
 import kz.greetgo.sandbox.controller.util.Controller;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Objects;
-
 @SuppressWarnings("WeakerAccess")
 @Bean
 @ControllerPrefix("/migrate")

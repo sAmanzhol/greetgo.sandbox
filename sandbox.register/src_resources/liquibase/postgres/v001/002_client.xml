@@ -138,4 +138,10 @@
     ]]></sql>
   </changeSet>
 
+  <changeSet author="sultan" id="create-sequence-migration_order">
+    <sql endDelimiter=";;"><![CDATA[
+      create sequence migration_order start 1
+    ]]></sql>
+  </changeSet>
+
 </databaseChangeLog>

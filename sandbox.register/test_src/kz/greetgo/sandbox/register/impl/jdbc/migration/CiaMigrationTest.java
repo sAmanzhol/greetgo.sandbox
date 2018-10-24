@@ -250,8 +250,6 @@ public class CiaMigrationTest extends ParentTestNg {
     String migrationId = "0-B9N-ic-PU-04wolRBPzj";
 
     Client client = migrationTestDao.get().getClientByMigrationId(migrationId);
-    List<ClientAddress> addresses = migrationTestDao.get().getClientAddressesById(client.id);
-    List<ClientPhone> phones = migrationTestDao.get().getClientPhonesById(client.id);
     String charm = migrationTestDao.get().getCharmById(client.charm).name;
 
     assertThat(client.surname).isEqualTo("Лолололо");
@@ -260,10 +258,6 @@ public class CiaMigrationTest extends ParentTestNg {
     assertThat(charm).isEqualTo("ЩlВOpФpЪИШ");
     assertThat(client.birthDate).isEqualTo("1995-07-07");
     assertThat(client.gender).isEqualTo("FEMALE");
-
-    assertThat(addresses).hasSize(2);
-
-    assertThat(phones).hasSize(3);
   }
 
   @Test
@@ -286,8 +280,6 @@ public class CiaMigrationTest extends ParentTestNg {
     String migrationId = "0-B9N-uc-PU-04wolRBPzj";
 
     Client client = migrationTestDao.get().getClientByMigrationId(migrationId);
-    List<ClientAddress> addresses = migrationTestDao.get().getClientAddressesById(client.id);
-    List<ClientPhone> phones = migrationTestDao.get().getClientPhonesById(client.id);
     String charm = migrationTestDao.get().getCharmById(client.charm).name;
 
     assertThat(client.surname).isEqualTo("Фамилия");
@@ -296,10 +288,6 @@ public class CiaMigrationTest extends ParentTestNg {
     assertThat(charm).isEqualTo("Характер");
     assertThat(client.birthDate).isEqualTo("2000-10-07");
     assertThat(client.gender).isEqualTo("MALE");
-
-    assertThat(addresses).hasSize(2);
-
-    assertThat(phones).hasSize(3);
   }
 
 
@@ -394,14 +382,14 @@ public class CiaMigrationTest extends ParentTestNg {
 
     assertThat(phones).hasSize(3);
 
-    assertThat(phones.get(0).type).isEqualTo("HOME");
-    assertThat(phones.get(0).number).isEqualTo("+7-878-241-63-94");
+    assertThat(phones.get(0).type).isEqualTo("WORK");
+    assertThat(phones.get(0).number).isEqualTo("+7-385-253-53-56");
 
-    assertThat(phones.get(1).type).isEqualTo("WORK");
-    assertThat(phones.get(1).number).isEqualTo("+7-385-253-53-56");
+    assertThat(phones.get(1).type).isEqualTo("MOBILE");
+    assertThat(phones.get(1).number).isEqualTo("+7-418-204-55-17");
 
-    assertThat(phones.get(2).type).isEqualTo("MOBILE");
-    assertThat(phones.get(2).number).isEqualTo("+7-418-204-55-17");
+    assertThat(phones.get(2).type).isEqualTo("HOME");
+    assertThat(phones.get(2).number).isEqualTo("+7-878-241-63-94");
   }
 
   @Test
@@ -426,19 +414,13 @@ public class CiaMigrationTest extends ParentTestNg {
     Client client = migrationTestDao.get().getClientByMigrationId(migrationId);
     List<ClientPhone> phones = migrationTestDao.get().getClientPhonesById(client.id);
 
-    assertThat(phones).hasSize(4);
+    assertThat(phones).hasSize(2);
 
-    assertThat(phones.get(0).type).isEqualTo("HOME");
-    assertThat(phones.get(0).number).isEqualTo("+7-878-241-63-94");
+    assertThat(phones.get(0).type).isEqualTo("WORK");
+    assertThat(phones.get(0).number).isEqualTo("+7-385-253-53-22");
 
-    assertThat(phones.get(1).type).isEqualTo("WORK");
-    assertThat(phones.get(1).number).isEqualTo("+7-385-253-53-56");
-
-    assertThat(phones.get(2).type).isEqualTo("MOBILE");
-    assertThat(phones.get(2).number).isEqualTo("+7-418-204-55-17");
-
-    assertThat(phones.get(3).type).isEqualTo("MOBILE");
-    assertThat(phones.get(3).number).isEqualTo("+7-555-204-55-17");
+    assertThat(phones.get(1).type).isEqualTo("HOME");
+    assertThat(phones.get(1).number).isEqualTo("+7-878-241-63-11");
   }
 
 
@@ -488,14 +470,14 @@ public class CiaMigrationTest extends ParentTestNg {
 
     assertThat(phones1).hasSize(3);
 
-    assertThat(phones1.get(0).type).isEqualTo("HOME");
-    assertThat(phones1.get(0).number).isEqualTo("+7-878-241-63-94");
+    assertThat(phones1.get(0).type).isEqualTo("WORK");
+    assertThat(phones1.get(0).number).isEqualTo("+7-222-253-53-56");
 
-    assertThat(phones1.get(1).type).isEqualTo("WORK");
-    assertThat(phones1.get(1).number).isEqualTo("+7-385-253-53-56");
+    assertThat(phones1.get(1).type).isEqualTo("MOBILE");
+    assertThat(phones1.get(1).number).isEqualTo("+7-333-204-55-17");
 
-    assertThat(phones1.get(2).type).isEqualTo("MOBILE");
-    assertThat(phones1.get(2).number).isEqualTo("+7-418-204-55-17");
+    assertThat(phones1.get(2).type).isEqualTo("HOME");
+    assertThat(phones1.get(2).number).isEqualTo("+7-111-241-63-94");
 
 
     Client client2 = migrationTestDao.get().getClientByMigrationId(migrationId2);
@@ -503,12 +485,12 @@ public class CiaMigrationTest extends ParentTestNg {
     List<ClientPhone> phones2 = migrationTestDao.get().getClientPhonesById(client2.id);
     String charm2 = migrationTestDao.get().getCharmById(client2.charm).name;
 
-    assertThat(client1.surname).isEqualTo("Фамилия");
-    assertThat(client1.name).isEqualTo("Имя");
-    assertThat(client1.patronymic).isEqualTo("Отчество");
+    assertThat(client2.surname).isEqualTo("Фамилия");
+    assertThat(client2.name).isEqualTo("Имя");
+    assertThat(client2.patronymic).isEqualTo("Отчество");
     assertThat(charm2).isEqualTo("Характерный");
-    assertThat(client1.birthDate).isEqualTo("1910-10-10");
-    assertThat(client1.gender).isEqualTo("FEMALE");
+    assertThat(client2.birthDate).isEqualTo("1910-10-10");
+    assertThat(client2.gender).isEqualTo("FEMALE");
 
     assertThat(addresses2).hasSize(2);
 
@@ -522,18 +504,9 @@ public class CiaMigrationTest extends ParentTestNg {
     assertThat(addresses2.get(1).house).isEqualTo("119");
     assertThat(addresses2.get(1).flat).isEqualTo("90");
 
-    assertThat(phones2).hasSize(4);
+    assertThat(phones2).hasSize(1);
 
     assertThat(phones2.get(0).type).isEqualTo("HOME");
-    assertThat(phones2.get(0).number).isEqualTo("+7-878-241-63-94");
-
-    assertThat(phones2.get(1).type).isEqualTo("WORK");
-    assertThat(phones2.get(1).number).isEqualTo("+7-385-253-53-56");
-
-    assertThat(phones2.get(2).type).isEqualTo("MOBILE");
-    assertThat(phones2.get(2).number).isEqualTo("+7-418-204-55-17");
-
-    assertThat(phones2.get(3).type).isEqualTo("HOME");
-    assertThat(phones2.get(3).number).isEqualTo("+7-111-111-11-11");
+    assertThat(phones2.get(0).number).isEqualTo("+7-111-111-11-11");
   }
 }

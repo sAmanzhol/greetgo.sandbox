@@ -35,16 +35,26 @@ public class CiaMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
         " gender varchar(100), " +
         " birth_date varchar(100), " +
         " charm varchar(100), " +
-        " status int default 1" +
+        " status int default 1, " +
+        " migration_order int" +
         ")";
+
+    try (PreparedStatement ps = connection.prepareStatement(clientTempTableCreate)) {
+      ps.executeUpdate();
+    }
 
     final String clientPhoneTempTableCreate =
       "create table client_phone_temp (" +
         " type varchar(100), " +
         " client varchar(100), " +
         " number varchar(100), " +
-        " status int default 1" +
+        " status int default 1, " +
+        " migration_order int" +
         ")";
+
+    try (PreparedStatement ps = connection.prepareStatement(clientPhoneTempTableCreate)) {
+      ps.executeUpdate();
+    }
 
     final String clientAddressTempTableCreate =
       "create table client_addr_temp (" +
@@ -53,16 +63,9 @@ public class CiaMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
         " street varchar(100), " +
         " house varchar(100), " +
         " flat varchar(100), " +
-        " status int default 1" +
+        " status int default 1, " +
+        " migration_order int" +
         ")";
-
-    try (PreparedStatement ps = connection.prepareStatement(clientTempTableCreate)) {
-      ps.executeUpdate();
-    }
-
-    try (PreparedStatement ps = connection.prepareStatement(clientPhoneTempTableCreate)) {
-      ps.executeUpdate();
-    }
 
     try (PreparedStatement ps = connection.prepareStatement(clientAddressTempTableCreate)) {
       ps.executeUpdate();
@@ -73,16 +76,16 @@ public class CiaMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
   public void parseAndFillData() throws Exception {
 
     String clientTempTableInsert =
-      "insert into client_temp (id, surname, name, patronymic, gender, birth_date, charm) " +
-        " values (?, ?, ?, ?, ?, ?, ?)";
+      "insert into client_temp (id, surname, name, patronymic, gender, birth_date, charm, migration_order) " +
+        " values (?, ?, ?, ?, ?, ?, ?, nextval('migration_order'))";
 
     String clientPhoneTempTableInsert =
-      "insert into client_phone_temp (client, type, number) " +
-        " values (?, ?, ?)";
+      "insert into client_phone_temp (client, type, number, migration_order) " +
+        " values (?, ?, ?, currval('migration_order'))";
 
     String clientAddressTempTableInsert =
-      "insert into client_addr_temp (client, type, street, house, flat) " +
-        " values (?, ?, ?, ?, ?)";
+      "insert into client_addr_temp (client, type, street, house, flat, migration_order) " +
+        " values (?, ?, ?, ?, ?, currval('migration_order'))";
 
 
     File ciaFile = new File(this.filePath);
@@ -175,12 +178,16 @@ public class CiaMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
 
       CiaPhone ciaPhone = new CiaPhone();
 
-      if (curHomePhoneElement.getNodeName().equals("homePhone")) {
-        ciaPhone.type = "HOME";
-      } else if (curHomePhoneElement.getNodeName().equals("workPhone")) {
-        ciaPhone.type = "WORK";
-      } else if (curHomePhoneElement.getNodeName().equals("mobilePhone")) {
-        ciaPhone.type = "MOBILE";
+      switch (curHomePhoneElement.getNodeName()) {
+        case "homePhone":
+          ciaPhone.type = "HOME";
+          break;
+        case "workPhone":
+          ciaPhone.type = "WORK";
+          break;
+        case "mobilePhone":
+          ciaPhone.type = "MOBILE";
+          break;
       }
       ciaPhone.number = curHomePhoneElement.getTextContent();
 
@@ -264,47 +271,33 @@ public class CiaMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
 
     // Migrate valid clients without phone and address
 
-    // And there is just insert, because problems with update-insert
     String clientTableUpdateMigrate =
       "insert into client (id, surname, name, patronymic, gender, birth_date, charm, migration_id) " +
         "   select " +
+        "     distinct on (cl.id) " +
         "     nextval('id') as id, " +
-        "     surname, " +
-        "     name, " +
-        "     patronymic, " +
-        "     gender::gender as gender, " +
-        "     to_date(birth_date, 'YYYY-MM-DD') as birth_date, " +
-        "     (select id from charm where name = client_temp.charm) as charm, " +
-        "     id as migration_id " +
-        "   from client_temp " +
-        "   where status = 1 " +
-        " on conflict on constraint migration_id " +
-        " do nothing";
-//        " do update set " +
-//        "  surname = excluded.surname," +
-//        "  name = excluded.name, " +
-//        "  patronymic = excluded.patronymic, " +
-//        "  gender = excluded.gender, " +
-//        "  birth_date = excluded.birth_date, " +
-//        "  charm = excluded.charm";
+        "     cl.surname, " +
+        "     cl.name, " +
+        "     cl.patronymic, " +
+        "     cl.gender::gender as gender, " +
+        "     to_date(cl.birth_date, 'YYYY-MM-DD') as birth_date, " +
+        "     ch.id as charm, " +
+        "     cl.id as migration_id " +
+        "   from client_temp cl " +
+        "     left join charm ch " +
+        "       on cl.charm = ch.name " +
+        "   where cl.status = 1 " +
+        "   order by cl.id, migration_order desc" +
+        " on conflict (migration_id) " +
+        " do update set " +
+        "   surname = excluded.surname," +
+        "   name = excluded.name, " +
+        "   patronymic = excluded.patronymic, " +
+        "   gender = excluded.gender, " +
+        "   birth_date = excluded.birth_date, " +
+        "   charm = excluded.charm";
 
     try (PreparedStatement ps = connection.prepareStatement(clientTableUpdateMigrate)) {
-      ps.executeUpdate();
-    }
-
-
-    String clientPhoneTableUpdateMigrate =
-      "insert into client_phone (id, client, type, number) " +
-        "   select " +
-        "     nextval('id') as id, " +
-        "     (select id from client where migration_id = client_phone_temp.client) as client, " +
-        "     type::phone as type, " +
-        "     number as number " +
-        "   from client_phone_temp " +
-        "   where status = 1 and client notnull " +
-        "on conflict (number) do nothing";
-
-    try (PreparedStatement ps = connection.prepareStatement(clientPhoneTableUpdateMigrate)) {
       ps.executeUpdate();
     }
 
@@ -312,16 +305,66 @@ public class CiaMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
     String clientAddrTableUpdateMigrate =
       "insert into client_addr (client, type, street, house, flat) " +
         "   select " +
-        "     coalesce( nullif((select id from client where migration_id = client_addr_temp.client and actual = 1), null), -1), " +
+        "     distinct on (ad.client, ad.type) " +
+        "     cl.id as client, " +
         "     type::addr as type, " +
         "     street as street, " +
         "     house as house, " +
         "     flat as flat " +
-        "   from client_addr_temp " +
-        "   where status = 1 and client notnull " +
-        "on conflict (client, type) do nothing";
+        "   from client_addr_temp ad " +
+        "     left join client cl " +
+        "       on cl.migration_id = ad.client" +
+        "   where ad.status = 1 and cl.id notnull " +
+        "   order by ad.client, ad.type, ad.migration_order desc " +
+        "on conflict (client, type) " +
+        "do update set " +
+        "   street = excluded.street," +
+        "   house = excluded.house," +
+        "   flat = excluded.flat";
 
     try (PreparedStatement ps = connection.prepareStatement(clientAddrTableUpdateMigrate)) {
+      ps.executeUpdate();
+    }
+
+
+    String clientPhoneTableUpdateDelete =
+      "delete from client_phone " +
+        "where client in" +
+        "(" +
+        " select distinct cl.id " +
+        " from client_phone_temp ph_temp" +
+        "   inner join client cl " +
+        "    on cl.migration_id = ph_temp.client " +
+        ")";
+
+    try (PreparedStatement ps = connection.prepareStatement(clientPhoneTableUpdateDelete)) {
+      ps.executeUpdate();
+    }
+
+
+    String clientPhoneTableUpdateMigrate =
+      "with maxMigOrder as" +
+        "(" +
+        "  select client, max(migration_order) as migration_order" +
+        "  from client_phone_temp" +
+        "  group by client" +
+        ")" +
+        "insert into client_phone (id, client, type, number) " +
+        "   select " +
+        "     nextval('id') as id, " +
+        "     cl.id as client, " +
+        "     ph.type::phone as type, " +
+        "     ph.number as number " +
+        "   from client_phone_temp ph " +
+        "     left join client cl " +
+        "       on cl.migration_id = ph.client" +
+        "     inner join maxMigOrder mig " +
+        "       on mig.client = ph.client and mig.migration_order = ph.migration_order" +
+        "   where ph.status = 1 and cl.id notnull " +
+        "   order by ph.client, ph.migration_order desc " +
+        "on conflict (number) do nothing";
+
+    try (PreparedStatement ps = connection.prepareStatement(clientPhoneTableUpdateMigrate)) {
       ps.executeUpdate();
     }
   }
@@ -331,17 +374,17 @@ public class CiaMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
 
     final String clientTempTableDrop = "drop table if exists client_temp";
 
-    final String clientPhoneTempTableDrop = "drop table if exists client_phone_temp";
-
-    final String clientAddressTempTableDrop = "drop table if exists client_addr_temp";
-
     try (PreparedStatement ps = connection.prepareStatement(clientTempTableDrop)) {
       ps.executeUpdate();
     }
 
+    final String clientPhoneTempTableDrop = "drop table if exists client_phone_temp";
+
     try (PreparedStatement ps = connection.prepareStatement(clientPhoneTempTableDrop)) {
       ps.executeUpdate();
     }
+
+    final String clientAddressTempTableDrop = "drop table if exists client_addr_temp";
 
     try (PreparedStatement ps = connection.prepareStatement(clientAddressTempTableDrop)) {
       ps.executeUpdate();
@@ -367,7 +410,7 @@ public class CiaMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
     String clientAddrTableUpdateDisable =
       "update client_addr " +
         "set actual = 0 " +
-        "where client = -1 and actual = 1";
+        "where client isnull and actual = 1";
 
     try (PreparedStatement ps = connection.prepareStatement(clientAddrTableUpdateDisable)) {
       ps.executeUpdate();
