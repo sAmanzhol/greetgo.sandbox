@@ -114,17 +114,16 @@ public class DbLoader {
   }
 
   private void loadCharms() {
-    charmRegister.get().insert(new Charm(null,"Глупый","Глупый",40.0,true));
+    charmRegister.get().insert(new Charm(null,"Слабый","Слабый",40.0,true));
     charmRegister.get().insert(new Charm(null,"Строгий","Строгий",40.0,true));
-    charmRegister.get().insert(new Charm(null,"Безумец","Безумец",40.0,true));
+    charmRegister.get().insert(new Charm(null,"Глупый","Глупый",40.0,true));
     charmRegister.get().insert(new Charm(null,"Хороший","Хороший",40.0,true));
-    charmRegister.get().insert(new Charm(null,"Остряк,","Остряк",40.0,true));
+    charmRegister.get().insert(new Charm(null,"Хитрый,","Остряк",40.0,true));
     charmRegister.get().insert(new Charm(null,"Добряк","Добряк",40.0,true));
     charmRegister.get().insert(new Charm(null,"Красавчик","Красавчик",40.0,true));
-    charmRegister.get().insert(new Charm(null,"Маладец","Маладец",40.0,true));
+    charmRegister.get().insert(new Charm(null,"Умный","Маладец",40.0,true));
     charmRegister.get().insert(new Charm(null,"Волевой","Волевой",40.0,true));
-    charmRegister.get().insert(new Charm(null,"Высокомерный","Высокомерный",40.0,true));
-
+    charmRegister.get().insert(new Charm(null,"Внимательный","Высокомерный",40.0,true));
     charmList = charmRegister.get().list();
   }
 

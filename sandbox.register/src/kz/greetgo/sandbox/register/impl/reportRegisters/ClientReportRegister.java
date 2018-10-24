@@ -15,40 +15,40 @@ import org.apache.log4j.Logger;
 
 @Bean
 public class ClientReportRegister implements ReportRegister {
-  private final String REPORT_HEADER = "Отчет по клиентам";
+    private final String REPORT_HEADER = "Отчет по клиентам";
 
-  final Logger logger = Logger.getLogger(getClass());
-  ReportView reportView = null;
-  public BeanGetter<Jdbc> jdbcBean;
+    final Logger logger = Logger.getLogger(getClass());
+    ReportView reportView = null;
+    public BeanGetter<Jdbc> jdbcBean;
 
-  @Override
-  public void generate(ReportParam param) throws Exception {
-    if (logger.isInfoEnabled()) {
-      logger.info("STARTING REPORT GENERATING BY " + param.username);
+    @Override
+    public void generate(ReportParam param) throws Exception {
+        if (logger.isInfoEnabled()) {
+            logger.info("STARTING REPORT GENERATING BY " + param.username);
+        }
+
+        switch (param.type) {
+            case PDF: {
+                reportView = new ClientReportViewPDF(param.out);
+                break;
+            }
+            case XLSX: {
+                reportView = new ClientReportViewXLSX(param.out);
+                break;
+            }
+        }
+
+        ClientReportHeadData headData = new ClientReportHeadData(REPORT_HEADER);
+
+        reportView.start(headData);
+
+        jdbcBean.get().execute(new ClientReportJdbc(reportView));
+
+        reportView.finish(new ClientReportFootData(param.username, param.date));
+
+        if (logger.isInfoEnabled()) {
+            logger.info("FINISHED REPORT GENERATING");
+        }
     }
-
-    switch (param.type) {
-      case PDF: {
-        reportView = new ClientReportViewPDF(param.out);
-        break;
-      }
-      case XLSX: {
-        reportView = new ClientReportViewXLSX(param.out);
-        break;
-      }
-    }
-
-    ClientReportHeadData headData = new ClientReportHeadData(REPORT_HEADER);
-
-    reportView.start(headData);
-
-    jdbcBean.get().execute(new ClientReportJdbc(reportView));
-
-    reportView.finish(new ClientReportFootData(param.username, param.date));
-
-    if (logger.isInfoEnabled()) {
-      logger.info("FINISHED REPORT GENERATING");
-    }
-  }
 
 }

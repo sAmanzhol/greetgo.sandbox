@@ -36,34 +36,24 @@ public class ClientReportViewPDF implements ReportView {
             //подключаем файл шрифта, который поддерживает кириллицу
             font = new Font(bf, FONT_SIZE);
 
-            //TODO зачем здесь 2 catch?
-
-        } catch (IOException ex) {
-
-            //TODO Обрабатывай ошибки!!!
-
-            ex.printStackTrace();
-        } catch (DocumentException ex) {
+        } catch (Exception ex) {
+            font = new Font(Font.FontFamily.ZAPFDINGBATS);
             ex.printStackTrace();
         }
-
     }
 
     @Override
     public void start(ClientReportHeadData headData) {
-        try {  // Using a custom page size
+        try {
             document = new Document(PageSize.A4);
-            // step 2
             PdfWriter.getInstance(document, outputStream);
-            // step 3
             document.open();
             document.add(new Chunk(""));
             document.addTitle(headData.header);
             document.addHeader("Header",headData.header);
             document.add(table);
         } catch (Exception e) {
-            //TODO Обрабатывай ошибки!!!
-
+           document.close();
             e.printStackTrace();
         }
     }
@@ -95,8 +85,7 @@ public class ClientReportViewPDF implements ReportView {
             outputStream.flush();
             document.close();
         } catch (Exception e) {
-            //TODO Обрабатывай ошибки!!!
-
+            document.close();
             e.printStackTrace();
         }
     }
