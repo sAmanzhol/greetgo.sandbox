@@ -24,8 +24,14 @@ public class FrsMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
         " client varchar(100), " +
         " account_number varchar(100), " +
         " registered_at varchar(100), " +
-        " status int default 1" +
+        " status int default 1, " +
+        " migration_order int" +
         ")";
+
+    try (PreparedStatement ps = connection.prepareStatement(clientAccountTableCreate)) {
+      ps.executeUpdate();
+    }
+
 
     final String clientAccountTransactionTableCreate =
       "create table client_account_transaction_temp (" +
@@ -36,10 +42,6 @@ public class FrsMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
         " status int default 1" +
         ")";
 
-    try (PreparedStatement ps = connection.prepareStatement(clientAccountTableCreate)) {
-      ps.executeUpdate();
-    }
-
     try (PreparedStatement ps = connection.prepareStatement(clientAccountTransactionTableCreate)) {
       ps.executeUpdate();
     }
@@ -49,8 +51,8 @@ public class FrsMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
   public void parseAndFillData() throws Exception {
 
     String clientAccountTempTableInsert =
-      "insert into client_account_temp (client, account_number, registered_at) " +
-        " values (?, ?, ?)";
+      "insert into client_account_temp (client, account_number, registered_at, migration_order) " +
+        " values (?, ?, ?, nextval('migration_order'))";
 
     String clientAccountTransactionTempTableInsert =
       "insert into client_account_transaction_temp (account_number, transaction_type, money, finished_at) " +
@@ -153,15 +155,20 @@ public class FrsMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
 
     // Migrate valid accounts and transactions with actual 1
 
-    // no (update insert) need to fix
+
     String clientAccountTableUpdateMigrate =
       "insert into client_account (id, client, number, registered_at) " +
-        "  select nextval('id') as id, " +
-        "  (select id from client where migration_id = client) as client, " +
-        "  account_number as number, " +
-        "  to_timestamp(registered_at, 'YYYY-MM-DD hh24:mi:ss') as registered_at " +
-        " from client_account_temp " +
-        " where status = 1" +
+        "  select " +
+        "  distinct on (account_number)" +
+        "  nextval('id') as id, " +
+        "  cl.id as client, " +
+        "  ac_temp.account_number as number, " +
+        "  to_timestamp(ac_temp.registered_at, 'YYYY-MM-DD hh24:mi:ss') as registered_at " +
+        " from client_account_temp ac_temp " +
+        "   left join client cl " +
+        "     on cl.migration_id = ac_temp.client" +
+        "   where status = 1 " +
+        "   order by account_number, migration_order asc" +
         " on conflict (number) " +
         " do nothing";
 
@@ -173,12 +180,16 @@ public class FrsMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
     String clientAccountTransactionTableUpdateMigrate =
       "insert into client_account_transaction (id, account, money, finished_at, type, migration_account) " +
         " select nextval('id') as id, " +
-        "   (select id from client_account where number = account_number) as account, " +
-        "   cast(money as double precision) as money, " +
-        "   to_timestamp(finished_at, 'YYYY-MM-DD hh24:mi:ss') as finished_at, " +
-        "   (select id from transaction_type where name = transaction_type) as type, " +
+        "   ac.id as account, " +
+        "   cast(ac_tr_temp.money as double precision) as money, " +
+        "   to_timestamp(ac_tr_temp.finished_at, 'YYYY-MM-DD hh24:mi:ss') as finished_at, " +
+        "   tt.id as type, " +
         "   account_number as migration_account " +
-        " from client_account_transaction_temp " +
+        " from client_account_transaction_temp ac_tr_temp " +
+        "   left join client_account ac " +
+        "     on account_number = ac.number " +
+        "   left join transaction_type tt " +
+        "     on transaction_type = tt.name " +
         " where status = 1 " +
         "on conflict (migration_account, money, finished_at) do nothing";
 

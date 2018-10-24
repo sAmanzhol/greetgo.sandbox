@@ -252,7 +252,7 @@ public class CiaMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
 
     // Adding new charms
 
-    String CharmTableInsert =
+    String charmTableInsert =
       "insert into charm (name, id, description, energy) " +
         " select " +
         "   distinct charm as name, " +
@@ -264,7 +264,7 @@ public class CiaMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
         " group by charm " +
         "on conflict (name) do nothing";
 
-    try (PreparedStatement ps = connection.prepareStatement(CharmTableInsert)) {
+    try (PreparedStatement ps = connection.prepareStatement(charmTableInsert)) {
       ps.executeUpdate();
     }
 

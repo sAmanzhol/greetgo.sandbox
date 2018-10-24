@@ -3,6 +3,7 @@ package kz.greetgo.sandbox.register.test.dao;
 import kz.greetgo.sandbox.register.dao_model.Character;
 import kz.greetgo.sandbox.register.dao_model.*;
 import kz.greetgo.sandbox.register.impl.jdbc.migration.model.*;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
@@ -102,4 +103,10 @@ public interface MigrationTestDao {
     "from Client_account_transaction " +
     "where money = #{money} and finished_at = to_timestamp(#{finished_at}, 'YYYY-MM-DD hh24:mi:ss') and account = #{account}")
   ClientAccountTransaction getTransaction(@Param("money") Double money, @Param("finished_at") String finished_at, @Param("account") int account);
+
+
+  @Insert("insert into Client (id, surname, name, patronymic, gender, birth_date, charm, migration_id) " +
+    "values (#{id}, #{surname}, #{name}, #{patronymic}, #{gender}::gender, #{birthDate}, #{charm}, #{migration_id}) " +
+    "on conflict (id) do update set actual = 1;")
+  void insertClient(Client client);
 }

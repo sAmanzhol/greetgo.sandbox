@@ -12,6 +12,9 @@ import kz.greetgo.sandbox.register.test.dao.MigrationTestDao;
 import kz.greetgo.sandbox.register.test.util.ParentTestNg;
 import org.testng.annotations.Test;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -175,8 +178,8 @@ public class FrsMigrationTest extends ParentTestNg {
 
 
     Character character = new Character();
-    character.name = "Характер";
-    character.description = "Самовлюблённый Описание";
+    character.name = "Character insert account";
+    character.description = "Descriptiom insert account";
     character.energy = 100;
 
     characterTestDao.get().insertCharacter(character);
@@ -191,9 +194,9 @@ public class FrsMigrationTest extends ParentTestNg {
     client.gender = "MALE";
     client.birthDate = new GregorianCalendar(2010, 10, 10).getTime();
     client.charm = character.id;
-    client.migration_id = "1-A69-QA-PJ-G6hRzbEf2W";
+    client.migration_id = "1-A69-ia-PJ-G6hRzbEf2W";
 
-    clientTestDao.get().insertClient(client);
+    migrationTestDao.get().insertClient(client);
 
     //
     //
@@ -208,9 +211,13 @@ public class FrsMigrationTest extends ParentTestNg {
 
     ClientAccount account = migrationTestDao.get().getAccountByAccountNumber(accountNumber);
 
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+    Date parsedDate = dateFormat.parse("2001-02-21 15:51:14");
+    Timestamp timestamp = new java.sql.Timestamp(parsedDate.getTime());
+
     assertThat(account.client).isEqualTo(111);
     assertThat(account.number).isEqualTo("19382KZ865-20725-11111-8267359");
-    assertThat(account.registeredAt).isEqualTo("2001-02-21T15:51:14.111");
+    assertThat(account.registeredAt).isEqualTo(timestamp);
   }
 
   @Test
@@ -230,7 +237,7 @@ public class FrsMigrationTest extends ParentTestNg {
     //
     //
 
-    String accountNumber = "19382KZ865-20725-11111-8267359";
+    String accountNumber = "19382KZ865-20725-33333-8267359";
 
     ClientAccount account = migrationTestDao.get().getAccountByAccountNumber(accountNumber);
 
@@ -246,8 +253,8 @@ public class FrsMigrationTest extends ParentTestNg {
     String filePath = String.format("%s/duplicate_account/%s", migrationConfig.get().directoryTest(), fileName);
 
     Character character = new Character();
-    character.name = "Характер";
-    character.description = "Самовлюблённый Описание";
+    character.name = "Character update account";
+    character.description = "Description update account";
     character.energy = 100;
 
     characterTestDao.get().insertCharacter(character);
@@ -262,9 +269,9 @@ public class FrsMigrationTest extends ParentTestNg {
     client.gender = "MALE";
     client.birthDate = new GregorianCalendar(2010, 10, 10).getTime();
     client.charm = character.id;
-    client.migration_id = "1-A69-QA-PJ-G6hRzbEf2W";
+    client.migration_id = "1-A69-ua-PJ-G6hRzbEf2W";
 
-    clientTestDao.get().insertClient(client);
+    migrationTestDao.get().insertClient(client);
 
     //
     //
@@ -275,13 +282,17 @@ public class FrsMigrationTest extends ParentTestNg {
     //
     //
 
-    String accountNumber = "19382KZ865-20725-11111-8267359";
+    String accountNumber = "19382KZ865-20725-22222-8267359";
 
     ClientAccount account = migrationTestDao.get().getAccountByAccountNumber(accountNumber);
 
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+    Date parsedDate = dateFormat.parse("2001-02-21 15:51:14");
+    Timestamp timestamp = new java.sql.Timestamp(parsedDate.getTime());
+
     assertThat(account.client).isEqualTo(222);
-    assertThat(account.number).isEqualTo("19382KZ865-20725-11111-8267359");
-    assertThat(account.registeredAt).isEqualTo("2001-02-21T15:51:14.111");
+    assertThat(account.number).isEqualTo("19382KZ865-20725-22222-8267359");
+    assertThat(account.registeredAt).isEqualTo(timestamp);
   }
 
 
@@ -295,8 +306,8 @@ public class FrsMigrationTest extends ParentTestNg {
 
 
     Character character = new Character();
-    character.name = "Характер";
-    character.description = "Самовлюблённый Описание";
+    character.name = "Character insert transaction";
+    character.description = "Desctiption insert transaction";
     character.energy = 100;
 
     characterTestDao.get().insertCharacter(character);
@@ -304,16 +315,16 @@ public class FrsMigrationTest extends ParentTestNg {
     character.id = migrationTestDao.get().getCharmByName(character.name).id;
 
     Client client = new Client();
-    client.id = 111;
+    client.id = 333;
     client.surname = "S";
     client.name = "N";
     client.patronymic = "";
     client.gender = "MALE";
     client.birthDate = new GregorianCalendar(2010, 10, 10).getTime();
     client.charm = character.id;
-    client.migration_id = "1-A69-QA-PJ-G6hRzbEf2W";
+    client.migration_id = "1-A69-it-PJ-G6hRzbEf2W";
 
-    clientTestDao.get().insertClient(client);
+    migrationTestDao.get().insertClient(client);
 
     //
     //
@@ -324,14 +335,18 @@ public class FrsMigrationTest extends ParentTestNg {
     //
     //
 
-    ClientAccount account = migrationTestDao.get().getAccountByAccountNumber("19382KZ865-20725-98987-8267359");
-    ClientAccountTransaction transaction = migrationTestDao.get().getTransaction(-4321.5, "2011-02-21 15:51:16.000000", account.id);
+    ClientAccount account = migrationTestDao.get().getAccountByAccountNumber("19382KZ865-20725-44444-8267359");
+    ClientAccountTransaction transaction = migrationTestDao.get().getTransaction(-4321.5, "2011-02-21 15:51:16", account.id);
     TransactionType transactionType = migrationTestDao.get().getTransactionTypeById(transaction.type);
 
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+    Date parsedDate = dateFormat.parse("2011-02-21 15:51:16");
+    Timestamp timestamp = new java.sql.Timestamp(parsedDate.getTime());
+
     assertThat(transaction.money).isEqualTo(-4321.5);
-    assertThat(transaction.finishedAt).isEqualTo("2011-02-21 15:51:16.000000");
+    assertThat(transaction.finishedAt).isEqualTo(timestamp);
     assertThat(transaction.account).isEqualTo(account.id);
-    assertThat(transactionType.name).isEqualTo("Перевод в офшоры");
+    assertThat(transactionType.name).isEqualTo("Переводик в офшоры");
   }
 
   @Test
@@ -351,8 +366,8 @@ public class FrsMigrationTest extends ParentTestNg {
     //
     //
 
-    ClientAccount account = migrationTestDao.get().getAccountByAccountNumber("19382KZ865-20725-98987-8267359");
-    ClientAccountTransaction transaction = migrationTestDao.get().getTransaction(-4321.5, "2011-02-21 15:51:16.000000", account.id);
+    ClientAccount account = migrationTestDao.get().getAccountByAccountNumber("19382KZ865-20725-55555-8267359");
+    ClientAccountTransaction transaction = migrationTestDao.get().getTransaction(-4321.5, "2011-02-21 15:51:16", account.id);
 
     assertThat(transaction).isNull();
   }
@@ -374,18 +389,22 @@ public class FrsMigrationTest extends ParentTestNg {
     //
     //
 
-    ClientAccount account = migrationTestDao.get().getAccountByAccountNumber("19382KZ865-20725-98987-8267359");
-    ClientAccountTransaction transaction = migrationTestDao.get().getTransaction(-4321.5, "2011-02-21 15:51:16.000000", account.id);
+    ClientAccount account = migrationTestDao.get().getAccountByAccountNumber("19382KZ865-20725-66666-8267359");
+    ClientAccountTransaction transaction = migrationTestDao.get().getTransaction(-4321.5, "2011-02-21 15:51:16", account.id);
     TransactionType transactionType = migrationTestDao.get().getTransactionTypeById(transaction.type);
 
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+    Date parsedDate = dateFormat.parse("2011-02-21 15:51:16");
+    Timestamp timestamp = new java.sql.Timestamp(parsedDate.getTime());
+
     assertThat(transaction.money).isEqualTo(-4321.5);
-    assertThat(transaction.finishedAt).isEqualTo("2011-02-21 15:51:16.000000");
+    assertThat(transaction.finishedAt).isEqualTo(timestamp);
     assertThat(transaction.account).isEqualTo(account.id);
-    assertThat(transactionType.name).isEqualTo("Перевод в офшоры");
+    assertThat(transactionType.name).isEqualTo("Перевод");
   }
 
   @Test
-  public void validateAndMigrateData() throws Exception {
+  public void validateAndMigrateData() throws Exception                 {
 
     this.prepareTempTables();
 
@@ -393,8 +412,8 @@ public class FrsMigrationTest extends ParentTestNg {
     String filePath = String.format("%s/full/%s", migrationConfig.get().directoryTest(), fileName);
 
     Character character = new Character();
-    character.name = "Характер";
-    character.description = "Самовлюблённый Описание";
+    character.name = "Character";
+    character.description = "Character full";
     character.energy = 100;
 
     characterTestDao.get().insertCharacter(character);
@@ -402,16 +421,16 @@ public class FrsMigrationTest extends ParentTestNg {
     character.id = migrationTestDao.get().getCharmByName(character.name).id;
 
     Client client = new Client();
-    client.id = 555;
+    client.id = 999;
     client.surname = "S";
     client.name = "N";
     client.patronymic = "";
     client.gender = "MALE";
     client.birthDate = new GregorianCalendar(2010, 10, 10).getTime();
     client.charm = character.id;
-    client.migration_id = "7-A69-QA-PJ-G6hRzbEf2W";
+    client.migration_id = "7-A69-ff-PJ-G6hRzbEf2W";
 
-    clientTestDao.get().insertClient(client);
+    migrationTestDao.get().insertClient(client);
 
     //
     //
@@ -422,30 +441,34 @@ public class FrsMigrationTest extends ParentTestNg {
     //
     //
 
-    String accountNumber1 = "19382KZ865-20725-11111-8267359";
+    String accountNumber1 = "19382KZ865-20725-77777-8267359";
 
     ClientAccount account1 = migrationTestDao.get().getAccountByAccountNumber(accountNumber1);
 
-    assertThat(account1.client).isEqualTo(111);
-    assertThat(account1.number).isEqualTo("19382KZ865-20725-11111-8267359");
-    assertThat(account1.registeredAt).isEqualTo("2001-02-21T15:51:14.111");
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+    Date parsedDate = dateFormat.parse("2001-02-21 15:51:14");
+    Timestamp timestamp = new java.sql.Timestamp(parsedDate.getTime());
+
+    assertThat(account1.client).isEqualTo(999);
+    assertThat(account1.number).isEqualTo("19382KZ865-20725-77777-8267359");
+    assertThat(account1.registeredAt).isEqualTo(timestamp);
 
 
-    String accountNumber2 = "19382KZ865-20725-22222-8267359";
+    String accountNumber2 = "19382KZ865-20725-88888-8267359";
 
     ClientAccount account2 = migrationTestDao.get().getAccountByAccountNumber(accountNumber2);
 
     assertThat(account2).isNull();
 
-    ClientAccountTransaction transaction1 = migrationTestDao.get().getTransaction(-4321.5, "2011-02-21T15:51:16.996", account1.id);
+    ClientAccountTransaction transaction1 = migrationTestDao.get().getTransaction(-4321.5, "2011-02-21T15:51:16", account1.id);
     TransactionType transactionType = migrationTestDao.get().getTransactionTypeById(transaction1.type);
 
     assertThat(transaction1.money).isEqualTo(-4321.5);
-    assertThat(transaction1.finishedAt).isEqualTo("2011-02-21T15:51:16.996");
+    assertThat(transaction1.finishedAt).isEqualTo("2011-02-21T15:51:16");
     assertThat(transaction1.account).isEqualTo(account1.id);
-    assertThat(transactionType.name).isEqualTo("Перевод в офшоры");
+    assertThat(transactionType.name).isEqualTo("Перевод в оффтоп");
 
-    ClientAccountTransaction transaction2 = migrationTestDao.get().getTransaction(100100.5, "2011-02-21T15:51:16.996", account1.id);
+    ClientAccountTransaction transaction2 = migrationTestDao.get().getTransaction(100100.5, "2011-02-21T15:51:16", account1.id);
 
     assertThat(transaction2).isNull();
   }
