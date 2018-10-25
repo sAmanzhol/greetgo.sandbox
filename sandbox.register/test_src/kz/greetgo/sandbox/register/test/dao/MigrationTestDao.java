@@ -2,6 +2,9 @@ package kz.greetgo.sandbox.register.test.dao;
 
 import kz.greetgo.sandbox.register.dao_model.Character;
 import kz.greetgo.sandbox.register.dao_model.*;
+import kz.greetgo.sandbox.register.dao_model.temp.ClientAddressTemp;
+import kz.greetgo.sandbox.register.dao_model.temp.ClientPhoneTemp;
+import kz.greetgo.sandbox.register.dao_model.temp.ClientTemp;
 import kz.greetgo.sandbox.register.impl.jdbc.migration.model.*;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
@@ -110,4 +113,20 @@ public interface MigrationTestDao {
     "values (#{id}, #{surname}, #{name}, #{patronymic}, #{gender}::gender, #{birthDate}, #{charm}, #{migration_id}) " +
     "on conflict (id) do update set actual = 1;")
   void insertClient(Client client);
+
+
+  @Select("select currval('migration_order')")
+  Integer getCurrentMigrationOrder();
+
+  @Insert("insert into Client_temp (id, surname, name, patronymic, gender, birth_date, charm, status, migration_order) " +
+    "values (#{id}, #{surname}, #{name}, #{patronymic}, #{gender}, #{birthDate}, #{charm}, #{status}, nextval('migration_order'))")
+  void insertClientTemp(ClientTemp clientTemp);
+
+  @Insert("insert into Client_addr_temp (type, client, street, house, flat, status, migration_order) " +
+    "values (#{type}, #{client}, #{street}, #{house}, #{flat}, #{status}, #{migrationOrder})")
+  void insertClientAddressTemp(ClientAddressTemp clientAddressTemp);
+
+  @Insert("insert into Client_phone_temp (type, client, number, status, migration_order) " +
+    "values (#{type}, #{client}, #{number}, #{status}, #{migrationOrder})")
+  void insertClientPhoneTemp(ClientPhoneTemp clientPhoneTemp);
 }
