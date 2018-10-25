@@ -131,6 +131,12 @@
     ]]></sql>
   </changeSet>
 
+  <changeSet author="sultan" id="alter-table-client_account-migration_client">
+    <sql endDelimiter=";;"><![CDATA[
+      alter table client_account add column migration_client varchar(50);
+    ]]></sql>
+  </changeSet>
+
   <changeSet author="sultan" id="alter-table-client_account_transaction-migration_account">
     <sql endDelimiter=";;"><![CDATA[
       alter table client_account_transaction add column migration_account varchar(50);

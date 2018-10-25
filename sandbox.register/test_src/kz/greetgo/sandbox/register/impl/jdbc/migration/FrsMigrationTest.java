@@ -177,7 +177,7 @@ public class FrsMigrationTest extends ParentTestNg {
 
     Character character = new Character();
     character.name = "Character insert account";
-    character.description = "Descriptiom insert account";
+    character.description = "Description insert account";
     character.energy = 100;
 
     characterTestDao.get().insertCharacter(character);
@@ -426,6 +426,155 @@ public class FrsMigrationTest extends ParentTestNg {
     assertThat(transaction.account).isEqualTo(account.id);
     assertThat(transactionType.name).isEqualTo("Перевод");
   }
+
+
+  @Test
+  public void checkForLateUpdates_account_no_client() throws Exception {
+
+    this.prepareTempTables();
+
+    String fileName = "from_frs_2018-02-21-154543-1-30009.json_row";
+    String filePath = String.format("%s/check_late_update_account/%s", migrationConfig.get().directoryTest(), fileName);
+
+    //
+    //
+    frsMigration = new FrsMigrationCallbackImpl(filePath);
+    frsMigration.parseAndFillData();
+    frsMigration.checkForValidness();
+    frsMigration.validateAndMigrateData();
+    frsMigration.disableUnusedRecords();
+    frsMigration.checkForLateUpdates();
+    //
+    //
+
+    String accountNumber = "19382KZ865-20725-12312-8267359";
+
+    ClientAccount account = migrationTestDao.get().getAccountByAccountNumber(accountNumber);
+
+    assertThat(account).isNull();
+
+
+    Character character = new Character();
+    character.name = "Character check update account";
+    character.description = "Description check update account";
+    character.energy = 100;
+
+    characterTestDao.get().insertCharacter(character);
+
+    character.id = migrationTestDao.get().getCharmByName(character.name).id;
+
+    Client client = new Client();
+    client.id = 12312;
+    client.surname = "S";
+    client.name = "N";
+    client.patronymic = "";
+    client.gender = "MALE";
+    client.birthDate = new GregorianCalendar(2010, 10, 10).getTime();
+    client.charm = character.id;
+    client.migration_id = "1-A69-cua-PJ-G6hRzbEf2W";
+
+    migrationTestDao.get().insertClient(client);
+
+    fileName = "from_frs_2018-02-21-154543-1-30010.json_row";
+    filePath = String.format("%s/check_late_update_account/%s", migrationConfig.get().directoryTest(), fileName);
+
+    //
+    //
+    frsMigration = new FrsMigrationCallbackImpl(filePath);
+    frsMigration.parseAndFillData();
+    frsMigration.checkForValidness();
+    frsMigration.validateAndMigrateData();
+    frsMigration.disableUnusedRecords();
+    frsMigration.checkForLateUpdates();
+    //
+    //
+
+    account = migrationTestDao.get().getAccountByAccountNumber(accountNumber);
+
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+    Date parsedDate = dateFormat.parse("2001-02-21 10:10:10");
+    Timestamp timestamp = new java.sql.Timestamp(parsedDate.getTime());
+
+    assertThat(account.client).isEqualTo(12312);
+    assertThat(account.number).isEqualTo("19382KZ865-20725-12312-8267359");
+    assertThat(account.registeredAt).isEqualTo(timestamp);
+  }
+
+  @Test
+  public void checkForLateUpdates_transaction_no_account() throws Exception {
+
+    this.prepareTempTables();
+
+    String fileName = "from_frs_2018-02-21-154543-1-30009.json_row";
+    String filePath = String.format("%s/check_late_update_transaction/%s", migrationConfig.get().directoryTest(), fileName);
+
+    //
+    //
+    frsMigration = new FrsMigrationCallbackImpl(filePath);
+    frsMigration.parseAndFillData();
+    frsMigration.checkForValidness();
+    frsMigration.validateAndMigrateData();
+    frsMigration.disableUnusedRecords();
+    frsMigration.checkForLateUpdates();
+    //
+    //
+
+    String accountNumber = "19382KZ865-20725-32132-8267359";
+
+    ClientAccount account = migrationTestDao.get().getAccountByAccountNumber(accountNumber);
+
+    assertThat(account).isNull();
+
+
+    Character character = new Character();
+    character.name = "Character check update transaction";
+    character.description = "Description check update transaction";
+    character.energy = 100;
+
+    characterTestDao.get().insertCharacter(character);
+
+    character.id = migrationTestDao.get().getCharmByName(character.name).id;
+
+    Client client = new Client();
+    client.id = 32132;
+    client.surname = "S";
+    client.name = "N";
+    client.patronymic = "";
+    client.gender = "MALE";
+    client.birthDate = new GregorianCalendar(2010, 10, 10).getTime();
+    client.charm = character.id;
+    client.migration_id = "1-A69-cut-PJ-G6hRzbEf2W";
+
+    migrationTestDao.get().insertClient(client);
+
+    fileName = "from_frs_2018-02-21-154543-1-30010.json_row";
+    filePath = String.format("%s/check_late_update_transaction/%s", migrationConfig.get().directoryTest(), fileName);
+
+    //
+    //
+    frsMigration = new FrsMigrationCallbackImpl(filePath);
+    frsMigration.parseAndFillData();
+    frsMigration.checkForValidness();
+    frsMigration.validateAndMigrateData();
+    frsMigration.disableUnusedRecords();
+    frsMigration.checkForLateUpdates();
+    //
+    //
+
+    account = migrationTestDao.get().getAccountByAccountNumber(accountNumber);
+    ClientAccountTransaction transaction = migrationTestDao.get().getTransaction(-4321.5, "2011-02-21 11:11:11", account.id);
+    TransactionType transactionType = migrationTestDao.get().getTransactionTypeById(transaction.type);
+
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+    Date parsedDate = dateFormat.parse("2011-02-21 11:11:11");
+    Timestamp timestamp = new java.sql.Timestamp(parsedDate.getTime());
+
+    assertThat(transaction.money).isEqualTo(-4321.5);
+    assertThat(transaction.finishedAt).isEqualTo(timestamp);
+    assertThat(transaction.account).isEqualTo(account.id);
+    assertThat(transactionType.name).isEqualTo("Перевод в никуда");
+  }
+
 
   @Test
   public void validateAndMigrateData() throws Exception {
