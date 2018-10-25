@@ -244,7 +244,7 @@ public class FrsMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
     String clientAccountTransactionTableUpdateDisable =
       "update client_account_transaction " +
         "set actual = 0 " +
-        "where account not in (select distinct id from client_account where actual = 1)";
+        "where account is null or account not in (select distinct id from client_account where actual = 1)";
 
     try (PreparedStatement ps = connection.prepareStatement(clientAccountTransactionTableUpdateDisable)) {
       ps.executeUpdate();
@@ -252,8 +252,8 @@ public class FrsMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
   }
 
   /*
-   Function for checking new records that needed for disabled data, if there exists than we enable disabled records
- */
+    Function for checking new records that needed for disabled data, if there exists than we enable disabled records
+  */
   @Override
   public void checkForLateUpdates() {
 

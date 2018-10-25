@@ -96,7 +96,8 @@ public interface MigrationTestDao {
 
   @Select("select * " +
     "from Client_account " +
-    "where number = #{account_number}")
+    "where number = #{account_number} " +
+    "and actual = 1")
   ClientAccount getAccountByAccountNumber(String account_number);
 
   @Select("select * " +

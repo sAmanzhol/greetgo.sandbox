@@ -7,7 +7,6 @@ import kz.greetgo.sandbox.register.dao_model.*;
 import kz.greetgo.sandbox.register.impl.jdbc.migration.model.FrsAccount;
 import kz.greetgo.sandbox.register.impl.jdbc.migration.model.FrsTransaction;
 import kz.greetgo.sandbox.register.test.dao.CharacterTestDao;
-import kz.greetgo.sandbox.register.test.dao.ClientTestDao;
 import kz.greetgo.sandbox.register.test.dao.MigrationTestDao;
 import kz.greetgo.sandbox.register.test.util.ParentTestNg;
 import org.testng.annotations.Test;
@@ -25,7 +24,6 @@ public class FrsMigrationTest extends ParentTestNg {
 
   public BeanGetter<MigrationConfig> migrationConfig;
   public BeanGetter<MigrationTestDao> migrationTestDao;
-  public BeanGetter<ClientTestDao> clientTestDao;
   public BeanGetter<CharacterTestDao> characterTestDao;
 
   private FrsMigrationCallbackImpl frsMigration;
@@ -204,6 +202,7 @@ public class FrsMigrationTest extends ParentTestNg {
     frsMigration.parseAndFillData();
     frsMigration.checkForValidness();
     frsMigration.validateAndMigrateData();
+    frsMigration.disableUnusedRecords();
     //
     //
 
@@ -234,6 +233,7 @@ public class FrsMigrationTest extends ParentTestNg {
     frsMigration.parseAndFillData();
     frsMigration.checkForValidness();
     frsMigration.validateAndMigrateData();
+    frsMigration.disableUnusedRecords();
     //
     //
 
@@ -279,6 +279,7 @@ public class FrsMigrationTest extends ParentTestNg {
     frsMigration.parseAndFillData();
     frsMigration.checkForValidness();
     frsMigration.validateAndMigrateData();
+    frsMigration.disableUnusedRecords();
     //
     //
 
@@ -332,6 +333,7 @@ public class FrsMigrationTest extends ParentTestNg {
     frsMigration.parseAndFillData();
     frsMigration.checkForValidness();
     frsMigration.validateAndMigrateData();
+    frsMigration.disableUnusedRecords();
     //
     //
 
@@ -363,19 +365,40 @@ public class FrsMigrationTest extends ParentTestNg {
     frsMigration.parseAndFillData();
     frsMigration.checkForValidness();
     frsMigration.validateAndMigrateData();
+    frsMigration.disableUnusedRecords();
     //
     //
 
     ClientAccount account = migrationTestDao.get().getAccountByAccountNumber("19382KZ865-20725-55555-8267359");
-    ClientAccountTransaction transaction = migrationTestDao.get().getTransaction(-4321.5, "2011-02-21 15:51:16", account.id);
 
-    assertThat(transaction).isNull();
+    assertThat(account).isNull();
   }
 
   @Test
   public void validateAndMigrateData_duplicate_transaction() throws Exception {
 
     this.prepareTempTables();
+
+    Character character = new Character();
+    character.name = "Character update transaction";
+    character.description = "Desctiption update transaction";
+    character.energy = 100;
+
+    characterTestDao.get().insertCharacter(character);
+
+    character.id = migrationTestDao.get().getCharmByName(character.name).id;
+
+    Client client = new Client();
+    client.id = 888;
+    client.surname = "S";
+    client.name = "N";
+    client.patronymic = "";
+    client.gender = "MALE";
+    client.birthDate = new GregorianCalendar(2010, 10, 10).getTime();
+    client.charm = character.id;
+    client.migration_id = "1-A69-ut-PJ-G6hRzbEf2W";
+
+    migrationTestDao.get().insertClient(client);
 
     String fileName = "from_frs_2018-02-21-154543-1-30009.json_row";
     String filePath = String.format("%s/duplicate_transaction/%s", migrationConfig.get().directoryTest(), fileName);
@@ -386,6 +409,7 @@ public class FrsMigrationTest extends ParentTestNg {
     frsMigration.parseAndFillData();
     frsMigration.checkForValidness();
     frsMigration.validateAndMigrateData();
+    frsMigration.disableUnusedRecords();
     //
     //
 
@@ -404,7 +428,7 @@ public class FrsMigrationTest extends ParentTestNg {
   }
 
   @Test
-  public void validateAndMigrateData() throws Exception                 {
+  public void validateAndMigrateData() throws Exception {
 
     this.prepareTempTables();
 
@@ -438,6 +462,7 @@ public class FrsMigrationTest extends ParentTestNg {
     frsMigration.parseAndFillData();
     frsMigration.checkForValidness();
     frsMigration.validateAndMigrateData();
+    frsMigration.disableUnusedRecords();
     //
     //
 
@@ -463,8 +488,12 @@ public class FrsMigrationTest extends ParentTestNg {
     ClientAccountTransaction transaction1 = migrationTestDao.get().getTransaction(-4321.5, "2011-02-21T15:51:16", account1.id);
     TransactionType transactionType = migrationTestDao.get().getTransactionTypeById(transaction1.type);
 
+    dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+    parsedDate = dateFormat.parse("2011-02-21 15:51:16");
+    timestamp = new java.sql.Timestamp(parsedDate.getTime());
+
     assertThat(transaction1.money).isEqualTo(-4321.5);
-    assertThat(transaction1.finishedAt).isEqualTo("2011-02-21T15:51:16");
+    assertThat(transaction1.finishedAt).isEqualTo(timestamp);
     assertThat(transaction1.account).isEqualTo(account1.id);
     assertThat(transactionType.name).isEqualTo("Перевод в оффтоп");
 

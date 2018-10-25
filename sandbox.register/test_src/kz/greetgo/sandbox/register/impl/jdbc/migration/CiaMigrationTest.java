@@ -383,22 +383,22 @@ public class CiaMigrationTest extends ParentTestNg {
     assertThat(phones).hasSize(3);
 
     assertThat(phones.get(0).type).isEqualTo("WORK");
-    assertThat(phones.get(0).number).isEqualTo("+7-385-253-53-56");
+    assertThat(phones.get(0).number).isEqualTo("+7-111-111-12-12");
 
     assertThat(phones.get(1).type).isEqualTo("MOBILE");
-    assertThat(phones.get(1).number).isEqualTo("+7-418-204-55-17");
+    assertThat(phones.get(1).number).isEqualTo("+7-111-111-13-13");
 
     assertThat(phones.get(2).type).isEqualTo("HOME");
-    assertThat(phones.get(2).number).isEqualTo("+7-878-241-63-94");
+    assertThat(phones.get(2).number).isEqualTo("+7-111-111-14-14");
   }
 
   @Test
-  public void validateAndMigrateData_duplicate_phone() throws Exception {
+  public void validateAndMigrateData_update_phone() throws Exception {
 
     prepareTempTables();
 
     String fileName = "from_cia_2018-02-21-154532-1-300.xml";
-    String filePath = String.format("%s/duplicate_phone/%s", migrationConfig.get().directoryTest(), fileName);
+    String filePath = String.format("%s/update_phone/%s", migrationConfig.get().directoryTest(), fileName);
 
     //
     //
@@ -417,10 +417,10 @@ public class CiaMigrationTest extends ParentTestNg {
     assertThat(phones).hasSize(2);
 
     assertThat(phones.get(0).type).isEqualTo("WORK");
-    assertThat(phones.get(0).number).isEqualTo("+7-385-253-53-22");
+    assertThat(phones.get(0).number).isEqualTo("+7-222-222-22-22");
 
     assertThat(phones.get(1).type).isEqualTo("HOME");
-    assertThat(phones.get(1).number).isEqualTo("+7-878-241-63-11");
+    assertThat(phones.get(1).number).isEqualTo("+7-222-222-21-21");
   }
 
 
