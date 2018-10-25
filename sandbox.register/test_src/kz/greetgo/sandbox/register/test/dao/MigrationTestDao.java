@@ -2,9 +2,7 @@ package kz.greetgo.sandbox.register.test.dao;
 
 import kz.greetgo.sandbox.register.dao_model.Character;
 import kz.greetgo.sandbox.register.dao_model.*;
-import kz.greetgo.sandbox.register.dao_model.temp.ClientAddressTemp;
-import kz.greetgo.sandbox.register.dao_model.temp.ClientPhoneTemp;
-import kz.greetgo.sandbox.register.dao_model.temp.ClientTemp;
+import kz.greetgo.sandbox.register.dao_model.temp.*;
 import kz.greetgo.sandbox.register.impl.jdbc.migration.model.*;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
@@ -77,6 +75,11 @@ public interface MigrationTestDao {
     "where id = #{id}")
   TransactionType getTransactionTypeById(int id);
 
+  @Select("select * " +
+    "from Transaction_type " +
+    "where name = #{name}")
+  TransactionType getTransactionTypeByName(String name);
+
   @Select("select type, number " +
     "from Client_phone " +
     "where client = #{id}")
@@ -101,7 +104,7 @@ public interface MigrationTestDao {
     "from Client_account " +
     "where number = #{account_number} " +
     "and actual = 1")
-  ClientAccount getAccountByAccountNumber(String account_number);
+  ClientAccount getAccountByNumber(String account_number);
 
   @Select("select * " +
     "from Client_account_transaction " +
@@ -129,4 +132,31 @@ public interface MigrationTestDao {
   @Insert("insert into Client_phone_temp (type, client, number, status, migration_order) " +
     "values (#{type}, #{client}, #{number}, #{status}, #{migrationOrder})")
   void insertClientPhoneTemp(ClientPhoneTemp clientPhoneTemp);
+
+
+  @Insert("insert into Client_account_temp (client, account_number, registered_at, status, migration_order) " +
+    "values (#{client}, #{accountNumber}, #{registeredAt}, #{status}, nextval('migration_order'))")
+  void insertClientAccountTemp(ClientAccountTemp clientAccountTemp);
+
+  @Insert("insert into Client_account_transaction_temp (transaction_type, account_number, finished_at, money, status) " +
+    "values (#{transactionType}, #{accountNumber}, #{finishedAt}, #{money}, #{status})")
+  void insertClientAccountTransactionTemp(ClientAccountTransactionTemp clientAccountTransactionTemp);
+
+  @Insert("insert into Client_account (id, client, money, number, registered_at, actual, migration_client) " +
+    "values (nextval('id'), #{client}, #{money}, #{number}, #{registeredAt}, #{actual}, #{migrationClient}) " +
+    "on conflict (number) do update " +
+    "set actual = 1")
+  void insertClientAccount(ClientAccount clientAccount);
+
+  @Insert("insert into Client_account_transaction (id, account, money, finished_at, type, actual, migration_account) " +
+    "values (nextval('id'), #{account}, #{money}, #{finishedAt}, #{type}, #{actual}, #{migrationAccount}) " +
+    "on conflict (migration_account, money, finished_at) do update " +
+    "set actual = 1")
+  void insertClientAccountTransaction(ClientAccountTransaction clientAccountTransaction);
+
+  @Insert("insert into Transaction_type (id, code, name) " +
+    "values (nextval('id'), nextval('code'), #{name}) " +
+    "on conflict (name) do update " +
+    "set actual = 1")
+  void insertTransactionType(TransactionType transactionType);
 }

@@ -268,7 +268,6 @@ public class CiaMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
       ps.executeUpdate();
     }
 
-
     // Migrate valid clients without phone and address
 
     String clientTableUpdateMigrate =
@@ -301,6 +300,7 @@ public class CiaMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
       ps.executeUpdate();
     }
 
+    // Migrate addresses
 
     String clientAddrTableUpdateMigrate =
       "insert into client_addr (client, type, street, house, flat) " +
@@ -326,6 +326,7 @@ public class CiaMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
       ps.executeUpdate();
     }
 
+    // Migrate phones
 
     String clientPhoneTableUpdateDelete =
       "delete from client_phone " +

@@ -152,9 +152,7 @@ public class FrsMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
       ps.executeUpdate();
     }
 
-
     // Migrate valid accounts and transactions with actual 1
-
 
     String clientAccountTableUpdateMigrate =
       "insert into client_account (id, client, number, registered_at, migration_client) " +
