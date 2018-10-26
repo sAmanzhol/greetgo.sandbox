@@ -3,26 +3,26 @@ package kz.greetgo.sandbox.register.configs;
 import kz.greetgo.conf.hot.DefaultStrValue;
 import kz.greetgo.conf.hot.Description;
 
-@Description("Параметры миграции и бд")
+@Description("Параметры миграции")
 public interface MigrationConfig {
 
-  @Description("Временная директория миграционных файлов")
-  @DefaultStrValue("/home/ssailaubayev/migration")
-  String directory();
+  @Description("Хост для подключения")
+  @DefaultStrValue("localhost")
+  String ftpHostname();
 
-  @Description("Временная директория миграционных файлов для тестов")
-  @DefaultStrValue("/home/ssailaubayev/migration/test")
-  String directoryTest();
+  @Description("Логин для подключения")
+  @DefaultStrValue("ssailaubayev")
+  String ftpLogin();
 
-  @Description("URL доступа к БД")
-  @DefaultStrValue("jdbc:postgresql://localhost/ssailaubayev_sandbox")
-  String dbUrl();
-
-  @Description("Пользователь для доступа к БД")
-  @DefaultStrValue("ssailaubayev_sandbox")
-  String dbUsername();
-
-  @Description("Пароль для доступа к БД")
+  @Description("Пароль для подключения")
   @DefaultStrValue("111")
-  String dbPassword();
+  String ftpPassword();
+
+  @Description("Путь к директории где хранится реальные файлы для миграции")
+  @DefaultStrValue("migration/real")
+  String ftpRealPath();
+
+  @Description("Путь к директории где хранится тестовые файлы для миграции")
+  @DefaultStrValue("migration/test")
+  String ftpTestPath();
 }

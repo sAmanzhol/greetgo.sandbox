@@ -12,23 +12,20 @@ import org.w3c.dom.NodeList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.InputStream;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("WeakerAccess, SqlResolve")
-public class CiaMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
+public class CiaMigrationImpl extends MigrationAbstract {
 
-  private FTPClient ftp;
-  private String filePath;
-
-  public CiaMigrationCallbackImpl(String filePath) throws Exception {
-    this.filePath = filePath;
+  public CiaMigrationImpl(Connection connection) {
+    super(connection);
   }
 
-  public CiaMigrationCallbackImpl(FTPClient ftp, String filePath) throws Exception {
-    this.ftp = ftp;
-    this.filePath = filePath;
+  public CiaMigrationImpl(Connection connection, FTPClient ftp, String filePath) {
+    super(connection, ftp, filePath);
   }
 
   @Override

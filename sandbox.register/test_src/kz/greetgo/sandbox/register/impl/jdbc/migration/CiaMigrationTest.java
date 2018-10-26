@@ -24,17 +24,17 @@ import static org.fest.assertions.api.Assertions.assertThat;
 @SuppressWarnings("WeakerAccess")
 public class CiaMigrationTest extends ParentTestNg {
 
-  public BeanGetter<MigrationConfig> migrationConfig;
   public BeanGetter<MigrationTestDao> migrationTestDao;
-
   public BeanGetter<MigrationRegisterImpl> migrationRegister;
+  public BeanGetter<MigrationConfig> migrationConfig;
 
-  private CiaMigrationCallbackImpl ciaMigration;
+  public FTPClient ftp;
 
-  FTPClient ftp;
+  private CiaMigrationImpl ciaMigration;
+
 
   private void prepareTempTables() throws Exception {
-    ciaMigration = new CiaMigrationCallbackImpl("");
+    ciaMigration = new CiaMigrationImpl(migrationRegister.get().getConnection());
 
     ciaMigration.dropTemplateTables();
     ciaMigration.createTempTables();
@@ -93,11 +93,11 @@ public class CiaMigrationTest extends ParentTestNg {
     String fileName = "from_cia_2018-02-21-154532-1-300.xml";
     ftp = migrationRegister.get().getFtpConnection();
 
-    String filePath = String.format("migration/test/%s", fileName);
+    String filePath = String.format("%s/%s", migrationConfig.get().ftpTestPath(), fileName);
 
     //
     //
-    ciaMigration = new CiaMigrationCallbackImpl(ftp, filePath);
+    ciaMigration = new CiaMigrationImpl(migrationRegister.get().getConnection(), ftp, filePath);
     ciaMigration.parseAndFillData();
     //
     //
@@ -147,11 +147,11 @@ public class CiaMigrationTest extends ParentTestNg {
     String fileName = "from_cia_2018-02-21-154532-1-300.xml";
     ftp = migrationRegister.get().getFtpConnection();
 
-    String filePath = String.format("migration/test/%s", fileName);
+    String filePath = String.format("%s/%s", migrationConfig.get().ftpTestPath(), fileName);
 
     //
     //
-    ciaMigration = new CiaMigrationCallbackImpl(ftp, filePath);
+    ciaMigration = new CiaMigrationImpl(migrationRegister.get().getConnection(), ftp, filePath);
     ciaMigration.parseAndFillData();
     //
     //
@@ -181,11 +181,11 @@ public class CiaMigrationTest extends ParentTestNg {
     String fileName = "from_cia_2018-02-21-154532-1-300.xml";
     ftp = migrationRegister.get().getFtpConnection();
 
-    String filePath = String.format("migration/test/%s", fileName);
+    String filePath = String.format("%s/%s", migrationConfig.get().ftpTestPath(), fileName);
 
     //
     //
-    ciaMigration = new CiaMigrationCallbackImpl(ftp, filePath);
+    ciaMigration = new CiaMigrationImpl(migrationRegister.get().getConnection(), ftp, filePath);
     ciaMigration.parseAndFillData();
     //
     //
@@ -226,7 +226,6 @@ public class CiaMigrationTest extends ParentTestNg {
 
     //
     //
-    ciaMigration = new CiaMigrationCallbackImpl("");
     ciaMigration.checkForValidness();
     //
     //
@@ -252,7 +251,6 @@ public class CiaMigrationTest extends ParentTestNg {
 
     //
     //
-    ciaMigration = new CiaMigrationCallbackImpl("");
     ciaMigration.checkForValidness();
     //
     //
@@ -278,7 +276,6 @@ public class CiaMigrationTest extends ParentTestNg {
 
     //
     //
-    ciaMigration = new CiaMigrationCallbackImpl("");
     ciaMigration.checkForValidness();
     //
     //
@@ -302,7 +299,6 @@ public class CiaMigrationTest extends ParentTestNg {
 
     //
     //
-    ciaMigration = new CiaMigrationCallbackImpl("");
     ciaMigration.validateAndMigrateData();
     //
     //
@@ -328,7 +324,6 @@ public class CiaMigrationTest extends ParentTestNg {
 
     //
     //
-    ciaMigration = new CiaMigrationCallbackImpl("");
     ciaMigration.validateAndMigrateData();
     //
     //
@@ -357,7 +352,6 @@ public class CiaMigrationTest extends ParentTestNg {
 
     //
     //
-    ciaMigration = new CiaMigrationCallbackImpl("");
     ciaMigration.validateAndMigrateData();
     //
     //
@@ -393,7 +387,6 @@ public class CiaMigrationTest extends ParentTestNg {
 
     //
     //
-    ciaMigration = new CiaMigrationCallbackImpl("");
     ciaMigration.validateAndMigrateData();
     //
     //
@@ -426,7 +419,6 @@ public class CiaMigrationTest extends ParentTestNg {
 
     //
     //
-    ciaMigration = new CiaMigrationCallbackImpl("");
     ciaMigration.validateAndMigrateData();
     //
     //
@@ -464,7 +456,6 @@ public class CiaMigrationTest extends ParentTestNg {
 
     //
     //
-    ciaMigration = new CiaMigrationCallbackImpl("");
     ciaMigration.validateAndMigrateData();
     //
     //
@@ -514,7 +505,6 @@ public class CiaMigrationTest extends ParentTestNg {
 
     //
     //
-    ciaMigration = new CiaMigrationCallbackImpl("");
     ciaMigration.validateAndMigrateData();
     //
     //

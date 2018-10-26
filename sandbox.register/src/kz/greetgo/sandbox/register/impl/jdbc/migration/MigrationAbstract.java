@@ -1,32 +1,28 @@
 package kz.greetgo.sandbox.register.impl.jdbc.migration;
 
-import kz.greetgo.db.ConnectionCallback;
+import org.apache.commons.net.ftp.FTPClient;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 
 @SuppressWarnings("WeakerAccess")
-public abstract class MigrationCallbackAbstract<T> implements ConnectionCallback<T> {
+public abstract class MigrationAbstract {
 
   public Connection connection;
+  public FTPClient ftp;
+  public String filePath;
 
-//  public BeanGetter<MigrationConfig> migrationConfig;
 
-  public MigrationCallbackAbstract() throws Exception {
-    this.connection = DriverManager.getConnection(
-      "jdbc:postgresql://localhost/ssailaubayev_sandbox",
-      "ssailaubayev_sandbox",
-      "111"
-    );
+  public MigrationAbstract(Connection connection) {
+    this.connection = connection;
   }
 
-  @Override
-  public T doInConnection(Connection con) throws Exception {
-//    this.connection = DriverManager.getConnection(
-//      migrationConfig.get().dbUrl(),
-//      migrationConfig.get().dbUsername(),
-//      migrationConfig.get().dbPassword()
-//    );
+  public MigrationAbstract(Connection connection, FTPClient ftp, String filePath) {
+    this.connection = connection;
+    this.ftp = ftp;
+    this.filePath = filePath;
+  }
+
+  public void migrate() throws Exception {
 
     dropTemplateTables();
 
@@ -43,8 +39,6 @@ public abstract class MigrationCallbackAbstract<T> implements ConnectionCallback
     disableUnusedRecords();
 
     checkForLateUpdates();
-
-    return null;
   }
 
   public abstract void createTempTables() throws Exception;

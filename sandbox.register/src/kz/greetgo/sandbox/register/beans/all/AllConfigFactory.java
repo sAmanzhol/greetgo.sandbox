@@ -17,5 +17,4 @@ public class AllConfigFactory extends LocalConfigFactory {
   public MigrationConfig createMigrationConfig() {
     return createConfig(MigrationConfig.class);
   }
-
 }
