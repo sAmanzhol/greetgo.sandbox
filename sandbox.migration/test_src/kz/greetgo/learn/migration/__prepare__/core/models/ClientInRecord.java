@@ -1,6 +1,6 @@
-package kz.greetgo.learn.migration.__prepare__.core;
+package kz.greetgo.learn.migration.__prepare__.core.models;
 
-import kz.greetgo.learn.migration.core.Gender;
+import kz.greetgo.learn.migration.core.models.Gender;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

@@ -1,4 +1,4 @@
-package kz.greetgo.learn.migration.core;
+package kz.greetgo.learn.migration.core.models;
 
 public class AddressRecord {
     public AddressType type;

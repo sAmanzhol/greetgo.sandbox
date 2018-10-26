@@ -1,4 +1,4 @@
-package kz.greetgo.learn.migration.core;
+package kz.greetgo.learn.migration.core.models;
 
 public class Charm {
     public String name;

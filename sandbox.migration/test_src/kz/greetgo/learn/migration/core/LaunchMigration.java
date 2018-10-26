@@ -17,19 +17,38 @@ public class LaunchMigration {
     ConnectionConfig operCC = ConnectionUtils.fileToConnectionConfig(ConfigFiles.operDb());
     ConnectionConfig ciaCC = ConnectionUtils.fileToConnectionConfig(ConfigFiles.ciaDb());
 
-    try (Migration migration = new Migration(operCC, ciaCC)) {
+    try (MigrationXML migrationXML = new MigrationXML(operCC, ciaCC)) {
 
-      migration.portionSize = 250_000;
-      migration.uploadMaxBatchSize = 50_000;
-      migration.downloadMaxBatchSize = 50_000;
+      migrationXML.portionSize = 500_000;
+      migrationXML.uploadMaxBatchSize = 50_000;
+      migrationXML.downloadMaxBatchSize = 50_000;
 
       while (true)
       {
-        int count = migration.migrate();
+        int count = migrationXML.migrate();
         if (count == 0) break;
         if (count > 0) break;
         if (!file.exists()) break;
-        System.out.println("Migrated " + count + " records");
+        System.out.println("MigratedXML " + count + " records");
+        System.out.println("------------------------------------------------------------------");
+        System.out.println("------------------------------------------------------------------");
+      }
+
+    }
+
+    try (MigrationJSON migrationJSON  = new MigrationJSON(operCC, ciaCC)) {
+
+      migrationJSON.portionSize = 500_000;
+      migrationJSON.uploadMaxBatchSize = 50_000;
+      migrationJSON.downloadMaxBatchSize = 50_000;
+
+      while (true)
+      {
+        int count = migrationJSON.migrate();
+        if (count == 0) break;
+        if (count > 0) break;
+        if (!file.exists()) break;
+        System.out.println("MigratedJSON " + count + " records");
         System.out.println("------------------------------------------------------------------");
         System.out.println("------------------------------------------------------------------");
       }

@@ -1,12 +1,11 @@
 package kz.greetgo.learn.migration.test;
 
 import kz.greetgo.learn.migration.__prepare__.GenerateCiaData;
-import kz.greetgo.learn.migration.__prepare__.core.AddressInRecord;
-import kz.greetgo.learn.migration.__prepare__.core.AddressType;
-import kz.greetgo.learn.migration.__prepare__.core.ClientInRecord;
-import kz.greetgo.learn.migration.core.AddressRecord;
-import kz.greetgo.learn.migration.core.ClientRecord;
-import kz.greetgo.learn.migration.core.Migration;
+import kz.greetgo.learn.migration.__prepare__.core.models.AddressInRecord;
+import kz.greetgo.learn.migration.__prepare__.core.models.AddressType;
+import kz.greetgo.learn.migration.__prepare__.core.models.ClientInRecord;
+import kz.greetgo.learn.migration.core.models.ClientRecord;
+import kz.greetgo.learn.migration.core.MigrationXML;
 import kz.greetgo.learn.migration.interfaces.ConnectionConfig;
 import kz.greetgo.learn.migration.util.ConfigFiles;
 import kz.greetgo.learn.migration.util.ConnectionUtils;
@@ -20,9 +19,9 @@ import java.util.Date;
 import static org.fest.assertions.api.Assertions.assertThat;
 
 @Test
-public class MigrationTest extends TestNG {
+public class MigrationXMLTest extends TestNG {
 
-    private Migration migration;
+    private MigrationXML migrationXML;
 
     private ClientInRecord prepareTestData(){
         ClientInRecord clientInRecord = new ClientInRecord();
@@ -61,13 +60,13 @@ public class MigrationTest extends TestNG {
         ConnectionConfig ciaCC = ConnectionUtils.fileToConnectionConfig(ConfigFiles.ciaDb());
 
         try {
-            migration = new Migration(operCC, ciaCC);
-            migration.portionSize = 250_000;
-            migration.uploadMaxBatchSize = 50_000;
-            migration.downloadMaxBatchSize = 50_000;
+            migrationXML = new MigrationXML(operCC, ciaCC);
+            migrationXML.portionSize = 250_000;
+            migrationXML.uploadMaxBatchSize = 50_000;
+            migrationXML.downloadMaxBatchSize = 50_000;
 
             while (true) {
-                int count = migration.migrate();
+                int count = migrationXML.migrate();
                 if (count == 0) break;
                 if (count > 0) break;
                 if (!file.exists()) break;
@@ -75,13 +74,13 @@ public class MigrationTest extends TestNG {
         }
         catch (Exception e){
             e.printStackTrace();
-            if(migration != null)
-                migration.close();
+            if(migrationXML != null)
+                migrationXML.close();
         }
     }
 
     private void finishMigration(){
-        migration.close();
+        migrationXML.close();
     }
 
     @Test
@@ -92,7 +91,7 @@ public class MigrationTest extends TestNG {
         try{
             gcd.testExecute(clientInRecord);
             startMigration();
-            ClientRecord migratedRecord = migration.getByCiaID(clientInRecord.id);
+            ClientRecord migratedRecord = migrationXML.getByCiaID(clientInRecord.id);
 
                 assertThat(migratedRecord).isNotNull();
                 assertThat(migratedRecord.id).isNotNull();

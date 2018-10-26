@@ -1,4 +1,4 @@
-package kz.greetgo.learn.migration.__prepare__.core;
+package kz.greetgo.learn.migration.__prepare__.core.models;
 
 public class AddressInRecord {
      public String type;

@@ -10,8 +10,6 @@ import java.util.List;
 public abstract class SaxHandler extends DefaultHandler {
     private final List<String> pathList = new ArrayList<>();
 
-    protected boolean readText = false;
-
     protected String path() {
         StringBuilder sb = new StringBuilder();
         for (String pathElement : pathList) {
@@ -24,13 +22,16 @@ public abstract class SaxHandler extends DefaultHandler {
 
     protected String text() {
         if (text == null) return "";
+        if(text.toString().equals("null"))
+            return null;
+
         return text.toString();
     }
 
     @Override
     public void characters(char[] ch, int start, int length) throws SAXException {
         if (text == null) text = new StringBuilder();
-        text.append(ch, start, length);
+        text.append(ch,start,length);
     }
 
     @Override

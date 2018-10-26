@@ -1,4 +1,4 @@
-package kz.greetgo.learn.migration.core;
+package kz.greetgo.learn.migration.core.models;
 
 import kz.greetgo.learn.migration.util.SaxHandler;
 import org.xml.sax.Attributes;
@@ -24,7 +24,6 @@ public class ClientRecord extends SaxHandler {
   public List<Phone> phoneList = new ArrayList<>();
 
   public void parseRecordData(String recordData) throws SAXException, IOException {
-    System.out.println(recordData);
     if (recordData == null) return;
     XMLReader reader = XMLReaderFactory.createXMLReader();
     reader.setContentHandler(this);
@@ -40,21 +39,21 @@ public class ClientRecord extends SaxHandler {
       id = attributes.getValue("id");
       return;
     }
-    if ("/client/surname".equals(path)) {
+    else if ("/client/surname".equals(path)) {
       surname = attributes.getValue("value");
     }
-    if ("/client/name".equals(path)) {
+    else if ("/client/name".equals(path)) {
       name = attributes.getValue("value");
     }
-    if ("/client/patronymic".equals(path)) {
+    else if ("/client/patronymic".equals(path)) {
       patronymic = attributes.getValue("value");
       return;
     }
-    if ("/client/charm".equals(path)) {
+    else if ("/client/charm".equals(path)) {
       charm.name = attributes.getValue("value");
       return;
     }
-    if ("/client/birth".equals(path)) {
+    else if ("/client/birth".equals(path)) {
       try {
         String date = attributes.getValue("value");
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
@@ -66,13 +65,13 @@ public class ClientRecord extends SaxHandler {
         e.printStackTrace();
       }
     }
-    if("/client/gender".equals(path)){
+    else if("/client/gender".equals(path)){
        gender = Gender.valueOf(attributes.getValue("value"));
     }
-    if ("/client/address".equals(path)){
+    else if ("/client/address".equals(path)){
       addressRecordList = new ArrayList<>();
     }
-    if("/client/address/fact".equals(path)){
+    else if("/client/address/fact".equals(path)){
       AddressRecord addressRecord = new AddressRecord();
 
       addressRecord.type = AddressType.FACT;
@@ -83,7 +82,7 @@ public class ClientRecord extends SaxHandler {
       addressRecordList.add(addressRecord);
     }
 
-    if("/client/address/register".equals(path)){
+    else if("/client/address/register".equals(path)){
       AddressRecord addressRecord = new AddressRecord();
 
       addressRecord.type = AddressType.REG;
@@ -92,31 +91,34 @@ public class ClientRecord extends SaxHandler {
       addressRecord.flat = attributes.getValue("flat");
 
       addressRecordList.add(addressRecord);
-
-    }
-
-    if("/client/workPhone".equals(path)){
-      Phone phone = new Phone();
-      phone.type = PhoneType.WORK;
-      phone.number = text();
-    }
-
-    if("/client/homePhone".equals(path)){
-      Phone phone = new Phone();
-      phone.type = PhoneType.WORK;
-      phone.number = text();
-    }
-
-    if("/client/mobilePhone".equals(path)){
-      Phone phone = new Phone();
-      phone.type = PhoneType.WORK;
-      phone.number = text();
     }
   }
 
   @Override
   protected void endedTag(String tagName) throws Exception {
-
     String path = path() + "/" + tagName;
+    if("/client/workPhone".equals(path)){
+      Phone phone = new Phone();
+      phone.type = PhoneType.WORK;
+      phone.number = text();
+
+      phoneList.add(phone);
+    }
+
+    if("/client/homePhone".equals(path)){
+      Phone phone = new Phone();
+      phone.type = PhoneType.HOME;
+      phone.number = text();
+
+      phoneList.add(phone);
+    }
+
+    if("/client/mobilePhone".equals(path)){
+      Phone phone = new Phone();
+      phone.type = PhoneType.MOBILE;
+      phone.number = text();
+
+      phoneList.add(phone);
+    }
   }
 }

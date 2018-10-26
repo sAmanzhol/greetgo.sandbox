@@ -92,7 +92,8 @@
      create table client_account
         (
             id bigserial PRIMARY KEY NOT NULL,
-            client bigserial,
+            cia_id varchar(255),
+            client int8,
             money float,
             number varchar(255),
             registered_at timestamp,
@@ -106,10 +107,11 @@
      create table client_account_transaction
         (
             id bigserial PRIMARY KEY NOT NULL,
+            cia_id varchar(255),
             account bigserial,
             money float,
             finished_at timestamp,
-            type int,
+            type varchar(255),
             actual boolean default false
         )
     ]]></sql>

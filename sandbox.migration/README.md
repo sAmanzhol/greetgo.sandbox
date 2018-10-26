@@ -60,13 +60,13 @@ $ psql -U postgres -W -h localhost
 После установки всего необходимого ПО нужно склонировать проект из гитхаба командой:
 
 ```
-$ git clone https://github.com/john-kolpakov-x/learn.migration.git
+$ git clone https://github.com/john-kolpakov-x/learn.migrationXML.git
 ```
 
 и зайти в директорию
 
 ```
-$ cd learn.migration
+$ cd learn.migrationXML
 ```
 
 В этой директории будет скрипт prepare_all_databases.sh
