@@ -6,11 +6,13 @@ import kz.greetgo.sandbox.register.dao_model.Character;
 import kz.greetgo.sandbox.register.dao_model.*;
 import kz.greetgo.sandbox.register.dao_model.temp.ClientAccountTemp;
 import kz.greetgo.sandbox.register.dao_model.temp.ClientAccountTransactionTemp;
+import kz.greetgo.sandbox.register.impl.MigrationRegisterImpl;
 import kz.greetgo.sandbox.register.impl.jdbc.migration.model.FrsAccount;
 import kz.greetgo.sandbox.register.impl.jdbc.migration.model.FrsTransaction;
 import kz.greetgo.sandbox.register.test.dao.CharacterTestDao;
 import kz.greetgo.sandbox.register.test.dao.MigrationTestDao;
 import kz.greetgo.sandbox.register.test.util.ParentTestNg;
+import org.apache.commons.net.ftp.FTPClient;
 import org.testng.annotations.Test;
 
 import java.sql.Timestamp;
@@ -28,7 +30,11 @@ public class FrsMigrationTest extends ParentTestNg {
   public BeanGetter<MigrationTestDao> migrationTestDao;
   public BeanGetter<CharacterTestDao> characterTestDao;
 
+  public BeanGetter<MigrationRegisterImpl> migrationRegister;
+
   private FrsMigrationCallbackImpl frsMigration;
+
+  FTPClient ftp;
 
 
   private void prepareTempTables() throws Exception {
@@ -143,11 +149,13 @@ public class FrsMigrationTest extends ParentTestNg {
     this.prepareTempTables();
 
     String fileName = "from_frs_2018-02-21-154543-1-30009.json_row";
-    String filePath = String.format("%s/%s", migrationConfig.get().directoryTest(), fileName);
+    ftp = migrationRegister.get().getFtpConnection();
+
+    String filePath = String.format("migration/test/%s", fileName);
 
     //
     //
-    frsMigration = new FrsMigrationCallbackImpl(filePath);
+    frsMigration = new FrsMigrationCallbackImpl(ftp, filePath);
     frsMigration.parseAndFillData();
     //
     //
@@ -175,11 +183,13 @@ public class FrsMigrationTest extends ParentTestNg {
     this.prepareTempTables();
 
     String fileName = "from_frs_2018-02-21-154543-1-30009.json_row";
-    String filePath = String.format("%s/%s", migrationConfig.get().directoryTest(), fileName);
+    ftp = migrationRegister.get().getFtpConnection();
+
+    String filePath = String.format("migration/test/%s", fileName);
 
     //
     //
-    frsMigration = new FrsMigrationCallbackImpl(filePath);
+    frsMigration = new FrsMigrationCallbackImpl(ftp, filePath);
     frsMigration.parseAndFillData();
     //
     //
@@ -496,16 +506,18 @@ public class FrsMigrationTest extends ParentTestNg {
     this.prepareTempTables();
 
     String fileName = "from_frs_2018-02-21-154543-1-30009.json_row";
-    String filePath = String.format("%s/full/%s", migrationConfig.get().directoryTest(), fileName);
+    ftp = migrationRegister.get().getFtpConnection();
+
+    String filePath = String.format("migration/test/full/%s", fileName);
 
     Character character = insertCharacter("Character for full test");
     character.id = migrationTestDao.get().getCharmByName(character.name).id;
 
-    Client client = insertClient(999, character.id, "1-A69-ff-PJ-G6hRzbEf2W");
+    Client client = insertClient(999, character.id, "7-A69-ff-PJ-G6hRzbEf2W");
 
     //
     //
-    frsMigration = new FrsMigrationCallbackImpl(filePath);
+    frsMigration = new FrsMigrationCallbackImpl(ftp, filePath);
     frsMigration.parseAndFillData();
     frsMigration.checkForValidness();
     frsMigration.validateAndMigrateData();

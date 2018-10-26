@@ -3,6 +3,7 @@ package kz.greetgo.sandbox.register.impl.jdbc.migration;
 import kz.greetgo.sandbox.register.impl.jdbc.migration.model.CiaAddress;
 import kz.greetgo.sandbox.register.impl.jdbc.migration.model.CiaClient;
 import kz.greetgo.sandbox.register.impl.jdbc.migration.model.CiaPhone;
+import org.apache.commons.net.ftp.FTPClient;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -10,16 +11,23 @@ import org.w3c.dom.NodeList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.File;
+import java.io.InputStream;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("WeakerAccess, SqlResolve")
 public class CiaMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
 
+  private FTPClient ftp;
   private String filePath;
 
   public CiaMigrationCallbackImpl(String filePath) throws Exception {
+    this.filePath = filePath;
+  }
+
+  public CiaMigrationCallbackImpl(FTPClient ftp, String filePath) throws Exception {
+    this.ftp = ftp;
     this.filePath = filePath;
   }
 
@@ -88,10 +96,10 @@ public class CiaMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
         " values (?, ?, ?, ?, ?, currval('migration_order'))";
 
 
-    File ciaFile = new File(this.filePath);
+    InputStream stream = ftp.retrieveFileStream(filePath);
     DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
     DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-    Document doc = dBuilder.parse(ciaFile);
+    Document doc = dBuilder.parse(stream);
 
     NodeList clientNodes = doc.getElementsByTagName("client");
 
@@ -167,6 +175,9 @@ public class CiaMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
         }
       }
     }
+
+    stream.close();
+    ftp.completePendingCommand();
   }
 
   private void parseCiaClientPhones(List<CiaPhone> phones, Element curClientElement, String phoneType) {

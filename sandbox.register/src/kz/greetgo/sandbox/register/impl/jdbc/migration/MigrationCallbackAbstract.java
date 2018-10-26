@@ -28,6 +28,8 @@ public abstract class MigrationCallbackAbstract<T> implements ConnectionCallback
 //      migrationConfig.get().dbPassword()
 //    );
 
+    dropTemplateTables();
+
     createTempTables();
 
     parseAndFillData();

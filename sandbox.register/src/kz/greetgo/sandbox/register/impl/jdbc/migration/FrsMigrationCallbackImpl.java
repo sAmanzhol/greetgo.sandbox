@@ -2,17 +2,26 @@ package kz.greetgo.sandbox.register.impl.jdbc.migration;
 
 import kz.greetgo.sandbox.register.impl.jdbc.migration.model.FrsAccount;
 import kz.greetgo.sandbox.register.impl.jdbc.migration.model.FrsTransaction;
+import org.apache.commons.net.ftp.FTPClient;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.sql.PreparedStatement;
 
+@SuppressWarnings("WeakerAccess, SqlResolve")
 public class FrsMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
 
+  private FTPClient ftp;
   private String filePath;
 
   public FrsMigrationCallbackImpl(String filePath) throws Exception {
+    this.filePath = filePath;
+  }
+
+  public FrsMigrationCallbackImpl(FTPClient ftp, String filePath) throws Exception {
+    this.ftp = ftp;
     this.filePath = filePath;
   }
 
@@ -59,8 +68,8 @@ public class FrsMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
         " values (?, ?, ?, ?)";
 
 
-    FileReader fileReader = new FileReader(filePath);
-    BufferedReader bufferedReader = new BufferedReader(fileReader);
+    InputStream stream = ftp.retrieveFileStream(filePath);
+    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(stream, "UTF-8"));
 
     String rowString;
 
@@ -100,7 +109,8 @@ public class FrsMigrationCallbackImpl extends MigrationCallbackAbstract<Void> {
     }
 
     bufferedReader.close();
-    fileReader.close();
+    stream.close();
+    ftp.completePendingCommand();
   }
 
   /*

@@ -8,11 +8,13 @@ import kz.greetgo.sandbox.register.dao_model.ClientPhone;
 import kz.greetgo.sandbox.register.dao_model.temp.ClientAddressTemp;
 import kz.greetgo.sandbox.register.dao_model.temp.ClientPhoneTemp;
 import kz.greetgo.sandbox.register.dao_model.temp.ClientTemp;
+import kz.greetgo.sandbox.register.impl.MigrationRegisterImpl;
 import kz.greetgo.sandbox.register.impl.jdbc.migration.model.CiaAddress;
 import kz.greetgo.sandbox.register.impl.jdbc.migration.model.CiaClient;
 import kz.greetgo.sandbox.register.impl.jdbc.migration.model.CiaPhone;
 import kz.greetgo.sandbox.register.test.dao.MigrationTestDao;
 import kz.greetgo.sandbox.register.test.util.ParentTestNg;
+import org.apache.commons.net.ftp.FTPClient;
 import org.testng.annotations.Test;
 
 import java.util.List;
@@ -25,7 +27,11 @@ public class CiaMigrationTest extends ParentTestNg {
   public BeanGetter<MigrationConfig> migrationConfig;
   public BeanGetter<MigrationTestDao> migrationTestDao;
 
+  public BeanGetter<MigrationRegisterImpl> migrationRegister;
+
   private CiaMigrationCallbackImpl ciaMigration;
+
+  FTPClient ftp;
 
   private void prepareTempTables() throws Exception {
     ciaMigration = new CiaMigrationCallbackImpl("");
@@ -85,11 +91,13 @@ public class CiaMigrationTest extends ParentTestNg {
     prepareTempTables();
 
     String fileName = "from_cia_2018-02-21-154532-1-300.xml";
-    String filePath = String.format("%s/%s", migrationConfig.get().directoryTest(), fileName);
+    ftp = migrationRegister.get().getFtpConnection();
+
+    String filePath = String.format("migration/test/%s", fileName);
 
     //
     //
-    ciaMigration = new CiaMigrationCallbackImpl(filePath);
+    ciaMigration = new CiaMigrationCallbackImpl(ftp, filePath);
     ciaMigration.parseAndFillData();
     //
     //
@@ -137,11 +145,13 @@ public class CiaMigrationTest extends ParentTestNg {
     prepareTempTables();
 
     String fileName = "from_cia_2018-02-21-154532-1-300.xml";
-    String filePath = String.format("%s/%s", migrationConfig.get().directoryTest(), fileName);
+    ftp = migrationRegister.get().getFtpConnection();
+
+    String filePath = String.format("migration/test/%s", fileName);
 
     //
     //
-    ciaMigration = new CiaMigrationCallbackImpl(filePath);
+    ciaMigration = new CiaMigrationCallbackImpl(ftp, filePath);
     ciaMigration.parseAndFillData();
     //
     //
@@ -169,11 +179,13 @@ public class CiaMigrationTest extends ParentTestNg {
     prepareTempTables();
 
     String fileName = "from_cia_2018-02-21-154532-1-300.xml";
-    String filePath = String.format("%s/%s", migrationConfig.get().directoryTest(), fileName);
+    ftp = migrationRegister.get().getFtpConnection();
+
+    String filePath = String.format("migration/test/%s", fileName);
 
     //
     //
-    ciaMigration = new CiaMigrationCallbackImpl(filePath);
+    ciaMigration = new CiaMigrationCallbackImpl(ftp, filePath);
     ciaMigration.parseAndFillData();
     //
     //
