@@ -3,6 +3,7 @@ package kz.greetgo.sandbox.register.impl.jdbc.migration;
 import kz.greetgo.sandbox.register.impl.jdbc.migration.model.FrsAccount;
 import kz.greetgo.sandbox.register.impl.jdbc.migration.model.FrsTransaction;
 import org.apache.commons.net.ftp.FTPClient;
+import org.apache.log4j.Logger;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -10,9 +11,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.time.Duration;
+import java.time.Instant;
 
 @SuppressWarnings("WeakerAccess, SqlResolve")
 public class FrsMigrationImpl extends MigrationAbstract {
+
+  final static Logger logger = Logger.getLogger("kz.greetgo.sandbox.register.impl.jdbc.migration.FrsMigrationImpl");
 
   public FrsMigrationImpl(Connection connection) {
     super(connection);
@@ -24,6 +29,16 @@ public class FrsMigrationImpl extends MigrationAbstract {
 
   @Override
   public void createTempTables() throws Exception {
+
+    Instant startTime = Instant.now();
+
+    if (logger.isInfoEnabled()) {
+      logger.info("Started creating temp tables!");
+    }
+
+    if (logger.isInfoEnabled()) {
+      logger.info("Creating temp table - ClientAccountTempTable!");
+    }
 
     final String clientAccountTableCreate =
       "create table client_account_temp (" +
@@ -38,6 +53,9 @@ public class FrsMigrationImpl extends MigrationAbstract {
       ps.executeUpdate();
     }
 
+    if (logger.isInfoEnabled()) {
+      logger.info("Creating temp table - ClientAccountTransactionTempTable!");
+    }
 
     final String clientAccountTransactionTableCreate =
       "create table client_account_transaction_temp (" +
@@ -51,10 +69,26 @@ public class FrsMigrationImpl extends MigrationAbstract {
     try (PreparedStatement ps = connection.prepareStatement(clientAccountTransactionTableCreate)) {
       ps.executeUpdate();
     }
+
+    Instant endTime = Instant.now();
+    Duration timeSpent = Duration.between(startTime, endTime);
+
+
+    if (logger.isInfoEnabled()) {
+      logger.info(String.format("Temporary tables were created! Time taken: %s milliseconds!", timeSpent.toMillis()));
+    }
   }
 
   @Override
   public void parseAndFillData() throws Exception {
+
+    Instant startTime = Instant.now();
+    int accountCount = 0;
+    int transactionCount = 0;
+
+    if (logger.isInfoEnabled()) {
+      logger.info(String.format("Started parsing file %s, and inserting to temp tables!", filePath));
+    }
 
     String clientAccountTempTableInsert =
       "insert into client_account_temp (client, account_number, registered_at, migration_order) " +
@@ -80,7 +114,6 @@ public class FrsMigrationImpl extends MigrationAbstract {
         frsTransaction.transactionType = (String) rowJson.get("transaction_type");
         frsTransaction.accountNumber = (String) rowJson.get("account_number");
 
-
         try (PreparedStatement ps = connection.prepareStatement(clientAccountTransactionTempTableInsert)) {
           ps.setObject(1, frsTransaction.accountNumber);
           ps.setObject(2, frsTransaction.transactionType);
@@ -88,6 +121,8 @@ public class FrsMigrationImpl extends MigrationAbstract {
           ps.setObject(4, frsTransaction.finishedAt);
 
           ps.executeUpdate();
+
+          transactionCount++;
         }
       } else if (rowJson.get("type").equals("new_account")) {
         FrsAccount frsAccount = new FrsAccount();
@@ -101,6 +136,8 @@ public class FrsMigrationImpl extends MigrationAbstract {
           ps.setObject(3, frsAccount.registeredAt);
 
           ps.executeUpdate();
+
+          accountCount++;
         }
       }
     }
@@ -108,6 +145,13 @@ public class FrsMigrationImpl extends MigrationAbstract {
     bufferedReader.close();
     stream.close();
     ftp.completePendingCommand();
+
+    Instant endTime = Instant.now();
+    Duration timeSpent = Duration.between(startTime, endTime);
+
+    if (logger.isInfoEnabled()) {
+      logger.info(String.format("Ended parsing file %s, and in total inserted %d accounts and %d transactions! Time taken: %s milliseconds!", filePath, accountCount, transactionCount, timeSpent.toMillis()));
+    }
   }
 
   /*
@@ -115,6 +159,16 @@ public class FrsMigrationImpl extends MigrationAbstract {
  */
   @Override
   public void checkForValidness() throws Exception {
+
+    Instant startTime = Instant.now();
+
+    if (logger.isInfoEnabled()) {
+      logger.info("Started checking temp tables for validness, and if there error sets status = 2!");
+    }
+
+    if (logger.isInfoEnabled()) {
+      logger.info("Checking temp table - ClientAccountTempTable!");
+    }
 
     String clientAccountTempTableUpdateError =
       "update client_account_temp set status = 2 " +
@@ -126,6 +180,9 @@ public class FrsMigrationImpl extends MigrationAbstract {
       ps.executeUpdate();
     }
 
+    if (logger.isInfoEnabled()) {
+      logger.info("Checking temp table - ClientAccountTransactionTempTable!");
+    }
 
     String clientAccountTransactionTempTableUpdateError =
       "update client_account_transaction_temp set status = 2 " +
@@ -137,10 +194,28 @@ public class FrsMigrationImpl extends MigrationAbstract {
     try (PreparedStatement ps = connection.prepareStatement(clientAccountTransactionTempTableUpdateError)) {
       ps.executeUpdate();
     }
+
+    Instant endTime = Instant.now();
+    Duration timeSpent = Duration.between(startTime, endTime);
+
+
+    if (logger.isInfoEnabled()) {
+      logger.info(String.format("Ended checking temp tables for validness! Time taken: %s milliseconds!", timeSpent.toMillis()));
+    }
   }
 
   @Override
   public void validateAndMigrateData() throws Exception {
+
+    Instant startTime = Instant.now();
+
+    if (logger.isInfoEnabled()) {
+      logger.info("Started validating and migrating data!");
+    }
+
+    if (logger.isInfoEnabled()) {
+      logger.info("Inserting new transaction types!");
+    }
 
     // Adding new transaction types
 
@@ -157,6 +232,10 @@ public class FrsMigrationImpl extends MigrationAbstract {
 
     try (PreparedStatement ps = connection.prepareStatement(clientAccountTransactionTypeInsert)) {
       ps.executeUpdate();
+    }
+
+    if (logger.isInfoEnabled()) {
+      logger.info("Validating and migrating Account!");
     }
 
     // Migrate valid accounts and transactions with actual 1
@@ -182,6 +261,9 @@ public class FrsMigrationImpl extends MigrationAbstract {
       ps.executeUpdate();
     }
 
+    if (logger.isInfoEnabled()) {
+      logger.info("Validating and migrating Transaction!");
+    }
 
     String clientAccountTransactionTableUpdateMigrate =
       "insert into client_account_transaction (id, account, money, finished_at, type, migration_account) " +
@@ -203,6 +285,9 @@ public class FrsMigrationImpl extends MigrationAbstract {
       ps.executeUpdate();
     }
 
+    if (logger.isInfoEnabled()) {
+      logger.info("Validating and migrating Account (setting money from transactions)!");
+    }
 
     String clientAccountTableUpdateMigrateMoney =
       "update client_account " +
@@ -212,10 +297,27 @@ public class FrsMigrationImpl extends MigrationAbstract {
     try (PreparedStatement ps = connection.prepareStatement(clientAccountTableUpdateMigrateMoney)) {
       ps.executeUpdate();
     }
+
+    Instant endTime = Instant.now();
+    Duration timeSpent = Duration.between(startTime, endTime);
+
+    if (logger.isInfoEnabled()) {
+      logger.info(String.format("Ended validating and migrating Account, Transaction! Time taken: %s milliseconds!", timeSpent.toMillis()));
+    }
   }
 
   @Override
   public void dropTemplateTables() throws Exception {
+
+    Instant startTime = Instant.now();
+
+    if (logger.isInfoEnabled()) {
+      logger.info("Started dropping temp tables!");
+    }
+
+    if (logger.isInfoEnabled()) {
+      logger.info("Dropping Client Account Temp Table!");
+    }
 
     final String clientAccountTableDrop = "drop table if exists client_account_temp";
 
@@ -223,11 +325,22 @@ public class FrsMigrationImpl extends MigrationAbstract {
       ps.executeUpdate();
     }
 
+    if (logger.isInfoEnabled()) {
+      logger.info("Dropping Client Account Transaction Temp Table!");
+    }
 
     final String clientAccountTransactionTableDrop = "drop table if exists client_account_transaction_temp";
 
     try (PreparedStatement ps = connection.prepareStatement(clientAccountTransactionTableDrop)) {
       ps.executeUpdate();
+    }
+
+    Instant endTime = Instant.now();
+    Duration timeSpent = Duration.between(startTime, endTime);
+
+
+    if (logger.isInfoEnabled()) {
+      logger.info(String.format("Ended dropping temp tables! Time taken: %s milliseconds!", timeSpent.toMillis()));
     }
   }
 
@@ -236,6 +349,16 @@ public class FrsMigrationImpl extends MigrationAbstract {
  */
   @Override
   public void disableUnusedRecords() throws Exception {
+
+    Instant startTime = Instant.now();
+
+    if (logger.isInfoEnabled()) {
+      logger.info("Started disabling unused records, ex: if account has not client or transaction has not account than it's actual = 0!");
+    }
+
+    if (logger.isInfoEnabled()) {
+      logger.info("Disabling Client Accounts!");
+    }
 
     String clientAccountTableUpdateDisable =
       "update client_account " +
@@ -246,6 +369,9 @@ public class FrsMigrationImpl extends MigrationAbstract {
       ps.executeUpdate();
     }
 
+    if (logger.isInfoEnabled()) {
+      logger.info("Disabling Client Account Transactions!");
+    }
 
     String clientAccountTransactionTableUpdateDisable =
       "update client_account_transaction " +
@@ -255,6 +381,14 @@ public class FrsMigrationImpl extends MigrationAbstract {
     try (PreparedStatement ps = connection.prepareStatement(clientAccountTransactionTableUpdateDisable)) {
       ps.executeUpdate();
     }
+
+    Instant endTime = Instant.now();
+    Duration timeSpent = Duration.between(startTime, endTime);
+
+
+    if (logger.isInfoEnabled()) {
+      logger.info(String.format("Ended disabling records! Time taken: %s milliseconds!", timeSpent.toMillis()));
+    }
   }
 
   /*
@@ -262,6 +396,17 @@ public class FrsMigrationImpl extends MigrationAbstract {
   */
   @Override
   public void checkForLateUpdates() throws Exception {
+
+    Instant startTime = Instant.now();
+
+    if (logger.isInfoEnabled()) {
+      logger.info("Started checking late updates, ex: new clients for existing accounts or new accounts for transactions!");
+    }
+
+    if (logger.isInfoEnabled()) {
+      logger.info("Checking Accounts without Clients for new Clients!");
+    }
+
     String clientAccountTableUpdateMigrate =
       "update client_account " +
         "set actual = 1, " +
@@ -271,6 +416,10 @@ public class FrsMigrationImpl extends MigrationAbstract {
 
     try (PreparedStatement ps = connection.prepareStatement(clientAccountTableUpdateMigrate)) {
       ps.executeUpdate();
+    }
+
+    if (logger.isInfoEnabled()) {
+      logger.info("Checking Transactions without Accounts for new Accounts!");
     }
 
     String clientAccountTransactionTableUpdateMigrate =
@@ -284,13 +433,25 @@ public class FrsMigrationImpl extends MigrationAbstract {
       ps.executeUpdate();
     }
 
-    String clientAccountTransactionTableUpdateDisable =
-      "update client_account_transaction " +
-        "set actual = 0 " +
-        "where account is null or account not in (select distinct id from client_account where actual = 1)";
+    if (logger.isInfoEnabled()) {
+      logger.info("Validating and migrating new Accounts (setting money from transactions)!");
+    }
 
-    try (PreparedStatement ps = connection.prepareStatement(clientAccountTransactionTableUpdateDisable)) {
+    String clientAccountTableUpdateMigrateMoney =
+      "update client_account " +
+        "set money = (select sum(money) from client_account_transaction where account = client_account.id and type notnull) " +
+        "where actual = 1 and client notnull";
+
+    try (PreparedStatement ps = connection.prepareStatement(clientAccountTableUpdateMigrateMoney)) {
       ps.executeUpdate();
+    }
+
+    Instant endTime = Instant.now();
+    Duration timeSpent = Duration.between(startTime, endTime);
+
+
+    if (logger.isInfoEnabled()) {
+      logger.info(String.format("Ended checking late updates! Time taken: %s milliseconds!", timeSpent.toMillis()));
     }
   }
 }

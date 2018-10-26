@@ -4,6 +4,7 @@ import kz.greetgo.sandbox.register.impl.jdbc.migration.model.CiaAddress;
 import kz.greetgo.sandbox.register.impl.jdbc.migration.model.CiaClient;
 import kz.greetgo.sandbox.register.impl.jdbc.migration.model.CiaPhone;
 import org.apache.commons.net.ftp.FTPClient;
+import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -14,11 +15,15 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("WeakerAccess, SqlResolve")
 public class CiaMigrationImpl extends MigrationAbstract {
+
+  final static Logger logger = Logger.getLogger("kz.greetgo.sandbox.register.impl.jdbc.migration.CiaMigrationImpl");
 
   public CiaMigrationImpl(Connection connection) {
     super(connection);
@@ -30,6 +35,16 @@ public class CiaMigrationImpl extends MigrationAbstract {
 
   @Override
   public void createTempTables() throws Exception {
+
+    Instant startTime = Instant.now();
+
+    if (logger.isInfoEnabled()) {
+      logger.info("Started creating temp tables!");
+    }
+
+    if (logger.isInfoEnabled()) {
+      logger.info("Creating temp table - ClientTempTable!");
+    }
 
     final String clientTempTableCreate =
       "create table client_temp (" +
@@ -48,6 +63,10 @@ public class CiaMigrationImpl extends MigrationAbstract {
       ps.executeUpdate();
     }
 
+    if (logger.isInfoEnabled()) {
+      logger.info("Creating temp table - ClientPhoneTempTable!");
+    }
+
     final String clientPhoneTempTableCreate =
       "create table client_phone_temp (" +
         " type varchar(100), " +
@@ -59,6 +78,10 @@ public class CiaMigrationImpl extends MigrationAbstract {
 
     try (PreparedStatement ps = connection.prepareStatement(clientPhoneTempTableCreate)) {
       ps.executeUpdate();
+    }
+
+    if (logger.isInfoEnabled()) {
+      logger.info("Creating temp table - ClientAddressTempTable!");
     }
 
     final String clientAddressTempTableCreate =
@@ -75,10 +98,26 @@ public class CiaMigrationImpl extends MigrationAbstract {
     try (PreparedStatement ps = connection.prepareStatement(clientAddressTempTableCreate)) {
       ps.executeUpdate();
     }
+
+    Instant endTime = Instant.now();
+    Duration timeSpent = Duration.between(startTime, endTime);
+
+
+    if (logger.isInfoEnabled()) {
+      logger.info(String.format("Temporary tables were created! Time taken: %s milliseconds!", timeSpent.toMillis()));
+    }
   }
 
   @Override
   public void parseAndFillData() throws Exception {
+
+    Instant startTime = Instant.now();
+    int phoneCount = 0;
+    int addressCount = 0;
+
+    if (logger.isInfoEnabled()) {
+      logger.info(String.format("Started parsing file %s, and inserting to temp tables!", filePath));
+    }
 
     String clientTempTableInsert =
       "insert into client_temp (id, surname, name, patronymic, gender, birth_date, charm, migration_order) " +
@@ -153,6 +192,8 @@ public class CiaMigrationImpl extends MigrationAbstract {
           ps.setObject(5, ciaAddress.flat);
 
           ps.executeUpdate();
+
+          addressCount++;
         }
       }
 
@@ -169,12 +210,21 @@ public class CiaMigrationImpl extends MigrationAbstract {
           ps.setObject(3, ciaPhone.number);
 
           ps.executeUpdate();
+
+          phoneCount++;
         }
       }
     }
 
     stream.close();
     ftp.completePendingCommand();
+
+    Instant endTime = Instant.now();
+    Duration timeSpent = Duration.between(startTime, endTime);
+
+    if (logger.isInfoEnabled()) {
+      logger.info(String.format("Ended parsing file %s, and in total inserted %d clients and %d phones and %d addresses! Time taken: %s milliseconds!", filePath, clientNodes.getLength(), phoneCount, addressCount, timeSpent.toMillis()));
+    }
   }
 
   private void parseCiaClientPhones(List<CiaPhone> phones, Element curClientElement, String phoneType) {
@@ -225,6 +275,16 @@ public class CiaMigrationImpl extends MigrationAbstract {
   @Override
   public void checkForValidness() throws Exception {
 
+    Instant startTime = Instant.now();
+
+    if (logger.isInfoEnabled()) {
+      logger.info("Started checking temp tables for validness, and if there error sets status = 2!");
+    }
+
+    if (logger.isInfoEnabled()) {
+      logger.info("Checking temp table - ClientTempTable!");
+    }
+
     String clientTempTableUpdateError =
       "update client_temp set status = 2 " +
         " where surname = '' or name = '' or gender = '' or charm = '' or birth_date = '' " +
@@ -236,6 +296,9 @@ public class CiaMigrationImpl extends MigrationAbstract {
       ps.executeUpdate();
     }
 
+    if (logger.isInfoEnabled()) {
+      logger.info("Checking temp table - ClientPhoneTempTable!");
+    }
 
     String clientPhoneTempTableUpdateError =
       "update client_phone_temp set status = 2 " +
@@ -245,6 +308,9 @@ public class CiaMigrationImpl extends MigrationAbstract {
       ps.executeUpdate();
     }
 
+    if (logger.isInfoEnabled()) {
+      logger.info("Checking temp table - ClientAddressTempTable!");
+    }
 
     String clientAddrTempTableUpdateError =
       "update client_addr_temp set status = 2 " +
@@ -253,10 +319,28 @@ public class CiaMigrationImpl extends MigrationAbstract {
     try (PreparedStatement ps = connection.prepareStatement(clientAddrTempTableUpdateError)) {
       ps.executeUpdate();
     }
+
+    Instant endTime = Instant.now();
+    Duration timeSpent = Duration.between(startTime, endTime);
+
+
+    if (logger.isInfoEnabled()) {
+      logger.info(String.format("Ended checking temp tables for validness! Time taken: %s milliseconds!", timeSpent.toMillis()));
+    }
   }
 
   @Override
   public void validateAndMigrateData() throws Exception {
+
+    Instant startTime = Instant.now();
+
+    if (logger.isInfoEnabled()) {
+      logger.info("Started validating and migrating data!");
+    }
+
+    if (logger.isInfoEnabled()) {
+      logger.info("Inserting new charms!");
+    }
 
     // Adding new charms
 
@@ -274,6 +358,10 @@ public class CiaMigrationImpl extends MigrationAbstract {
 
     try (PreparedStatement ps = connection.prepareStatement(charmTableInsert)) {
       ps.executeUpdate();
+    }
+
+    if (logger.isInfoEnabled()) {
+      logger.info("Validating and migrating Client!");
     }
 
     // Migrate valid clients without phone and address
@@ -308,6 +396,10 @@ public class CiaMigrationImpl extends MigrationAbstract {
       ps.executeUpdate();
     }
 
+    if (logger.isInfoEnabled()) {
+      logger.info("Validating and migrating Client Addresses!");
+    }
+
     // Migrate addresses
 
     String clientAddrTableUpdateMigrate =
@@ -334,6 +426,10 @@ public class CiaMigrationImpl extends MigrationAbstract {
       ps.executeUpdate();
     }
 
+    if (logger.isInfoEnabled()) {
+      logger.info("Deleting previous Client Phones!");
+    }
+
     // Migrate phones
 
     String clientPhoneTableUpdateDelete =
@@ -350,6 +446,9 @@ public class CiaMigrationImpl extends MigrationAbstract {
       ps.executeUpdate();
     }
 
+    if (logger.isInfoEnabled()) {
+      logger.info("Validating and migrating Client Phones!");
+    }
 
     String clientPhoneTableUpdateMigrate =
       "with maxMigOrder as" +
@@ -376,15 +475,36 @@ public class CiaMigrationImpl extends MigrationAbstract {
     try (PreparedStatement ps = connection.prepareStatement(clientPhoneTableUpdateMigrate)) {
       ps.executeUpdate();
     }
+
+    Instant endTime = Instant.now();
+    Duration timeSpent = Duration.between(startTime, endTime);
+
+    if (logger.isInfoEnabled()) {
+      logger.info(String.format("Ended validating and migrating Client, Phone, Address! Time taken: %s milliseconds!", timeSpent.toMillis()));
+    }
   }
 
   @Override
   public void dropTemplateTables() throws Exception {
 
+    Instant startTime = Instant.now();
+
+    if (logger.isInfoEnabled()) {
+      logger.info("Started dropping temp tables!");
+    }
+
+    if (logger.isInfoEnabled()) {
+      logger.info("Dropping Client Temp Table!");
+    }
+
     final String clientTempTableDrop = "drop table if exists client_temp";
 
     try (PreparedStatement ps = connection.prepareStatement(clientTempTableDrop)) {
       ps.executeUpdate();
+    }
+
+    if (logger.isInfoEnabled()) {
+      logger.info("Dropping Client Phone Temp Table!");
     }
 
     final String clientPhoneTempTableDrop = "drop table if exists client_phone_temp";
@@ -393,10 +513,22 @@ public class CiaMigrationImpl extends MigrationAbstract {
       ps.executeUpdate();
     }
 
+    if (logger.isInfoEnabled()) {
+      logger.info("Dropping Client Address Temp Table!");
+    }
+
     final String clientAddressTempTableDrop = "drop table if exists client_addr_temp";
 
     try (PreparedStatement ps = connection.prepareStatement(clientAddressTempTableDrop)) {
       ps.executeUpdate();
+    }
+
+    Instant endTime = Instant.now();
+    Duration timeSpent = Duration.between(startTime, endTime);
+
+
+    if (logger.isInfoEnabled()) {
+      logger.info(String.format("Ended dropping temp tables! Time taken: %s milliseconds!", timeSpent.toMillis()));
     }
   }
 
@@ -405,6 +537,16 @@ public class CiaMigrationImpl extends MigrationAbstract {
  */
   @Override
   public void disableUnusedRecords() throws Exception {
+
+    Instant startTime = Instant.now();
+
+    if (logger.isInfoEnabled()) {
+      logger.info("Started disabling unused records, ex: if phone or address has not client than it's actual = 0!");
+    }
+
+    if (logger.isInfoEnabled()) {
+      logger.info("Disabling Client Phones!");
+    }
 
     String clientPhoneTableUpdateDisable =
       "update client_phone " +
@@ -415,6 +557,9 @@ public class CiaMigrationImpl extends MigrationAbstract {
       ps.executeUpdate();
     }
 
+    if (logger.isInfoEnabled()) {
+      logger.info("Disabling Client Addresses!");
+    }
 
     String clientAddrTableUpdateDisable =
       "update client_addr " +
@@ -423,6 +568,14 @@ public class CiaMigrationImpl extends MigrationAbstract {
 
     try (PreparedStatement ps = connection.prepareStatement(clientAddrTableUpdateDisable)) {
       ps.executeUpdate();
+    }
+
+    Instant endTime = Instant.now();
+    Duration timeSpent = Duration.between(startTime, endTime);
+
+
+    if (logger.isInfoEnabled()) {
+      logger.info(String.format("Ended disabling records! Time taken: %s milliseconds!", timeSpent.toMillis()));
     }
   }
 
