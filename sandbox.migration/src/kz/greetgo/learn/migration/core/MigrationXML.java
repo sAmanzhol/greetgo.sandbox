@@ -1,9 +1,6 @@
 package kz.greetgo.learn.migration.core;
 
-import kz.greetgo.learn.migration.core.models.AddressRecord;
-import kz.greetgo.learn.migration.core.models.Charm;
-import kz.greetgo.learn.migration.core.models.ClientRecord;
-import kz.greetgo.learn.migration.core.models.Phone;
+import kz.greetgo.learn.migration.core.models.*;
 import kz.greetgo.learn.migration.interfaces.ConnectionConfig;
 import kz.greetgo.learn.migration.util.TimeUtils;
 import org.xml.sax.SAXException;
@@ -124,13 +121,15 @@ public class MigrationXML extends Migration {
         return portionSize;
     }
 
-    public ClientRecord getByCiaID(String id) throws Exception {
+    public ClientRecord getClientByCiaID(String id) throws Exception {
         ClientRecord clientRecord = null;
 
         //language=PostgreSQL
-        try (PreparedStatement selectStmnt
-                     = operConnection.prepareStatement(r("SELECT cia_id,surname,\"name\"," +
-                "patronymic,birth_date,charm from TMP_CLIENT WHERE cia_id = '" + id + "'"))) {
+        try (PreparedStatement selectStmnt = operConnection.prepareStatement(
+                r("SELECT cia_id,surname,\"name\",patronymic,birth_date,charm " +
+                        "from TMP_CLIENT " +
+                        "WHERE cia_id = '" + id + "'"))) {
+
             try (ResultSet rs = selectStmnt.executeQuery())
             {
                 while (rs.next()) {
@@ -145,6 +144,57 @@ public class MigrationXML extends Migration {
             }
         }
         return clientRecord;
+    }
+
+    public List<AddressRecord> getClientAdrsByCiaID(String id) throws Exception {
+        List<AddressRecord> addressRecordList = null;
+
+        //language=PostgreSQL
+        try (PreparedStatement selectStmnt = operConnection.prepareStatement(
+                r("SELECT \"type\",street,house,flat " +
+                        "from TMP_CLIENT_ADDRESS \n" +
+                        "WHERE cia_client_id = '" + id + "'"))) {
+
+            addressRecordList = new ArrayList<>();
+            try (ResultSet rs = selectStmnt.executeQuery())
+            {
+                AddressRecord addressRecord;
+                while (rs.next()) {
+                    addressRecord = new AddressRecord();
+                    addressRecord.type = AddressType.valueOf(rs.getString(1));
+                    addressRecord.street = rs.getString(2);
+                    addressRecord.house = rs.getString(3);
+                    addressRecord.flat = rs.getString(4);
+                   addressRecordList.add(addressRecord);
+                }
+            }
+        }
+        return addressRecordList;
+    }
+
+    public List<Phone> getClientPhnsByCiaID(String id) throws SQLException {
+        List<Phone> phoneRecordList = null;
+
+        //language=PostgreSQL
+        try (PreparedStatement selectStmnt = operConnection.prepareStatement(
+                r("SELECT \"type\",number " +
+                        "from TMP_CLIENT_PHONES \n" +
+                        "WHERE cia_client_id = '" + id + "'"))) {
+
+            phoneRecordList = new ArrayList<>();
+            try (ResultSet rs = selectStmnt.executeQuery())
+            {
+                Phone phoneRecord;
+                while (rs.next()) {
+                    phoneRecord = new Phone();
+                    phoneRecord.type = PhoneType.valueOf(rs.getString(1));
+                    phoneRecord.number = rs.getString(2);
+                    phoneRecordList.add(phoneRecord);
+                }
+            }
+        }
+        return phoneRecordList;
+
     }
 
     private int download() throws SQLException, IOException, SAXException {
@@ -627,4 +677,6 @@ public class MigrationXML extends Migration {
 
         uploadAllOk();
     }
+
+
 }

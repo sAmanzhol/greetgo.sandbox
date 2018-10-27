@@ -325,7 +325,103 @@ public class MigrationJSON extends Migration {
 
     }
 
+
+    private void uploadAllOkRec(ResultSet inRS,PreparedStatement outPS,int batchSize,int recordsCount,AtomicBoolean showStatus) throws SQLException{
+        long startedAt = System.nanoTime();
+
+        while (inRS.next()) {
+
+            outPS.setLong(1, inRS.getLong("number"));
+            outPS.addBatch();
+            batchSize++;
+            recordsCount++;
+
+            if (batchSize >= uploadMaxBatchSize) {
+                outPS.executeBatch();
+                ciaConnection.commit();
+                batchSize = 0;
+            }
+
+            if (showStatus.get()) {
+                showStatus.set(false);
+
+                long now = System.nanoTime();
+                info(" -- uploaded ok records " + recordsCount + " for " + TimeUtils.showTime(now, startedAt)
+                        + " : " + TimeUtils.recordsPerSecond(recordsCount, now - startedAt));
+            }
+        }
+
+        if (batchSize > 0) {
+            outPS.executeBatch();
+            ciaConnection.commit();
+        }
+
+        {
+            long now = System.nanoTime();
+            info("TOTAL Uploaded ok records " + recordsCount + " for " + TimeUtils.showTime(now, startedAt)
+                    + " : " + TimeUtils.recordsPerSecond(recordsCount, now - startedAt));
+        }
+    }
+
     private void uploadAllOk() throws Exception {
+        info("uploadAllOk goes: maxBatchSize = " + uploadMaxBatchSize);
+
+        final AtomicBoolean working = new AtomicBoolean(true);
+
+        createCiaConnection();
+        ciaConnection.setAutoCommit(false);
+        try {
+
+            try (PreparedStatement inAcPS = operConnection.prepareStatement(r("select number from TMP_CLIENT_ACCOUNTS"));
+                 PreparedStatement inTrPS = operConnection.prepareStatement(r("select number from TMP_CLIENT_ACCOUNT_TRANSACTIONS"))
+            ) {
+
+                info("Prepared statement for : select number from TMP_CLIENT_ACCOUNTS");
+                info("Prepared statement for : select number from TMP_CLIENT_ACCOUNT_TRANSACTIONS");
+
+                try (ResultSet inAcRS = inAcPS.executeQuery();
+                     ResultSet inTrRS = inTrPS.executeQuery()) {
+                    info("Query executed for : select number from TMP_CLIENT_ACCOUNTS");
+                    info("Query executed for : select number from TMP_CLIENT_ACCOUNT_TRANSACTIONS");
+
+                    try (PreparedStatement outPS = ciaConnection.prepareStatement(
+                            "update transition_account_transaction set status = 'OK' where number = ?")) {
+
+                        int batchSize = 0, recordsCount = 0;
+
+                        final AtomicBoolean showStatus = new AtomicBoolean(false);
+
+                        new Thread(() -> {
+
+                            while (true) {
+
+                                if (!working.get()) break;
+
+                                try {
+                                    Thread.sleep(showStatusPingMillis);
+                                } catch (InterruptedException e) {
+                                    break;
+                                }
+
+                                showStatus.set(true);
+                            }
+
+                        }).start();
+
+                        uploadAllOkRec(inAcRS,outPS,batchSize,recordsCount,showStatus);
+                        batchSize = 0;
+                        recordsCount = 0;
+                        showStatus.set(true);
+                        uploadAllOkRec(inTrRS,outPS,batchSize,recordsCount,showStatus);
+
+                    }
+                }
+            }
+
+        } finally {
+            closeCiaConnection();
+            working.set(false);
+        }
 
     }
 
@@ -378,9 +474,9 @@ public class MigrationJSON extends Migration {
         exec("update TMP_CLIENT_ACCOUNTS set status = 0 where client_id is not null  and status = 0");
 
         //language=PostgreSQL
-        exec("update TMP_CLIENT_ACCOUNTS  set status = 3 " +
-                "from (Select * from client_account) as tmpAccounts " +
-                "where tmpAccounts.number = account_number");
+        exec("update TMP_CLIENT_ACCOUNTS  set status = 3, account_id = ca.id\n" +
+                "from client_account ca " +
+                "where ca.number = account_number");
 
         //language=PostgreSQL
         exec("update TMP_CLIENT_ACCOUNTS set account_id = nextval('client_account_id_seq') where status = 0");
@@ -397,8 +493,19 @@ public class MigrationJSON extends Migration {
                 "  where acc.number = t.account_number\n");
 
         //language=PostgreSQL
+        exec("update TMP_CLIENT_ACCOUNT_TRANSACTIONS t set account_id = acc.account_id\n" +
+                "  from TMP_CLIENT_ACCOUNTS acc\n" +
+                "  where acc.account_number = t.account_number\n");
+
+        //language=PostgreSQL
+        exec("update TMP_CLIENT_ACCOUNT_TRANSACTIONS set error = 'account_number is not defined'\n" +
+                "where error is null and account_id  is null");
+
+        uploadAndDropErrors();
+
+        //language=PostgreSQL
         exec("update TMP_CLIENT_ACCOUNT_TRANSACTIONS as tmpTr set status = 3\n" +
-                "from (SELECT * from  client_account_transaction) as tr \n" +
+                "from client_account_transaction tr \n" +
                 "where tr.money = tmpTr.money \n" +
                 "and tr.finished_at = tmpTr.finished_at\n" +
                 "and tr.account = tmpTr.account_id");
@@ -407,7 +514,7 @@ public class MigrationJSON extends Migration {
         exec("insert into client_account_transaction (account,money,finished_at,\"type\") \n" +
                 "select account_id as account,money,finished_at,\"transaction_type\" as \"type\" \n" +
                 "from TMP_CLIENT_ACCOUNT_TRANSACTIONS " +
-                "where status = 0 and account_id is not null ");
+                "where status = 0");
 
         uploadAllOk();
     }

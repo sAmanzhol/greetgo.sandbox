@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -61,15 +62,37 @@ public class GenerateCiaData {
         }
     }
 
-    public void testExecute(ClientInRecord record) throws Exception {
+    public long testExecute(ClientInRecord record) throws Exception {
         try (Connection connection = DbWorker.createConnection(ConfigFiles.ciaDb())) {
             this.connection = connection;
 
-            try (PreparedStatement ps = connection.prepareStatement("insert into transition_client (record_data) values (?)")) {
+            try (PreparedStatement ps = connection.prepareStatement("insert into transition_client (record_data) values (?) RETURNING \"number\"" )) {
                 ps.setString(1, record.toXml());
-                ps.execute();
+
+                try (ResultSet generatedKeys = ps.executeQuery()) {
+                     generatedKeys.next();
+                     return generatedKeys.getLong(1);
+                }
             }
         }
+    }
+
+    public String getStatus(Long ciaRecId) throws Exception {
+        try (Connection connection = DbWorker.createConnection(ConfigFiles.ciaDb())) {
+            this.connection = connection;
+
+            try (PreparedStatement ps = connection.prepareStatement(
+                    "Select status from transition_client where number = ?" )) {
+                ps.setLong(1,ciaRecId );
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    if(rs.next()){
+                     return rs.getString(1);
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     private final File storingIdsFile = new File("build/storing_ids.txt");
