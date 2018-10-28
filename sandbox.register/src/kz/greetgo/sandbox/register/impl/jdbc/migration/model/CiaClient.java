@@ -13,10 +13,6 @@ public class CiaClient {
   public String charm;
   public String birthDate;
 
-  public List<CiaAddress> addresses;
-
-  public List<CiaPhone> phones;
-
   public CiaClient() {
     id = "";
     surname = "";
@@ -25,9 +21,6 @@ public class CiaClient {
     gender = "";
     charm = "";
     birthDate = "";
-
-    addresses = new ArrayList<>();
-    phones = new ArrayList<>();
   }
 
   public String getId() {
@@ -96,8 +89,6 @@ public class CiaClient {
       ", gender='" + gender + '\'' +
       ", charm='" + charm + '\'' +
       ", birthDate='" + birthDate + '\'' +
-      ", addresses=" + addresses +
-      ", phones=" + phones +
       '}';
   }
 }
