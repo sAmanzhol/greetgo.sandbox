@@ -103,6 +103,8 @@ public class CiaMigrationImpl extends MigrationAbstract {
   @Override
   public void parseAndFillData() throws Exception {
 
+    this.connection.setAutoCommit(false);
+
     if (logger.isInfoEnabled()) {
       logger.info(String.format("Started parsing file %s, and inserting to temp tables!", filePath));
     }
@@ -115,8 +117,12 @@ public class CiaMigrationImpl extends MigrationAbstract {
     CiaHandler handler = new CiaHandler(connection);
     saxParser.parse(stream, handler);
 
+    this.connection.setAutoCommit(true);
+
     stream.close();
     ftp.completePendingCommand();
+    ftp.rename(filePath, filePath + ".txt");
+    ftp.disconnect();
 
     Instant endTime = Instant.now();
     Duration timeSpent = Duration.between(startTime, endTime);
@@ -199,6 +205,8 @@ public class CiaMigrationImpl extends MigrationAbstract {
       logger.info("Inserting new charms!");
     }
 
+    Instant startCharmInsertTime = Instant.now();
+
     // Adding new charms
 
     String charmTableInsert =
@@ -217,9 +225,18 @@ public class CiaMigrationImpl extends MigrationAbstract {
       ps.executeUpdate();
     }
 
+    Instant endCharmInsertTime = Instant.now();
+    Duration timeSpentCharmInsert = Duration.between(startCharmInsertTime, endCharmInsertTime);
+
+    if (logger.isInfoEnabled()) {
+      logger.info(String.format("Ended inserting new Charms! Time taken: %s milliseconds!", timeSpentCharmInsert.toMillis()));
+    }
+
     if (logger.isInfoEnabled()) {
       logger.info("Validating and migrating Client!");
     }
+
+    Instant startClientValidateTime = Instant.now();
 
     // Migrate valid clients without phone and address
 
@@ -253,9 +270,18 @@ public class CiaMigrationImpl extends MigrationAbstract {
       ps.executeUpdate();
     }
 
+    Instant endClientValidateTime = Instant.now();
+    Duration timeSpentClientValidate = Duration.between(startClientValidateTime, endClientValidateTime);
+
+    if (logger.isInfoEnabled()) {
+      logger.info(String.format("Ended validating Clients! Time taken: %s milliseconds!", timeSpentClientValidate.toMillis()));
+    }
+
     if (logger.isInfoEnabled()) {
       logger.info("Validating and migrating Client Addresses!");
     }
+
+    Instant startAddressValidateTime = Instant.now();
 
     // Migrate addresses
 
@@ -283,9 +309,18 @@ public class CiaMigrationImpl extends MigrationAbstract {
       ps.executeUpdate();
     }
 
+    Instant endAddressValidateTime = Instant.now();
+    Duration timeSpentAddressValidate = Duration.between(startAddressValidateTime, endAddressValidateTime);
+
+    if (logger.isInfoEnabled()) {
+      logger.info(String.format("Ended validating Addresses! Time taken: %s milliseconds!", timeSpentAddressValidate.toMillis()));
+    }
+
     if (logger.isInfoEnabled()) {
       logger.info("Deleting previous Client Phones!");
     }
+
+    Instant startPhoneValidateTime = Instant.now();
 
     // Migrate phones
 
@@ -331,6 +366,13 @@ public class CiaMigrationImpl extends MigrationAbstract {
 
     try (PreparedStatement ps = connection.prepareStatement(clientPhoneTableUpdateMigrate)) {
       ps.executeUpdate();
+    }
+
+    Instant endPhoneValidateTime = Instant.now();
+    Duration timeSpentPhoneValidate = Duration.between(startPhoneValidateTime, endPhoneValidateTime);
+
+    if (logger.isInfoEnabled()) {
+      logger.info(String.format("Ended validating Phones! Time taken: %s milliseconds!", timeSpentPhoneValidate.toMillis()));
     }
 
     Instant endTime = Instant.now();

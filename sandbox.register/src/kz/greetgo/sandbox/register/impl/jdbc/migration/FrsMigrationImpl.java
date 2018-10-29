@@ -19,6 +19,14 @@ public class FrsMigrationImpl extends MigrationAbstract {
 
   final static Logger logger = Logger.getLogger("kz.greetgo.sandbox.register.impl.jdbc.migration.FrsMigrationImpl");
 
+  public PreparedStatement accountInsertPS;
+  public PreparedStatement transactionInsertPS;
+
+  public final int MAX_BATCH_SIZE = 50000;
+
+  public int accountBatchCount = 0;
+  public int transactionBatchCount = 0;
+
   public FrsMigrationImpl(Connection connection) {
     super(connection);
   }
@@ -82,6 +90,8 @@ public class FrsMigrationImpl extends MigrationAbstract {
   @Override
   public void parseAndFillData() throws Exception {
 
+    this.connection.setAutoCommit(false);
+
     Instant startTime = Instant.now();
     int accountCount = 0;
     int transactionCount = 0;
@@ -90,14 +100,7 @@ public class FrsMigrationImpl extends MigrationAbstract {
       logger.info(String.format("Started parsing file %s, and inserting to temp tables!", filePath));
     }
 
-    String clientAccountTempTableInsert =
-      "insert into client_account_temp (client, account_number, registered_at, migration_order) " +
-        " values (?, ?, ?, nextval('migration_order'))";
-
-    String clientAccountTransactionTempTableInsert =
-      "insert into client_account_transaction_temp (account_number, transaction_type, money, finished_at) " +
-        " values (?, ?, ?, ?)";
-
+    initPreparedStatements();
 
     InputStream stream = ftp.retrieveFileStream(filePath);
     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(stream, "UTF-8"));
@@ -114,37 +117,54 @@ public class FrsMigrationImpl extends MigrationAbstract {
         frsTransaction.transactionType = (String) rowJson.get("transaction_type");
         frsTransaction.accountNumber = (String) rowJson.get("account_number");
 
-        try (PreparedStatement ps = connection.prepareStatement(clientAccountTransactionTempTableInsert)) {
-          ps.setObject(1, frsTransaction.accountNumber);
-          ps.setObject(2, frsTransaction.transactionType);
-          ps.setObject(3, frsTransaction.money);
-          ps.setObject(4, frsTransaction.finishedAt);
+        transactionInsertPS.setObject(1, frsTransaction.accountNumber);
+        transactionInsertPS.setObject(2, frsTransaction.transactionType);
+        transactionInsertPS.setObject(3, frsTransaction.money);
+        transactionInsertPS.setObject(4, frsTransaction.finishedAt);
 
-          ps.executeUpdate();
+        transactionInsertPS.addBatch();
 
-          transactionCount++;
+        if (transactionBatchCount == MAX_BATCH_SIZE) {
+          transactionInsertPS.executeBatch();
+          connection.commit();
+          transactionBatchCount = 0;
         }
+
+        transactionBatchCount++;
+        transactionCount++;
+
       } else if (rowJson.get("type").equals("new_account")) {
         FrsAccount frsAccount = new FrsAccount();
         frsAccount.client = (String) rowJson.get("client_id");
         frsAccount.accountNumber = (String) rowJson.get("account_number");
         frsAccount.registeredAt = (String) rowJson.get("registered_at");
 
-        try (PreparedStatement ps = connection.prepareStatement(clientAccountTempTableInsert)) {
-          ps.setObject(1, frsAccount.client);
-          ps.setObject(2, frsAccount.accountNumber);
-          ps.setObject(3, frsAccount.registeredAt);
+        accountInsertPS.setObject(1, frsAccount.client);
+        accountInsertPS.setObject(2, frsAccount.accountNumber);
+        accountInsertPS.setObject(3, frsAccount.registeredAt);
 
-          ps.executeUpdate();
+        accountInsertPS.addBatch();
 
-          accountCount++;
+        if (accountBatchCount == MAX_BATCH_SIZE) {
+          accountInsertPS.executeBatch();
+          connection.commit();
+          accountBatchCount = 0;
         }
+
+        accountBatchCount++;
+        accountCount++;
       }
     }
+
+    executeLeftBatches();
+
+    connection.setAutoCommit(true);
 
     bufferedReader.close();
     stream.close();
     ftp.completePendingCommand();
+    ftp.rename(filePath, filePath + ".txt");
+    ftp.disconnect();
 
     Instant endTime = Instant.now();
     Duration timeSpent = Duration.between(startTime, endTime);
@@ -217,6 +237,8 @@ public class FrsMigrationImpl extends MigrationAbstract {
       logger.info("Inserting new transaction types!");
     }
 
+    Instant startTransactionTypeInsertTime = Instant.now();
+
     // Adding new transaction types
 
     String clientAccountTransactionTypeInsert =
@@ -234,9 +256,18 @@ public class FrsMigrationImpl extends MigrationAbstract {
       ps.executeUpdate();
     }
 
+    Instant endTransactionTypeInsertTime = Instant.now();
+    Duration timeSpentTransactionTypeInsert = Duration.between(startTransactionTypeInsertTime, endTransactionTypeInsertTime);
+
+    if (logger.isInfoEnabled()) {
+      logger.info(String.format("Ended inserting new Transaction Types! Time taken: %s milliseconds!", timeSpentTransactionTypeInsert.toMillis()));
+    }
+
     if (logger.isInfoEnabled()) {
       logger.info("Validating and migrating Account!");
     }
+
+    Instant startAccountValidateTime = Instant.now();
 
     // Migrate valid accounts and transactions with actual 1
 
@@ -261,9 +292,18 @@ public class FrsMigrationImpl extends MigrationAbstract {
       ps.executeUpdate();
     }
 
+    Instant endAccountValidateTime = Instant.now();
+    Duration timeSpentAccountValidate = Duration.between(startAccountValidateTime, endAccountValidateTime);
+
+    if (logger.isInfoEnabled()) {
+      logger.info(String.format("Ended validating Accounts! Time taken: %s milliseconds!", timeSpentAccountValidate.toMillis()));
+    }
+
     if (logger.isInfoEnabled()) {
       logger.info("Validating and migrating Transaction!");
     }
+
+    Instant startTransactionValidateTime = Instant.now();
 
     String clientAccountTransactionTableUpdateMigrate =
       "insert into client_account_transaction (id, account, money, finished_at, type, migration_account) " +
@@ -285,18 +325,25 @@ public class FrsMigrationImpl extends MigrationAbstract {
       ps.executeUpdate();
     }
 
+    Instant endTransactionValidateTime = Instant.now();
+    Duration timeSpentTransactionValidate = Duration.between(startTransactionValidateTime, endTransactionValidateTime);
+
     if (logger.isInfoEnabled()) {
-      logger.info("Validating and migrating Account (setting money from transactions)!");
+      logger.info(String.format("Ended validating Transactions! Time taken: %s milliseconds!", timeSpentTransactionValidate.toMillis()));
     }
 
-    String clientAccountTableUpdateMigrateMoney =
-      "update client_account " +
-        "set money = (select sum(money) from client_account_transaction where account = client_account.id and type notnull) " +
-        "where actual = 1 and client notnull";
+//    if (logger.isInfoEnabled()) {
+//      logger.info("Validating and migrating Account (setting money from transactions)!");
+//    }
 
-    try (PreparedStatement ps = connection.prepareStatement(clientAccountTableUpdateMigrateMoney)) {
-      ps.executeUpdate();
-    }
+//    String clientAccountTableUpdateMigrateMoney =
+//      "update client_account " +
+//        "set money = (select sum(money) from client_account_transaction where account = client_account.id and type notnull) " +
+//        "where actual = 1 and client notnull";
+//
+//    try (PreparedStatement ps = connection.prepareStatement(clientAccountTableUpdateMigrateMoney)) {
+//      ps.executeUpdate();
+//    }
 
     Instant endTime = Instant.now();
     Duration timeSpent = Duration.between(startTime, endTime);
@@ -407,6 +454,8 @@ public class FrsMigrationImpl extends MigrationAbstract {
       logger.info("Checking Accounts without Clients for new Clients!");
     }
 
+    Instant startCheckLateUpdateAccountTime = Instant.now();
+
     String clientAccountTableUpdateMigrate =
       "update client_account " +
         "set actual = 1, " +
@@ -418,9 +467,18 @@ public class FrsMigrationImpl extends MigrationAbstract {
       ps.executeUpdate();
     }
 
+    Instant endCheckLateUpdateAccountTime = Instant.now();
+    Duration timeCheckLateUpdateAccountSpent = Duration.between(startCheckLateUpdateAccountTime, endCheckLateUpdateAccountTime);
+
+    if (logger.isInfoEnabled()) {
+      logger.info(String.format("Ended checking late update Accounts! Time taken: %s milliseconds!", timeCheckLateUpdateAccountSpent.toMillis()));
+    }
+
     if (logger.isInfoEnabled()) {
       logger.info("Checking Transactions without Accounts for new Accounts!");
     }
+
+    Instant startCheckLateUpdateTransactionTime = Instant.now();
 
     String clientAccountTransactionTableUpdateMigrate =
       "update client_account_transaction " +
@@ -433,18 +491,25 @@ public class FrsMigrationImpl extends MigrationAbstract {
       ps.executeUpdate();
     }
 
+    Instant endCheckLateUpdateTransactionTime = Instant.now();
+    Duration timeCheckLateUpdateTransactionSpent = Duration.between(startCheckLateUpdateTransactionTime, endCheckLateUpdateTransactionTime);
+
     if (logger.isInfoEnabled()) {
-      logger.info("Validating and migrating new Accounts (setting money from transactions)!");
+      logger.info(String.format("Ended checking late update Transactions! Time taken: %s milliseconds!", timeCheckLateUpdateTransactionSpent.toMillis()));
     }
 
-    String clientAccountTableUpdateMigrateMoney =
-      "update client_account " +
-        "set money = (select sum(money) from client_account_transaction where account = client_account.id and type notnull) " +
-        "where actual = 1 and client notnull";
+//    if (logger.isInfoEnabled()) {
+//      logger.info("Validating and migrating new Accounts (setting money from transactions)!");
+//    }
 
-    try (PreparedStatement ps = connection.prepareStatement(clientAccountTableUpdateMigrateMoney)) {
-      ps.executeUpdate();
-    }
+//    String clientAccountTableUpdateMigrateMoney =
+//      "update client_account " +
+//        "set money = (select sum(money) from client_account_transaction where account = client_account.id and type notnull) " +
+//        "where actual = 1 and client notnull";
+//
+//    try (PreparedStatement ps = connection.prepareStatement(clientAccountTableUpdateMigrateMoney)) {
+//      ps.executeUpdate();
+//    }
 
     Instant endTime = Instant.now();
     Duration timeSpent = Duration.between(startTime, endTime);
@@ -453,5 +518,26 @@ public class FrsMigrationImpl extends MigrationAbstract {
     if (logger.isInfoEnabled()) {
       logger.info(String.format("Ended checking late updates! Time taken: %s milliseconds!", timeSpent.toMillis()));
     }
+  }
+
+
+  private void initPreparedStatements() throws Exception {
+    String clientAccountTempTableInsert =
+      "insert into client_account_temp (client, account_number, registered_at, migration_order) " +
+        " values (?, ?, ?, nextval('migration_order'))";
+
+    String clientAccountTransactionTempTableInsert =
+      "insert into client_account_transaction_temp (account_number, transaction_type, money, finished_at) " +
+        " values (?, ?, ?, ?)";
+
+    transactionInsertPS = connection.prepareStatement(clientAccountTransactionTempTableInsert);
+    accountInsertPS = connection.prepareStatement(clientAccountTempTableInsert);
+  }
+
+  private void executeLeftBatches() throws Exception {
+    accountInsertPS.executeBatch();
+    connection.commit();
+    transactionInsertPS.executeBatch();
+    connection.commit();
   }
 }

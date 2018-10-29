@@ -11,7 +11,7 @@ import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings("WeakerAccess,SqlResolve")
 public class CiaHandler extends DefaultHandler {
 
   public Connection connection;
@@ -27,8 +27,22 @@ public class CiaHandler extends DefaultHandler {
   public Integer addressCount = 0;
   public Integer phoneCount = 0;
 
-  public CiaHandler(Connection con) {
+  public PreparedStatement clientInsertPS;
+  public PreparedStatement phoneInsertPS;
+  public PreparedStatement addressInsertPS;
+
+  public final int MAX_BATCH_SIZE = 50000;
+
+  public int clientBatchCount = 0;
+  public int phoneBatchCount = 0;
+  public int addressBatchCount = 0;
+
+  public int phoneMigrationOrder = 0;
+  public int addressMigrationOrder = 0;
+
+  public CiaHandler(Connection con) throws Exception {
     this.connection = con;
+    initPreparedStatements();
   }
 
   @Override
@@ -82,17 +96,25 @@ public class CiaHandler extends DefaultHandler {
         insertClient(client);
 
         for (CiaPhone phone : phones) {
-          insertClientPhone(phone);
+          insertClientPhone(phone, phoneMigrationOrder);
         }
 
+        phoneMigrationOrder++;
         phones = new ArrayList<>();
 
         for (CiaAddress address : addresses) {
-          insertClientAddress(address);
+          insertClientAddress(address, addressMigrationOrder);
         }
 
+        addressMigrationOrder++;
         addresses = new ArrayList<>();
         client = new CiaClient();
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    } else if (qName.equalsIgnoreCase("cia")) {
+      try {
+        executeLeftBatches();
       } catch (Exception e) {
         e.printStackTrace();
       }
@@ -129,56 +151,92 @@ public class CiaHandler extends DefaultHandler {
   }
 
   private void insertClient(CiaClient client) throws Exception {
+
+    clientInsertPS.setObject(1, client.id);
+    clientInsertPS.setObject(2, client.surname);
+    clientInsertPS.setObject(3, client.name);
+    clientInsertPS.setObject(4, client.patronymic);
+    clientInsertPS.setObject(5, client.gender);
+    clientInsertPS.setObject(6, client.birthDate);
+    clientInsertPS.setObject(7, client.charm);
+
+    clientInsertPS.addBatch();
+
+    if (clientBatchCount == MAX_BATCH_SIZE) {
+      clientInsertPS.executeBatch();
+      connection.commit();
+      clientBatchCount = 0;
+    }
+
+    clientBatchCount++;
+    clientCount++;
+  }
+
+  private void insertClientAddress(CiaAddress address, int migrationOrder) throws Exception {
+
+    addressInsertPS.setObject(1, address.client);
+    addressInsertPS.setObject(2, address.type);
+    addressInsertPS.setObject(3, address.street);
+    addressInsertPS.setObject(4, address.house);
+    addressInsertPS.setObject(5, address.flat);
+    addressInsertPS.setObject(6, migrationOrder);
+
+    addressInsertPS.addBatch();
+
+    if (addressBatchCount == MAX_BATCH_SIZE) {
+      addressInsertPS.executeBatch();
+      connection.commit();
+      addressBatchCount = 0;
+    }
+
+    addressBatchCount++;
+    addressCount++;
+  }
+
+  private void insertClientPhone(CiaPhone phone, int migrationOrder) throws Exception {
+
+    phoneInsertPS.setObject(1, phone.client);
+    phoneInsertPS.setObject(2, phone.type);
+    phoneInsertPS.setObject(3, phone.number);
+    phoneInsertPS.setObject(4, migrationOrder);
+
+    phoneInsertPS.addBatch();
+
+    if (phoneBatchCount == MAX_BATCH_SIZE) {
+      phoneInsertPS.executeBatch();
+      connection.commit();
+      phoneBatchCount = 0;
+    }
+
+    phoneBatchCount++;
+    phoneCount++;
+  }
+
+
+  private void initPreparedStatements() throws Exception {
     String clientTempTableInsert =
       "insert into client_temp (id, surname, name, patronymic, gender, birth_date, charm, migration_order) " +
         " values (?, ?, ?, ?, ?, ?, ?, nextval('migration_order'))";
 
-    try (PreparedStatement ps = connection.prepareStatement(clientTempTableInsert)) {
-      ps.setObject(1, client.id);
-      ps.setObject(2, client.surname);
-      ps.setObject(3, client.name);
-      ps.setObject(4, client.patronymic);
-      ps.setObject(5, client.gender);
-      ps.setObject(6, client.birthDate);
-      ps.setObject(7, client.charm);
-
-      ps.executeUpdate();
-    }
-
-    clientCount++;
-  }
-
-  private void insertClientAddress(CiaAddress address) throws Exception {
     String clientAddressTempTableInsert =
       "insert into client_addr_temp (client, type, street, house, flat, migration_order) " +
-        " values (?, ?, ?, ?, ?, currval('migration_order'))";
+        " values (?, ?, ?, ?, ?, ?)";
 
-    try (PreparedStatement ps = connection.prepareStatement(clientAddressTempTableInsert)) {
-      ps.setObject(1, address.client);
-      ps.setObject(2, address.type);
-      ps.setObject(3, address.street);
-      ps.setObject(4, address.house);
-      ps.setObject(5, address.flat);
-
-      ps.executeUpdate();
-    }
-
-    addressCount++;
-  }
-
-  private void insertClientPhone(CiaPhone phone) throws Exception {
     String clientPhoneTempTableInsert =
       "insert into client_phone_temp (client, type, number, migration_order) " +
-        " values (?, ?, ?, currval('migration_order'))";
+        " values (?, ?, ?, ?)";
 
-    try (PreparedStatement ps = connection.prepareStatement(clientPhoneTempTableInsert)) {
-      ps.setObject(1, phone.client);
-      ps.setObject(2, phone.type);
-      ps.setObject(3, phone.number);
+    clientInsertPS = connection.prepareStatement(clientTempTableInsert);
+    addressInsertPS = connection.prepareStatement(clientAddressTempTableInsert);
+    phoneInsertPS = connection.prepareStatement(clientPhoneTempTableInsert);
+  }
 
-      ps.executeUpdate();
-    }
-
-    phoneCount++;
+  private void executeLeftBatches() throws Exception {
+    clientInsertPS.executeBatch();
+    connection.commit();
+    addressInsertPS.executeBatch();
+    connection.commit();
+    phoneInsertPS.executeBatch();
+    connection.commit();
   }
 }
