@@ -1,24 +1,16 @@
 package kz.greetgo.sandbox.register.impl.jdbc.migration;
 
-import kz.greetgo.sandbox.register.impl.jdbc.migration.model.CiaAddress;
-import kz.greetgo.sandbox.register.impl.jdbc.migration.model.CiaClient;
-import kz.greetgo.sandbox.register.impl.jdbc.migration.model.CiaPhone;
+import kz.greetgo.sandbox.register.impl.jdbc.migration.handler.CiaHandler;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.log4j.Logger;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
 
 @SuppressWarnings("WeakerAccess, SqlResolve")
 public class CiaMigrationImpl extends MigrationAbstract {
@@ -111,110 +103,17 @@ public class CiaMigrationImpl extends MigrationAbstract {
   @Override
   public void parseAndFillData() throws Exception {
 
-    Instant startTime = Instant.now();
-    int phoneCount = 0;
-    int addressCount = 0;
-
     if (logger.isInfoEnabled()) {
       logger.info(String.format("Started parsing file %s, and inserting to temp tables!", filePath));
     }
 
-    String clientTempTableInsert =
-      "insert into client_temp (id, surname, name, patronymic, gender, birth_date, charm, migration_order) " +
-        " values (?, ?, ?, ?, ?, ?, ?, nextval('migration_order'))";
-
-    String clientPhoneTempTableInsert =
-      "insert into client_phone_temp (client, type, number, migration_order) " +
-        " values (?, ?, ?, currval('migration_order'))";
-
-    String clientAddressTempTableInsert =
-      "insert into client_addr_temp (client, type, street, house, flat, migration_order) " +
-        " values (?, ?, ?, ?, ?, currval('migration_order'))";
-
+    Instant startTime = Instant.now();
 
     InputStream stream = ftp.retrieveFileStream(filePath);
-    DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-    DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-    Document doc = dBuilder.parse(stream);
-
-    NodeList clientNodes = doc.getElementsByTagName("client");
-
-    for (int clientIterator = 0; clientIterator < clientNodes.getLength(); clientIterator++) {
-      Node curClientNode = clientNodes.item(clientIterator);
-      Element curClientElement = (Element) curClientNode;
-
-      CiaClient ciaClient = new CiaClient();
-
-      ciaClient.id = curClientElement.getAttribute("id");
-
-      if (curClientElement.getElementsByTagName("surname").item(0) != null) {
-        ciaClient.surname = ((Element) curClientElement.getElementsByTagName("surname").item(0)).getAttribute("value");
-      }
-      if (curClientElement.getElementsByTagName("name").item(0) != null) {
-        ciaClient.name = ((Element) curClientElement.getElementsByTagName("name").item(0)).getAttribute("value");
-      }
-      if ((curClientElement.getElementsByTagName("patronymic").item(0)) != null) {
-        ciaClient.patronymic = ((Element) curClientElement.getElementsByTagName("patronymic").item(0)).getAttribute("value").trim();
-      }
-      if (curClientElement.getElementsByTagName("gender").item(0) != null) {
-        ciaClient.gender = ((Element) curClientElement.getElementsByTagName("gender").item(0)).getAttribute("value");
-      }
-      if (curClientElement.getElementsByTagName("charm").item(0) != null) {
-        ciaClient.charm = ((Element) curClientElement.getElementsByTagName("charm").item(0)).getAttribute("value");
-      }
-      if (curClientElement.getElementsByTagName("birth").item(0) != null) {
-        ciaClient.birthDate = ((Element) curClientElement.getElementsByTagName("birth").item(0)).getAttribute("value");
-      }
-
-      try (PreparedStatement ps = connection.prepareStatement(clientTempTableInsert)) {
-        ps.setObject(1, ciaClient.id);
-        ps.setObject(2, ciaClient.surname);
-        ps.setObject(3, ciaClient.name);
-        ps.setObject(4, ciaClient.patronymic);
-        ps.setObject(5, ciaClient.gender);
-        ps.setObject(6, ciaClient.birthDate);
-        ps.setObject(7, ciaClient.charm);
-
-        ps.executeUpdate();
-      }
-
-      ciaClient.addresses = new ArrayList<>();
-
-      parseCiaClientAddresses(ciaClient.addresses, curClientElement, "fact");
-      parseCiaClientAddresses(ciaClient.addresses, curClientElement, "register");
-
-      for (CiaAddress ciaAddress : ciaClient.addresses) {
-        try (PreparedStatement ps = connection.prepareStatement(clientAddressTempTableInsert)) {
-          ps.setObject(1, ciaClient.id);
-          ps.setObject(2, ciaAddress.type);
-          ps.setObject(3, ciaAddress.street);
-          ps.setObject(4, ciaAddress.house);
-          ps.setObject(5, ciaAddress.flat);
-
-          ps.executeUpdate();
-
-          addressCount++;
-        }
-      }
-
-      ciaClient.phones = new ArrayList<>();
-
-      parseCiaClientPhones(ciaClient.phones, curClientElement, "homePhone");
-      parseCiaClientPhones(ciaClient.phones, curClientElement, "mobilePhone");
-      parseCiaClientPhones(ciaClient.phones, curClientElement, "workPhone");
-
-      for (CiaPhone ciaPhone : ciaClient.phones) {
-        try (PreparedStatement ps = connection.prepareStatement(clientPhoneTempTableInsert)) {
-          ps.setObject(1, ciaClient.id);
-          ps.setObject(2, ciaPhone.type);
-          ps.setObject(3, ciaPhone.number);
-
-          ps.executeUpdate();
-
-          phoneCount++;
-        }
-      }
-    }
+    SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
+    SAXParser saxParser = saxParserFactory.newSAXParser();
+    CiaHandler handler = new CiaHandler(connection);
+    saxParser.parse(stream, handler);
 
     stream.close();
     ftp.completePendingCommand();
@@ -223,50 +122,8 @@ public class CiaMigrationImpl extends MigrationAbstract {
     Duration timeSpent = Duration.between(startTime, endTime);
 
     if (logger.isInfoEnabled()) {
-      logger.info(String.format("Ended parsing file %s, and in total inserted %d clients and %d phones and %d addresses! Time taken: %s milliseconds!", filePath, clientNodes.getLength(), phoneCount, addressCount, timeSpent.toMillis()));
+      logger.info(String.format("Ended parsing file %s, and in total inserted %d clients and %d phones and %d addresses! Time taken: %s milliseconds!", filePath, handler.clientCount, handler.phoneCount, handler.addressCount, timeSpent.toMillis()));
     }
-  }
-
-  private void parseCiaClientPhones(List<CiaPhone> phones, Element curClientElement, String phoneType) {
-    NodeList curClientElementHomePhones = curClientElement.getElementsByTagName(phoneType);
-
-    for (int homePhoneIterator = 0; homePhoneIterator < curClientElementHomePhones.getLength(); homePhoneIterator++) {
-      Node curHomePhoneNode = curClientElementHomePhones.item(homePhoneIterator);
-      Element curHomePhoneElement = (Element) curHomePhoneNode;
-
-      CiaPhone ciaPhone = new CiaPhone();
-
-      switch (curHomePhoneElement.getNodeName()) {
-        case "homePhone":
-          ciaPhone.type = "HOME";
-          break;
-        case "workPhone":
-          ciaPhone.type = "WORK";
-          break;
-        case "mobilePhone":
-          ciaPhone.type = "MOBILE";
-          break;
-      }
-      ciaPhone.number = curHomePhoneElement.getTextContent();
-
-      phones.add(ciaPhone);
-    }
-  }
-
-  private void parseCiaClientAddresses(List<CiaAddress> addresses, Element curClientElement, String addressType) {
-    Element curAddressElement = (Element) curClientElement.getElementsByTagName(addressType).item(0);
-
-    CiaAddress ciaAddress = new CiaAddress();
-    if ("fact".equals(addressType)) {
-      ciaAddress.type = "FACT";
-    } else if ("register".equals(addressType)) {
-      ciaAddress.type = "REG";
-    }
-    ciaAddress.street = curAddressElement.getAttribute("street");
-    ciaAddress.house = curAddressElement.getAttribute("house");
-    ciaAddress.flat = curAddressElement.getAttribute("flat");
-
-    addresses.add(ciaAddress);
   }
 
   /*

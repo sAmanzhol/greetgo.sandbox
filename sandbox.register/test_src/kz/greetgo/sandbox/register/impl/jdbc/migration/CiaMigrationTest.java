@@ -109,7 +109,7 @@ public class CiaMigrationTest extends ParentTestNg {
     assertThat(clients.get(0).id).isEqualTo("0-B9N-HT-PU-04wolRBPzj");
     assertThat(clients.get(0).surname).isEqualTo("");
     assertThat(clients.get(0).name).isEqualTo("WCИTБЯ7щАо");
-    assertThat(clients.get(0).patronymic).isEqualTo("");
+    assertThat(clients.get(0).patronymic.trim()).isEqualTo("");
     assertThat(clients.get(0).gender).isEqualTo("FEMALE");
     assertThat(clients.get(0).birthDate).isEqualTo("1995-07-07");
     assertThat(clients.get(0).charm).isEqualTo("ЩlВOpФpЪИШ");
@@ -160,13 +160,13 @@ public class CiaMigrationTest extends ParentTestNg {
 
     assertThat(phones).hasSize(19);
 
-    assertThat(phones.get(0).type).isEqualTo("HOME");
+    assertThat(phones.get(0).type).isEqualTo("WORK");
     assertThat(phones.get(0).client).isEqualTo("0-B9N-HT-PU-04wolRBPzj");
-    assertThat(phones.get(0).number).isEqualTo("+7-878-241-63-94");
+    assertThat(phones.get(0).number).isEqualTo("+7-385-253-53-56");
 
-    assertThat(phones.get(1).type).isEqualTo("WORK");
+    assertThat(phones.get(1).type).isEqualTo("HOME");
     assertThat(phones.get(1).client).isEqualTo("0-B9N-HT-PU-04wolRBPzj");
-    assertThat(phones.get(1).number).isEqualTo("+7-385-253-53-56");
+    assertThat(phones.get(1).number).isEqualTo("+7-878-241-63-94");
 
     assertThat(phones.get(18).type).isEqualTo("WORK");
     assertThat(phones.get(18).client).isEqualTo("8-3K0-1Q-NP-8EPS3lmuxb");
