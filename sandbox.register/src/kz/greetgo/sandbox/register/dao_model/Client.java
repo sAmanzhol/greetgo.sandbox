@@ -10,6 +10,7 @@ public class Client {
   public String gender;
   public Date birthDate;
   public int charm;
+  public String migration_id;
 
   public Client() {
 

@@ -6,7 +6,7 @@ import kz.greetgo.sandbox.controller.report.model.ClientReportHeadData;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -25,7 +25,7 @@ public class ClientReportViewXlsx implements ClientReportView {
 
   public ClientReportViewXlsx(OutputStream outputStream) {
     this.outputStream = outputStream;
-    this.workbook = new XSSFWorkbook();
+    this.workbook = new SXSSFWorkbook();
   }
 
   @Override
@@ -64,17 +64,12 @@ public class ClientReportViewXlsx implements ClientReportView {
     rowDate.createCell(0).setCellValue("Generated at: ");
     rowDate.createCell(1).setCellValue(String.valueOf(footData.generatedAt));
 
-    // Resize all columns to fit the content size
-    for (int i = 0; i < 7; i++) {
-      this.sheet.autoSizeColumn(i);
-    }
-
     this.workbook.write(this.outputStream);
   }
 
   public static void main(String[] args) throws Exception {
     File file = new File("build/report/test_report.xlsx");
-    file.getParentFile().mkdir();
+    file.getParentFile().mkdirs();
 
     try (FileOutputStream fileOutputStream = new FileOutputStream(file)) {
       try (OutputStream outputStream = new PrintStream(fileOutputStream, false, "UTF-8")) {
@@ -85,7 +80,7 @@ public class ClientReportViewXlsx implements ClientReportView {
 
         viewXlsx.start(head);
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 1_000_000; i++) {
           ClientRecord row = new ClientRecord();
           row.id = i;
           row.fio = "fio of " + i;

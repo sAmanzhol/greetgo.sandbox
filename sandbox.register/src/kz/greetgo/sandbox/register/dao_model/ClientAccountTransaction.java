@@ -4,8 +4,11 @@ import java.sql.Timestamp;
 
 public class ClientAccountTransaction {
   public int id;
-  public int account;
-  public float money;
-  public Timestamp finished_at;
+  public Integer account;
+  public double money;
+  public Timestamp finishedAt;
   public int type;
+
+  public int actual;
+  public String migrationAccount;
 }

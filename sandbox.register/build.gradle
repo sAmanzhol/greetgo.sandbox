@@ -13,6 +13,9 @@ dependencies {
   // https://mvnrepository.com/artifact/org.json/json
   compile group: 'org.json', name: 'json', version: '20090211'
 
+  // https://mvnrepository.com/artifact/commons-net/commons-net
+  compile group: 'commons-net', name: 'commons-net', version: '3.3'
+
 
   testCompile "kz.greetgo.depinject:greetgo.depinject.testng:$depinjectVersion"
 }

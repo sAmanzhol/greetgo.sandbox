@@ -5,9 +5,9 @@ public class ClientRecord {
   public String fio;
   public String character;
   public int age;
-  public float balance;
-  public float balanceMax;
-  public float balanceMin;
+  public double balance;
+  public double balanceMax;
+  public double balanceMin;
 
   public ClientRecord() {
 

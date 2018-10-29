@@ -6,8 +6,8 @@ import org.apache.ibatis.annotations.Update;
 
 public interface CharacterTestDao {
   @Insert("insert into Charm (id, name, description, energy) " +
-    "values (#{id}, #{name}, #{description}, #{energy}) " +
-    "on conflict (id) do update set actual = 1;")
+    "values (nextval('id'), #{name}, #{description}, #{energy}) " +
+    "on conflict (name) do update set actual = 1")
   void insertCharacter(Character character);
 
   @Update("" +
