@@ -62,7 +62,7 @@ public class GenerateCiaData {
         }
     }
 
-    public long testExecute(ClientInRecord record) throws Exception {
+    public long insertClientRec(ClientInRecord record) throws Exception {
         try (Connection connection = DbWorker.createConnection(ConfigFiles.ciaDb())) {
             this.connection = connection;
 
@@ -77,7 +77,23 @@ public class GenerateCiaData {
         }
     }
 
-    public String getStatus(Long ciaRecId) throws Exception {
+    public long insertAccountOrTransactionRec(Object record) throws Exception {
+        try (Connection connection = DbWorker.createConnection(ConfigFiles.ciaDb())) {
+            this.connection = connection;
+
+            try (PreparedStatement ps = connection.prepareStatement("insert into transition_account_transaction (record_data) values (?) RETURNING \"number\"" )) {
+                ps.setString(1, record.toString());
+
+                try (ResultSet generatedKeys = ps.executeQuery()) {
+                    generatedKeys.next();
+                    return generatedKeys.getLong(1);
+                }
+            }
+        }
+    }
+
+
+    public String getCiaClientRecStatus(Long ciaRecId) throws Exception {
         try (Connection connection = DbWorker.createConnection(ConfigFiles.ciaDb())) {
             this.connection = connection;
 
@@ -88,6 +104,24 @@ public class GenerateCiaData {
                 try (ResultSet rs = ps.executeQuery()) {
                     if(rs.next()){
                      return rs.getString(1);
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    public String getAccOrTransRecStatus(Long ciaRecId) throws Exception {
+        try (Connection connection = DbWorker.createConnection(ConfigFiles.ciaDb())) {
+            this.connection = connection;
+
+            try (PreparedStatement ps = connection.prepareStatement(
+                    "Select status from transition_account_transaction where number = ?" )) {
+                ps.setLong(1,ciaRecId );
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    if(rs.next()){
+                        return rs.getString(1);
                     }
                 }
             }

@@ -32,9 +32,8 @@ public class MigrationJSON extends Migration {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
         Date nowDate = new Date();
         tmpClientTable = "cia_migration_client_" + sdf.format(nowDate);
-        info("TMP_CLIENT = " + tmpClientTable);
         createOperConnection();
-
+        dropAllTables();
         //language=PostgreSQL
         exec(" create table TMP_CLIENT_ACCOUNTS (\n" +
                 " error varchar(300),\n" +
@@ -82,6 +81,55 @@ public class MigrationJSON extends Migration {
 
         return portionSize;
     }
+
+
+    public Account getAccountById(Long id) throws SQLException{
+        Account account = null;
+
+        //language=PostgreSQL
+        try (PreparedStatement selectStmnt = operConnection.prepareStatement(
+                r("SELECT cia_client_id,account_number,registered_at,\"number\" \n " +
+                        "from TMP_CLIENT_ACCOUNTS " +
+                        "WHERE number = '" + id + "'"))) {
+
+            try (ResultSet rs = selectStmnt.executeQuery())
+            {
+                while (rs.next()) {
+                    account = new Account();
+                    account.client_id = rs.getString(1);
+                    account.account_number = rs.getString(2);
+                    account.registered_at = rs.getDate(3);
+                    account.number = rs.getLong(4);
+                }
+            }
+        }
+        return account;
+    }
+
+
+    public Transaction getTransactionById(Long id) throws SQLException {
+        Transaction transaction = null;
+
+        //language=PostgreSQL
+        try (PreparedStatement selectStmnt = operConnection.prepareStatement(
+                r("SELECT finished_at,account_number,money,transaction_type \n " +
+                        "from TMP_CLIENT_ACCOUNT_TRANSACTIONS " +
+                        "WHERE number = '" + id + "'"))) {
+
+            try (ResultSet rs = selectStmnt.executeQuery())
+            {
+                while (rs.next()) {
+                    transaction = new Transaction();
+                    transaction.finished_at = rs.getDate(1);
+                    transaction.account_number = rs.getString(2);
+                    transaction.money = rs.getDouble(3);
+                    transaction.transaction_type = rs.getString(4);
+                }
+            }
+        }
+        return transaction;
+    }
+
 
     public int download() throws SQLException, IOException, SAXException {
 
@@ -518,4 +566,5 @@ public class MigrationJSON extends Migration {
 
         uploadAllOk();
     }
+
 }

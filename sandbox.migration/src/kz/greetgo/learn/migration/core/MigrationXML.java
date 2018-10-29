@@ -55,6 +55,7 @@ public class MigrationXML extends Migration {
         tmpClientTable = "cia_migration_client_" + sdf.format(nowDate);
         info("TMP_CLIENT = " + tmpClientTable);
         createOperConnection();
+        dropAllTables();
 
         //language=PostgreSQL
         exec("create table TMP_CLIENT (\n" +
@@ -127,7 +128,7 @@ public class MigrationXML extends Migration {
         //language=PostgreSQL
         try (PreparedStatement selectStmnt = operConnection.prepareStatement(
                 r("SELECT cia_id,surname,\"name\",patronymic,birth_date,charm " +
-                        "from TMP_CLIENT " +
+                        "from clients " +
                         "WHERE cia_id = '" + id + "'"))) {
 
             try (ResultSet rs = selectStmnt.executeQuery())
@@ -647,16 +648,20 @@ public class MigrationXML extends Migration {
         //language=PostgreSQL
         exec("update client_addr set actual = false from TMP_CLIENT_PHONES tmpPhn where tmpPhn.client_id = client ");
 
+        //language=PostgreSQL
+        exec("update TMP_CLIENT_ADDRESS set actual = true");
+        //language=PostgreSQL
+        exec("update TMP_CLIENT_ADDRESS set actual = true");
 
         //language=PostgreSQL
-        exec("insert into client_addr (client,\"type\",street,house,flat)\n" +
-                "select client_id, \"type\",street,house,flat\n" +
+        exec("insert into client_addr (client,\"type\",street,house,flat,actual)\n" +
+                "select client_id, \"type\",street,house,flat,actual\n" +
                 "from TMP_CLIENT_ADDRESS \n" +
                 "where client_id is not null" );
 
         //language=PostgreSQL
-        exec("insert into client_phone (client,\"type\",number)\n" +
-                "select client_id, \"type\",number\n" +
+        exec("insert into client_phone (client,\"type\",number,actual)\n" +
+                "select client_id, \"type\",number,actual\n" +
                 "from TMP_CLIENT_PHONES \n" +
                 "where client_id is not null" );
 

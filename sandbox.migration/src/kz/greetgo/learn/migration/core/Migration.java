@@ -9,6 +9,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static kz.greetgo.learn.migration.util.TimeUtils.showTime;
 
@@ -17,6 +20,7 @@ public class Migration implements Closeable {
     public int downloadMaxBatchSize = 50_000;
     public int uploadMaxBatchSize = 50_000;
     public int showStatusPingMillis = 5000;
+
 
     protected final ConnectionConfig operConfig;
     protected final ConnectionConfig ciaConfig;
@@ -30,6 +34,7 @@ public class Migration implements Closeable {
 
     @Override
     public void close() {
+
         closeOperConnection();
         closeCiaConnection();
     }
@@ -76,13 +81,13 @@ public class Migration implements Closeable {
 
     protected void exec(String sql) throws SQLException {
         String executingSql = r(sql);
-        System.out.println(sql);
         long startedAt = System.nanoTime();
         try (Statement statement = operConnection.createStatement()) {
             int updates = statement.executeUpdate(executingSql);
             info("Updated " + updates
                     + " records for " + showTime(System.nanoTime(), startedAt)
                     + ", EXECUTED SQL : " + executingSql);
+
         } catch (SQLException e) {
             info("ERROR EXECUTE SQL for " + showTime(System.nanoTime(), startedAt)
                     + ", message: " + e.getMessage() + ", SQL : " + executingSql);
@@ -90,7 +95,18 @@ public class Migration implements Closeable {
         }
     }
 
-
+    public void dropAllTables() throws Exception{
+//        language=PostgreSQL
+        exec("Drop table if exists TMP_CLIENT");
+        //language=PostgreSQL
+        exec("Drop table if exists  TMP_CLIENT_address");
+        //language=PostgreSQL
+        exec("Drop table if exists TMP_CLIENT_phones");
+        //language=PostgreSQL
+        exec("Drop table if exists TMP_CLIENT_accounts");
+        //language=PostgreSQL
+        exec("Drop table if exists  TMP_CLIENT_account_transactions");
+    }
 
 
 }

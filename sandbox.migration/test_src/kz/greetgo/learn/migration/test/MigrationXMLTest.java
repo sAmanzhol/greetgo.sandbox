@@ -16,7 +16,6 @@ import org.testng.annotations.Test;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import static org.fest.assertions.api.Assertions.assertThat;
@@ -28,11 +27,11 @@ public class MigrationXMLTest extends TestNG {
 
     private ClientInRecord prepareTestData(){
         ClientInRecord clientInRecord = new ClientInRecord();
-        clientInRecord.id           = "TESTID";
-        clientInRecord.name         = "TESTNAME";
-        clientInRecord.surname      = "TESTNAME";
-        clientInRecord.patronymic   = "TESTNAME";
-        clientInRecord.birthDate    = new Date();
+        clientInRecord.id           =  RND.str(8);
+        clientInRecord.name         =  RND.str(5);
+        clientInRecord.surname      =  RND.str(5);
+        clientInRecord.patronymic   =  RND.str(5);
+        clientInRecord.birthDate    =  RND.date(-100 * 365, -10 * 365);
         clientInRecord.charm        = "TESTCharm";
         clientInRecord.addressList  =  new ArrayList<>();
         clientInRecord.phoneList    =  new ArrayList<>();
@@ -113,7 +112,7 @@ public class MigrationXMLTest extends TestNG {
         ClientInRecord clientInRecord = prepareTestData();
 
         try{
-            gcd.testExecute(clientInRecord);
+            gcd.insertClientRec(clientInRecord);
             startMigration();
             ClientRecord migratedRecord = migrationXML.getClientByCiaID(clientInRecord.id);
 
@@ -135,10 +134,7 @@ public class MigrationXMLTest extends TestNG {
             e.printStackTrace();
             System.out.println("Cannot insert data to Transition_client");
             finishMigration();
-            return;
         }
-
-       // assertThat()
 
     }
 
@@ -147,17 +143,17 @@ public class MigrationXMLTest extends TestNG {
     public void migrateClientAddressRecord(){
         GenerateCiaData gcd = new GenerateCiaData();
         ClientInRecord clientInRecord = prepareTestData();
-        clientInRecord.addressList = new ArrayList<>();
+        clientInRecord.addressList.clear();
         AddressInRecord addressInRecord = generateAddress();
         clientInRecord.addressList.add(addressInRecord);
 
         try{
-            gcd.testExecute(clientInRecord);
+            gcd.insertClientRec(clientInRecord);
             startMigration();
             ClientRecord migratedRecord = migrationXML.getClientByCiaID(clientInRecord.id);
             //
             //
-            List<AddressRecord> addressRecordList =  migrationXML.getClientAdrsByCiaID(clientInRecord.id);
+            List<AddressRecord> addressRecordList =  migrationXML.getClientAdrsByCiaID(migratedRecord.id);
             //
             //
             assertThat(addressRecordList).isNotNull();
@@ -172,7 +168,6 @@ public class MigrationXMLTest extends TestNG {
             e.printStackTrace();
             System.out.println("Cannot insert data to Transition_client");
             finishMigration();
-            return;
         }
 
         // assertThat()
@@ -189,7 +184,7 @@ public class MigrationXMLTest extends TestNG {
         clientInRecord.phoneList.add(phoneInRecord);
 
         try{
-            gcd.testExecute(clientInRecord);
+            gcd.insertClientRec(clientInRecord);
             startMigration();
             ClientRecord migratedRecord = migrationXML.getClientByCiaID(clientInRecord.id);
             //
@@ -206,7 +201,6 @@ public class MigrationXMLTest extends TestNG {
             e.printStackTrace();
             System.out.println("Cannot insert data to Transition_client");
             finishMigration();
-            return;
         }
     }
 
@@ -217,12 +211,12 @@ public class MigrationXMLTest extends TestNG {
         clientInRecord.phoneList.get(0).number = null;
 
         try{
-            Long ciaRecordId = gcd.testExecute(clientInRecord);
+            Long ciaRecordId = gcd.insertClientRec(clientInRecord);
             startMigration();
             ClientRecord migratedRecord = migrationXML.getClientByCiaID(clientInRecord.id);
             //
             //
-            String statusMess =  gcd.getStatus(ciaRecordId);
+            String statusMess =  gcd.getCiaClientRecStatus(ciaRecordId);
             //
             //
             assertThat(statusMess).isNotNull();
@@ -234,25 +228,77 @@ public class MigrationXMLTest extends TestNG {
             e.printStackTrace();
             System.out.println("Cannot insert data to Transition_client");
             finishMigration();
-            return;
+        }
+    }
+
+    @Test
+    public void testClientAddressToError(){
+        GenerateCiaData gcd = new GenerateCiaData();
+        ClientInRecord clientInRecord = prepareTestData();
+        clientInRecord.addressList.get(0).street = null;
+        clientInRecord.addressList.get(0).flat = null;
+        clientInRecord.addressList.get(0).house = null;
+
+        try{
+            Long ciaRecordId = gcd.insertClientRec(clientInRecord);
+            startMigration();
+            ClientRecord migratedRecord = migrationXML.getClientByCiaID(clientInRecord.id);
+            //
+            //
+            String statusMess =  gcd.getCiaClientRecStatus(ciaRecordId);
+            //
+            //
+            assertThat(statusMess).isNotNull();
+            assertThat(statusMess).isEqualTo("ERROR");
+
+            finishMigration();
+        }
+        catch (Exception e ){
+            e.printStackTrace();
+            System.out.println("Cannot insert data to Transition_client");
+            finishMigration();
+        }
+    }
+
+    @Test
+    public void testClientNameToError(){
+        GenerateCiaData gcd = new GenerateCiaData();
+        ClientInRecord clientInRecord = prepareTestData();
+        clientInRecord.name = null;
+
+        try{
+            Long ciaRecordId = gcd.insertClientRec(clientInRecord);
+            startMigration();
+            //
+            //
+            String statusMess =  gcd.getCiaClientRecStatus(ciaRecordId);
+            //
+            //
+            assertThat(statusMess).isNotNull();
+            assertThat(statusMess).isEqualTo("ERROR");
+
+            finishMigration();
+        }
+        catch (Exception e ){
+            e.printStackTrace();
+            System.out.println("Cannot insert data to Transition_client");
+            finishMigration();
         }
     }
 
 
     @Test
-    public void testClientToError(){
+    public void testClientSurnameToError(){
         GenerateCiaData gcd = new GenerateCiaData();
         ClientInRecord clientInRecord = prepareTestData();
-        clientInRecord.name = null;
         clientInRecord.surname = null;
-        clientInRecord.birthDate = null;
 
         try{
-            Long ciaRecordId = gcd.testExecute(clientInRecord);
+            Long ciaRecordId = gcd.insertClientRec(clientInRecord);
             startMigration();
             //
             //
-            String statusMess =  gcd.getStatus(ciaRecordId);
+            String statusMess =  gcd.getCiaClientRecStatus(ciaRecordId);
             //
             //
             assertThat(statusMess).isNotNull();
@@ -264,8 +310,71 @@ public class MigrationXMLTest extends TestNG {
             e.printStackTrace();
             System.out.println("Cannot insert data to Transition_client");
             finishMigration();
-            return;
         }
+    }
+
+
+    @Test
+    public void testClientBirthDayToError(){
+        GenerateCiaData gcd = new GenerateCiaData();
+        ClientInRecord clientInRecord = prepareTestData();
+        clientInRecord.birthDate = null;
+
+        try{
+            Long ciaRecordId = gcd.insertClientRec(clientInRecord);
+            startMigration();
+            //
+            //
+            String statusMess =  gcd.getCiaClientRecStatus(ciaRecordId);
+            //
+            //
+            assertThat(statusMess).isNotNull();
+            assertThat(statusMess).isEqualTo("ERROR");
+
+            finishMigration();
+        }
+        catch (Exception e ){
+            e.printStackTrace();
+            System.out.println("Cannot insert data to Transition_client");
+            finishMigration();
+        }
+    }
+
+    @Test
+    public void testClientToUpdate(){
+        GenerateCiaData gcd = new GenerateCiaData();
+        ClientInRecord clientInRecord = prepareTestData();
+        try{
+            gcd.insertClientRec(clientInRecord);
+            startMigration();
+            ClientRecord migratedRecord = migrationXML.getClientByCiaID(clientInRecord.id);
+
+            clientInRecord = prepareTestData();
+            clientInRecord.id = migratedRecord.id;
+
+            gcd.insertClientRec(clientInRecord);
+            startMigration();
+            //
+            //
+            ClientRecord updatedRecord = migrationXML.getClientByCiaID(clientInRecord.id);
+            //
+            //
+            assertThat(migratedRecord).isNotNull();
+            assertThat(updatedRecord).isNotNull();
+            assertThat(migratedRecord.id).isEqualTo(updatedRecord.id);
+            assertThat(migratedRecord.name).isNotEqualTo(updatedRecord.name);
+            assertThat(migratedRecord.surname).isNotEqualTo(updatedRecord.surname);
+            assertThat(migratedRecord.birthDate).isNotEqualTo(updatedRecord.birthDate);
+
+            finishMigration();
+        }
+        catch (Exception e ){
+            e.printStackTrace();
+            System.out.println("Cannot insert data to Transition_client");
+            finishMigration();
+        }
+
+        // assertThat()
     }
 
 
