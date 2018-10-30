@@ -25,16 +25,8 @@ import java.util.List;
 @Bean
 public class ClientRegistrImpl implements ClientRegister {
 
-  //TODO ты не используешь все созданные переменные, тем более они у тебя статичные.
-  //TODO удали мертвый код
-
   public static final String COL_ID = "id";
-  public static final String COL_NAME = "name";
-  public static final String COL_SURNAME = "surname";
-  public static final String COL_PARTONYMIC = "patronymic";
-  public static final String COL_GENDER = "gender";
   public static final String COL_BIRTH_DATE = "birth_date";
-  public static final String COL_CHARM = "charm";
 
   final Logger logger = Logger.getLogger(getClass());
 
@@ -154,39 +146,24 @@ public class ClientRegistrImpl implements ClientRegister {
     return resultId;
   }
 
-  public void insertBatch(List<Client> clientList) {
-    List<Long> resultIdList = null;
-
-    jdbcBean.get().execute(con -> {
+  public int[] insertBatch(List<Client> clientList) {
+    int[] resultSet;
+    resultSet = jdbcBean.get().execute(con -> {
+      int[] resSet = null;
       try (PreparedStatement preparedStatement = con.prepareStatement(INSERT_STATEMENT)) {
         for (Client client : clientList) {
-          setInsertStatementParams(preparedStatement, clientList.get(0));
+          setInsertStatementParams(preparedStatement, client);
           preparedStatement.addBatch();
         }
-
-        int[] resultSet = preparedStatement.executeBatch();
-        for (int i = 0; i < resultSet.length; i++) {
-          if (resultSet[i] > 0) {
-            //TODO здесь что происходит ?
-
-            //console log
-          }
-        }
-      } catch (BatchUpdateException jdbce) {
-
-        //TODO Обрабатывай ошибки
-
-
-        jdbce.getNextException().printStackTrace();
-      } catch (Exception e) {
-
-        //TODO Обрабатывай ошибки
-
-        e.printStackTrace();
+        resSet = preparedStatement.executeBatch();
       }
-
-      return 1;
+      catch (Exception jdbce) {
+        logger.error("ERROR INSERT BATCH : Error while inserting",jdbce);
+        return resSet;
+      }
+      return resSet;
     });
+    return resultSet;
   }
 
 

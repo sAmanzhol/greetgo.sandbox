@@ -15,7 +15,7 @@ public interface ClientRegister {
 
     Long insert(Client client);
 
-    void insertBatch(List<Client> clientList);
+    int[] insertBatch(List<Client> clientList);
 
     List<Client> getListByParam(ClientReqParams params);
 
