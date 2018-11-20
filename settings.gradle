@@ -1,8 +1,3 @@
-rootProject.name = "greetgo.sandbox.root"
+rootProject.name = "sandbox_string_angular"
 
-include 'sandbox.client'
-include 'sandbox.controller'
-include 'sandbox.debug'
-include 'sandbox.register'
-include 'sandbox.server'
-include 'sandbox.server:war'
+//include 'sandbox.client'

@@ -1,5 +1,3 @@
-# greetgo.sandbox
+# greetgo sandbox_string_angular
 
-SandBox from greetgo!
-
-Added in_service
+SandBox from greetgo! for gAcademy
