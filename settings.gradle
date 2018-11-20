@@ -1,4 +1,4 @@
 rootProject.name = "greetgo! Sandbox with Spring-boot and Angular"
 
 include 'sandbox.backend'
-include 'sandbox.boot'
+include 'sandbox.server'
