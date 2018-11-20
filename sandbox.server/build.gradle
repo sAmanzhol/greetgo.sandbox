@@ -1,9 +1,21 @@
-apply plugin: 'org.springframework.boot'
-apply plugin: 'io.spring.dependency-management'
+apply plugin: 'war'
+webAppDirName = 'webapps'
 
 dependencies {
   compile project(":sandbox.backend")
   
   implementation('org.springframework.boot:spring-boot-starter-web')
   testImplementation('org.springframework.boot:spring-boot-starter-test')
+}
+
+war {
+  enabled = true
+  baseName 'sandbox'
+
+  addExcludes rootSpec
+}
+
+static def addExcludes(rootSpec) {
+  rootSpec.exclude 'ant-*.jar'
+  rootSpec.exclude 'ant-launcher-*.jar'
 }
