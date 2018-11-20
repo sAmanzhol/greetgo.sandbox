@@ -1,3 +1,4 @@
-rootProject.name = "sandbox_string_angular"
+rootProject.name = "greetgo! Sandbox with Spring-boot and Angular"
 
-//include 'sandbox.client'
+include 'sandbox.backend'
+include 'sandbox.boot'
