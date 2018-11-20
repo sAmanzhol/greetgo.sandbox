@@ -85,6 +85,7 @@ subprojects {
   }
 
   jar {
+    enabled = true
     manifest {
       attributes 'Specification-Title': rootProject.name
       attributes 'Specification-Version': version
