@@ -1,8 +1,12 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
 
-import { MainWindowComponent } from './main-window/main-window.component';
-import { LoginFormComponent } from './login-form/login-form.component';
+import {MainWindowComponent} from './main-window/main-window.component';
+import {LoginFormComponent} from './login-form/login-form.component';
+import {HttpService} from "./http.service";
+import {LoginService} from "./login-form/login.service";
+import {HttpClientModule} from "@angular/common/http";
+import {FormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -10,9 +14,9 @@ import { LoginFormComponent } from './login-form/login-form.component';
     LoginFormComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule, HttpClientModule, FormsModule,
   ],
-  providers: [],
+  providers: [HttpService, LoginService],
   bootstrap: [MainWindowComponent]
 })
 export class AppModule {}

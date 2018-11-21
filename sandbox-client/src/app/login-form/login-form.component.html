@@ -1,17 +1,22 @@
 <div class="login-form form-area">
 
+  <div class="logo">
+    <img src="assets/sandbox.png">
+  </div>
+
   <div class="title">
     Sandbox (greetgo!)
   </div>
 
   <div class="input">
-    <input type="text" placeholder="Логин">
+    <input type="text" placeholder="Логин" [(ngModel)]="loginService.username">
   </div>
   <div class="input">
-    <input type="password" placeholder="Пароль">
+    <input type="password" placeholder="Пароль" [(ngModel)]="loginService.password">
   </div>
   <div class="submit">
-    <button>Вход</button>
+    <!--suppress JSIgnoredPromiseFromCall -->
+    <button (click)="loginService.login()">Вход</button>
   </div>
 
 </div>

@@ -2,8 +2,18 @@
 
   padding: 0.5rem 1rem;
 
+  .logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
   div {
     margin-top: 0.5rem;
+  }
+
+  .title {
+    text-align: center;
   }
 
   .submit button {
