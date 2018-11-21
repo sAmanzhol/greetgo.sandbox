@@ -1,4 +1,4 @@
-package kz.greetgo.sandbox.server.app;
+package kz.greetgo.sandbox.war.app;
 
 import kz.greetgo.sandbox.backend.util.ScannerBackend;
 import org.springframework.boot.SpringApplication;

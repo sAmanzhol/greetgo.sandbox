@@ -1,4 +1,4 @@
 rootProject.name = "sandbox-spring-boot-angular"
 
 include 'sandbox.backend'
-include 'sandbox.server'
+include 'sandbox.war'
