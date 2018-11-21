@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  urlPrefix: 'http://localhost:1313/api',
+  urlPrefix: 'http://' + location.hostname + ':1313/api',
 };
 
 /*

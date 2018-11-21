@@ -13,5 +13,12 @@ export class LoginService {
 
   async login() {
     console.log("login as username = " + this.username + ", password = " + this.password);
+
+    this.http.token = await this.http.post("/auth/login", {
+      username: this.username,
+      password: this.password,
+    }, "text").toPromise().then(resp => resp.body as string);
+
+    console.log("this.http.token = " + this.http.token)
   }
 }
