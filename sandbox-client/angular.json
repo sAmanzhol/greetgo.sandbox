@@ -123,5 +123,10 @@
       }
     }
   },
-  "defaultProject": "sandbox-client"
+  "defaultProject": "sandbox-client",
+  "schematics": {
+    "@schematics/angular:component": {
+      "styleext": "scss"
+    }
+  }
 }
