@@ -1,6 +1,5 @@
-package kz.greetgo.sandbox.backend.security.beans;
+package kz.greetgo.sandbox.backend.configuration.security.beans;
 
-import kz.greetgo.sandbox.backend.security.beans.ControllerAccessInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;

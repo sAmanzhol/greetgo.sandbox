@@ -4,9 +4,15 @@ import kz.greetgo.sandbox.backend.test.beans.DbPreparation;
 import kz.greetgo.sandbox.backend.test.util.ScannerForTests;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-public class PrepareDb {
-  public static void main(String[] args) {
+import static kz.greetgo.sandbox.backend.test.util.DbKind.OPERATIVE;
 
+public class PrepareDb {
+
+  public static void main(String[] args) {
+    new PrepareDb().exec();
+  }
+
+  private void exec() {
     try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
       context.register(ScannerForTests.class);
       context.refresh();
@@ -17,11 +23,11 @@ public class PrepareDb {
 
       dbPreparation.prepareDbConfig();
 
-      dbPreparation.dropDb();
+      dbPreparation.dropDb(OPERATIVE);
 
-      dbPreparation.createDb();
+      dbPreparation.createDb(OPERATIVE);
 
-      dbPreparation.applyLiquibase();
+      dbPreparation.applyLiquibase(OPERATIVE);
     }
   }
 }

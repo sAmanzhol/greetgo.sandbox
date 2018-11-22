@@ -1,11 +1,11 @@
-package kz.greetgo.sandbox.backend.util;
+package kz.greetgo.sandbox.backend.configuration.util;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
 import java.util.Optional;
 
-import static kz.greetgo.sandbox.backend.util.StreamUtil.nullSafeToStream;
+import static kz.greetgo.sandbox.backend.configuration.util.StreamUtil.nullSafeToStream;
 
 public class MvcUtil {
   public static Optional<String> extractCookieValue(HttpServletRequest request, String name) {

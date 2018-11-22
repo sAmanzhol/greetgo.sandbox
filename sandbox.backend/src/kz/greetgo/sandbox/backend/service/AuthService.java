@@ -1,6 +1,6 @@
 package kz.greetgo.sandbox.backend.service;
 
-import kz.greetgo.sandbox.backend.security.roles.Role;
+import kz.greetgo.sandbox.backend.configuration.security.roles.Role;
 
 public interface AuthService {
   String probe();

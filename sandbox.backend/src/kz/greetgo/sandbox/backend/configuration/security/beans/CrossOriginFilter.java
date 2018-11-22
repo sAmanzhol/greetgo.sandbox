@@ -1,4 +1,4 @@
-package kz.greetgo.sandbox.backend.security.beans;
+package kz.greetgo.sandbox.backend.configuration.security.beans;
 
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;

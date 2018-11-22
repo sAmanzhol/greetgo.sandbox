@@ -1,8 +1,8 @@
-package kz.greetgo.sandbox.backend.security.beans;
+package kz.greetgo.sandbox.backend.configuration.security.beans;
 
-import kz.greetgo.sandbox.backend.security.core.PublicAccess;
-import kz.greetgo.sandbox.backend.security.roles.MustHave;
-import kz.greetgo.sandbox.backend.security.roles.Role;
+import kz.greetgo.sandbox.backend.configuration.security.core.PublicAccess;
+import kz.greetgo.sandbox.backend.configuration.security.roles.MustHave;
+import kz.greetgo.sandbox.backend.configuration.security.roles.Role;
 import kz.greetgo.sandbox.backend.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

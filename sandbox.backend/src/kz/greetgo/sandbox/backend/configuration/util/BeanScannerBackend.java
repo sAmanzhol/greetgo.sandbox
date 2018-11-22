@@ -1,4 +1,4 @@
-package kz.greetgo.sandbox.backend.util;
+package kz.greetgo.sandbox.backend.configuration.util;
 
 import kz.greetgo.sandbox.backend.controller.BeanScannerController;
 import kz.greetgo.sandbox.backend.service.impl.BeanScannerService;

@@ -1,4 +1,4 @@
-package kz.greetgo.sandbox.backend.security.roles;
+package kz.greetgo.sandbox.backend.configuration.security.roles;
 
 public enum Role {
   EDIT_STARS,

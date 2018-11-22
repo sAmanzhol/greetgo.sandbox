@@ -1,4 +1,4 @@
-package kz.greetgo.sandbox.backend.security.core;
+package kz.greetgo.sandbox.backend.configuration.security.core;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;

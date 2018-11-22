@@ -1,6 +1,6 @@
 package kz.greetgo.sandbox.backend.service.impl;
 
-import kz.greetgo.sandbox.backend.security.roles.Role;
+import kz.greetgo.sandbox.backend.configuration.security.roles.Role;
 import kz.greetgo.sandbox.backend.service.AuthService;
 import org.springframework.stereotype.Component;
 

@@ -1,5 +1,6 @@
-package kz.greetgo.sandbox.backend.security.beans;
+package kz.greetgo.sandbox.backend.configuration.security.beans;
 
+import kz.greetgo.sandbox.backend.configuration.security.core.SessionConst;
 import kz.greetgo.sandbox.backend.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
@@ -14,8 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static kz.greetgo.sandbox.backend.security.core.SessionConst.SESSION_ID;
-import static kz.greetgo.sandbox.backend.util.MvcUtil.extractCookieValue;
+import static kz.greetgo.sandbox.backend.configuration.util.MvcUtil.extractCookieValue;
 
 @Component
 @Order(1000)
@@ -32,7 +32,7 @@ public class SessionPreparationFilter implements Filter {
     HttpServletRequest request = (HttpServletRequest) servletRequest;
     HttpServletResponse response = (HttpServletResponse) servletResponse;
 
-    String sessionId = extractCookieValue(request, SESSION_ID).orElse(null);
+    String sessionId = extractCookieValue(request, SessionConst.SESSION_ID).orElse(null);
 
     String token = request.getHeader("token");
 

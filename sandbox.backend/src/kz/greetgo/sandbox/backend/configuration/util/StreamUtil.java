@@ -1,4 +1,4 @@
-package kz.greetgo.sandbox.backend.util;
+package kz.greetgo.sandbox.backend.configuration.util;
 
 import java.util.Arrays;
 import java.util.stream.Stream;

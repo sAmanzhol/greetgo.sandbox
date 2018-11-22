@@ -1,4 +1,4 @@
-package kz.greetgo.sandbox.backend.security.roles;
+package kz.greetgo.sandbox.backend.configuration.security.roles;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
