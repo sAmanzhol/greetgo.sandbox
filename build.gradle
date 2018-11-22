@@ -50,6 +50,7 @@ subprojects {
   
   dependencies {
     ext.testNgVersion = '6.14.3'
+    ext.greetgoConfVersion = "1.0.2"
 
     testCompile "org.testng:testng:$testNgVersion"
     compile 'org.easytesting:fest-assert-core:2.0M10'

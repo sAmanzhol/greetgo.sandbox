@@ -8,7 +8,7 @@ import static kz.greetgo.sandbox.backend.test.util.DbKind.DIFF;
 import static kz.greetgo.sandbox.backend.test.util.DbKind.OPERATIVE;
 
 public class ShowDiff {
-  public static void main(String[] args) {
+  public static void main(String[] args) throws Exception {
 
     try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
       context.register(ScannerForTests.class);
