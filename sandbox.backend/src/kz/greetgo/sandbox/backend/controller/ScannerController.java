@@ -1,4 +1,4 @@
-package kz.greetgo.sandbox.backend.constroller;
+package kz.greetgo.sandbox.backend.controller;
 
 import org.springframework.context.annotation.ComponentScan;
 

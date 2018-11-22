@@ -1,4 +1,4 @@
-package kz.greetgo.sandbox.backend.constroller;
+package kz.greetgo.sandbox.backend.controller;
 
 import kz.greetgo.sandbox.backend.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
