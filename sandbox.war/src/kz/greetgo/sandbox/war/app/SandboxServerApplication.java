@@ -1,6 +1,7 @@
 package kz.greetgo.sandbox.war.app;
 
-import kz.greetgo.sandbox.backend.util.ScannerBackend;
+import kz.greetgo.sandbox.backend.security.beans.BeanScannerSecurity;
+import kz.greetgo.sandbox.backend.util.BeanScannerBackend;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -11,7 +12,10 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
 @SpringBootApplication
-@Import(ScannerBackend.class)
+@Import({
+    BeanScannerBackend.class,
+    BeanScannerSecurity.class,
+})
 public class SandboxServerApplication extends SpringBootServletInitializer {
   public static void main(String[] args) {
     SpringApplication.run(SandboxServerApplication.class, args);

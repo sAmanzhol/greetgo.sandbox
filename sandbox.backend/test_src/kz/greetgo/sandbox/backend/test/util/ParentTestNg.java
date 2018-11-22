@@ -1,4 +1,4 @@
-package kz.greetgo.sandbox.backend.util;
+package kz.greetgo.sandbox.backend.test.util;
 
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
