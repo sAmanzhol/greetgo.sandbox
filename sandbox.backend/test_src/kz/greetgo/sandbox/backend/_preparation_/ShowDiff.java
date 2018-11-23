@@ -26,8 +26,8 @@ public class ShowDiff {
       dbPreparation.createDb(DIFF);
       dbPreparation.createDb(OPERATIVE);
 
-      dbPreparation.applyLiquibase(OPERATIVE);
-      dbPreparation.applyCurrentStructure(DIFF);
+      dbPreparation.applyLiquibaseToOperative();
+      dbPreparation.applyCurrentStructureTo(DIFF);
 
       dbPreparation.generateDiffSql(OPERATIVE, DIFF);
     }

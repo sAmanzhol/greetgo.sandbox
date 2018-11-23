@@ -7,6 +7,9 @@ import java.util.Date;
 
 @Component
 public class StarsServiceImpl implements StarsService {
+
+
+
   @Override
   public String hello() {
     return "Hello From Aldebaran : " + new Date();

@@ -2,6 +2,8 @@ package kz.greetgo.sandbox.backend.test.util;
 
 import kz.greetgo.sandbox.backend.config.DbConfig;
 
+import java.util.Map;
+
 import static kz.greetgo.conf.sys_params.SysParams.pgAdminPassword;
 import static kz.greetgo.conf.sys_params.SysParams.pgAdminUrl;
 import static kz.greetgo.conf.sys_params.SysParams.pgAdminUserid;
@@ -54,7 +56,7 @@ public class ConnectParamsUtil {
 
           @Override
           public String username() {
-            return dbConfig.username();
+            return dbConfig.username() + "_diff";
           }
 
           @Override
@@ -66,5 +68,21 @@ public class ConnectParamsUtil {
       default:
         throw new IllegalStateException();
     }
+  }
+
+  public static String replaceParameterOrReturnSame(String line, Map<String, String> params) {
+    int i = line.indexOf("=");
+    if (i < 0) {
+      return line;
+    }
+
+    String key = line.substring(0, i).trim();
+
+    String newValue = params.get(key);
+    if (newValue != null) {
+      return key + "=" + newValue;
+    }
+
+    return line;
   }
 }

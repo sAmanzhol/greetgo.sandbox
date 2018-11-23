@@ -6,4 +6,8 @@ public interface ConnectParams {
   String username();
 
   String password();
+
+  default String dbName() {
+    return DbUrlUtils.extractDbName(url());
+  }
 }

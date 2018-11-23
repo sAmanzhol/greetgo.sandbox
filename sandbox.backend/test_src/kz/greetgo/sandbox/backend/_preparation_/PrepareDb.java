@@ -9,10 +9,6 @@ import static kz.greetgo.sandbox.backend.test.util.DbKind.OPERATIVE;
 public class PrepareDb {
 
   public static void main(String[] args) throws Exception {
-    new PrepareDb().exec();
-  }
-
-  private void exec() throws Exception {
     try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
       context.register(ScannerForTests.class);
       context.refresh();
@@ -27,7 +23,8 @@ public class PrepareDb {
 
       dbPreparation.createDb(OPERATIVE);
 
-      dbPreparation.applyLiquibase(OPERATIVE);
+      dbPreparation.applyLiquibaseToOperative();
     }
   }
+
 }

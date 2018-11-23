@@ -10,7 +10,6 @@ public class AppConfigFactory extends LocalConfigFactory {
 
   @Bean
   public DbConfig createDbConfig() {
-    System.out.println("SystemConfigFactory.createDbConfig");
     return createConfig(DbConfig.class);
   }
 

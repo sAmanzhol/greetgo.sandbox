@@ -21,4 +21,10 @@ public class LOG {
       destination.info(message.get());
     }
   }
+
+  public void errorMessage(String message) {
+    if (destination.isErrorEnabled()) {
+      destination.error(message);
+    }
+  }
 }
