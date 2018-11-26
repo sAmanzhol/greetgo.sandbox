@@ -27,4 +27,14 @@ public class LOG {
       destination.error(message);
     }
   }
+
+  public boolean isTraceEnabled() {
+    return destination.isTraceEnabled();
+  }
+
+  public void trace(Supplier<String> message) {
+    if (destination.isTraceEnabled()) {
+      destination.trace(message.get());
+    }
+  }
 }
