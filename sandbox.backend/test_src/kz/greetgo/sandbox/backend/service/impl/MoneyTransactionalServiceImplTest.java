@@ -22,8 +22,6 @@ public class MoneyTransactionalServiceImplTest extends ParentTestNg {
   @Test
   public void transactionTest() throws Exception {
 
-    System.out.println("ags2t6w moneyTransactionalService = " + moneyTransactionalService.getClass());
-
     String room = RND.str(10);
 
     System.out.println("room = [[" + room + "]]");
@@ -37,14 +35,14 @@ public class MoneyTransactionalServiceImplTest extends ParentTestNg {
         idList.add(id);
         moneyService.create(id, room, +amount);
       }
+      assertThat(moneyService.amountSum(room)).isEqualTo(amount);
       {
         String id = RND.str(10);
         idList.add(id);
         moneyService.create(id, room, -amount);
       }
+      assertThat(moneyService.amountSum(room)).isZero();
     }
-
-    assertThat(moneyService.amountSum(room)).isZero();
 
     class Worker extends Thread {
       final String name;
@@ -80,6 +78,9 @@ public class MoneyTransactionalServiceImplTest extends ParentTestNg {
     for (Worker worker : workers) {
       worker.start();
     }
+
+    System.out.println("Join to all workers");
+
     for (Worker worker : workers) {
       worker.join();
     }

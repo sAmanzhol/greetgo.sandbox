@@ -7,14 +7,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 @Component
-@Transactional
 public class MoneyTransactionalServiceImpl implements MoneyTransactionalService {
 
   @Autowired
   private MoneyService moneyService;
 
-  @Transactional
   @Override
+  @Transactional
   public void move(String idFrom, String idTo, long amount) {
 
     int cmp = idFrom.compareTo(idTo);
