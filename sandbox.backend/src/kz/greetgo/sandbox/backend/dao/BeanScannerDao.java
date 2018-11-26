@@ -1,11 +1,11 @@
-package kz.greetgo.sandbox.backend.test.dao;
+package kz.greetgo.sandbox.backend.dao;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @MapperScan(
-    basePackages = "kz.greetgo.sandbox.backend.test.dao",
+    basePackages = "kz.greetgo.sandbox.backend.dao",
     sqlSessionFactoryRef = "masterSqlSessionFactory"
 )
-public class BeanScannerTestDao {}
+public class BeanScannerDao {}

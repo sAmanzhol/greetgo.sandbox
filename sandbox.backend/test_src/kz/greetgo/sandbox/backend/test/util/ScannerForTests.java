@@ -8,6 +8,6 @@ import org.springframework.context.annotation.Import;
 @Import({
     BeanScannerBackend.class,
     BeanScannerTestBeans.class,
-    //BeanScannerTestDao.class,
+    BeanScannerTestDao.class,
 })
 public class ScannerForTests {}

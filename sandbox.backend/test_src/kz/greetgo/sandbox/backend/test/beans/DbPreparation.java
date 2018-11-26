@@ -3,7 +3,7 @@ package kz.greetgo.sandbox.backend.test.beans;
 import kz.greetgo.conf.hot.DefaultStrValue;
 import kz.greetgo.sandbox.backend.config.DbConfig;
 import kz.greetgo.sandbox.backend.configuration.beans.AppConfigFactory;
-import kz.greetgo.sandbox.backend.configuration.beans.JdbcTemplateFactory;
+import kz.greetgo.sandbox.backend.configuration.beans.MasterDatabaseAccessFactory;
 import kz.greetgo.sandbox.backend.configuration.beans.LiquibaseManager;
 import kz.greetgo.sandbox.backend.configuration.logging.LOG;
 import kz.greetgo.sandbox.backend.configuration.util.App;
@@ -45,7 +45,7 @@ public class DbPreparation extends DbPreparationParent {
   private AppConfigFactory appConfigFactory;
 
   @Autowired
-  private JdbcTemplateFactory jdbcTemplateFactory;
+  private MasterDatabaseAccessFactory masterDatabaseAccessFactory;
 
   public void prepareDbConfig() throws Exception {
     log().info(() -> "Prepare DB Config");
@@ -69,14 +69,14 @@ public class DbPreparation extends DbPreparationParent {
           .collect(Collectors.toList()));
 
       appConfigFactory.reset();
-      jdbcTemplateFactory.reset();
+      masterDatabaseAccessFactory.reset();
     }
   }
 
   public void dropDb(DbKind kind) {
     log().info(() -> "Drop " + kind + " DB");
 
-    jdbcTemplateFactory.closeDataSource();
+    masterDatabaseAccessFactory.closeDataSource();
 
     ConnectParams params = getConnectParams(kind.connection());
 
@@ -92,7 +92,7 @@ public class DbPreparation extends DbPreparationParent {
     exec(ADMIN, "create user " + params.username() + " with password '" + params.password() + "'");
     exec(ADMIN, "create database " + params.dbName() + " with owner " + params.username());
 
-    jdbcTemplateFactory.reset();
+    masterDatabaseAccessFactory.reset();
   }
 
   @Autowired
