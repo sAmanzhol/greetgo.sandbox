@@ -1,3 +1,5 @@
+sourceSets.main.java.srcDirs = ["src", "nf36_gen_src"]
+
 dependencies {
   implementation('org.springframework.boot:spring-boot-starter')
   implementation('org.springframework.boot:spring-boot-starter-web')
@@ -13,6 +15,14 @@ dependencies {
   compile 'org.mybatis:mybatis:3.4.6'
   compile 'kz.greetgo.util:greetgo.util:0.1.0'
 
+  compile "kz.greetgo.db:greetgo.nf36:$greetgoDbVersion"
+  testCompile "kz.greetgo.db:greetgo.nf36.gen:$greetgoDbVersion"
+
   compile "kz.greetgo.conf:greetgo.conf:$greetgoConfVersion"
   testCompile "kz.greetgo.conf:greetgo.sys_params:$greetgoConfVersion"
+}
+
+task asd(type: JavaExec) {
+  main = "kz.greetgo.sandbox.backend.test.util.Modules"
+  classpath = sourceSets.test.runtimeClasspath
 }
