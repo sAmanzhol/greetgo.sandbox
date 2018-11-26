@@ -29,7 +29,7 @@ public class ConnectParamsUtil {
           }
         };
 
-      case OPERATIVE:
+      case MASTER:
         return new ConnectParams() {
           @Override
           public String url() {

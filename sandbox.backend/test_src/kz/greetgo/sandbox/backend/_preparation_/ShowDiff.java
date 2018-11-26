@@ -5,7 +5,7 @@ import kz.greetgo.sandbox.backend.test.util.ScannerForTests;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import static kz.greetgo.sandbox.backend.test.util.DbKind.DIFF;
-import static kz.greetgo.sandbox.backend.test.util.DbKind.OPERATIVE;
+import static kz.greetgo.sandbox.backend.test.util.DbKind.MASTER;
 
 public class ShowDiff {
   public static void main(String[] args) throws Exception {
@@ -21,15 +21,15 @@ public class ShowDiff {
       dbPreparation.prepareDbConfig();
 
       dbPreparation.dropDb(DIFF);
-      dbPreparation.dropDb(OPERATIVE);
+      dbPreparation.dropDb(MASTER);
 
       dbPreparation.createDb(DIFF);
-      dbPreparation.createDb(OPERATIVE);
+      dbPreparation.createDb(MASTER);
 
       dbPreparation.applyLiquibaseToOperative();
       dbPreparation.applyCurrentStructureTo(DIFF);
 
-      dbPreparation.generateDiffSql(OPERATIVE, DIFF);
+      dbPreparation.generateDiffSql(MASTER, DIFF);
     }
   }
 }

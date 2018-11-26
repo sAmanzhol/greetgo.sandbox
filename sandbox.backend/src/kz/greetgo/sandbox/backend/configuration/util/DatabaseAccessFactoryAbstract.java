@@ -16,6 +16,7 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.sql.DataSource;
+import java.sql.SQLException;
 import java.util.concurrent.atomic.AtomicReference;
 
 public abstract class DatabaseAccessFactoryAbstract {
@@ -24,7 +25,7 @@ public abstract class DatabaseAccessFactoryAbstract {
 
   @PreDestroy
   public void closeDataSource() {
-    HikariDataSource ds = hikariDataSourceReference.get();
+    HikariDataSource ds = hikariDataSourceReference.getAndSet(null);
     if (ds != null) {
       ds.close();
     }
@@ -36,9 +37,32 @@ public abstract class DatabaseAccessFactoryAbstract {
   private void recreateDataSource() {
     HikariConfig config = createHikariConfig();
 
-    HikariDataSource old = hikariDataSourceReference.getAndSet(new HikariDataSource(config));
+    HikariDataSource old = hikariDataSourceReference.getAndSet(createHikariDataSource(config));
     if (old != null) {
       old.close();
+    }
+  }
+
+  private HikariDataSource createHikariDataSource(HikariConfig config) {
+    try {
+      return new HikariDataSource(config);
+    } catch (RuntimeException e) {
+      SQLException sqlException = DbUtil.extractSqlException(e);
+      if (sqlException == null) {
+        throw e;
+      }
+
+      switch (sqlException.getSQLState()) {
+        case "08001":
+        case "28P01":
+          return new HikariDataSource();
+      }
+
+
+      System.out.println("a612ge3rt SQL State = " + sqlException.getSQLState());
+      sqlException.printStackTrace(System.out);
+
+      throw e;
     }
   }
 

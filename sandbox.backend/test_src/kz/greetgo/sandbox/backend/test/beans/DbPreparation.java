@@ -99,7 +99,7 @@ public class DbPreparation extends DbPreparationParent {
   private LiquibaseManager liquibaseManager;
 
   public void applyLiquibaseToOperative() throws Exception {
-    log().info(() -> "Apply Liquibase to " + DbKind.OPERATIVE + " DB");
+    log().info(() -> "Apply Liquibase to " + DbKind.MASTER + " DB");
 
     liquibaseManager.apply();
   }
