@@ -14,6 +14,7 @@
 
     ]]></sql>
   </changeSet>
+
   <changeSet author="pompei" id="create-table-star">
     <sql endDelimiter=";;"><![CDATA[
 
