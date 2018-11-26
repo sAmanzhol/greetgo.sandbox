@@ -2,6 +2,7 @@ package kz.greetgo.sandbox.backend.service.impl;
 
 import kz.greetgo.sandbox.backend.service.StarsService;
 import kz.greetgo.sandbox.backend.test.util.ParentTestNg;
+import org.fest.assertions.api.Assertions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.testng.annotations.Test;
@@ -22,5 +23,10 @@ public class StarsServiceImplTest extends ParentTestNg {
     jdbcTemplate.execute("select 1");
 
     assertThat(1);
+  }
+
+  @Test
+  public void transactionTest() {
+    Assertions.assertThat(1);
   }
 }

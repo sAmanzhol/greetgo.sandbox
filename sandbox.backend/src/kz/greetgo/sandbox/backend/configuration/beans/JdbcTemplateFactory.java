@@ -6,8 +6,10 @@ import kz.greetgo.sandbox.backend.config.DbConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 @Component
@@ -18,9 +20,32 @@ public class JdbcTemplateFactory {
 
   private HikariDataSource dataSource = null;
 
+  private final JdbcTemplate jdbcTemplate = new JdbcTemplate();
+
   @Bean
   public JdbcTemplate getJdbcTemplate() {
+    return jdbcTemplate;
+  }
 
+  @PreDestroy
+  public void closeDataSource() {
+    HikariDataSource ds = dataSource;
+    dataSource = null;
+    if (ds != null) {
+      ds.close();
+    }
+  }
+
+  @PostConstruct
+  public void reset() {
+    closeDataSource();
+
+    createDataSource();
+
+    jdbcTemplate.setDataSource(dataSource);
+  }
+
+  private void createDataSource() {
     HikariConfig config = new HikariConfig();
     config.setJdbcUrl(dbConfig.url());
     config.setUsername(dbConfig.username());
@@ -28,14 +53,13 @@ public class JdbcTemplateFactory {
 
     dataSource = new HikariDataSource(config);
 
-    return new JdbcTemplate(dataSource);
+    dataSourceTransactionManager.setDataSource(dataSource);
   }
 
-  @PreDestroy
-  private void closeDataSource() {
-    HikariDataSource ds = dataSource;
-    if (ds != null) {
-      ds.close();
-    }
+  private final DataSourceTransactionManager dataSourceTransactionManager = new DataSourceTransactionManager();
+
+  @Bean("txManager")
+  public DataSourceTransactionManager txManager() {
+    return dataSourceTransactionManager;
   }
 }

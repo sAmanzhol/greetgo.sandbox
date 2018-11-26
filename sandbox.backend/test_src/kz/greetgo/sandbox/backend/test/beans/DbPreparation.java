@@ -3,6 +3,8 @@ package kz.greetgo.sandbox.backend.test.beans;
 import kz.greetgo.conf.hot.DefaultStrValue;
 import kz.greetgo.sandbox.backend.config.DbConfig;
 import kz.greetgo.sandbox.backend.configuration.beans.AppConfigFactory;
+import kz.greetgo.sandbox.backend.configuration.beans.JdbcTemplateFactory;
+import kz.greetgo.sandbox.backend.configuration.beans.LiquibaseManager;
 import kz.greetgo.sandbox.backend.configuration.logging.LOG;
 import kz.greetgo.sandbox.backend.configuration.util.App;
 import kz.greetgo.sandbox.backend.test.util.ConnectParams;
@@ -42,6 +44,9 @@ public class DbPreparation extends DbPreparationParent {
   @Autowired
   private AppConfigFactory appConfigFactory;
 
+  @Autowired
+  private JdbcTemplateFactory jdbcTemplateFactory;
+
   public void prepareDbConfig() throws Exception {
     log().info(() -> "Prepare DB Config");
 
@@ -63,11 +68,16 @@ public class DbPreparation extends DbPreparationParent {
           .map(line -> replaceParameterOrReturnSame(line, params))
           .collect(Collectors.toList()));
 
+      appConfigFactory.reset();
+      jdbcTemplateFactory.reset();
     }
   }
 
   public void dropDb(DbKind kind) {
     log().info(() -> "Drop " + kind + " DB");
+
+    jdbcTemplateFactory.closeDataSource();
+
     ConnectParams params = getConnectParams(kind.connection());
 
     exec(ADMIN, "drop database " + params.dbName(), DB_ABSENT);
@@ -81,10 +91,17 @@ public class DbPreparation extends DbPreparationParent {
 
     exec(ADMIN, "create user " + params.username() + " with password '" + params.password() + "'");
     exec(ADMIN, "create database " + params.dbName() + " with owner " + params.username());
+
+    jdbcTemplateFactory.reset();
   }
 
-  public void applyLiquibaseToOperative() {
+  @Autowired
+  private LiquibaseManager liquibaseManager;
+
+  public void applyLiquibaseToOperative() throws Exception {
     log().info(() -> "Apply Liquibase to " + DbKind.OPERATIVE + " DB");
+
+    liquibaseManager.apply();
   }
 
   public void applyCurrentStructureTo(DbKind kind) {
