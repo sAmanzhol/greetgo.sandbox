@@ -22,7 +22,7 @@ public class MoneyTransactionalServiceImplTest extends ParentTestNg {
   @Test
   public void transactionTest() throws Exception {
 
-    System.out.println("ags2t6w moneyTransactionalService = " + moneyTransactionalService);
+    System.out.println("ags2t6w moneyTransactionalService = " + moneyTransactionalService.getClass());
 
     String room = RND.str(10);
 

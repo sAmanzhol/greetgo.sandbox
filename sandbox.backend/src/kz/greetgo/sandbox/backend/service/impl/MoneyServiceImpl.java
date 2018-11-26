@@ -57,7 +57,7 @@ public class MoneyServiceImpl implements MoneyService {
     //noinspection ConstantConditions
     return jdbcTemplate.execute(
 
-        "select amount from money where id = ?",
+        "select amount from money where id = ? for update",
 
         (PreparedStatementCallback<Long>) ps -> {
 

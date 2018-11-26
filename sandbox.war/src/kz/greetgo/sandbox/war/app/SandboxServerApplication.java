@@ -7,15 +7,17 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Import;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
-@SpringBootApplication
 @Import({
     BeanScannerBackend.class,
     BeanScannerSecurity.class,
 })
+@SpringBootApplication
+@EnableTransactionManagement
 public class SandboxServerApplication extends SpringBootServletInitializer {
   public static void main(String[] args) {
     SpringApplication.run(SandboxServerApplication.class, args);

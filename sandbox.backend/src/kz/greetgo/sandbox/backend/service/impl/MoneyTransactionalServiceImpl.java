@@ -13,6 +13,7 @@ public class MoneyTransactionalServiceImpl implements MoneyTransactionalService 
   @Autowired
   private MoneyService moneyService;
 
+  @Transactional
   @Override
   public void move(String idFrom, String idTo, long amount) {
 
